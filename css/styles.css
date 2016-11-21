@@ -1,0 +1,42 @@
+/*.MainRight{
+    width: calc(100%-210px);
+    width: -webkit-calc(100%-210px);
+    width: -o-calc(100%-210px);
+    width: -moz-calc(100%-210px);
+}*/
+*{
+    font-family: Microsoft YaHei;
+}
+.MainBody{
+    display: flex;
+    align-items: stretch;
+    position: fixed;
+    height: 100%;
+    width: calc(100% - 16px);
+}
+.MainLeft{
+    display: flex;
+}
+.MainRight{
+    /*display: inline-flex;*/
+    width:100%;
+    overflow-y: auto;
+    margin-bottom:80px;
+}
+.MainRight>div{
+    width:100%;
+}
+.text{
+    text-decoration: none;
+}
+/*welcome*/
+.welcome{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 80%;
+}
+.welcome>div{
+    justify-content: center;
+}

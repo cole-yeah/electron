@@ -1,45 +1,52 @@
-import React from 'react';
-import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
-import RaisedButton from 'material-ui/RaisedButton';
+import React from 'react'
+import Dialog from 'material-ui/Dialog'
+import FlatButton from 'material-ui/FlatButton'
+import RaisedButton from 'material-ui/RaisedButton'
+import DatePicker from 'material-ui/DatePicker'
 
 export default class DialogExampleAlert extends React.Component {
-  state = {
-    open: false,
-  };
+  constructor(props) {
+    super(props)
+    this.state = {
+      open:false
+    }
+  }
 
-  handleOpen = () => {
+  handleClose(){
+    this.setState({
+      open:false
+    })
+  }
+
+   handleOpen(){
     this.setState({open: true});
-  };
-
-  handleClose = () => {
-    this.setState({open: false});
-  };
+  }
 
   render() {
     const actions = [
       <FlatButton
         label="Cancel"
         primary={true}
-        onTouchTap={this.handleClose}
+        onTouchTap={this.handleClose.bind(this)}
       />,
       <FlatButton
-        label="Discard"
+        label="Submit"
         primary={true}
-        onTouchTap={this.handleClose}
+        keyboardFocused={true}
+        onTouchTap={this.handleClose.bind(this)}
       />,
-    ];
-
+    ]
     return (
       <div>
-        <RaisedButton label="Alert" onTouchTap={this.handleOpen} />
+        <RaisedButton label="Dialog" onTouchTap={this.handleOpen.bind(this)} />
         <Dialog
           actions={actions}
           modal={false}
           open={this.state.open}
-          onRequestClose={this.handleClose}
+          onRequestClose={this.handleClose.bind(this)}
         >
-          Discard draft?
+          Open a Date Picker dialog from within a dialog.
+          <DatePicker hintText="Date Picker" />
         </Dialog>
       </div>
     );

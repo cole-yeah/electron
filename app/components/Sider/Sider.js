@@ -9,6 +9,7 @@ import FloatingActionButton from 'material-ui/FloatingActionButton'
 import ContentAdd from 'material-ui/svg-icons/content/add'
 import ContentCreate from 'material-ui/svg-icons/content/create'
 import ContentDelete from 'material-ui/svg-icons/content/delete-sweep'
+import Diaaalog from '../test/test'
 
 const style = {
   paper:{
@@ -54,6 +55,7 @@ export default class Sider extends Component {
               </Link>,)
             ]} />
           </List>
+          <Diaaalog/>
           <div style={style.menuHandle}>
             <FloatingActionButton mini={true} style={style.button}>
               <ContentAdd />

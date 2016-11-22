@@ -7,7 +7,7 @@ import DatePicker from 'material-ui/DatePicker'
 import {fullWhite} from 'material-ui/styles/colors'
 
 import Search from '../Search/Search'
-import Sider from '../Sider/Sider'
+import Sider from '../test/testList'
 
 const style = {
   datePicker: {

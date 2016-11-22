@@ -6,7 +6,15 @@ import ActionHome from 'material-ui/svg-icons/action/home'
 import DatePicker from 'material-ui/DatePicker'
 import {fullWhite} from 'material-ui/styles/colors'
 
+import Search from '../Search/Search'
 import Sider from '../Sider/Sider'
+
+const style = {
+  datePicker: {
+    display: 'inline-block',
+    margin: 10,
+  }
+}
 
 const Main = props => (
     <div>
@@ -27,10 +35,6 @@ const Main = props => (
         </div>
 
         <div className="MainRight">
-          <div>
-            <DatePicker hintText="Min date" />
-            <DatePicker hintText="Max date" />
-          </div>
           { props.children }
         </div>
 

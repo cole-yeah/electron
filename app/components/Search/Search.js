@@ -6,6 +6,8 @@ import ContentDelete from 'material-ui/svg-icons/content/delete-sweep'
 import FloatingActionButton from 'material-ui/FloatingActionButton'
 import ContentAdd from 'material-ui/svg-icons/content/add'
 
+import Dialog from '../Dialog/Dialog'
+
 const styles = {
   paper:{
     width: '100%',
@@ -24,6 +26,24 @@ const styles = {
 }
 
 export default class Search extends Component {
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      open: false
+    }
+  }
+
+   handleOpen(){
+    this.setState({open: true});
+  }
+
+  handleClose() {
+    this.setState({
+      open:false
+    })    
+  }
+
   render() {
     return (
       <Paper style={styles.paper} zDepth={1}>
@@ -34,14 +54,19 @@ export default class Search extends Component {
           <RaisedButton label="搜 索" primary={true} style={styles.raisedButton} />
         </span>
 
+          <Dialog
+          open={this.state.open}
+          handleClose={this.handleClose.bind(this)}/>
+
         <span className="handle">
-          <FloatingActionButton mini={true} style={styles.actionButton}>
+          <FloatingActionButton onTouchTap={this.handleOpen.bind(this)} mini={true} style={styles.actionButton}>
             <ContentAdd />
           </FloatingActionButton>
-          <FloatingActionButton mini={true} style={styles.actionButton}>
+          <FloatingActionButton onTouchTap={this.handleOpen.bind(this)} mini={true} style={styles.actionButton}>
             <ContentDelete />
           </FloatingActionButton>
         </span>
+
       </Paper>
     )
   }

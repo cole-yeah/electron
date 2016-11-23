@@ -55,18 +55,6 @@ export default class Sider extends Component {
               </Link>,)
             ]} />
           </List>
-          <Diaaalog/>
-          <div style={style.menuHandle}>
-            <FloatingActionButton mini={true} style={style.button}>
-              <ContentAdd />
-            </FloatingActionButton>
-            <FloatingActionButton mini={true} style={style.button}>
-              <ContentCreate />
-            </FloatingActionButton>
-            <FloatingActionButton mini={true} style={style.button}>
-              <ContentDelete />
-            </FloatingActionButton>
-          </div>
         </Paper>
     )
   }

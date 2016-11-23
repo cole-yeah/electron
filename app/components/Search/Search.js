@@ -1,10 +1,10 @@
 import React, { Component, PropTypes } from 'react'
-import Paper from 'material-ui/Paper'
-import TextField from 'material-ui/TextField'
-import RaisedButton from 'material-ui/RaisedButton'
-import ContentDelete from 'material-ui/svg-icons/content/delete-sweep'
-import FloatingActionButton from 'material-ui/FloatingActionButton'
-import ContentAdd from 'material-ui/svg-icons/content/add'
+import Paper from 'material-ui/lib/paper'
+import TextField from 'material-ui/lib/text-field'
+import RaisedButton from 'material-ui/lib/raised-button'
+import ContentDelete from 'material-ui/lib/svg-icons/content/remove'
+import FloatingActionButton from 'material-ui/lib/floating-action-button'
+import ContentAdd from 'material-ui/lib/svg-icons/content/add'
 
 import Dialog from '../Dialog/Dialog'
 
@@ -51,7 +51,7 @@ export default class Search extends Component {
           <TextField
             hintText="search"
           />
-          <RaisedButton label="搜 索" primary={true} style={styles.raisedButton} />
+          <RaisedButton label="搜 索" secondary={true} primary={true} style={styles.raisedButton} />
         </span>
 
           <Dialog
@@ -59,10 +59,10 @@ export default class Search extends Component {
           handleClose={this.handleClose.bind(this)}/>
 
         <span className="handle">
-          <FloatingActionButton onTouchTap={this.handleOpen.bind(this)} mini={true} style={styles.actionButton}>
+          <FloatingActionButton secondary={true} onTouchTap={this.handleOpen.bind(this)} mini={true} style={styles.actionButton}>
             <ContentAdd />
           </FloatingActionButton>
-          <FloatingActionButton onTouchTap={this.handleOpen.bind(this)} mini={true} style={styles.actionButton}>
+          <FloatingActionButton secondary={true} onTouchTap={this.handleOpen.bind(this)} mini={true} style={styles.actionButton}>
             <ContentDelete />
           </FloatingActionButton>
         </span>

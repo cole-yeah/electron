@@ -1,20 +1,13 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router'
-import AppBar from 'material-ui/AppBar'
-import IconButton from 'material-ui/IconButton'
-import ActionHome from 'material-ui/svg-icons/action/home'
-import DatePicker from 'material-ui/DatePicker'
-import {fullWhite} from 'material-ui/styles/colors'
+
+import AppBar from 'material-ui/lib/app-bar'
+import IconButton from 'material-ui/lib/icon-button'
+import ActionHome from 'material-ui/lib/svg-icons/action/home'
+import {fullWhite} from 'material-ui/lib/styles/colors'
 
 import Search from '../Search/Search'
-import Sider from '../test/testList'
-
-const style = {
-  datePicker: {
-    display: 'inline-block',
-    margin: 10,
-  }
-}
+import Sider from '../Sider/Sider'
 
 const Main = props => (
     <div>

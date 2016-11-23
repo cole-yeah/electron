@@ -1,15 +1,11 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router'
-import Paper from 'material-ui/Paper'
-import Menu from 'material-ui/Menu'
-import MenuItem from 'material-ui/MenuItem'
-import { List, ListItem, makeSelectable } from 'material-ui/List'
-import Checkbox from 'material-ui/Checkbox'
-import FloatingActionButton from 'material-ui/FloatingActionButton'
-import ContentAdd from 'material-ui/svg-icons/content/add'
-import ContentCreate from 'material-ui/svg-icons/content/create'
-import ContentDelete from 'material-ui/svg-icons/content/delete-sweep'
-import Diaaalog from '../test/test'
+import Paper from 'material-ui/lib/paper'
+
+import List from 'material-ui/lib/lists/list'
+import ListItem from 'material-ui/lib/lists/list-item'
+
+// import Diaaalog from '../test/test'
 
 const style = {
   paper:{
@@ -44,7 +40,6 @@ export default class Sider extends Component {
           <ListItem primaryText="Drafts"/>
           <ListItem 
             primaryText="Inbox"
-            initiallyOpen={true}
             primaryTogglesNestedList={true}
             nestedItems={[
               lists.map((list, i) =>

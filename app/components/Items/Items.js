@@ -1,8 +1,12 @@
 import React, { Component, PropTypes } from 'react'
-import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn}
-  from 'material-ui/Table'
-import FloatingActionButton from 'material-ui/FloatingActionButton'
-import ContentCreate from 'material-ui/svg-icons/content/create'
+import Table from 'material-ui/lib/table/table';
+import TableHeaderColumn from 'material-ui/lib/table/table-header-column'
+import TableRow from 'material-ui/lib/table/table-row'
+import TableHeader from 'material-ui/lib/table/table-header'
+import TableRowColumn from 'material-ui/lib/table/table-row-column'
+import TableBody from 'material-ui/lib/table/table-body'
+import FloatingActionButton from 'material-ui/lib/floating-action-button'
+import ContentCreate from 'material-ui/lib/svg-icons/content/create'
 import Search from '../Search/Search'
 const styles = {
   index:{
@@ -74,7 +78,7 @@ export default class Items extends Component {
                 <TableRowColumn style={styles.index}>{index}</TableRowColumn>
                 <TableRowColumn>{post}</TableRowColumn>
                 <TableRowColumn style={styles.tableCreate}>
-                  <FloatingActionButton mini={true} onClick={this.handleClick.bind(this)} style={styles.actionButton}>
+                  <FloatingActionButton mini={true} secondary={true} onClick={this.handleClick.bind(this)} style={styles.actionButton}>
                    <ContentCreate />
                   </FloatingActionButton>
                 </TableRowColumn>

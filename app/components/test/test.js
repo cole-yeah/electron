@@ -1,54 +1,38 @@
-import React from 'react'
-import Dialog from 'material-ui/Dialog'
-import FlatButton from 'material-ui/FlatButton'
-import RaisedButton from 'material-ui/RaisedButton'
-import DatePicker from 'material-ui/DatePicker'
+import React, { Component } from 'react';
+// import data from '../../../test.json'
+import fetch from 'isomorphic-fetch'
+import One from './testOne'
+export default class ListExampleSelectable extends Component {
 
-export default class DialogExampleAlert extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      open:false
+      tData: [],
     }
   }
 
-  handleClose(){
-    this.setState({
-      open:false
-    })
-  }
-
-   handleOpen(){
-    this.setState({open: true});
-  }
+  handleClick(e) {
+    fetch('../../../test.json')
+      .then(res => {
+        console.log(res.status);
+        return res.json()
+      })
+      .then(data => {
+        this.setState({tData: data.B})
+        console.log(this.state.tData)
+      })
+      .catch((e) => {console.log(e.message)})
+  } 
 
   render() {
-    const actions = [
-      <FlatButton
-        label="Cancel"
-        primary={true}
-        onTouchTap={this.handleClose.bind(this)}
-      />,
-      <FlatButton
-        label="Submit"
-        primary={true}
-        keyboardFocused={true}
-        onTouchTap={this.handleClose.bind(this)}
-      />,
-    ]
-    return (
+    return(
       <div>
-        <RaisedButton label="Dialog" onTouchTap={this.handleOpen.bind(this)} />
-        <Dialog
-          actions={actions}
-          modal={false}
-          open={this.state.open}
-          onRequestClose={this.handleClose.bind(this)}
-        >
-          Open a Date Picker dialog from within a dialog.
-          <DatePicker hintText="Date Picker" />
-        </Dialog>
+        <button onClick={this.handleClick.bind(this)}>123</button>
+        {
+          this.state.tData.map((data, i) => 
+          <p key={i}>{data.serviceUrl}</p>)
+        }
       </div>
-    );
-  }
+      )
+    }
 }

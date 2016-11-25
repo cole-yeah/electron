@@ -8,13 +8,8 @@ import TableBody from 'material-ui/lib/table/table-body'
 import FloatingActionButton from 'material-ui/lib/floating-action-button'
 import ContentCreate from 'material-ui/lib/svg-icons/content/create'
 import Search from '../Search/Search'
+import Pagination from '../Pagination/Pagination'
 const styles = {
-  index:{
-    width:''
-  },
-  actionButton: {
-    marginRight: 20
-  },
   tableCreate: {
     textAlign: 'right',
   }
@@ -34,7 +29,7 @@ export default class Items extends Component {
       enableSelectAll: true,
       deselectOnClickaway: false,
       showCheckboxes: true,
-      height: '100%',
+      height:510,
     }
   }
 
@@ -43,7 +38,7 @@ export default class Items extends Component {
     }
 
   render() {
-    const posts = ['123', '456', '789', '654', '852']
+    const posts = ['123', '456', '789', '654', '852', '856', '564', '762', '886', '326', '427', '556', '666', '756', '010', '020', '889']
 
     return (
       <div>
@@ -65,6 +60,9 @@ export default class Items extends Component {
             <TableRow>
               <TableHeaderColumn style={styles.index} tooltip="The ID">ID</TableHeaderColumn>
               <TableHeaderColumn tooltip="The URL">URL</TableHeaderColumn>
+              <TableHeaderColumn tooltip="The NAME">NAME</TableHeaderColumn>
+              <TableHeaderColumn tooltip="The TITLE">TITLE</TableHeaderColumn>
+              <TableHeaderColumn style={styles.tableCreate} tooltip="The EDIT">EDIT</TableHeaderColumn>
             </TableRow>
           </TableHeader>
           <TableBody
@@ -77,8 +75,10 @@ export default class Items extends Component {
               <TableRow key={index}>
                 <TableRowColumn style={styles.index}>{index}</TableRowColumn>
                 <TableRowColumn>{post}</TableRowColumn>
+                <TableRowColumn>{post}</TableRowColumn>
+                <TableRowColumn>{post}</TableRowColumn>
                 <TableRowColumn style={styles.tableCreate}>
-                  <FloatingActionButton mini={true} secondary={true} onClick={this.handleClick.bind(this)} style={styles.actionButton}>
+                  <FloatingActionButton mini={true} secondary={true} onClick={this.handleClick.bind(this)}>
                    <ContentCreate />
                   </FloatingActionButton>
                 </TableRowColumn>
@@ -86,6 +86,9 @@ export default class Items extends Component {
               ))}
           </TableBody>
         </Table>
+        
+        <Pagination/>
+
       </div>
     )
   }

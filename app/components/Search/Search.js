@@ -51,7 +51,8 @@ export default class Search extends Component {
           <TextField
             hintText="search"
           />
-          <RaisedButton label="搜 索" secondary={true} primary={true} style={styles.raisedButton} />
+          <RaisedButton label="搜 索" secondary={true} style={styles.raisedButton} />
+          <RaisedButton label="刷 新" primary={true} style={styles.raisedButton} />
         </span>
 
           <Dialog

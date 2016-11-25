@@ -12,7 +12,7 @@
     align-items: stretch;
     position: fixed;
     height: 100%;
-    width: calc(100% - 16px);
+    width: calc(100% + 6px);
 }
 .MainLeft{
     display: flex;
@@ -21,7 +21,9 @@
     /*display: inline-flex;*/
     width:100%;
     overflow-y: auto;
-    margin-bottom:80px;
+    margin-bottom:60px;
+    background: white;
+    z-index: 9;
 }
 .MainRight>div{
     width:100%;
@@ -46,4 +48,10 @@
 }
 .handle{
     display: inline-block;
+}
+.pagination{
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 19;
 }

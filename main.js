@@ -1,10 +1,15 @@
 'use strict';
 
-
 const fs = require('fs');
 const nconf = require('nconf');
 const electron = require('electron');
 const ipcMain = electron.ipcMain;
+const path = require('path');
+
+/**
+ * 获取menus.json文件路径
+ */
+const _path = path.join(__dirname,'/menus.json');
 
 // Module to control application life.
 const app = electron.app;
@@ -14,30 +19,22 @@ const BrowserWindow = electron.BrowserWindow;
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
-/**
- * 接收登录消息记录到本地
- * @param  {[type]} event [description]
- * @param  {[type]} arg)  {             const authorinfo [description]
- * @return {[type]}       [description]
- */
-/*ipcMain.on('loginsuccess', function(event, arg) {
-  const authorinfo = JSON.parse(arg);
-  authorfile.set('islogin', true);
-  authorfile.set('user', {
-    accesstoken: authorinfo.accesstoken,
-    avatar_url: authorinfo.avatar_url,
-    loginname: authorinfo.loginname,
-  });
-  authorfile.save(function() {
 
+/**
+ * 监听ipcrenderer，读写本地json文件
+ */
+ipcMain.on('save-json-file', data => {
+  fs.writeFile(_path, data, event => {
+    event.sender.send('save-state', 'ok')
   })
-})*/
+})
 
 function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: 1200,
-    height: 900
+    width: 1100,
+    height: 830,
+    frame: false,
   });
 
   // and load the index.html of the app.

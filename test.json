@@ -1,0 +1,14 @@
+{
+  "A":[
+  {"serviceUrl":"AAAAA","serviceMethod":"GET"},
+  {"serviceUrl":"BBBBB","serviceMethod":"GET"},
+  {"serviceUrl":"CCCCC","serviceMethod":"GET"},
+  {"serviceUrl":"DDDDD","serviceMethod":"GET"}
+  ],
+  "B":[
+    {"serviceUrl":"11111","serviceMethod":"GET"},
+    {"serviceUrl":"22222","serviceMethod":"GET"},
+    {"serviceUrl":"33333","serviceMethod":"GET"},
+    {"serviceUrl":"44444","serviceMethod":"GET"}
+  ]
+}

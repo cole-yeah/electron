@@ -11,7 +11,7 @@ import ListItem from 'material-ui/lib/lists/list-item'
 const style = {
   paper:{
     display: 'inline-block',
-    margin: '4px -12px 60px 0',
+    margin: '0 -16px 60px 0',
     overflowY: 'scroll',
   },
   link:{

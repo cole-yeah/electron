@@ -9,7 +9,7 @@ const path = require('path');
 /**
  * 获取menus.json文件路径
  */
-const _path = path.join(__dirname,'/menus.json');
+const _path = path.join(__dirname,'/test.json');
 
 // Module to control application life.
 const app = electron.app;
@@ -23,11 +23,15 @@ let mainWindow;
 /**
  * 监听ipcrenderer，读写本地json文件
  */
-ipcMain.on('save-json-file', data => {
-  fs.writeFile(_path, data, event => {
-    event.sender.send('save-state', 'ok')
+// ipcMain.on('save-json-file', data => {
+//   fs.writeFile(_path, data, event => {
+//     console.log(data)
+//   })
+// })
+
+  fs.readFile(_path, (err, data) => {
+    err ? console.log(err) : console.log(data)
   })
-})
 
 function createWindow() {
   // Create the browser window.

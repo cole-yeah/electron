@@ -2,16 +2,26 @@
 *读写本地json文件
 */
 
-'use strict'
+var fs = require('fs'),
+    textarea = document.getElementsByTagName('textarea')[0],
+    read_btn = document.getElementById('read_btn'),
+    write_btn = document.getElementById('write_btn');
 
-const electron = require('electron');
-const ipcRenderer = electron.ipcRenderer;
+function writeFile() {
+    var text = textarea.value;
+    console.log("写内容："+text);
+    var fileN = __dirname+'/message.txt';
+    console.log("文件名："+fileN);
+    fs.writeFileSync(fileN,text, 'utf8');
+    console.log("写完成！");
+}
+function readFile() {
+    var fileN = __dirname+'/info.txt';
+    console.log("文件名："+fileN);
+	var content = fs.readFileSync(fileN,'utf-8');
+ 	textarea.value=content;
+    console.log("读完成！");
+}
 
-ipcRenderer.on('save-state', (event, state) => {
-  console.log('save-state:%O %O', event, state)
-})
-
-/**
- * 点击保存按钮（修改or新增）时触发，向ipcmain发送,data为已修改的json数组
- */
-ipcRenderer.send('save-json-file',data);
+write_btn.onclick = writeFile;
+read_btn.onclick = readFile;

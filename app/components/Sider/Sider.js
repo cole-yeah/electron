@@ -8,6 +8,9 @@ import ContentCreate from 'material-ui/lib/svg-icons/content/create'
 import List from 'material-ui/lib/lists/list'
 import ListItem from 'material-ui/lib/lists/list-item'
 
+const remote = window.require('electron').remote
+const fs = remote.require('fs')
+
 const style = {
   paper:{
     display: 'inline-block',
@@ -40,6 +43,32 @@ const style = {
 }
 
 export default class Sider extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      listItems: []
+    }
+  }
+
+  componentDidMount() {
+    console.log('执行componentDidMount')
+    fs.readFile('./test.json', 'utf-8', (err, data) => {
+      if(err) {
+        console.log(err)
+      } else {
+        console.log(typeof(data))
+        // console.log(data)
+        data = JSON.parse(data)
+        console.log(data.length)
+        console.log(data[0].children[0])
+        const tData = []
+        for(var i = 0;i<data.length;i++) {
+          tData.push(data[i])
+        }
+        this.setState({listItems: tData})
+      }
+    })
+  }
 
   handleOpen(){
     this.setState({open: true});
@@ -50,8 +79,10 @@ export default class Sider extends Component {
     return(
       <Paper style={style.paper}>
         <List style={style.item}>
-          <ListItem primaryText="Sent mail"/>
-          <ListItem primaryText="Drafts"/>
+          {
+            this.state.listItems.map((listItem, i) => 
+            <ListItem key={listItem.menuCode} primaryText={listItem.name}/>
+          )}
           <ListItem 
             primaryText="Inbox"
             primaryTogglesNestedList={true}

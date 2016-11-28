@@ -1,4 +1,5 @@
-import fetch from 'isomorphic-fetch'
+const remote = window.require('electron').remote
+const fs = remote.require('fs')
 
 //选择菜单类型action
 export function selectMenus(menus) {

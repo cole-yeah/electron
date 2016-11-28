@@ -26,27 +26,42 @@
 // read_btn.onclick = readFile;
 
 import React, { Component, PropTypes } from 'react'
-var fs = require('fs')
+const remote = window.require('electron').remote
+const fs = remote.require('fs')
 
-const _file = '../../../test.json'
 
 export default class Test extends Component {
+  constructor(props) {
+    super(props)
+  }
 
   handleClick(e) {
-    fs.readFileSync(_file, (err, data) => {
+    var textarea = document.getElementsByTagName('textarea')[0]
+    fs.readFile('./test.json','utf-8', (err,data) => {
       if(err) {
-        console.log(err)
+        console.error(err)
       } else {
-        console.log(data)
+        console.log(typeof(data))
+        const a = data
+        textarea.value=a.A
+        console.log("读完成！")
+        console.log(a["A"])
       }
-    })
+    });
+  }
+    writeClick(e) {
+    var textarea = document.getElementsByTagName('textarea')[0]
+    var text = textarea.value
+    var content = fs.writeFileSync('./test.json',text,'utf-8');
+    console.log("写完成！");
   }
 
   render() {
     return (
       <div>
         <h2>456</h2>
-        <button onClick={this.handleClick.bind(this)}>click me</button>
+        <button onClick={this.handleClick.bind(this)}>Read</button>
+        <button onClick={this.writeClick.bind(this)}>Write</button>
       </div>
     )
   }

@@ -63,7 +63,7 @@
 /******/ 	}
 
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "e8378a676dbb9f0643ec"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "03148e9bb2cf96a3ecd4"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 
@@ -20651,29 +20651,41 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var fs = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"fs\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
-
-	var _file = '../../../test.json';
+	var remote = window.require('electron').remote;
+	var fs = remote.require('fs');
 
 	var Test = (function (_Component) {
 	  _inherits(Test, _Component);
 
-	  function Test() {
+	  function Test(props) {
 	    _classCallCheck(this, Test);
 
-	    _get(Object.getPrototypeOf(Test.prototype), 'constructor', this).apply(this, arguments);
+	    _get(Object.getPrototypeOf(Test.prototype), 'constructor', this).call(this, props);
 	  }
 
 	  _createClass(Test, [{
 	    key: 'handleClick',
 	    value: function handleClick(e) {
-	      fs.readFileSync(_file, function (err, data) {
+	      var textarea = document.getElementsByTagName('textarea')[0];
+	      fs.readFile('./test.json', 'utf-8', function (err, data) {
 	        if (err) {
-	          console.log(err);
+	          console.error(err);
 	        } else {
-	          console.log(data);
+	          console.log(typeof data);
+	          var a = data;
+	          textarea.value = a.A;
+	          console.log("读完成！");
+	          console.log(a["A"]);
 	        }
 	      });
+	    }
+	  }, {
+	    key: 'writeClick',
+	    value: function writeClick(e) {
+	      var textarea = document.getElementsByTagName('textarea')[0];
+	      var text = textarea.value;
+	      var content = fs.writeFileSync('./test.json', text, 'utf-8');
+	      console.log("写完成！");
 	    }
 	  }, {
 	    key: 'render',
@@ -20689,7 +20701,12 @@
 	        _react2['default'].createElement(
 	          'button',
 	          { onClick: this.handleClick.bind(this) },
-	          'click me'
+	          'Read'
+	        ),
+	        _react2['default'].createElement(
+	          'button',
+	          { onClick: this.writeClick.bind(this) },
+	          'Write'
 	        )
 	      );
 	    }

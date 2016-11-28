@@ -1,14 +1,22 @@
-  const holder = document.getElementById('holder')
-  holder.ondragover = () => {
-    return false;
-  }
-  holder.ondragleave = holder.ondragend = () => {
-    return false;
-  }
-  holder.ondrop = (e) => {
-    e.preventDefault()
-    for (let f of e.dataTransfer.files) {
-      console.log('File(s) you dragged here: ', f.path)
-    }
-    return false;
-  }
+var textarea = document.getElementsByTagName('textarea')[0],
+    read_btn = document.getElementById('read_btn'),
+    write_btn = document.getElementById('write_btn');
+const fs = require('fs')
+function writeFile() {
+    var text = textarea.value;
+    console.log("写内容："+text);
+    var fileN =  __dirname+'/test.json';
+    console.log("文件名："+fileN);
+    fs.writeFileSync(fileN,text, 'utf8');
+    console.log("写完成！");
+}
+function readFile() {
+    var fileN = __dirname+'/test.json';
+    console.log("文件名："+fileN);
+	var content = fs.readFileSync(fileN,'utf-8');
+ 	textarea.value=content;
+    console.log("读完成！");
+}
+
+write_btn.onclick = writeFile;
+read_btn.onclick = readFile;

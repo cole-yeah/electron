@@ -9,6 +9,6 @@
     {"serviceUrl":"11111","serviceMethod":"GET"},
     {"serviceUrl":"22222","serviceMethod":"GET"},
     {"serviceUrl":"33333","serviceMethod":"GET"},
-    {"serviceUrl":"44444","serviceMethod":"POST"}
+    {"serviceUrl":"44444","serviceMethod":"GET"}
   ]
 }

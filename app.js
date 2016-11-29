@@ -63,7 +63,7 @@
 /******/ 	}
 
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "03148e9bb2cf96a3ecd4"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "231ee969bac9502c872f"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 
@@ -20672,8 +20672,9 @@
 	          console.error(err);
 	        } else {
 	          console.log(typeof data);
+	          data = JSON.parse(data);
 	          var a = data;
-	          textarea.value = a.A;
+	          textarea.value = JSON.stringify(a.A);
 	          console.log("读完成！");
 	          console.log(a["A"]);
 	        }

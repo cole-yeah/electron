@@ -43,10 +43,10 @@ export default class Test extends Component {
       } else {
         console.log(typeof(data))
         data = JSON.parse(data)
-        const a = data
-        textarea.value=JSON.stringify(a.A)
+        var data = JSON.stringify(data[0].children[0])
+        textarea.value=data
         console.log("读完成！")
-        console.log(a["A"])
+        console.log(data)
       }
     });
   }

@@ -37,6 +37,7 @@ const style = {
 export default class SideBar extends Component {
   constructor(props) {
     super(props)
+    this.handleOpen = this.handleOpen.bind(this)
     this.state = {
       listItems: []
     }
@@ -58,6 +59,19 @@ export default class SideBar extends Component {
     this.setState({open: true});
   }
 
+  fsItems(j, i) {
+    fs.readFile('./test.json', 'utf-8', (err, data) => {
+      if(err) {
+        console.log(err)
+      } else {
+        console.log(j,i)
+        console.log(typeof(j))
+        data = JSON.parse(data)
+        console.log(data[j].children[i].functions[0].operations)
+      }
+    })
+  }
+
   render(){
     return(
       <div style={style.paper}>
@@ -73,19 +87,20 @@ export default class SideBar extends Component {
                 <ListItem 
                   id={j}
                   key={i}
+                  onClick={this.fsItems.bind(this, j, i)}
                   primaryText={list.name}/>
               </Link>,)
             ]}/>
           )}
           </List>
           <div style={style.buttonBox}>
-            <FloatingActionButton secondary={true} onTouchTap={this.handleOpen.bind(this)} mini={true} style={style.actionButton}>
+            <FloatingActionButton secondary={true} onTouchTap={this.handleOpen} mini={true} style={style.actionButton}>
               <ContentAdd />
             </FloatingActionButton>
-            <FloatingActionButton secondary={true} onTouchTap={this.handleOpen.bind(this)} mini={true} style={style.actionButton}>
+            <FloatingActionButton secondary={true} onTouchTap={this.handleOpen} mini={true} style={style.actionButton}>
               <ContentDelete />
             </FloatingActionButton>
-            <FloatingActionButton secondary={true} onTouchTap={this.handleOpen.bind(this)} mini={true} style={style.actionButton}>
+            <FloatingActionButton secondary={true} onTouchTap={this.handleOpen} mini={true} style={style.actionButton}>
               <ContentCreate />
             </FloatingActionButton>
           </div>

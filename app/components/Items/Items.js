@@ -51,7 +51,7 @@ export default class Items extends Component {
         data = JSON.parse(data)
         // console.log(data.length)
         const i = 0, j = 1
-        // console.log(data[i].children[j].functions[0])
+        console.log(data[i].children[j].functions[0])
         this.setState({posts:(data[i].children[j].functions[0].operations)})
       }
     })

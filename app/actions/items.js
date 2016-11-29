@@ -15,7 +15,7 @@ export function selectItems(first,second) {
 }
 
 //开始获取列表action
-export function requestItems(first,second) {
+export function requestItems(first, second) {
   return {
     type: REQUEST_MENUS,
     first,
@@ -24,16 +24,14 @@ export function requestItems(first,second) {
 }
 
 //获取列表成功action
-export function receiveItems(first, second, data) {
+export function receiveItems(items) {
   return {
     type: RECEIVE_MENUS,
-    first: first,
-    second: second,
-    items: data[i].children[j].functions[0].operations,
+    items: items,
   }
 }
 
-//获取列表
+//读取本地json文件获取列表
 function fsItems(first, second) {
   return dispatch => {
     dispatch(requestItems(first, second))
@@ -42,7 +40,8 @@ function fsItems(first, second) {
         console.log(err)
       } else {
         data = JSON.parse(data)
-        data => dispatch(receiveItems(first, second, data))
+        items = data[first].children[second].function[0].operations
+        items => dispatch(receiveItems(items))
       }
     })
   }

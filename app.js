@@ -63,7 +63,7 @@
 /******/ 	}
 
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "70e193eb9413f8d9c1e0"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "176a36b4adc07000a58a"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 
@@ -27394,6 +27394,7 @@
 	    _classCallCheck(this, SideBar);
 
 	    _get(Object.getPrototypeOf(SideBar.prototype), 'constructor', this).call(this, props);
+	    this.handleOpen = this.handleOpen.bind(this);
 	    this.state = {
 	      listItems: []
 	    };
@@ -27420,8 +27421,24 @@
 	      this.setState({ open: true });
 	    }
 	  }, {
+	    key: 'fsItems',
+	    value: function fsItems(j, i) {
+	      fs.readFile('./test.json', 'utf-8', function (err, data) {
+	        if (err) {
+	          console.log(err);
+	        } else {
+	          console.log(j, i);
+	          console.log(typeof j);
+	          data = JSON.parse(data);
+	          console.log(data[j].children[i].functions[0].operations);
+	        }
+	      });
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
+	      var _this2 = this;
+
 	      return _react2['default'].createElement(
 	        'div',
 	        { style: style.paper },
@@ -27439,6 +27456,7 @@
 	                  _react2['default'].createElement(_materialUiLibListsListItem2['default'], {
 	                    id: j,
 	                    key: i,
+	                    onClick: _this2.fsItems.bind(_this2, j, i),
 	                    primaryText: list.name })
 	                );
 	              })] });
@@ -27449,17 +27467,17 @@
 	          { style: style.buttonBox },
 	          _react2['default'].createElement(
 	            _materialUiLibFloatingActionButton2['default'],
-	            { secondary: true, onTouchTap: this.handleOpen.bind(this), mini: true, style: style.actionButton },
+	            { secondary: true, onTouchTap: this.handleOpen, mini: true, style: style.actionButton },
 	            _react2['default'].createElement(_materialUiLibSvgIconsContentAdd2['default'], null)
 	          ),
 	          _react2['default'].createElement(
 	            _materialUiLibFloatingActionButton2['default'],
-	            { secondary: true, onTouchTap: this.handleOpen.bind(this), mini: true, style: style.actionButton },
+	            { secondary: true, onTouchTap: this.handleOpen, mini: true, style: style.actionButton },
 	            _react2['default'].createElement(_materialUiLibSvgIconsContentRemove2['default'], null)
 	          ),
 	          _react2['default'].createElement(
 	            _materialUiLibFloatingActionButton2['default'],
-	            { secondary: true, onTouchTap: this.handleOpen.bind(this), mini: true, style: style.actionButton },
+	            { secondary: true, onTouchTap: this.handleOpen, mini: true, style: style.actionButton },
 	            _react2['default'].createElement(_materialUiLibSvgIconsContentCreate2['default'], null)
 	          )
 	        )
@@ -38374,7 +38392,7 @@
 	          // console.log(data.length)
 	          var i = 0,
 	              j = 1;
-	          // console.log(data[i].children[j].functions[0])
+	          console.log(data[i].children[j].functions[0]);
 	          _this.setState({ posts: data[i].children[j].functions[0].operations });
 	        }
 	      });
@@ -41535,7 +41553,7 @@
 	        ),
 	        _react2['default'].createElement(
 	          'span',
-	          null,
+	          { className: 'searchTitle' },
 	          'title'
 	        ),
 	        _react2['default'].createElement(_DialogDialog2['default'], {

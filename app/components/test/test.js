@@ -42,8 +42,9 @@ export default class Test extends Component {
         console.error(err)
       } else {
         console.log(typeof(data))
+        data = JSON.parse(data)
         const a = data
-        textarea.value=a.A
+        textarea.value=JSON.stringify(a.A)
         console.log("读完成！")
         console.log(a["A"])
       }

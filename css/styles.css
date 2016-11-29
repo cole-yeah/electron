@@ -55,3 +55,12 @@
     right: 20px;
     z-index: 19;
 }
+.dialogTitle{
+    margin:0 0 0 1em;
+    padding-top: 1em;
+    color: #00bcd4;
+}
+.searchTitle{
+    font-weight: 600;
+    color: #00bcd4;
+}

@@ -20,19 +20,6 @@ const BrowserWindow = electron.BrowserWindow;
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
 
-/**
- * 监听ipcrenderer，读写本地json文件
- */
-// ipcMain.on('save-json-file', data => {
-//   fs.writeFile(_path, data, event => {
-//     console.log(data)
-//   })
-// })
-
-  fs.readFile(_path, (err, data) => {
-    err ? console.log(err) : console.log(data)
-  })
-
 function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({

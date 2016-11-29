@@ -55,6 +55,8 @@ export default class Search extends Component {
           <RaisedButton label="刷 新" primary={true} style={styles.raisedButton} />
         </span>
 
+        <span className="searchTitle">title</span>
+
           <Dialog
           open={this.state.open}
           handleClose={this.handleClose.bind(this)}/>

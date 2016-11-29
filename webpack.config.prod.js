@@ -4,7 +4,7 @@ var nodeModulesPath = path.resolve(__dirname, 'node_modules');
 module.exports = {
   // entry: './js/entry.js',
   entry: [
-     path.join(__dirname, 'app/test.js')
+     path.join(__dirname, 'app/client.jsx')
   ],
   output: {
     path: __dirname + '/',

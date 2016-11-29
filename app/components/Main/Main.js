@@ -5,9 +5,7 @@ import AppBar from 'material-ui/lib/app-bar'
 import IconButton from 'material-ui/lib/icon-button'
 import ActionHome from 'material-ui/lib/svg-icons/action/home'
 import {fullWhite} from 'material-ui/lib/styles/colors'
-import Paper from 'material-ui/lib/paper'
-import Search from '../Search/Search'
-import Sider from '../Sider/Sider'
+import SideBar from '../SideBar/SideBar'
 
 const Main = props => (
     <div>
@@ -24,7 +22,7 @@ const Main = props => (
       <div className="MainBody">
 
         <div className="MainLeft">
-          <Sider/>
+          <SideBar/>
         </div>
 
         <div className="MainRight">

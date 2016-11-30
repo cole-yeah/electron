@@ -8,6 +8,7 @@ import TableBody from 'material-ui/lib/table/table-body'
 import FloatingActionButton from 'material-ui/lib/floating-action-button'
 import ContentCreate from 'material-ui/lib/svg-icons/content/create'
 import ContentForward from 'material-ui/lib/svg-icons/content/forward'
+import RaisedButton from 'material-ui/lib/raised-button'
 import Search from '../Search/Search'
 import Dialog from '../Dialog/Dialog'
 
@@ -20,7 +21,10 @@ const style = {
   },
   table: {
     overflowX: 'hidden'
-  }
+  },
+  raisedButton: {
+    margin: 10
+  },
 }
 
 export default class Items extends Component {
@@ -111,7 +115,10 @@ export default class Items extends Component {
             open={this.state.open}
             handleClose={this.handleClose.bind(this)}
         />
-
+        <div className="exp-imp">
+          <RaisedButton label="导 入" secondary={true} style={style.raisedButton} />
+          <RaisedButton label="导 出" secondary={true} style={style.raisedButton} />
+        </div>
       </div>
     )
   }

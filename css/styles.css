@@ -55,6 +55,12 @@
     right: 20px;
     z-index: 19;
 }
+.exp-imp{
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 19;
+}
 .dialogTitle{
     margin:0 0 0 1em;
     padding-top: 1em;

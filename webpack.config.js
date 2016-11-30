@@ -7,7 +7,7 @@ module.exports = {
   entry: [
     `webpack-dev-server/client?${devserverpath}`, // WebpackDevServer host and port
     'webpack/hot/only-dev-server',
-     path.join(__dirname, 'app/client.jsx')
+     path.join(__dirname, 'app/test.js')
   ],
   output: {
     path: __dirname + '/',

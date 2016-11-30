@@ -8,11 +8,9 @@ import TableBody from 'material-ui/lib/table/table-body'
 import FloatingActionButton from 'material-ui/lib/floating-action-button'
 import ContentCreate from 'material-ui/lib/svg-icons/content/create'
 import ContentForward from 'material-ui/lib/svg-icons/content/forward'
-import Search from '../Search/Search'
 import Dialog from '../Dialog/Dialog'
 
-const remote = window.require('electron').remote
-const fs = remote.require('fs')
+
 
 const style = {
   tableCreate: {
@@ -61,8 +59,6 @@ export default class Items extends Component {
     return (
       <div>
 
-        <Search/>
-
         <Table
           fixedHeader={this.state.fixedHeader}
           fixedFooter={this.state.fixedFooter}
@@ -88,10 +84,10 @@ export default class Items extends Component {
             showRowHover={this.state.showRowHover}
             stripedRows={this.state.stripedRows}
           >
-
+          
               <TableRow>
-                <TableRowColumn>{posts.functionId}</TableRowColumn>
-                <TableRowColumn>{posts.functionName}</TableRowColumn>
+                <TableRowColumn>456</TableRowColumn>
+                <TableRowColumn>789</TableRowColumn>
                 <TableRowColumn style={style.tableCreate}>
                   <FloatingActionButton mini={true} secondary={true} onTouchTap={this.handleOpen}>
                    <ContentForward />

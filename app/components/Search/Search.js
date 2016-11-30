@@ -58,8 +58,8 @@ export default class Search extends Component {
         <span className="searchTitle">title</span>
 
           <Dialog
-          open={this.state.open}
-          handleClose={this.handleClose.bind(this)}/>
+            open={this.state.open}
+            handleClose={this.handleClose.bind(this)}/>
 
         <span className="handle">
           <FloatingActionButton secondary={true} onTouchTap={this.handleOpen.bind(this)} mini={true} style={styles.actionButton}>

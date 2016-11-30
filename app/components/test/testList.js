@@ -30,19 +30,19 @@ function wrapState(ComposedComponent) {
 
 SelectableList = wrapState(SelectableList);
 
+
 export default class ListExampleSelectable extends Component {
   render() {
+    const i = 4
+    const j = 2
     return(
-      <SelectableList
-        value={3}
-        subheader="SelectableContacts"
-      >
+      <SelectableList>
         <ListItem
           value={101}
           primaryText="Brendan Lim"
           nestedItems={[
             <ListItem
-              value={102}
+              value={i+j}
               primaryText="Grace Ng"
             />,
           ]}
@@ -50,6 +50,12 @@ export default class ListExampleSelectable extends Component {
         <ListItem
           value={103}
           primaryText="Kerem Suer"
+          nestedItems={[
+            <ListItem
+              value={i*10+j}
+              primaryText="Grace Ng"
+            />,
+          ]}
         />
         <ListItem
           value={104}

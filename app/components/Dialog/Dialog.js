@@ -5,7 +5,7 @@ import RaisedButton from 'material-ui/lib/raised-button'
 import Divider from 'material-ui/lib/divider'
 import TextField from 'material-ui/lib/text-field'
 
-import Test from './test'
+import Test from './OperationsDialog'
 
 const style = {
   textField: {

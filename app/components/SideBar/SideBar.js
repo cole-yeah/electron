@@ -1,6 +1,4 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router'
-import Paper from 'material-ui/lib/paper'
 import ContentDelete from 'material-ui/lib/svg-icons/content/remove'
 import FloatingActionButton from 'material-ui/lib/floating-action-button'
 import ContentAdd from 'material-ui/lib/svg-icons/content/add'
@@ -16,11 +14,6 @@ const style = {
     display: 'inline-block',
     margin: '0 -12px 130px 0',
     overflowY: 'scroll',
-  },
-  link:{
-    textDecoration:'none',
-    textIndent: '1em',
-    display: 'block',
   },
   item:{
     minWidth:'180px',
@@ -59,20 +52,8 @@ export default class SideBar extends Component {
     this.setState({open: true});
   }
 
-  fsItems(j, i) {
-    fs.readFile('./test.json', 'utf-8', (err, data) => {
-      if(err) {
-        console.log(err)
-      } else {
-        console.log(j,i)
-        console.log(typeof(j))
-        data = JSON.parse(data)
-        console.log(data[j].children[i].functions[0].operations)
-      }
-    })
-  }
-
   render(){
+    const { handleClick } = this.props
     return(
       <div style={style.paper}>
         <List style={style.item}>
@@ -83,13 +64,10 @@ export default class SideBar extends Component {
               primaryTogglesNestedList={true}
               nestedItems={[
               listItem.children.map((list, i) =>
-              <Link style={style.link} to={`/items/${list.menuId}`}> 
                 <ListItem 
-                  id={j}
                   key={i}
-                  onClick={this.fsItems.bind(this, j, i)}
-                  primaryText={list.name}/>
-              </Link>,)
+                  onClick={handleClick.bind(this, j, i)}
+                  primaryText={list.name}/>,)
             ]}/>
           )}
           </List>

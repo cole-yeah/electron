@@ -1,10 +1,20 @@
-import { SELECT_ITEMS, REQUEST_ITEMS } from '../actions/items'
+import { combineReducers } from 'redux'
+import { RECEIVE_ITEMS } from '../actions/items'
 
-function selectedItems(state = '', action) {
+function items(state={
+  posts:[]
+}, action) {
   switch (action.type) {
-    case SELECT_ITEMS:
-      return action.menus
+    case RECEIVE_ITEMS:
+      return Object.assign({}, state, {
+        posts: action.items
+      })
     default:
       return state
   }
 }
+
+const rootReducer = combineReducers({
+  items,
+})
+export default rootReducer

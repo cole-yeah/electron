@@ -1,48 +1,24 @@
 const remote = window.require('electron').remote
 const fs = remote.require('fs')
 
-export const SELECT_ITEMS = 'SELECT_ITEMS'
-export const REQUEST_ITEMS = 'REQUEST_ITEMS'
-
-
-//选择菜单类型action
-export function selectItems(first,second) {
-  return {
-    type: SELECT_MENUS,
-    first,
-    second,
-  }
-}
-
-//开始获取列表action
-export function requestItems(first, second) {
-  return {
-    type: REQUEST_MENUS,
-    first,
-    second,
-  }
-}
+export const RECEIVE_ITEMS = 'RECEIVE_ITEMS'
 
 //获取列表成功action
-export function receiveItems(items) {
+function receiveItems(items) {
+  console.log(items)
   return {
-    type: RECEIVE_MENUS,
+    type: RECEIVE_ITEMS,
     items: items,
   }
 }
 
-//读取本地json文件获取列表
-function fsItems(first, second) {
+//读取本地json文件获取列表,根据参数first,second 索引出点击菜单下的数组
+export function readItemsFile(first, second) {
   return dispatch => {
-    dispatch(requestItems(first, second))
-    return fs.readFile('./test.json', 'utf-8', (err, data) => {
-      if(err) {
-        console.log(err)
-      } else {
+    return (fs.readFile('./test.json', 'utf-8', (err, data) => {
         data = JSON.parse(data)
-        items = data[first].children[second].function[0].operations
-        items => dispatch(receiveItems(items))
-      }
-    })
+        const items = (data[first].children[second].functions[0])
+        dispatch(receiveItems(items))
+    }))
   }
 }

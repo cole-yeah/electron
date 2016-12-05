@@ -10,7 +10,7 @@ export default class Menus extends Component {
           posts.map((post, i) => 
             <MenusItems
               open={actions.openItems}
-              _selectedItems={actions.selectedItems}
+              _selectedItems={actions.haha}
               _checkedAll={actions.checkedAll}
               _checkedItems={actions.checkedItems}
               items={post}

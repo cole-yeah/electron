@@ -1,8 +1,6 @@
 // import { GET_SUCCESS } from '../actions/menus'
 
-// export default function items(state={
-//   menus:[]
-// }, action) {
+// export default function menus(state=[], action) {
 //   switch (action.type) {
 //     case GET_SUCCESS:
 //     // console.log(action.menus)

@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import Checkbox from 'material-ui/lib/checkbox'
-import cs from 'classnames'
+// import cs from 'classnames'
 
 const style = {
   checkbox: {
@@ -34,7 +34,7 @@ export default class MenusItems extends Component {
                   style={style.checkbox}/>
                 <span
                   child={child}
-                  onClick={() => _selectedItems(child.id)}>{child.name}</span>
+                  onClick={() => _selectedItems(child.id, child.functions)}>{child.name}</span>
               </li>)
           }
         </ul>

@@ -6,7 +6,7 @@ export const OPEN_ITEMS = 'OPEN_ITEMS'
 export const CHECKED_ALL = 'CHECKED_ALL'
 export const CHECKED_ITEMS = 'CHECKED_ITEMS'
 export const SELECTED_ITEMS = 'SELECTED_ITEMS'
-
+export const TESTS = 'TESTS'
 export function openItems(id) {
   return {
     type: OPEN_ITEMS,
@@ -26,6 +26,20 @@ export function checkedItems(id) {
     type: CHECKED_ITEMS,
     id,
   }
+}
+
+export function tests(items) {
+    return {
+        type: TESTS,
+        items,
+    }
+}
+
+export function haha(id, items) {
+    return dispatch => {
+        dispatch(selectedItems(id))
+        dispatch(tests(items))
+    }
 }
 
 export function selectedItems(id) {

@@ -7,6 +7,9 @@
 *{
     font-family: Microsoft YaHei;
 }
+li{
+    list-style: none;
+}
 .MainBody{
     display: flex;
     align-items: stretch;
@@ -69,4 +72,38 @@
 .searchTitle{
     font-weight: 600;
     color: #00bcd4;
+}
+
+.menusBox{
+    width: 180px;
+    margin-left: -40px;
+    overflow-y:auto;
+    margin-bottom: 100px;
+}
+.menusBox>li{
+    margin:4px 0;
+}
+/*.menusBox ul{
+    display: none;
+}*/
+.block{
+    display: block;
+    margin-left: -40px;
+}
+.none{
+    display: none;
+}
+.bgColor{
+    background: none rgba(0, 0, 0, 0.2);
+}
+.menus{
+    margin-left: -40px;
+    display: block;
+}
+.block>li{
+    padding: 4px 0 4px 20px;
+}
+.arrow{
+    float: right;
+    margin-right: 10px;
 }

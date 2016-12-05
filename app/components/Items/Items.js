@@ -12,8 +12,8 @@ import RaisedButton from 'material-ui/lib/raised-button'
 import Search from '../Search/Search'
 import Dialog from '../Dialog/Dialog'
 
-const remote = window.require('electron').remote
-const fs = remote.require('fs')
+// const remote = window.require('electron').remote
+// const fs = remote.require('fs')
 
 const style = {
   tableCreate: {

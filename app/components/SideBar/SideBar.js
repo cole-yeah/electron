@@ -6,8 +6,8 @@ import ContentCreate from 'material-ui/lib/svg-icons/content/create'
 import List from 'material-ui/lib/lists/list'
 import ListItem from 'material-ui/lib/lists/list-item'
 
-const remote = window.require('electron').remote
-const fs = remote.require('fs')
+// const remote = window.require('electron').remote
+// const fs = remote.require('fs')
 
 const style = {
   paper:{
@@ -38,14 +38,14 @@ export default class SideBar extends Component {
 
   componentDidMount() {
     console.log('执行componentDidMount')
-    fs.readFile('./test.json', 'utf-8', (err, data) => {
-      if(err) {
-        console.log(err)
-      } else {
-        data = JSON.parse(data)
-        this.setState({listItems: data})
-      }
-    })
+    // fs.readFile('./test.json', 'utf-8', (err, data) => {
+    //   if(err) {
+    //     console.log(err)
+    //   } else {
+    //     data = JSON.parse(data)
+    //     this.setState({listItems: data})
+    //   }
+    // })
   }
 
   handleOpen(){

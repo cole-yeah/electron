@@ -1,15 +1,15 @@
 import React, { Component, PropTypes } from 'react'
-import { Link } from 'react-router'
+import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import AppBar from 'material-ui/lib/app-bar'
 import IconButton from 'material-ui/lib/icon-button'
 import ActionHome from 'material-ui/lib/svg-icons/action/home'
 import {fullWhite} from 'material-ui/lib/styles/colors'
 
-import * as ItemsAcitons from '../actions/items'
+import * as Actions from '../actions/items'
 import Items from '../components/Items/Items'
-import SideBar from '../components/SideBar/SideBar'
-import { readItemsFile } from '../actions/items'
+import Menus from '../components/Menus/Menus'
+import { receiveItems } from '../actions/items'
 
 class App extends Component {
   constructor(props) {
@@ -17,32 +17,34 @@ class App extends Component {
   }
 
   componentDidMount() {
-    console.log('执行componentDidMount')
+    console.log('执行app componentDidMount')
+    this.props.actions.receiveItems()
   }
-
-  handleClick(j, i) {
-    this.props.dispatch(readItemsFile(j, i))
-  }
+  // handleClick(j, i) {
+  //   this.props.dispatch(readItemsFile(j, i))
+  // }           
+  // <SideBar
+  //  handleClick={this.handleClick.bind(this)}/>
 
   render() {
-    const {posts} = this.props
+    const {posts, actions} = this.props
     return(    
       <div>
         <AppBar
           title="Coooooool"
             iconElementLeft={
-              <Link to="/">
                 <IconButton>
                   <ActionHome color={fullWhite} />
                 </IconButton>
-              </Link>}
+              }
         />
 
         <div className="MainBody">
 
           <div className="MainLeft">
-            <SideBar
-              handleClick={this.handleClick.bind(this)}/>
+            <Menus
+              actions={actions}
+              posts={posts}/>
           </div>
 
           <div className="MainRight">
@@ -58,8 +60,14 @@ class App extends Component {
 
 function mapStateToProps(state) {
   return {
-    posts: state.items.posts
+    posts: state.items
   }
 }
 
-export default connect(mapStateToProps)(App)
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: bindActionCreators(Actions, dispatch)
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App)

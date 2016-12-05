@@ -54,6 +54,7 @@
     "moment": "^2.12.0"
   },
   "dependencies": {
+    "classnames": "^2.2.5",
     "fs": "0.0.1-security",
     "material-ui": "^0.14.4",
     "nconf": "^0.8.4",

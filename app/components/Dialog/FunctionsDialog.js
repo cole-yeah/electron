@@ -38,6 +38,22 @@ export default class FunctionsDialog extends Component {
 
   constructor(props) {
     super(props)
+    this.state = {
+      functionId: '',
+      functionName:''
+    }
+  }
+
+  componentDidMount() {
+    console.log('45646565465')
+  }
+
+  handleChange(name, event) {
+    console.log(name)
+    let newState = {}
+    newState[name] = event.target.value
+    console.log(newState)
+    this.setState(newState)
   }
 
   render() {
@@ -48,8 +64,20 @@ export default class FunctionsDialog extends Component {
       functions.edit?(
         <div>
           <h3 className="dialogTitle">functions</h3>
-          <TextField defaultValue={functions.functionId} hintText="functionId" floatingLabelText="functionId" style={style.textField} />
-          <TextField defaultValue={functions.functionName} hintText="functionName" floatingLabelText="functionName" style={style.textField} />
+          <TextField 
+            onChange={this.handleChange.bind(this,"functionId")}
+            value={this.state.functionId} 
+            defaultValue={functions.functionId} 
+            hintText="functionId" 
+            floatingLabelText="functionId" 
+            style={style.textField} />
+          <TextField 
+            onChange={this.handleChange.bind(this,"functionName")}
+            value={this.state.functionName} 
+            defaultValue={functions.functionName} 
+            hintText="functionName" 
+            floatingLabelText="functionName" 
+            style={style.textField} />
 
           <span className="dialogButton">
             <FlatButton label="Cancel" secondary={true}  onTouchTap={() => itemsActions.handleClose()} />

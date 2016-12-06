@@ -1,19 +1,21 @@
 import React, { Component, PropTypes } from 'react'
+import Paper from 'material-ui/lib/paper'
 import MenusItems from './MenusItems'
 
 export default class Menus extends Component {
   render() {
-    const {posts, actions} = this.props
+    const {menus, actions} = this.props
     return(
       <ul className="menusBox">
         {
-          posts.map((post, i) => 
+          menus.map((menu, i) => 
             <MenusItems
-              open={actions.openItems}
-              _selectedItems={actions.haha}
+              key={i}
+              open={actions.openMenus}
+              _dispatchActions={actions.dispatchActions}
               _checkedAll={actions.checkedAll}
-              _checkedItems={actions.checkedItems}
-              items={post}
+              _checkedMenus={actions.checkedMenus}
+              menuItems={menu}
               />)
         }
       </ul>

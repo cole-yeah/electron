@@ -69,3 +69,20 @@ export default class ListExampleSelectable extends Component {
       )
     }
 }
+
+
+          <h3 className="dialogTitle">webApis</h3>
+          <div>
+            <TextField hintText="serviceUrl" floatingLabelText="serviceUrl" style={style.textField} />
+            <TextField hintText="serviceMethod" floatingLabelText="serviceMethod" style={style.textField} />
+          </div>
+          <div>
+            <TextField hintText="serviceUrl" floatingLabelText="serviceUrl" style={style.textField} />
+            <TextField hintText="serviceMethod" floatingLabelText="serviceMethod" style={style.textField} />
+          </div>
+
+                  <div>
+          <FloatingActionButton secondary={true} mini={true} style={style.actionButton}>
+            <ContentAdd />
+          </FloatingActionButton>
+        </div>

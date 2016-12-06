@@ -6,10 +6,11 @@ import IconButton from 'material-ui/lib/icon-button'
 import ActionHome from 'material-ui/lib/svg-icons/action/home'
 import {fullWhite} from 'material-ui/lib/styles/colors'
 
-import * as Actions from '../actions/items'
+import * as MenusActions from '../actions/menus'
+import * as ItemsActions from '../actions/items'
 import Items from '../components/Items/Items'
 import Menus from '../components/Menus/Menus'
-import { receiveItems } from '../actions/items'
+// import { receiveMenus } from '../actions/menus'
 
 class App extends Component {
   constructor(props) {
@@ -18,16 +19,17 @@ class App extends Component {
 
   componentDidMount() {
     console.log('执行app componentDidMount')
-    this.props.actions.receiveItems()
+    this.props.menusActions.receiveMenus()
   }
   // handleClick(j, i) {
   //   this.props.dispatch(readItemsFile(j, i))
-  // }           
+  // }                      
+
   // <SideBar
   //  handleClick={this.handleClick.bind(this)}/>
 
   render() {
-    const {posts, actions} = this.props
+    const {items, menusActions, itemsActions, menus} = this.props
     return(    
       <div>
         <AppBar
@@ -43,13 +45,14 @@ class App extends Component {
 
           <div className="MainLeft">
             <Menus
-              actions={actions}
-              posts={posts}/>
+              actions={menusActions}
+              menus={menus}/>
           </div>
 
           <div className="MainRight">
             <Items
-              posts={posts}/>
+              itemsActions={itemsActions}
+              items={items}/> 
           </div>
 
         </div>
@@ -60,13 +63,15 @@ class App extends Component {
 
 function mapStateToProps(state) {
   return {
-    posts: state.items
+    items: state.items,
+    menus: state.menus
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators(Actions, dispatch)
+    menusActions: bindActionCreators(MenusActions, dispatch),
+    itemsActions: bindActionCreators(ItemsActions, dispatch)
   }
 }
 

@@ -6,8 +6,6 @@ import ContentDelete from 'material-ui/lib/svg-icons/content/remove'
 import FloatingActionButton from 'material-ui/lib/floating-action-button'
 import ContentAdd from 'material-ui/lib/svg-icons/content/add'
 
-import Dialog from '../Dialog/Dialog'
-
 const styles = {
   paper:{
     width: '100%',
@@ -35,16 +33,16 @@ export default class Search extends Component {
   }
 
    handleOpen(){
-    this.setState({open: true});
   }
 
-  handleClose() {
-    this.setState({
-      open:false
-    })    
-  }
+  // handleClose() {
+  //   this.setState({
+  //     open:false
+  //   })    
+  // }
 
   render() {
+    const {searchTitle} = this.props
     return (
       <Paper style={styles.paper} zDepth={1}>
         <span>
@@ -55,11 +53,11 @@ export default class Search extends Component {
           <RaisedButton label="刷 新" primary={true} style={styles.raisedButton} />
         </span>
 
-        <span className="searchTitle">title</span>
-
-          <Dialog
-            open={this.state.open}
-            handleClose={this.handleClose.bind(this)}/>
+        <span className="searchTitle">
+          {
+            searchTitle.map((title,i) => title.functionName)
+          }
+        </span>
 
         <span className="handle">
           <FloatingActionButton secondary={true} onTouchTap={this.handleOpen.bind(this)} mini={true} style={styles.actionButton}>

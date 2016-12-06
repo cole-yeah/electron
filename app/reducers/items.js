@@ -1,75 +1,58 @@
-import { combineReducers } from 'redux'
-import { RECEIVE_ITEMS, OPEN_ITEMS, CHECKED_ALL, CHECKED_ITEMS, SELECTED_ITEMS, TESTS } from '../actions/items'
-
+import { RECEIVE_ITEMS } from '../actions/menus'
+import { HANDLE_CLOSE, HANDLE_OPEN, HANDLE_EDIT, OPERATION_OPEN, OPERATION_EDIT, OPERATION_CLOSE } from '../actions/items'
 /**
- * 获取数据
- */
+ * 获取items  
+ */  
 export function items(state=[], action) {
   switch (action.type) {
     case RECEIVE_ITEMS:
-      return action.items.map((item, i) => {
+      return action.items.map(item => {
         item.open = false
-        item.checked = false
-        item.key = i
-        item.children.map((child, j) => {
-          child.checked = false
-          child.selected = false
-          child.id = i*10 + j
+        item.edit = false
+        item.operations.map(operation=> {
+          operation.open = false
+          operation.edit = false
         })
         return item
       })
-      // Object.assign({}, state, {
-      //   posts: action.items
-      // })
 /**
- * 选中该一级菜单
- */
-    case OPEN_ITEMS:
-      return state.map(item =>
-        item.key === action.id?
-          Object.assign({}, item, {
-            open: !item.open}
-          ):item)
-        // {...item, open: !item.open}:item)
+ * 关闭functions的dialog  
+ */    
+    case HANDLE_CLOSE:
+      return state.map(item => Object.assign({}, item, { open: false, edit: false }))
 /**
- * 点击勾选该一级菜单下所有二级菜单
+ * 打开functions的dialog  
  */
-    case CHECKED_ALL:
-      let all = state[action.id].children.every(child => child.checked)
-      console.log(all)
-      return state.map( item => 
-          item.key === action.id?
-            Object.assign({}, item, {
-              children: item.children.map(child => Object.assign({}, child, {
-                checked: !all}
-              ))
-            }):item)
+    case HANDLE_OPEN:
+      return state.map(item => Object.assign({}, item, { open: true, edit: false}))
 /**
- * 点击勾选或取消二级菜单
+ * 编辑functions的dialog  
  */
-    case CHECKED_ITEMS:
-      return state.map(item => 
-        Object.assign({}, item, {
-          children: item.children.map(child => child.id === action.id?
-            Object.assign({}, child, {
-              checked: !child.checked
-            }):child)
-          }))
+    case HANDLE_EDIT:
+      return state.map(item => Object.assign({}, item, {open: true, edit: true}))
 /**
- * 选择该二级菜单
+ * 打开operation的dialog  
  */
-    case SELECTED_ITEMS:
-      state.map(item => item.children.map(child => child.selected = false))
+    case OPERATION_OPEN:
       return state.map(item => Object.assign({}, item, {
-        children: item.children.map(child => child.id === action.id?
-          Object.assign({}, child, {
-            selected: true 
-          }):child)
-        }))
-
-      case TESTS:
-        console.log(action.items)
-        // return console.log(state.map(item => item.children.filter(child.selected === true)))
+        operations: item.operations.map(operation => operation.opId === action.opId?
+          Object.assign({}, operation, { open: true, edit: false }):operation)
+      })) 
+/**
+ * 关闭operation的dialog  
+ */
+    case OPERATION_CLOSE:
+      return state.map(item => Object.assign({}, item, {
+        operations: item.operations.map(operation => Object.assign({}, operation, { open: false, edit: false }))
+      })) 
+/**
+ * 编辑operation的dialog  
+ */
+    case OPERATION_EDIT:
+      return state.map(item => Object.assign({}, item, {
+        operations: item.operations.map(operation => operation.opId === action.opId?
+          Object.assign({}, operation, { open: true, edit: true }):operation)
+      }))  
 
     default:
       return state

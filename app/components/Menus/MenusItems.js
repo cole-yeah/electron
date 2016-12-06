@@ -12,29 +12,30 @@ const style = {
 
 export default class MenusItems extends Component {
   render() {
-    const {items, open, _checkedAll, _checkedItems, _selectedItems} = this.props
+    const {menuItems, open, _checkedAll, _checkedMenus, _dispatchActions } = this.props
     let element = (
-      <span open={items.open}>
+      <span open={menuItems.open}>
         <Checkbox
-          checked={items.children.every(child => child.checked)}
-          onClick={() => _checkedAll(items.key)}
+          checked={menuItems.children.every(child => child.checked)}
+          onClick={() => _checkedAll(menuItems.menuId, menuItems.key)}
           style={style.checkbox}/>
         <span
-          onClick={() => open(items.key)}>{items.name}</span>
-        <span className="arrow">{items.open?'-':'+'}</span>
-        <ul className={items.open?'block':'none'}>
+          onClick={() => open(menuItems.menuId)}>{menuItems.name}</span>
+        <span className="arrow">{menuItems.open?'▲':'▼'}</span>
+        <ul className={menuItems.open?'block':'none'}>
           {
-            items.children.map((child, j) =>               
+            menuItems.children.map((child, j) =>               
               <li
+                key={j}
                 selected={child.selected} 
                 className={child.selected?'bgColor':''}>
                 <Checkbox
                   checked={child.checked}
-                  onClick={() => _checkedItems(child.id)}
+                  onClick={() => _checkedMenus(child.menuId)}
                   style={style.checkbox}/>
                 <span
                   child={child}
-                  onClick={() => _selectedItems(child.id, child.functions)}>{child.name}</span>
+                  onClick={() => _dispatchActions(child.menuId, child.functions)}>{child.name}</span>
               </li>)
           }
         </ul>

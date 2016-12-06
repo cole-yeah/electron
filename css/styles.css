@@ -27,15 +27,17 @@ li{
     margin-bottom:60px;
     background: white;
     z-index: 9;
+    margin-left: -12px;
 }
 .MainRight>div{
     width:100%;
+    min-height: 160px;
 }
 .text{
     text-decoration: none;
 }
 /*welcome*/
-.welcome{
+/*.welcome{
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -48,7 +50,7 @@ li{
 .welcome>h2{
     color: #00bcd4;
     font-size: 50px;
-}
+}*/
 .handle{
     display: inline-block;
 }
@@ -75,13 +77,13 @@ li{
 }
 
 .menusBox{
-    width: 180px;
+    width: 200px;
     margin-left: -40px;
-    overflow-y:auto;
-    margin-bottom: 100px;
+    overflow-y:scroll;
+    margin-bottom: 130px;
 }
 .menusBox>li{
-    margin:6px 0;
+    margin:8px 0;
     cursor: pointer;
 }
 /*.menusBox ul{
@@ -102,9 +104,14 @@ li{
     display: block;
 }
 .block>li{
-    padding: 6px 0 6px 20px;
+    padding: 8px 0 8px 20px;
 }
 .arrow{
     float: right;
     margin-right: 10px;
+    color: #00bcd4;
+}
+.dialogButton{
+    float: right;
+    margin:20px 20px 0 0;
 }

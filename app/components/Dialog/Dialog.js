@@ -5,7 +5,7 @@ import RaisedButton from 'material-ui/lib/raised-button'
 import Divider from 'material-ui/lib/divider'
 import TextField from 'material-ui/lib/text-field'
 
-import Test from './OperationsDialog'
+import FunctionsDialog from './FunctionsDialog'
 
 const style = {
   textField: {
@@ -23,31 +23,34 @@ export default class DialogExampleAlert extends React.Component {
   }
 
   render() {
+    const { handleClose, functions, open, itemsActions } = this.props
 
-    const actions = [
-      <FlatButton
-        label="Cancel"
-        secondary={true}
-        onTouchTap={this.props.handleClose.bind(this)}
-      />,
-      <FlatButton
-        label="Submit"
-        primary={true}
-        keyboardFocused={true}
-        onTouchTap={this.props.handleClose.bind(this)}//到时这个逻辑改为提交的
-      />,
-    ]
+    // let actions = functions.edit?[
+    //   <FlatButton
+    //     label="Cancel"
+    //     secondary={true}
+    //     onTouchTap={() => handleClose()}
+    //   />,
+    //   <FlatButton
+    //     label="Submit"
+    //     primary={true}
+    //     keyboardFocused={true}
+    //     onTouchTap={() => handleClose()}//到时这个逻辑改为提交的
+    //   />,
+    // ]:''
 
     return (
       <div>
         <Dialog
           modal={false}
-          actions={actions}
-          open={this.props.open}
+          open={open}
           contentStyle={style.dialog}
-          onRequestClose={this.props.handleClose.bind(this)}
+          onRequestClose={() => handleClose()}
         >
-          <Test/>
+          <FunctionsDialog
+            itemsActions={itemsActions}
+            functions={functions}/>
+
         </Dialog>
       </div>
     );

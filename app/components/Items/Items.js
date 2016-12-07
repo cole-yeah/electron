@@ -31,6 +31,9 @@ export default class Items extends Component {
     super(props)
   }    
 
+handleClick(){
+  console.log('123')
+}
 
   render() {
     const { items=[], itemsActions } = this.props
@@ -51,10 +54,13 @@ export default class Items extends Component {
               <TableHeaderColumn style={style.tableCreate}>edit</TableHeaderColumn>
             </TableRow>
           </TableHeader>
-          <TableBody>
+          <TableBody deselectOnClickaway={false}>
           {
             items.map((item, i) => 
               <TableRow 
+                onTouchTap={() => itemsActions.handleSelected()}
+                // onTouchTap={this.handleClick.bind(this)}
+                selected={item.checked}
                 key={i}>
                 <TableRowColumn>{item.functionId}</TableRowColumn>
                 <TableRowColumn>{item.functionName}</TableRowColumn>

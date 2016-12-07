@@ -1,4 +1,4 @@
-import { RECEIVE_MENUS, OPEN_MENUS, CHECKED_ALL, CHECKED_MENUS, SELECTED_MENUS, TESTS } from '../actions/menus'
+import { RECEIVE_MENUS, OPEN_MENUS, CHECKED_ALL, CHECKED_MENUS, SELECTED_MENUS, COMBINE_ITEMS } from '../actions/menus'
 
 /**
  * 获取数据
@@ -13,6 +13,12 @@ export function menus(state=[], action) {
         menu.children.map(child => {
           child.checked = false
           child.selected = false
+          child.functions.map(fun => {
+            fun.checked = false
+            fun.operations.map(operation => {
+              operation.checked = false
+            })
+          })
         })
         return menu
       })
@@ -65,9 +71,17 @@ export function menus(state=[], action) {
           }):child)
         }))
 
-      case TESTS:
-        console.log(action.menus)
-        // return console.log(state.map(menu => menu.children.filter(child.selected === true)))
+    case COMBINE_ITEMS:
+      // const items = action.id
+      const funId = state.map(menu => menu.children.map(child => child.menuId))
+      console.log(typeof(action.items))
+      // console.log(funId)
+      return state.map(menu => Object.assign({}, menu, {
+        children: menu.children.map(child => action.id === child.menuId?
+          Object.assign({}, child, { 
+            functions: action.items 
+          }):child)
+      }))    
 
     default:
       return state

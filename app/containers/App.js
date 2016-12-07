@@ -10,7 +10,6 @@ import * as MenusActions from '../actions/menus'
 import * as ItemsActions from '../actions/items'
 import Items from '../components/Items/Items'
 import Menus from '../components/Menus/Menus'
-// import { receiveMenus } from '../actions/menus'
 
 class App extends Component {
   constructor(props) {
@@ -18,12 +17,19 @@ class App extends Component {
   }
 
   componentDidMount() {
-    console.log('执行app componentDidMount')
-    this.props.menusActions.receiveMenus()
+    // console.log('执行app componentDidMount') receiveMenus
+    // this.props.menusActions.readItemsFile()  //electron下，用fs读取文件
+    this.props.menusActions.receiveMenus()  //web下，假数据
+  }                  
+
+  componentWillReceiveProps(nextState) {
+    // console.log('执行 app componentReceiveProps')
+    const Id = (nextState.items.map(item => item.id))[0] //这个是和后面的menuId做对比判断的，map出来的是数组所以Id === menuId 为false，因为这个只有一个子集，所以直接用[0]取值
+    if(nextState.items !== this.props.items) {  //不加这个判断很容易进行死循环，一直更新
+      this.props.menusActions.combineItems(Id, nextState.items)
+    }
+    // console.log('执行 app componentReceiveProps 完成')
   }
-  // handleClick(j, i) {
-  //   this.props.dispatch(readItemsFile(j, i))
-  // }                      
 
   // <SideBar
   //  handleClick={this.handleClick.bind(this)}/>
@@ -62,6 +68,7 @@ class App extends Component {
 }
 
 function mapStateToProps(state) {
+  // menu = Object.assign({}, menu, {functions: item}) //想把items上改变合并到menus上用这个方法行不通,因为item和menu是平级
   return {
     items: state.items,
     menus: state.menus

@@ -25,20 +25,6 @@ export default class DialogExampleAlert extends React.Component {
   render() {
     const { handleClose, functions, open, itemsActions } = this.props
 
-    // let actions = functions.edit?[
-    //   <FlatButton
-    //     label="Cancel"
-    //     secondary={true}
-    //     onTouchTap={() => handleClose()}
-    //   />,
-    //   <FlatButton
-    //     label="Submit"
-    //     primary={true}
-    //     keyboardFocused={true}
-    //     onTouchTap={() => handleClose()}//到时这个逻辑改为提交的
-    //   />,
-    // ]:''
-
     return (
       <div>
         <Dialog

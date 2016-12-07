@@ -13,7 +13,7 @@ const styles = {
     display: 'flex',
     paddingLeft: 10,
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'initial',
   },
   raisedButton: {
     margin: 10
@@ -58,16 +58,6 @@ export default class Search extends Component {
             searchTitle.map((title,i) => title.functionName)
           }
         </span>
-
-        <span className="handle">
-          <FloatingActionButton secondary={true} onTouchTap={this.handleOpen.bind(this)} mini={true} style={styles.actionButton}>
-            <ContentAdd />
-          </FloatingActionButton>
-          <FloatingActionButton secondary={true} onTouchTap={this.handleOpen.bind(this)} mini={true} style={styles.actionButton}>
-            <ContentDelete />
-          </FloatingActionButton>
-        </span>
-
       </Paper>
     )
   }

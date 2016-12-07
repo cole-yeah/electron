@@ -6,9 +6,6 @@ import ContentCreate from 'material-ui/lib/svg-icons/content/create'
 import List from 'material-ui/lib/lists/list'
 import ListItem from 'material-ui/lib/lists/list-item'
 
-// const remote = window.require('electron').remote
-// const fs = remote.require('fs')
-
 const style = {
   paper:{
     display: 'inline-block',

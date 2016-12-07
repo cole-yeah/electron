@@ -7,6 +7,7 @@ export const CHECKED_ALL = 'CHECKED_ALL'
 export const CHECKED_MENUS = 'CHECKED_MENUS'
 export const SELECTED_MENUS = 'SELECTED_MENUS'
 export const RECEIVE_ITEMS = 'RECEIVE_ITEMS'
+export const COMBINE_ITEMS = 'COMBINE_ITEMS'
 
 export function openMenus(menuId) {
   return {
@@ -30,17 +31,18 @@ export function checkedMenus(menuId) {
   }
 }
 
-export function receiveItems(menus) {
+export function receiveItems(id,menus) {
     return {
         type: RECEIVE_ITEMS,
         items: menus,
+        id,
     }
 }
 
 export function dispatchActions(menuId, items) {
     return dispatch => {
         dispatch(selectedMenus(menuId))
-        dispatch(receiveItems(items))
+        dispatch(receiveItems(menuId,items))
     }
 }
 
@@ -51,12 +53,39 @@ export function selectedMenus(menuId) {
   }
 }
 
+export function combineItems(id, items) {
+    return {
+        type: COMBINE_ITEMS,
+        items,
+        id
+    }
+}
+
+//读取本地json文件获取列表,根据参数first,second 索引出点击菜单下的数组
+// export function readItemsFile() {
+//   return dispatch => {
+//     return (fs.readFile('./test.json', 'utf-8', (err, data) => {
+//         data = JSON.parse(data)
+//         // const items = (data)
+//         dispatch(receiveMenus(data))
+//     }))
+//   }
+// }
+
+//写入本地json文件
+// export function writeItemsFile(data) {
+//     return (fs.writeFile('./test.json', data) {
+//         console.log('Ok')
+//     })
+// } 
+
 //获取列表成功action
 export function receiveMenus() {
   console.log('获取data数据')
   return {
     type: RECEIVE_MENUS,
-    menus: [
+    menus:
+    [
     {
         "systemName": "收货系统",
         "menuId": "10001",
@@ -2697,14 +2726,5 @@ export function receiveMenus() {
   }
 }
 
-//读取本地json文件获取列表,根据参数first,second 索引出点击菜单下的数组
-// export function readItemsFile(first, second) {
-//   return dispatch => {
-//     return (fs.readFile('./test.json', 'utf-8', (err, data) => {
-//         data = JSON.parse(data)
-//         const items = (data)
-//         dispatch(receiveItems(items))
-//     }))
-//   }
-// }
+
 

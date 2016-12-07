@@ -31,28 +31,33 @@ const style = {
   },
   tableCreate: {
     width: 40
+  },
+  addButton: {
+    margin: 10
   }
-};
+}
 
 export default class FunctionsDialog extends Component {
 
   constructor(props) {
     super(props)
     this.state = {
-      functionId: '',
-      functionName:''
+      functionId: this.props.functions.functionId,
+      functionName:this.props.functions.functionName,
     }
   }
 
   componentDidMount() {
-    console.log('45646565465')
+    // console.log('执行componentDidMount')
+    // console.log(this.props.functions)
   }
 
+
   handleChange(name, event) {
-    console.log(name)
+    // console.log(name)
     let newState = {}
     newState[name] = event.target.value
-    console.log(newState)
+    // console.log(newState)
     this.setState(newState)
   }
 
@@ -62,78 +67,87 @@ export default class FunctionsDialog extends Component {
 
     let element = (
       functions.edit?(
-        <div>
+        <span>
           <h3 className="dialogTitle">functions</h3>
           <TextField 
             onChange={this.handleChange.bind(this,"functionId")}
             value={this.state.functionId} 
-            defaultValue={functions.functionId} 
             hintText="functionId" 
             floatingLabelText="functionId" 
             style={style.textField} />
           <TextField 
             onChange={this.handleChange.bind(this,"functionName")}
             value={this.state.functionName} 
-            defaultValue={functions.functionName} 
             hintText="functionName" 
             floatingLabelText="functionName" 
             style={style.textField} />
 
           <span className="dialogButton">
             <FlatButton label="Cancel" secondary={true}  onTouchTap={() => itemsActions.handleClose()} />
-            <FlatButton label="Submit" primary={true} keyboardFocused={true} onTouchTap={() => itemsActions.handleClose()} />
+            <FlatButton 
+              label="Submit" 
+              primary={true} 
+              keyboardFocused={true} 
+              onTouchTap={() => itemsActions.handleSubmit(this.state.functionId, this.state.functionName)} />
           </span>
 
-        </div>):(
-        <Table multiSelectable={true}>
-          <TableHeader>
-            <TableRow>
-              <TableHeaderColumn tooltip="The opId">opId</TableHeaderColumn>
-              <TableHeaderColumn tooltip="The opSort">opSort</TableHeaderColumn>
-              <TableHeaderColumn tooltip="The opName">opName</TableHeaderColumn>
-              <TableHeaderColumn tooltip="The elementClass">elementClass</TableHeaderColumn>
-              <TableHeaderColumn style={style.tableCreate} tooltip="The check">check</TableHeaderColumn>
-              <TableHeaderColumn style={style.tableCreate} tooltip="The edit">edit</TableHeaderColumn>
-            </TableRow>
-          </TableHeader>
-          <TableBody deselectOnClickaway={false}>
-              {
-                functions.operations.map((operation, i) => 
-                  <TableRow key={i} operations={operation}>
-                    <TableRowColumn>{operation.opId}</TableRowColumn>
-                    <TableRowColumn>{operation.opSort}</TableRowColumn>
-                    <TableRowColumn>{operation.opName}</TableRowColumn>
-                    <TableRowColumn>{operation.elementClass}</TableRowColumn>
-                    <TableRowColumn style={style.tableCreate}>
-                      <FloatingActionButton mini={true} secondary={true} onTouchTap={() => itemsActions.operationOpen(operation.opId)}>
-                      <ContentForward />
-                      </FloatingActionButton>
-                    </TableRowColumn>
-                    <TableRowColumn style={style.tableCreate}>
-                      <FloatingActionButton mini={true} secondary={true} onTouchTap={() => itemsActions.operationEdit(operation.opId)}>
-                      <ContentCreate />
-                      </FloatingActionButton>
-                    </TableRowColumn>
+        </span>):(
+        <span>
+          <Table multiSelectable={true}>
+            <TableHeader>
+              <TableRow>
+                <TableHeaderColumn tooltip="The opId">opId</TableHeaderColumn>
+                <TableHeaderColumn tooltip="The opSort">opSort</TableHeaderColumn>
+                <TableHeaderColumn tooltip="The opName">opName</TableHeaderColumn>
+                <TableHeaderColumn tooltip="The elementClass">elementClass</TableHeaderColumn>
+                <TableHeaderColumn style={style.tableCreate} tooltip="The check">check</TableHeaderColumn>
+                <TableHeaderColumn style={style.tableCreate} tooltip="The edit">edit</TableHeaderColumn>
+              </TableRow>
+            </TableHeader>
+            <TableBody deselectOnClickaway={false}>
+                {
+                  functions.operations.map((operation, i) => 
+                    <TableRow key={i} operations={operation}>
+                      <TableRowColumn>{operation.opId}</TableRowColumn>
+                      <TableRowColumn>{operation.opSort}</TableRowColumn>
+                      <TableRowColumn>{operation.opName}</TableRowColumn>
+                      <TableRowColumn>{operation.elementClass}</TableRowColumn>
+                      <TableRowColumn style={style.tableCreate}>
+                        <FloatingActionButton mini={true} secondary={true} onTouchTap={() => itemsActions.operationOpen(operation.opId)}>
+                        <ContentForward />
+                        </FloatingActionButton>
+                      </TableRowColumn>
+                      <TableRowColumn style={style.tableCreate}>
+                        <FloatingActionButton mini={true} secondary={true} onTouchTap={() => itemsActions.operationEdit(operation.opId)}>
+                        <ContentCreate />
+                        </FloatingActionButton>
+                      </TableRowColumn>
 
-                    <Dialog
-                      modal={false}
-                      onRequestClose={() => itemsActions.operationClose()}
-                      open={operation.open}>
-                      <OperationsDialog
-                        operations={operation}/>
-                    </Dialog>
+                      <Dialog
+                        modal={false}
+                        onRequestClose={() => itemsActions.operationClose()}
+                        open={operation.open}>
+                        <OperationsDialog
+                          operations={operation}/>
+                      </Dialog>
 
-                  </TableRow>
-                )
-            }
-          </TableBody>
-        </Table>)
+                    </TableRow>
+                    
+                    )
+                }
+              </TableBody>
+            </Table>
+
+            <FloatingActionButton secondary={true} mini={true} style={style.addButton}>
+              <ContentAdd />
+            </FloatingActionButton>
+
+          </span>)
     )
 
     return (
       <Paper style={style.paper} zDepth={2}>
         { element }
-
       </Paper>
     )
   }

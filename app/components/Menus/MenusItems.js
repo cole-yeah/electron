@@ -12,7 +12,7 @@ const style = {
 
 export default class MenusItems extends Component {
   render() {
-    const {menuItems, open, _checkedAll, _checkedMenus, _dispatchActions } = this.props
+    const { menuItems, open, _checkedAll, _checkedMenus, _dispatchActions } = this.props
     let element = (
       <span open={menuItems.open}>
         <Checkbox

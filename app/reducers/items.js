@@ -1,14 +1,25 @@
 import { RECEIVE_ITEMS } from '../actions/menus'
-import { HANDLE_CLOSE, HANDLE_OPEN, HANDLE_EDIT, OPERATION_OPEN, OPERATION_EDIT, OPERATION_CLOSE } from '../actions/items'
+import { 
+  HANDLE_CLOSE, 
+  HANDLE_OPEN, 
+  HANDLE_EDIT, 
+  OPERATION_OPEN, 
+  OPERATION_EDIT, 
+  OPERATION_CLOSE, 
+  HANDLE_SUBMIT, 
+  HANDLE_SELECTED } from '../actions/items'
+
 /**
  * 获取items  
  */  
 export function items(state=[], action) {
   switch (action.type) {
     case RECEIVE_ITEMS:
-      return action.items.map(item => {
+      state = action.items
+      return state.map(item => {
         item.open = false
         item.edit = false
+        item.id = action.id
         item.operations.map(operation=> {
           operation.open = false
           operation.edit = false
@@ -30,6 +41,18 @@ export function items(state=[], action) {
  */
     case HANDLE_EDIT:
       return state.map(item => Object.assign({}, item, {open: true, edit: true}))
+
+/**
+ * 提交修改functions的值，并合并到menus中
+ */
+    case HANDLE_SUBMIT:
+      return state.map(item => Object.assign({}, item, { functionId: action.functionId, functionName: action.functionName}))
+
+
+    case HANDLE_SELECTED:
+      // console.log('456')
+      return state.map(item => Object.assign({}, item, { checked: !item.checked }))
+
 /**
  * 打开operation的dialog  
  */

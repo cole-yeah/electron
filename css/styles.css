@@ -51,15 +51,15 @@ li{
     color: #00bcd4;
     font-size: 50px;
 }*/
-.handle{
+/*.handle{
     display: inline-block;
-}
-.pagination{
+}*/
+/*.pagination{
     position: fixed;
     bottom: 20px;
     right: 20px;
     z-index: 19;
-}
+}*/
 .exp-imp{
     position: fixed;
     bottom: 20px;
@@ -74,6 +74,7 @@ li{
 .searchTitle{
     font-weight: 600;
     color: #00bcd4;
+    margin-left: 60px;
 }
 
 .menusBox{
@@ -114,4 +115,9 @@ li{
 .dialogButton{
     float: right;
     margin:20px 20px 0 0;
+}
+.buttonBox{
+    position: fixed;
+    bottom: 20px;
+    margin-left: 16px;
 }

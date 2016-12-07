@@ -1,6 +1,8 @@
 export const HANDLE_CLOSE = 'HANDLE_CLOSE'
 export const HANDLE_OPEN = 'HANDLE_OPEN'
 export const HANDLE_EDIT = 'HANDLE_EDIT'
+export const HANDLE_SUBMIT = 'HANDLE_SUBMIT'
+export const HANDLE_SELECTED = 'HANDLE_SELECTED'
 export const OPERATION_OPEN = 'OPERATION_OPEN'
 export const OPERATION_CLOSE = 'OPERATION_CLOSE'
 export const OPERATION_EDIT = 'OPERATION_EDIT'
@@ -23,6 +25,20 @@ export function handleEdit() {
   }
 }
 
+export function handleSubmit(functionId, functionName) {
+  return {
+    type: HANDLE_SUBMIT,
+    functionId,
+    functionName,
+  }
+}
+
+export function handleSelected() {
+  return {
+    type: HANDLE_SELECTED
+  }
+}
+
 export function operationOpen(opId) {
   return {
     type: OPERATION_OPEN,
@@ -42,3 +58,5 @@ export function operationEdit(opId) {
     opId,
   }
 }
+
+

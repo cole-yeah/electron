@@ -36,17 +36,30 @@ export function menus(state=[], action) {
           ):menu)
         // {...menu, open: !menu.open}:menu)
 /**
- * 点击勾选该一级菜单下所有二级菜单
+ * 点击勾选该一级菜单下所有二、三级菜单
  */
     case CHECKED_ALL:
-      let all = state[action.id].children.every(child => child.checked)
+      const all = state[action.id].children.every(child => child.checked)
+      const allChecked = state[action.id].children.map(child =>
+          child.functions.map(fun => 
+            fun.operations.every(operation => 
+              operation.checked))
+        )
+        console.log(allChecked)
+      // operations.every(operation => operation.checked)
       console.log(all)
       return state.map( menu => 
           menu.menuId === action.menuId?
             Object.assign({}, menu, {
               children: menu.children.map(child => Object.assign({}, child, {
-                checked: !all}
-              ))
+                checked: !all,
+                functions: child.functions.map(fun => Object.assign({}, fun, {
+                  checked: !fun.checked,
+                  operations: fun.operations.map(operation => Object.assign({}, operation, {
+                    checked: !allChecked
+                  }))
+                }))
+              }))
             }):menu)
 /**
  * 点击勾选或取消二级菜单

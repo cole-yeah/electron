@@ -9,6 +9,7 @@ import {fullWhite} from 'material-ui/lib/styles/colors'
 import * as MenusActions from '../actions/menus'
 import * as ItemsActions from '../actions/items'
 import Items from '../components/Items/Items'
+// import TestItems from '../components/Items/TestItems'
 import Menus from '../components/Menus/Menus'
 
 class App extends Component {
@@ -33,6 +34,9 @@ class App extends Component {
 
   // <SideBar
   //  handleClick={this.handleClick.bind(this)}/>
+              // <Items
+              // itemsActions={itemsActions}
+              // items={items}/> 
 
   render() {
     const {items, menusActions, itemsActions, menus} = this.props

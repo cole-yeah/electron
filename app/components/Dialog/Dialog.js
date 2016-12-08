@@ -31,7 +31,7 @@ export default class DialogExampleAlert extends React.Component {
           modal={false}
           open={open}
           contentStyle={style.dialog}
-          onRequestClose={() => handleClose()}
+          onRequestClose={() => itemsActions.handleClose()}
         >
           <FunctionsDialog
             itemsActions={itemsActions}

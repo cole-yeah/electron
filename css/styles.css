@@ -121,3 +121,23 @@ li{
     bottom: 20px;
     margin-left: 16px;
 }
+/*items样式*/
+.tableItems{
+    width: 100%;
+    text-align: left;
+}
+.theadItems{
+    opacity: 0.5;
+}
+.toolItems{
+    width: 80px;
+    padding:4px;
+    border-bottom: 1px solid #e0e0e0;
+}
+.tdItems, .thItems {
+    max-width: 10em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding:4px;
+    border-bottom: 1px solid #e0e0e0;
+}

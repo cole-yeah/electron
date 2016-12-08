@@ -11,15 +11,10 @@ import ContentForward from 'material-ui/lib/svg-icons/content/forward'
 import RaisedButton from 'material-ui/lib/raised-button'
 import Search from '../Search/Search'
 import Dialog from '../Dialog/Dialog'
-
+import ChildrenItems from './ChildrenItems'
+import FunctionsItems from './FunctionsItems'
 
 const style = {
-  tableCreate: {
-    width: 40,
-  },
-  table: {
-    overflowX: 'hidden'
-  },
   raisedButton: {
     margin: 10
   },
@@ -43,53 +38,36 @@ handleClick(){
         <Search
           searchTitle={items} />
 
-        <Table
-          style={style.table}
-        >
-          <TableHeader>
-            <TableRow>
-              <TableHeaderColumn>functionId</TableHeaderColumn>
-              <TableHeaderColumn>functionName</TableHeaderColumn>
-              <TableHeaderColumn style={style.tableCreate}>check</TableHeaderColumn>
-              <TableHeaderColumn style={style.tableCreate}>edit</TableHeaderColumn>
-            </TableRow>
-          </TableHeader>
-          <TableBody deselectOnClickaway={false}>
-          {
-            items.map((item, i) => 
-              <TableRow 
-                onTouchTap={() => itemsActions.handleSelected()}
-                // onTouchTap={this.handleClick.bind(this)}
-                selected={item.checked}
-                key={i}>
-                <TableRowColumn>{item.functionId}</TableRowColumn>
-                <TableRowColumn>{item.functionName}</TableRowColumn>
-                <TableRowColumn style={style.tableCreate}>
-                  <FloatingActionButton mini={true} secondary={true} onClick={() => itemsActions.handleOpen()}>
-                   <ContentForward />
-                  </FloatingActionButton>
-                </TableRowColumn>
-                <TableRowColumn onClick={() => itemsActions.handleOpen()} style={style.tableCreate}>
-                  <FloatingActionButton mini={true} secondary={true} onClick={() => itemsActions.handleEdit()}>
-                   <ContentCreate />
-                  </FloatingActionButton>
-                </TableRowColumn>
+        {
+          items.map((item, i) => 
+            <ChildrenItems
+              key={i}
+              item={item}
+              checked={item.checked}
+              functionId={item.functionId}
+              functionName={item.functionName}
+              keyWord={['functionId', 'functionName']}
+              itemsActions={itemsActions}
+              _handleSelected={itemsActions.handleSelected}
+              _handleOpen={itemsActions.handleOpen}
+              _handleEdit={itemsActions.handleEdit}
+              />
+          )
+        }
 
-                <Dialog
-                  open={item.open}
-                  functions={item}
-                  itemsActions={itemsActions}
-                  handleClose={() => itemsActions.handleClose()}
-                />
-
-              </TableRow>
-              
-              )
-          }
-          </TableBody>
-        </Table>
-
-
+        {
+          items.map(menu => menu.operations.map(item =>
+            <FunctionsItems
+              keyWord={['opId', 'opSort', 'opName', 'elementClass']}
+              opId={item.opId}
+              opSort={item.opSort}
+              opName={item.opName}
+              elementClass={item.elementClass}
+              checked={item.checked}
+              functions={item}/>
+          ))
+        }
+        
         <div className="exp-imp">
           <RaisedButton label="导 入" secondary={true} style={style.raisedButton} />
           <RaisedButton label="导 出" secondary={true} style={style.raisedButton} />

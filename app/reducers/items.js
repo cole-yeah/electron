@@ -1,4 +1,4 @@
-import { RECEIVE_ITEMS } from '../actions/menus'
+import { RECEIVE_ITEMS, CHECKED_ALL } from '../actions/menus'
 import { 
   HANDLE_CLOSE, 
   HANDLE_OPEN, 
@@ -48,9 +48,17 @@ export function items(state=[], action) {
     case HANDLE_SUBMIT:
       return state.map(item => Object.assign({}, item, { functionId: action.functionId, functionName: action.functionName}))
 
+    // case CHECKED_ALL:
+    //   const all = state[0].operations.every(operation => operation.checked)
+    //   return state.map(item => Object.assign({}, item, {
+    //     checked: !item.checked,
+    //     operations: item.operations.map(operation => Object.assign({}, operation, {
+    //       checked: !all
+    //     }))
+    //   }))
+
 
     case HANDLE_SELECTED:
-      // console.log('456')
       return state.map(item => Object.assign({}, item, { checked: !item.checked }))
 
 /**

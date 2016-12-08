@@ -125,6 +125,7 @@ li{
 .tableItems{
     width: 100%;
     text-align: left;
+    margin-bottom: 30px;
 }
 .theadItems{
     opacity: 0.5;

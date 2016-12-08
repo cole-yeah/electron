@@ -3,6 +3,7 @@ export const HANDLE_OPEN = 'HANDLE_OPEN'
 export const HANDLE_EDIT = 'HANDLE_EDIT'
 export const HANDLE_SUBMIT = 'HANDLE_SUBMIT'
 export const HANDLE_SELECTED = 'HANDLE_SELECTED'
+export const OPERATIONS_SELECTED = 'OPERATIONS_SELECTED'
 export const OPERATION_OPEN = 'OPERATION_OPEN'
 export const OPERATION_CLOSE = 'OPERATION_CLOSE'
 export const OPERATION_EDIT = 'OPERATION_EDIT'
@@ -36,6 +37,13 @@ export function handleSubmit(functionId, functionName) {
 export function handleSelected() {
   return {
     type: HANDLE_SELECTED
+  }
+}
+
+export function operationsSeleted(opId) {
+  return {
+    type: OPERATIONS_SELECTED,
+    opId
   }
 }
 

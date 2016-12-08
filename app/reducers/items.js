@@ -7,7 +7,8 @@ import {
   OPERATION_EDIT, 
   OPERATION_CLOSE, 
   HANDLE_SUBMIT, 
-  HANDLE_SELECTED } from '../actions/items'
+  HANDLE_SELECTED,
+  OPERATIONS_SELECTED } from '../actions/items'
 
 /**
  * 获取items  
@@ -57,9 +58,18 @@ export function items(state=[], action) {
     //     }))
     //   }))
 
-
+/**
+ * 点击勾选与否functions  
+ */
     case HANDLE_SELECTED:
       return state.map(item => Object.assign({}, item, { checked: !item.checked }))
+
+    case OPERATIONS_SELECTED:
+      return state.map(item => Object.assign({}, item, {
+        operations: item.operations.map(operation => operation.opId === action.opId?
+          Object.assign({}, operation, { checked: !operation.checked }):operation)
+      }))
+
 
 /**
  * 打开operation的dialog  

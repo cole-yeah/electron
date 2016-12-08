@@ -55,19 +55,10 @@ handleClick(){
           )
         }
 
-        {
-          items.map(menu => menu.operations.map(item =>
-            <FunctionsItems
-              keyWord={['opId', 'opSort', 'opName', 'elementClass']}
-              opId={item.opId}
-              opSort={item.opSort}
-              opName={item.opName}
-              elementClass={item.elementClass}
-              checked={item.checked}
-              functions={item}/>
-          ))
-        }
-        
+        <FunctionsItems
+          items={items}
+          itemsActions={itemsActions}/>
+  
         <div className="exp-imp">
           <RaisedButton label="导 入" secondary={true} style={style.raisedButton} />
           <RaisedButton label="导 出" secondary={true} style={style.raisedButton} />

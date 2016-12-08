@@ -9,7 +9,7 @@ import Dialog from '../Dialog/Dialog'
 export default class ChildrenItems extends Component {
 
   render() {
-    const { opName, opId, opSort, elementClass, checked, keyWord, item, itemsActions } = this.props
+    const { items, itemsActions } = this.props
 
     return (
       <span>
@@ -17,32 +17,38 @@ export default class ChildrenItems extends Component {
           <thead className="theadItems">
             <tr>
               <th className="toolItems"><Checkbox disabled={true} /></th>
-              {
-                keyWord.map((key, i) => 
-                  <th key={i} className="thItems">{key}</th>
-                )
-              }
+              <th className="thItems">opId</th>
+              <th className="thItems">opSort</th>
+              <th className="thItems">opName</th>
+              <th className="thItems">elementClass</th>
               <th className="toolItems">forward</th>
               <th className="toolItems">edit</th>
             </tr>
             </thead>
           <tbody>
 
-          <tr>
-            <td className="toolItems"><Checkbox checked={checked} /></td>
-            <td className="tdItems">{opId}</td>
-            <td className="tdItems">{opName}</td>
-            <td className="toolItems">
-              <FloatingActionButton mini={true} secondary={true} >
-                <ContentForward />
-              </FloatingActionButton>
-            </td>
-            <td className="toolItems">
-              <FloatingActionButton mini={true} secondary={true} >
-                <ContentCreate />
-              </FloatingActionButton>
-            </td>
-          </tr>
+          {
+            items.map(item => item.operations.map((operation, i) => 
+              <tr>
+                <td className="toolItems"><Checkbox checked={operation.checked} onClick={() => itemsActions.operationsSeleted(operation.opId)}/></td>
+                <td className="tdItems">{operation.opId}</td>
+                <td className="tdItems">{operation.opSort}</td>
+                <td className="tdItems">{operation.opName}</td>
+                <td className="tdItems">{operation.elementClass}</td>
+                <td className="toolItems">
+                  <FloatingActionButton mini={true} secondary={true} >
+                    <ContentForward />
+                  </FloatingActionButton>
+                </td>
+                <td className="toolItems">
+                  <FloatingActionButton mini={true} secondary={true} >
+                    <ContentCreate />
+                  </FloatingActionButton>
+                </td>
+              </tr>
+            ))
+          }
+
 
           </tbody>
 

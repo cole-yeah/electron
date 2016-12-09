@@ -16,10 +16,6 @@ export default class Items extends Component {
     super(props)
   }    
 
-handleClick(){
-  console.log('123')
-}
-
   render() {
     const { items=[], itemsActions } = this.props
     return (

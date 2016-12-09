@@ -16,7 +16,10 @@ export function menus(state=[], action) {
           child.functions.map(fun => {
             fun.checked = false
             fun.operations.map(operation => {
-              operation.checked = false
+              operation.checked = false,
+              operation.webApis.map(api => {
+                api.checked = false
+              })
             })
           })
         })

@@ -1,6 +1,7 @@
 export const HANDLE_SUBMIT = 'HANDLE_SUBMIT'
 export const HANDLE_SELECTED = 'HANDLE_SELECTED'
 export const OPERATIONS_SELECTED = 'OPERATIONS_SELECTED'
+export const WEBAPIS_SELECTED = 'WEBAPIS_SELECTED'
 
 export function handleSubmit(functionId, functionName) {
   return {
@@ -23,5 +24,9 @@ export function operationsSeleted(opId) {
   }
 }
 
-
+export function webApis(opId) {
+  return {
+    type: WEBAPIS_SELECTED
+  }
+}
 

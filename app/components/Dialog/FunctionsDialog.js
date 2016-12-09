@@ -1,3 +1,4 @@
+/**暂不用到 */
 import React, { Component, PropTypes } from 'react'
 import Paper from 'material-ui/lib/paper'
 import FlatButton from 'material-ui/lib/flat-button'
@@ -47,17 +48,9 @@ export default class FunctionsDialog extends Component {
     }
   }
 
-  componentDidMount() {
-    // console.log('执行componentDidMount')
-    // console.log(this.props.functions)
-  }
-
-
   handleChange(name, event) {
-    // console.log(name)
     let newState = {}
     newState[name] = event.target.value
-    // console.log(newState)
     this.setState(newState)
   }
 

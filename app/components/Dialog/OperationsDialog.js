@@ -2,16 +2,8 @@ import React, { Component, PropTypes } from 'react'
 import Paper from 'material-ui/lib/paper'
 import TextField from 'material-ui/lib/text-field'
 import FloatingActionButton from 'material-ui/lib/floating-action-button'
-import ContentAdd from 'material-ui/lib/svg-icons/content/add'
-import Table from 'material-ui/lib/table/table'
-import TableHeaderColumn from 'material-ui/lib/table/table-header-column'
-import TableRow from 'material-ui/lib/table/table-row'
-import TableHeader from 'material-ui/lib/table/table-header'
-import TableRowColumn from 'material-ui/lib/table/table-row-column'
-import TableBody from 'material-ui/lib/table/table-body'
 import ContentCreate from 'material-ui/lib/svg-icons/content/create'
-import ContentForward from 'material-ui/lib/svg-icons/content/forward'
-import Dialog from 'material-ui/lib/dialog'
+import Checkbox from 'material-ui/lib/checkbox'
 
 const style = {
   textField: {
@@ -22,15 +14,6 @@ const style = {
     overflowY: 'auto',
     overflowX: 'hidden',
     height: 260,
-  },
-  actionButton: {
-    margin: 16
-  },
-  tableCreate: {
-    width: 40
-  },
-  tableHeader: {
-    width: 60
   }
 }
 
@@ -54,31 +37,34 @@ export default class OperationsDialog extends Component {
           <TextField defaultValue={operations.opName} hintText="opName" floatingLabelText="opName" style={style.textField} />
           <TextField defaultValue={operations.elementClass} hintText="elementClass" floatingLabelText="elementClass" style={style.textField} />
         </div>):(
-        <Table multiSelectable={true}>
-          <TableHeader>
-            <TableRow>
-              <TableHeaderColumn style={style.tableHeader} tooltip="The serviceMethod">serviceMethod</TableHeaderColumn>
-              <TableHeaderColumn tooltip="The serviceUrl">serviceUrl</TableHeaderColumn>
-              <TableHeaderColumn style={style.tableCreate} tooltip="The edit">edit</TableHeaderColumn>
-            </TableRow>
-          </TableHeader>
-          <TableBody deselectOnClickaway={false}>
-              {
-                operations.webApis.map((api, i) => 
-                  <TableRow key={i} webApis={api}>
-                    <TableRowColumn style={style.tableHeader}>{api.serviceMethod}</TableRowColumn>
-                    <TableRowColumn>{api.serviceUrl}</TableRowColumn>
-                    <TableRowColumn style={style.tableCreate}>
-                      <FloatingActionButton mini={true} secondary={true} onTouchTap={() => itemsActions.operationEdit(operation.opId)}>
-                      <ContentCreate />
-                      </FloatingActionButton>
-                    </TableRowColumn>
+        <table className="tableItems">
 
-                  </TableRow>
+          <thead className="theadItems">
+            <tr>
+              <th className="toolItems"><Checkbox disabled={true} /></th>
+              <th className="thItems">serviceMethod</th>
+              <th className="thItems">serviceUrl</th>
+              <th className="toolItems">edit</th>
+            </tr>
+          </thead>
+
+          <tbody>
+              {
+                operations.webApis.map((operation, i) => 
+                  <tr key={i} webApis={operation}>
+                    <td className="toolItems"><Checkbox checked={false} /></td>
+                    <td className="tdItems">{operation.serviceMethod}</td>
+                    <td className="tdItems">{operation.serviceUrl}</td>
+                    <td className="toolItems">
+                      <FloatingActionButton mini={true} secondary={true}>
+                        <ContentCreate />
+                      </FloatingActionButton>
+                    </td>
+                  </tr>
                 )
             }
-          </TableBody>
-        </Table>)
+          </tbody>
+        </table>)
     )
 
     return (

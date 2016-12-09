@@ -21,7 +21,7 @@ li{
     display: flex;
 }
 .MainRight{
-    /*display: inline-flex;*/
+    display: inline-flex;
     width:100%;
     overflow-y: auto;
     margin-bottom:60px;
@@ -36,30 +36,6 @@ li{
 .text{
     text-decoration: none;
 }
-/*welcome*/
-/*.welcome{
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    height: 80%;
-}
-.welcome>div{
-    justify-content: center;
-}
-.welcome>h2{
-    color: #00bcd4;
-    font-size: 50px;
-}*/
-/*.handle{
-    display: inline-block;
-}*/
-/*.pagination{
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: 19;
-}*/
 .exp-imp{
     position: fixed;
     bottom: 20px;
@@ -76,12 +52,18 @@ li{
     color: #00bcd4;
     margin-left: 60px;
 }
-
-.menusBox{
-    width: 200px;
+/*menus样式*/
+.mainLeftMenus {
+    width: 240px;
     margin-left: -40px;
     overflow-y:scroll;
-    margin-bottom: 130px;
+    margin-bottom: 130px;  
+}
+.menusBox{
+    /*width: 200px;
+    margin-left: -40px;
+    overflow-y:scroll;
+    margin-bottom: 130px;*/
 }
 .menusBox>li{
     margin:8px 0;

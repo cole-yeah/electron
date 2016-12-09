@@ -16,7 +16,7 @@ export default class Menus extends Component {
   render() {
     const {menus, actions} = this.props
     return(
-      <span>
+      <span className="mainLeftMenus">
         <ul className="menusBox">
           {
             menus.map((menu, i) => 

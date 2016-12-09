@@ -5,11 +5,11 @@ import AppBar from 'material-ui/lib/app-bar'
 import IconButton from 'material-ui/lib/icon-button'
 import ActionHome from 'material-ui/lib/svg-icons/action/home'
 import {fullWhite} from 'material-ui/lib/styles/colors'
+import Checkbox from 'material-ui/lib/checkbox'
 
 import * as MenusActions from '../actions/menus'
 import * as ItemsActions from '../actions/items'
 import Items from '../components/Items/Items'
-// import TestItems from '../components/Items/TestItems'
 import Menus from '../components/Menus/Menus'
 
 class App extends Component {
@@ -31,12 +31,6 @@ class App extends Component {
     }
     // console.log('执行 app componentReceiveProps 完成')
   }
-
-  // <SideBar
-  //  handleClick={this.handleClick.bind(this)}/>
-              // <Items
-              // itemsActions={itemsActions}
-              // items={items}/> 
 
   render() {
     const {items, menusActions, itemsActions, menus} = this.props
@@ -62,7 +56,7 @@ class App extends Component {
           <div className="MainRight">
             <Items
               itemsActions={itemsActions}
-              items={items}/> 
+              items={items}/>
           </div>
 
         </div>

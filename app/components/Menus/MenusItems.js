@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react'
 import Checkbox from 'material-ui/lib/checkbox'
-// import cs from 'classnames'
 
 const style = {
   checkbox: {

@@ -1,5 +1,5 @@
 import { RECEIVE_ITEMS, CHECKED_ALL } from '../actions/menus'
-import { HANDLE_SUBMIT, HANDLE_SELECTED, OPERATIONS_SELECTED, WEBAPIS_SELECTED } from '../actions/items'
+import { HANDLE_SUBMIT, HANDLE_SELECTED, OPERATIONS_SELECTED, WEBAPIS_SELECTED, OPERATIONS_SUBMIT } from '../actions/items'
 
 /**
  * 获取items  
@@ -18,23 +18,35 @@ export function items(state=[], action) {
  */
     case HANDLE_SUBMIT:
       return state.map(item => Object.assign({}, item, { functionId: action.functionId, functionName: action.functionName}))
+
+    case OPERATIONS_SUBMIT:
+    console.log(action.id)
+      return state.map(item => Object.assign({}, item, {
+        operations: item.operations.map(operation => operation.opId === action.id?
+          Object.assign({}, operation, {opId: action.opId, opName: action.opName, opSort: action.opSort, elementClass: action.elementClass}):operation)
+        }
+      ))
 /**
  * 点击勾选与否functions  
  */
     case HANDLE_SELECTED:
     let item = state[0];
       return [Object.assign({}, item, { checked: !item.checked })]
-
+/**
+ * 点击勾选与否operations  
+ */
     case OPERATIONS_SELECTED:
       return state.map(item => Object.assign({}, item, {
-        operations: item.operations.map(operation => operation.opId === action.opId?
+        operations: item.operations.map(operation => operation.opId === action.id?
           Object.assign({}, operation, { checked: !operation.checked }):operation)
       }))
-
+/**
+ * 点击勾选与否webApis  
+ */
     case WEBAPIS_SELECTED:
       return state.map(item => Object.assign({}, item, {
         operations: item.operations.map(operation => Object.assign({}, operation, {
-          webApis: operation.webApis.map(api => api.opId === action.opId?
+          webApis: operation.webApis.map(api => api.id === action.id?
             Object.assign({}, api, {checked: !api.checked}):api)
         }))
       }))

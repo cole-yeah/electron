@@ -23,18 +23,29 @@ export default class Items extends Component {
         <Search
           searchTitle={items} 
         />
-        {
-          items.map((item, i) => 
-            <ChildrenItems
-              key={i}
-              item={item}
-              itemsActions={itemsActions}
-              />)
-        }
 
-        <FunctionsItems
+        <ChildrenItems
+          array={['functionId', 'functionName']}
           items={items}
-          itemsActions={itemsActions}/>
+          forward={false}
+          _handleChecked={itemsActions.handleSelected}
+          itemsActions={itemsActions}
+          />
+
+          {
+            items.map((item, i) =>
+              <ChildrenItems
+                key={i}
+                items={item.operations}
+                forward={true}
+                array={['opId', 'opSort', 'opName', 'elementClass']}
+                _handleChecked={itemsActions.operationsSeleted}
+                itemsActions={itemsActions}
+              />
+            )
+          }
+
+
 
         <div className="exp-imp">
           <RaisedButton label="导 入" secondary={true} style={style.raisedButton} />

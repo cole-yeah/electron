@@ -24,38 +24,59 @@ const style = {
 }
 
 export default class ChildrenItems extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      opId: this.props.operations.opId,
+      opName: this.props.operations.opName,
+      opSort: this.props.operations.opSort,
+      elementClass: this.props.operations.elementClass
+    }
+  }
+
+  handleChange(name, event) {
+    let newState = {}
+    newState[name] = event.target.value
+    console.log(newState)
+    this.setState(newState)
+  }
 
   render() {
-    const { operations, edit } = this.props
+    const { operations, edit, itemsActions } = this.props
 
     let element = (
       edit?
         <span>
           <TextField 
-            value={operations.opId} 
+            value={this.state.opId} 
             hintText="opId" 
-            floatingLabelText="opId" 
+            floatingLabelText="opId"
+            onChange={this.handleChange.bind(this,"opId")} 
             style={style.textField} />
           <TextField 
-            value={operations.opSort} 
+            value={this.state.opSort} 
             hintText="opSort" 
             floatingLabelText="opSort" 
+            onChange={this.handleChange.bind(this,"opSort")}
             style={style.textField} />
           <TextField 
-            value={operations.opName} 
+            value={this.state.opName} 
             hintText="opName" 
             floatingLabelText="opName" 
+            onChange={this.handleChange.bind(this,"opName")}
             style={style.textField} />
           <TextField 
-            value={operations.elementClass} 
+            value={this.state.elementClass} 
             hintText="elementClass" 
             floatingLabelText="elementClass" 
+            onChange={this.handleChange.bind(this,"elementClass")}
             style={style.textField} />
           <FlatButton
             style={style.flatButton} 
             label="Submit" 
             primary={true} 
-            keyboardFocused={true} />
+            keyboardFocused={true}
+            onTouchTap={() => itemsActions.operationsSubmit(operations.opId, this.state.opId, this.state.opName, this.state.opSort, this.state.elementClass)} />
         </span>:         
           <table className="tableItems">
             <thead className="theadItems">
@@ -69,8 +90,8 @@ export default class ChildrenItems extends Component {
             <tbody>
               {
                 operations.webApis.map((api, i) => 
-                  <tr>
-                    <td className="toolItems"><Checkbox /></td>
+                  <tr key={i}>
+                    <td className="toolItems"><Checkbox checked={api.checked} onClick={() => itemsActions.webApisSelected(api.id)} /></td>
                     <td className="tdItems">{api.serviceMethod}</td>
                     <td className="tdItems">{api.serviceUrl}</td>
                     <td className="toolItems">

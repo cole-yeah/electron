@@ -1,3 +1,4 @@
+/**咱不用到 */
 import React, { Component, PropTypes } from 'react'
 import Paper from 'material-ui/lib/paper'
 import TextField from 'material-ui/lib/text-field'
@@ -50,11 +51,11 @@ export default class OperationsDialog extends Component {
 
           <tbody>
               {
-                operations.webApis.map((operation, i) => 
-                  <tr key={i} webApis={operation}>
-                    <td className="toolItems"><Checkbox checked={false} /></td>
-                    <td className="tdItems">{operation.serviceMethod}</td>
-                    <td className="tdItems">{operation.serviceUrl}</td>
+                operations.webApis.map((api, i) => 
+                  <tr key={i} webApi={api}>
+                    <td className="toolItems"><Checkbox dd={api.serviceMethod} checked={api.checked} onClick={() => itemsActions.webApisSelected(api.id)} /></td>
+                    <td className="tdItems">{api.serviceMethod}</td>
+                    <td className="tdItems">{api.serviceUrl}</td>
                     <td className="toolItems">
                       <FloatingActionButton mini={true} secondary={true}>
                         <ContentCreate />

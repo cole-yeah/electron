@@ -15,10 +15,11 @@ export function menus(state=[], action) {
           child.selected = false
           child.functions.map(fun => {
             fun.checked = false
-            fun.operations.map(operation => {
+            fun.operations.map((operation, x) => {
               operation.checked = false,
-              operation.webApis.map(api => {
-                api.checked = false
+              operation.webApis.map((api, y) => {
+                api.checked = false,
+                api.id = (x*10) + y
               })
             })
           })
@@ -56,7 +57,7 @@ export function menus(state=[], action) {
                 functions: child.functions.map(fun => Object.assign({}, fun, {
                   checked: !fun.checked,
                   operations: fun.operations.map(operation => Object.assign({}, operation, {
-                    checked: allChecked?false:true
+                    checked: !allChecked
                   }))
                 }))
               }))

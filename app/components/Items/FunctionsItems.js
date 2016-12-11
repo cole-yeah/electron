@@ -1,3 +1,4 @@
+//暂时没用到
 import React, { Component, PropTypes } from 'react'
 import Checkbox from 'material-ui/lib/checkbox'
 import FloatingActionButton from 'material-ui/lib/floating-action-button'
@@ -13,6 +14,7 @@ const style = {
   actionButton: {
     position: 'relative',
     left: '48%',
+    margin: '0 10px 20px'
   }
 }
 
@@ -59,9 +61,9 @@ export default class ChildrenItems extends Component {
             </thead>
           <tbody>
 
-          {
+          {//mark ^^
             items.map(item => item.operations.map((operation, i) => 
-              <tr>
+              <tr key={i}>
                 <td className="toolItems"><Checkbox checked={operation.checked} onClick={() => itemsActions.operationsSeleted(operation.opId)}/></td>
                 <td className="tdItems">{operation.opId}</td>
                 <td className="tdItems">{operation.opSort}</td>
@@ -86,6 +88,7 @@ export default class ChildrenItems extends Component {
           <Dialog open={this.state.open} onRequestClose={this.handleClose}>
             <OperationsItems
               edit={this.state.edit}
+              itemsActions={itemsActions}
               operations={this.state.operations}
             />
           </Dialog>

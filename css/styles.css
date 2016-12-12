@@ -89,6 +89,9 @@ li{
 .block>li{
     padding: 8px 0 8px 20px;
 }
+.itemsSpan {
+    padding: 8px 4px;
+}
 .arrow{
     float: right;
     margin-right: 10px;
@@ -100,8 +103,8 @@ li{
 }
 .buttonBox{
     position: fixed;
-    bottom: 20px;
-    margin-left: 66px;
+    bottom: 32px;
+    margin-left: 60px;
 }
 /*items样式*/
 .tableItems{
@@ -110,7 +113,7 @@ li{
     margin-bottom: 30px;
 }
 .theadItems{
-    opacity: 0.5;
+    opacity: 0.3;
 }
 .toolItems{
     width: 80px;

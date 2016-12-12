@@ -15,10 +15,11 @@ export default class MenusItems extends Component {
     let element = (
       <span open={menuItems.open}>
         <Checkbox
-          checked={menuItems.children.every(child => child.checked)}
+          checked={menuItems.checked}
           onClick={() => _checkedAll(menuItems.menuId, menuItems.key)}
           style={style.checkbox}/>
         <span
+          className="itemsSpan"
           onClick={() => open(menuItems.menuId)}>{menuItems.name}</span>
         <span className="arrow">{menuItems.open?'▲':'▼'}</span>
         <ul className={menuItems.open?'block':'none'}>
@@ -30,10 +31,11 @@ export default class MenusItems extends Component {
                 className={child.selected?'bgColor':''}>
                 <Checkbox
                   checked={child.checked}
-                  onClick={() => _checkedMenus(child.menuId)}
+                  onClick={() => _checkedMenus(child.menuParentId, child.menuId)}
                   style={style.checkbox}/>
                 <span
                   child={child}
+                  className="itemsSpan"
                   onClick={() => _dispatchActions(child.menuId, child.functions)}>{child.name}</span>
               </li>)
           }

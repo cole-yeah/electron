@@ -17,40 +17,40 @@ export default class ChildrenItems extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      functionId: this.props.functions.functionId,
-      functionName:this.props.functions.functionName,
+      serviceMethod: this.props.api.serviceMethod,
+      serviceUrl: this.props.api.serviceUrl,
     }
   }
 
   handleChange(name, event) {
     let newState = {}
     newState[name] = event.target.value
+    console.log(newState)
     this.setState(newState)
   }
 
   render() {
-    const { functions, itemsActions } = this.props
+    const { api, itemsActions, array } = this.props
+    let submitContent = array.map(arr => this.state[arr])
 
     return (
       <span>
-        <TextField 
-          value={this.state.functionId} 
-          hintText="functionId" 
-          floatingLabelText="functionId" 
-          onChange={this.handleChange.bind(this,"functionId")}
-          style={style.textField} />
-        <TextField 
-          value={this.state.functionName} 
-          hintText="functionName" 
-          floatingLabelText="functionName"
-          onChange={this.handleChange.bind(this,"functionName")} 
-          style={style.textField} />
+        {
+          array.map((arr, i) => 
+            <TextField 
+              value={this.state[arr]} 
+              hintText={arr} 
+              floatingLabelText={arr}
+              onChange={this.handleChange.bind(this, arr)}
+              style={style.textField} />
+          )
+        }
         <FlatButton
           style={style.flatButton} 
           label="Submit" 
           primary={true} 
           keyboardFocused={true}
-          onTouchTap={() => itemsActions.handleSubmit(this.state.functionId, this.state.functionName)} />
+          onTouchTap={() => itemsActions.webApisSubmit(api.id, ...submitContent)} />
       </span>
     )
   }

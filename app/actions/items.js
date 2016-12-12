@@ -3,6 +3,7 @@ export const HANDLE_SELECTED = 'HANDLE_SELECTED'
 export const OPERATIONS_SELECTED = 'OPERATIONS_SELECTED'
 export const WEBAPIS_SELECTED = 'WEBAPIS_SELECTED'
 export const OPERATIONS_SUBMIT = 'OPERATIONS_SUBMIT'
+export const WEBAPIS_SUBMIT = 'WEBAPIS_SUBMIT'
 
 export function handleSubmit(functionId, functionName) {
   return {
@@ -26,13 +27,6 @@ export function operationsSeleted(id) {
   }
 }
 
-export function webApisSelected(id) {
-  return {
-    type: WEBAPIS_SELECTED,
-    id
-  }
-}
-
 export function operationsSubmit(id, opId, opName, opSort, elementClass) {
   return {
     type: OPERATIONS_SUBMIT,
@@ -43,4 +37,21 @@ export function operationsSubmit(id, opId, opName, opSort, elementClass) {
     elementClass
   }
 }
+
+export function webApisSelected(id) {
+  return {
+    type: WEBAPIS_SELECTED,
+    id
+  }
+}
+
+export function webApisSubmit(id, serviceMethod, serviceUrl) {
+  return {
+    type: WEBAPIS_SUBMIT,
+    id,
+    serviceMethod,
+    serviceUrl
+  }
+}
+
 

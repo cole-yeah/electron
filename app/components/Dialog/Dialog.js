@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component } from 'react'
 import Dialog from 'material-ui/lib/dialog'
 import TextField from 'material-ui/lib/text-field'
 
@@ -14,7 +14,7 @@ const style = {
   }
 }
 
-export default class DialogExampleAlert extends React.Component {
+export default class DialogExampleAlert extends Component {
   constructor(props) {
     super(props)
   }

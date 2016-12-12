@@ -1,4 +1,4 @@
-import { RECEIVE_MENUS, OPEN_MENUS, CHECKED_ALL, CHECKED_MENUS, SELECTED_MENUS, COMBINE_ITEMS } from '../actions/menus'
+import { RECEIVE_MENUS, OPEN_MENUS, CHECKED_ALL, CHECKED_MENUS, SELECTED_MENUS, COMBINE_ITEMS, EDIT_FIRST_MENUS } from '../actions/menus'
 
 /**
  * 获取数据
@@ -10,9 +10,10 @@ export function menus(state=[], action) {
         menu.open = false
         menu.checked = false
         menu.key = i
-        menu.children.map(child => {
+        menu.children.map((child, j) => {
           child.checked = false
           child.selected = false
+          child.key = j
           child.functions.map(fun => {
             fun.checked = false
             fun.operations.map((operation, x) => {
@@ -52,6 +53,7 @@ export function menus(state=[], action) {
       return state.map( menu => 
           menu.menuId === action.menuId?
             Object.assign({}, menu, {
+              checked: !menu.checked,
               children: menu.children.map(child => Object.assign({}, child, {
                 checked: !all,
                 functions: child.functions.map(fun => Object.assign({}, fun, {
@@ -89,13 +91,21 @@ export function menus(state=[], action) {
  */
     case COMBINE_ITEMS:
       const funId = state.map(menu => menu.children.map(child => child.menuId))
-      console.log(typeof(action.items))
+      // console.log(typeof(action.items))
       return state.map(menu => Object.assign({}, menu, {
         children: menu.children.map(child => action.id === child.menuId?
           Object.assign({}, child, { 
             functions: action.items 
           }):child)
       }))    
+
+    case EDIT_FIRST_MENUS:
+      const aa = state.filter(menu => menu.checked === true)
+      console.log(aa)
+      console.log(aa[0].children)
+      const menusChecked = aa[0].children.filter(child => child.checked === true)
+      // const menusChecked = state.map(menu => menu.children.filter(child => child.checked === true ))
+      console.log(menusChecked)
 
     default:
       return state

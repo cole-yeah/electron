@@ -6,8 +6,8 @@ import Dialog from 'material-ui/lib/dialog'
 import ContentForward from 'material-ui/lib/svg-icons/content/forward'
 import ContentAdd from 'material-ui/lib/svg-icons/content/add'
 
-import TextItems from './TextItems'
-import OperationsItems from './OperationsItems'
+import FunctionsDialog from '../Dialog/FunctionsDialog'
+import OperationsDialog from '../Dialog/OperationsDialog'
 
 const style = {
   dialog: {
@@ -34,7 +34,6 @@ export default class ChildrenItems extends Component {
 
   handleOpen(content) {
     this.setState({open: true, operations: content})
-    console.log(content)
   }
 
   handleEdit(content) {
@@ -54,11 +53,13 @@ export default class ChildrenItems extends Component {
         </FloatingActionButton>:'' )
 
     let dialogChildren = (
-      forward?<OperationsItems
+      forward?<OperationsDialog
                 edit={this.state.edit}
                 itemsActions={itemsActions}
+                array={['opId', 'opSort', 'opName', 'elementClass']}
                 operations={this.state.operations}/>:       
-            <TextItems
+            <FunctionsDialog
+              array={['functionId', 'functionName']}
               functions={this.state.operations}
               itemsActions={itemsActions}/> )
 

@@ -18,7 +18,6 @@ class App extends Component {
   }
 
   componentDidMount() {
-    // console.log('执行app componentDidMount') receiveMenus
     // this.props.menusActions.readItemsFile()  //electron下，用fs读取文件
     this.props.menusActions.receiveMenus()  //web下，假数据
   }                  

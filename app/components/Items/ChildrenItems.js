@@ -8,6 +8,7 @@ import ContentAdd from 'material-ui/lib/svg-icons/content/add'
 
 import FunctionsDialog from '../Dialog/FunctionsDialog'
 import OperationsDialog from '../Dialog/OperationsDialog'
+import AddOperationsDialog from '../Dialog/AddOperationsDialog'
 
 const style = {
   dialog: {
@@ -28,16 +29,21 @@ export default class ChildrenItems extends Component {
     this.state = {
       open: false,
       edit: false,
+      addItems: false,
       content: ''
     }
   }
 
   handleOpen(content) {
-    this.setState({open: true, operations: content})
+    this.setState({open: true, addItems: false, operations: content})
   }
 
   handleEdit(content) {
-    this.setState({open: true, edit: true, operations: content})
+    this.setState({open: true, addItems: false, edit: true, operations: content})
+  }
+
+  handleAdd(content) {
+    this.setState({open: true, addItems: true})
   }
 
   handleClose() {
@@ -48,20 +54,28 @@ export default class ChildrenItems extends Component {
     const { items, itemsActions, array, forward, _handleChecked } = this.props
     
     let forwardAdd = (
-        forward?<FloatingActionButton secondary={true} mini={true} style={style.actionButton}>
+        forward?<FloatingActionButton secondary={true} mini={true} style={style.actionButton} onTouchTap={this.handleAdd.bind(this)}>
           <ContentAdd />
         </FloatingActionButton>:'' )
 
     let dialogChildren = (
-      forward?<OperationsDialog
-                edit={this.state.edit}
-                itemsActions={itemsActions}
-                array={['opId', 'opSort', 'opName', 'elementClass']}
-                operations={this.state.operations}/>:       
-            <FunctionsDialog
-              array={['functionId', 'functionName']}
-              functions={this.state.operations}
-              itemsActions={itemsActions}/> )
+      this.state.addItems?
+        (<AddOperationsDialog
+            itemsActions={itemsActions}
+            array={['opId', 'opSort', 'opName', 'elementClass']}/>)
+        :(forward?
+          <OperationsDialog
+            edit={this.state.edit}
+            itemsActions={itemsActions}
+            array={['opId', 'opSort', 'opName', 'elementClass']}
+            operations={this.state.operations}
+          />:       
+          <FunctionsDialog
+            array={['functionId', 'functionName']}
+            functions={this.state.operations}
+            itemsActions={itemsActions}
+          />) 
+        )
 
     return (
       <div>

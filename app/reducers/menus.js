@@ -1,4 +1,14 @@
-import { RECEIVE_MENUS, OPEN_MENUS, CHECKED_ALL, CHECKED_MENUS, SELECTED_MENUS, COMBINE_ITEMS, EDIT_FIRST_MENUS } from '../actions/menus'
+import { 
+  RECEIVE_MENUS, 
+  OPEN_MENUS, 
+  CHECKED_ALL, 
+  CHECKED_MENUS, 
+  SELECTED_MENUS, 
+  COMBINE_ITEMS, 
+  FIRST_MENUS_SUBMIT, 
+  SECOND_MENUS_SUBMIT, 
+  ADD_FIRST_MENUS,
+  ADD_SECOND_MENUS } from '../actions/menus'
 
 /**
  * 获取数据
@@ -37,7 +47,6 @@ export function menus(state=[], action) {
           Object.assign({}, menu, {
             open: !menu.open}
           ):menu)
-        // {...menu, open: !menu.open}:menu)
 /**
  * 点击勾选该一级菜单下所有二、三级菜单
  */
@@ -48,8 +57,6 @@ export function menus(state=[], action) {
             fun.operations.every(operation => 
               operation.checked))
         )
-      console.log(allChecked)
-      // console.log(all)
       return state.map( menu => 
           menu.menuId === action.menuId?
             Object.assign({}, menu, {
@@ -91,21 +98,78 @@ export function menus(state=[], action) {
  */
     case COMBINE_ITEMS:
       const funId = state.map(menu => menu.children.map(child => child.menuId))
-      // console.log(typeof(action.items))
       return state.map(menu => Object.assign({}, menu, {
         children: menu.children.map(child => action.id === child.menuId?
           Object.assign({}, child, { 
             functions: action.items 
           }):child)
       }))    
-
-    case EDIT_FIRST_MENUS:
-      const aa = state.filter(menu => menu.checked === true)
-      console.log(aa)
-      console.log(aa[0].children)
-      const menusChecked = aa[0].children.filter(child => child.checked === true)
-      // const menusChecked = state.map(menu => menu.children.filter(child => child.checked === true ))
-      console.log(menusChecked)
+/**
+ * 提交修改一级菜单数据
+ */
+    case FIRST_MENUS_SUBMIT:
+      return state.map(menu => menu.menuId === action.menuId?
+        Object.assign({}, menu, {
+          menuId: action.menuId,
+          menuCode: action.menuCode,
+          menuSort: action.menuSort,
+          name: action.name
+        }):menu)
+/**
+ * 提交修改二级菜单数据
+ */
+    case SECOND_MENUS_SUBMIT:
+      return state.map(menu => menu.menuId === action.menuParentId?(Object.assign({}, menu, {
+        children: menu.children.map(child => child.menuId === action.menuId?
+          Object.assign({}, child, {
+            menuId: action.menuId, 
+            menuCode: action.menuCode, 
+            menuSort: action.menuSort, 
+            name: action.name, 
+            menuParentId: action.menuParentId, 
+            anchor: action.anchor
+          }):child)
+      })):menu)
+/**
+ * 提交新增一级菜单数据
+ */
+    case ADD_FIRST_MENUS:
+      // console.log('提交新增一级菜单数据')
+      state.push({
+        menuId: action.menuId,
+        menuCode: action.menuCode,
+        icon: action.icon,
+        menuSort: action.menuSort,
+        name: action.name,
+        children: [],
+        systemName: '收货系统',
+        menuParent: '-1',
+        level: 1,
+        anchor: null,
+        functions: null,
+        topMenu: true
+      })
+/**
+ * 提交新增二级菜单数据
+ */
+    case ADD_SECOND_MENUS:
+      console.log('提交新增二级菜单数据')
+      // state.map(item => item.menuId === action.menuId?Object.assign({}, item, {
+      //   children: item.children.push({
+      //     systemName: "收货系统",
+      //     menuId: action.menuId,
+      //     menuCode: action.menuCode,
+      //     menuParentId: action.menuParentId,
+      //     menuSort: action.menuSort,
+      //     anchor: action.anchor,
+      //     name: action.name,
+      //     "icon": null,
+      //     level: 2,
+      //     functions: [],
+      //     children: [],
+      //     topMenu: false          
+      //   })
+      // }):item)
 
     default:
       return state

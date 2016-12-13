@@ -4,6 +4,8 @@ export const OPERATIONS_SELECTED = 'OPERATIONS_SELECTED'
 export const WEBAPIS_SELECTED = 'WEBAPIS_SELECTED'
 export const OPERATIONS_SUBMIT = 'OPERATIONS_SUBMIT'
 export const WEBAPIS_SUBMIT = 'WEBAPIS_SUBMIT'
+export const ADD_OPERATIONS_SUBMIT = 'ADD_OPERATIONS_SUBMIT'
+export const ADD_WEBAPIS_SUBMIT = 'ADD_WEBAPIS_SUBMIT'
 
 export function handleSubmit(functionId, functionName) {
   return {
@@ -54,4 +56,22 @@ export function webApisSubmit(id, serviceMethod, serviceUrl) {
   }
 }
 
+export function addOperationsSubmit(opId, opSort, opName, elementClass) {
+  return {
+    type: ADD_OPERATIONS_SUBMIT,
+    opId, 
+    opSort, 
+    opName, 
+    elementClass
+  }
+}
+
+export function addWebApisSubmit(opId, serviceMethod, serviceUrl) {
+  return {
+    type: ADD_WEBAPIS_SUBMIT,
+    serviceMethod,
+    serviceUrl,
+    opId
+  }
+}
 

@@ -8,6 +8,7 @@ import ContentAdd from 'material-ui/lib/svg-icons/content/add'
 import Dialog from 'material-ui/lib/dialog'
 
 import WebApisDialog from './WebApisDialog'
+import AddWebApisDialog from './AddWebApisDialog'
 
 const style = {
   textField: {
@@ -40,19 +41,24 @@ export default class ChildrenItems extends Component {
       opSort: this.props.operations.opSort,
       elementClass: this.props.operations.elementClass,
       open: false,
-      api: ''
+      addItems: false,
+      api: '',
     }
   }
 
   handleChange(name, event) {
     let newState = {}
     newState[name] = event.target.value
-    console.log(newState)
+    // console.log(newState)
     this.setState(newState)
   }
 
   handleEdit(content) {
-    this.setState({open: true, api: content})
+    this.setState({open: true, addItems: false, api: content})
+  }
+
+  handleAdd() {
+    this.setState({addItems: true, open: true})
   }
 
   handleClose() {
@@ -113,12 +119,21 @@ export default class ChildrenItems extends Component {
               contentStyle={style.dialog}
               onRequestClose={this.handleClose}
             >
-              <WebApisDialog
-                array={['serviceMethod', 'serviceUrl']}
-                itemsActions={itemsActions}
-                api={this.state.api}/>
+              {this.state.addItems?
+                <AddWebApisDialog
+                  array={['serviceMethod', 'serviceUrl']}
+                  itemsActions={itemsActions}
+                  opId = {operations.opId}
+                  api={operations.webApis.length !== 0?operations.webApis[0]:(operations.webApis.serviceMethod='',operations.webApis.serviceUrl='')}
+                />
+                :(<WebApisDialog
+                    array={['serviceMethod', 'serviceUrl']}
+                    itemsActions={itemsActions}
+                    api={this.state.api}
+                  />)
+              }
             </Dialog>
-            <FloatingActionButton secondary={true} mini={true} style={style.actionButton}>
+            <FloatingActionButton secondary={true} mini={true} style={style.actionButton} onTouchTap={this.handleAdd.bind(this)}>
               <ContentAdd/>
             </FloatingActionButton>
           </table>

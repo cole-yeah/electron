@@ -1,5 +1,13 @@
 import { RECEIVE_ITEMS, CHECKED_ALL } from '../actions/menus'
-import { HANDLE_SUBMIT, HANDLE_SELECTED, OPERATIONS_SELECTED, WEBAPIS_SELECTED, OPERATIONS_SUBMIT, WEBAPIS_SUBMIT } from '../actions/items'
+import { 
+  HANDLE_SUBMIT, 
+  HANDLE_SELECTED, 
+  OPERATIONS_SELECTED, 
+  WEBAPIS_SELECTED, 
+  OPERATIONS_SUBMIT, 
+  WEBAPIS_SUBMIT, 
+  ADD_OPERATIONS_SUBMIT, 
+  ADD_WEBAPIS_SUBMIT } from '../actions/items'
 
 /**
  * 获取items  
@@ -23,8 +31,7 @@ export function items(state=[], action) {
  * 点击勾选与否functions  
  */
     case HANDLE_SELECTED:
-    let item = state[0];
-      return [Object.assign({}, item, { checked: !item.checked })]
+      return [Object.assign({}, state[0], { checked: !state[0].checked })]
 /**
  * 提交修改operations的值，并合并到menus中
  */
@@ -64,6 +71,32 @@ export function items(state=[], action) {
             Object.assign({}, api, { serviceMethod: action.serviceMethod, serviceUrl: action.serviceUrl }):api)
         }))
       }))
+/**
+ * 提交新增operations的值，并合并到menus中  
+ */
+    case ADD_OPERATIONS_SUBMIT:
+      state.map(item => Object.assign({}, item, {
+        operations: item.operations.push({
+          checked: false,
+          opId: action.opId, 
+          opSort: action.opSort, 
+          opName: action.opName, 
+          elementClass: action.elementClass,
+          webApis: []
+        })  //todo 这里有点不明白，一return的话就会报childrenItems下的items.map is not a function错误. debug之后发现items变成了长度，不再是数组..
+      }))  // 是push的原因, array.push('xx')为数组，var other = array.push('xx')为长度
+
+    case ADD_WEBAPIS_SUBMIT:
+      // state.map(item => Object.assign({}, item, {
+      //   operations: item.operations.map(operation => operation.opId === action.opId?
+      //     Object.assign({}, operation, {
+      //       webApis: operation.webApis.push({
+      //         checked: false,
+      //         serviceUrl: action.serviceUrl,
+      //         serviceMethod: action.serviceMethod
+      //       })
+      //     }):operation)
+      // }))
 
     default:
       return state

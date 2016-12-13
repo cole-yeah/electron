@@ -17,14 +17,10 @@ export default class ChildrenItems extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      level: this.props.menus.level,
-      icon: this.props.menus.icon,
       menuCode: this.props.menus.menuCode,
       menuId: this.props.menus.menuId,
-      menuParentId: this.props.menus.menuParentId,
       menuSort: this.props.menus.menuSort,
       name: this.props.menus.name,
-      topMenu: this.props.menus.topMenu,
     }
   }
 
@@ -36,7 +32,7 @@ export default class ChildrenItems extends Component {
   }
 
   render() {
-    const { menus, itemsActions, array } = this.props
+    const { menus, menusActions, array } = this.props
     let submitContent = array.map(arr => this.state[arr])
 
     return (
@@ -56,7 +52,7 @@ export default class ChildrenItems extends Component {
           label="Submit" 
           primary={true} 
           keyboardFocused={true}
-          // onTouchTap={() => itemsActions.webApisSubmit(menusId, ...submitContent)}
+          onTouchTap={() => menusActions.firstMenusSubmit( ...submitContent)}
         />
       </span>
     )

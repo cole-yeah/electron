@@ -27,19 +27,7 @@ export default class Search extends Component {
 
   constructor(props) {
     super(props)
-    this.state = {
-      open: false
-    }
   }
-
-   handleOpen(){
-  }
-
-  // handleClose() {
-  //   this.setState({
-  //     open:false
-  //   })    
-  // }
 
   render() {
     const {searchTitle} = this.props

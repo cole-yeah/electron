@@ -63,7 +63,7 @@
 /******/ 	}
 
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "ed01f8249b37ca76c734"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "4f6a7e2f1162e5946cab"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 
@@ -624,7 +624,7 @@
 	  _react2['default'].createElement(_containersApp2['default'], null)
 	), document.getElementById('app'));
 
-	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(350); if (makeExportsHot(module, __webpack_require__(66))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "index.jsx" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
+	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(344); if (makeExportsHot(module, __webpack_require__(66))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "index.jsx" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)(module)))
 
 /***/ },
@@ -22540,35 +22540,8 @@
 	    case _actionsMenus.RECEIVE_ITEMS:
 	      state = action.items;
 	      return state.map(function (item) {
-	        item.open = false;
-	        item.edit = false;
 	        item.id = action.id;
-	        item.operations.map(function (operation) {
-	          operation.open = false;
-	          operation.edit = false;
-	        });
 	        return item;
-	      });
-	    /**
-	     * 关闭functions的dialog  
-	     */
-	    case _actionsItems.HANDLE_CLOSE:
-	      return state.map(function (item) {
-	        return Object.assign({}, item, { open: false, edit: false });
-	      });
-	    /**
-	     * 打开functions的dialog  
-	     */
-	    case _actionsItems.HANDLE_OPEN:
-	      return state.map(function (item) {
-	        return Object.assign({}, item, { open: true, edit: false });
-	      });
-	    /**
-	     * 编辑functions的dialog  
-	     */
-	    case _actionsItems.HANDLE_EDIT:
-	      return state.map(function (item) {
-	        return Object.assign({}, item, { open: true, edit: true });
 	      });
 
 	    /**
@@ -22580,35 +22553,62 @@
 	      });
 
 	    /**
-	     * 打开operation的dialog  
+	     * 点击勾选与否functions  
 	     */
-	    case _actionsItems.OPERATION_OPEN:
+	    case _actionsItems.HANDLE_SELECTED:
+	      var item = state[0];
+	      return [Object.assign({}, item, { checked: !item.checked })];
+	    /**
+	     * 提交修改operations的值，并合并到menus中
+	     */
+	    case _actionsItems.OPERATIONS_SUBMIT:
+	      console.log(action.id);
 	      return state.map(function (item) {
 	        return Object.assign({}, item, {
 	          operations: item.operations.map(function (operation) {
-	            return operation.opId === action.opId ? Object.assign({}, operation, { open: true, edit: false }) : operation;
+	            return operation.opId === action.id ? Object.assign({}, operation, { opId: action.opId, opName: action.opName, opSort: action.opSort, elementClass: action.elementClass }) : operation;
+	          })
+	        });
+	      });
+
+	    /**
+	     * 点击勾选与否operations  
+	     */
+	    case _actionsItems.OPERATIONS_SELECTED:
+	      return state.map(function (item) {
+	        return Object.assign({}, item, {
+	          operations: item.operations.map(function (operation) {
+	            return operation.opId === action.id ? Object.assign({}, operation, { checked: !operation.checked }) : operation;
 	          })
 	        });
 	      });
 	    /**
-	     * 关闭operation的dialog  
+	     * 点击勾选与否webApis  
 	     */
-	    case _actionsItems.OPERATION_CLOSE:
+	    case _actionsItems.WEBAPIS_SELECTED:
 	      return state.map(function (item) {
 	        return Object.assign({}, item, {
 	          operations: item.operations.map(function (operation) {
-	            return Object.assign({}, operation, { open: false, edit: false });
+	            return Object.assign({}, operation, {
+	              webApis: operation.webApis.map(function (api) {
+	                return api.id === action.id ? Object.assign({}, api, { checked: !api.checked }) : api;
+	              })
+	            });
 	          })
 	        });
 	      });
 	    /**
-	     * 编辑operation的dialog  
+	     * 提交修改webApis的值，并合并到menus中  
 	     */
-	    case _actionsItems.OPERATION_EDIT:
+	    case _actionsItems.WEBAPIS_SUBMIT:
 	      return state.map(function (item) {
 	        return Object.assign({}, item, {
 	          operations: item.operations.map(function (operation) {
-	            return operation.opId === action.opId ? Object.assign({}, operation, { open: true, edit: true }) : operation;
+	            return Object.assign({}, operation, {
+	              webApis: operation.webApis.map(function (api) {
+	                return api.id === action.id ? Object.assign({}, api, { serviceMethod: action.serviceMethod, serviceUrl: action.serviceUrl }) : api;
+	              })
+	            });
 	          })
 	        });
 	      });
@@ -22622,2647 +22622,26 @@
 /* 204 */
 /***/ function(module, exports) {
 
-	'use strict';Object.defineProperty(exports,'__esModule',{value:true});exports.openMenus = openMenus;exports.checkedAll = checkedAll;exports.checkedMenus = checkedMenus;exports.receiveItems = receiveItems;exports.dispatchActions = dispatchActions;exports.selectedMenus = selectedMenus;exports.combineItems = combineItems;exports.readItemsFile = readItemsFile;exports.receiveMenus = receiveMenus;var remote=window.require('electron').remote;var fs=remote.require('fs');var RECEIVE_MENUS='RECEIVE_MENUS';exports.RECEIVE_MENUS = RECEIVE_MENUS;var OPEN_MENUS='OPEN_MENUS';exports.OPEN_MENUS = OPEN_MENUS;var CHECKED_ALL='CHECKED_ALL';exports.CHECKED_ALL = CHECKED_ALL;var CHECKED_MENUS='CHECKED_MENUS';exports.CHECKED_MENUS = CHECKED_MENUS;var SELECTED_MENUS='SELECTED_MENUS';exports.SELECTED_MENUS = SELECTED_MENUS;var RECEIVE_ITEMS='RECEIVE_ITEMS';exports.RECEIVE_ITEMS = RECEIVE_ITEMS;var COMBINE_ITEMS='COMBINE_ITEMS';exports.COMBINE_ITEMS = COMBINE_ITEMS;function openMenus(menuId){return {type:OPEN_MENUS,menuId:menuId};}function checkedAll(menuId,id){return {type:CHECKED_ALL,menuId:menuId,id:id};}function checkedMenus(menuId){return {type:CHECKED_MENUS,menuId:menuId};}function receiveItems(id,menus){return {type:RECEIVE_ITEMS,items:menus,id:id};}function dispatchActions(menuId,items){return function(dispatch){dispatch(selectedMenus(menuId));dispatch(receiveItems(menuId,items));};}function selectedMenus(menuId){return {type:SELECTED_MENUS,menuId:menuId};}function combineItems(id,items){return {type:COMBINE_ITEMS,items:items,id:id};} //读取本地json文件获取列表,根据参数first,second 索引出点击菜单下的数组
-	function readItemsFile(){return function(dispatch){return fs.readFile('./test.json','utf-8',function(err,data){data = JSON.parse(data); // const items = (data)
-	dispatch(receiveMenus(data));});};} //获取列表成功action
-	function receiveMenus(items){console.log('获取data数据');return {type:RECEIVE_MENUS,menus:items};} //     [
-	//     {
-	//         "systemName": "收货系统",
-	//         "menuId": "10001",
-	//         "menuCode": "10001",
-	//         "menuParentId": "-1",
-	//         "icon": "fa-database",
-	//         "menuSort": 1,
-	//         "name": "基础数据管理",
-	//         "level": 1,
-	//         "anchor": null,
-	//         "functions": null,
-	//         "children": [
-	//             {
-	//                 "systemName": "收货系统",
-	//                 "menuId": "10001-001",
-	//                 "menuCode": "10001-001",
-	//                 "menuParentId": "10001",
-	//                 "icon": null,
-	//                 "menuSort": 1,
-	//                 "name": "字典数据管理",
-	//                 "level": 2,
-	//                 "anchor": "#basics/ydsWorkbooks",
-	//                 "functions": [
-	//                     {
-	//                         "functionId": "F0001",
-	//                         "functionName": "字典数据管理",
-	//                         "operations": [
-	//                             {
-	//                                 "opId": "P0001",
-	//                                 "opName": "字典数据管理查看",
-	//                                 "opSort": "P0001",
-	//                                 "elementClass": "acl_view_ydsWorkBook",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsWorkBooks",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsWorkBooks/{workbookId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsWorkBooks",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsWorkBooks",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsWorkBooks/count",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0002",
-	//                                 "opName": "字典数据管理新增",
-	//                                 "opSort": "P0002",
-	//                                 "elementClass": "acl_add_ydsWorkBook",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsWorkBooks",
-	//                                         "serviceMethod": "POST"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsWorkBooks",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsWorkBooks/{workbookId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsWorkBooks",
-	//                                         "serviceMethod": "POST"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsWorkBooks/count",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0003",
-	//                                 "opName": "字典数据管理编辑",
-	//                                 "opSort": "P0003",
-	//                                 "elementClass": "acl_edit_ydsWorkBook",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsWorkBooks/{workbookId}",
-	//                                         "serviceMethod": "PUT"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsWorkBooks",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsWorkBooks/{workbookId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsWorkBooks/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsWorkBooks/{workbookId}",
-	//                                         "serviceMethod": "PUT"
-	//                                     }
-	//                                 ]
-	//                             }
-	//                         ]
-	//                     }
-	//                 ],
-	//                 "children": [],
-	//                 "topMenu": false
-	//             },
-	//             {
-	//                 "systemName": "收货系统",
-	//                 "menuId": "10001-002",
-	//                 "menuCode": "10001-002",
-	//                 "menuParentId": "10001",
-	//                 "icon": null,
-	//                 "menuSort": 2,
-	//                 "name": "标准产品管理",
-	//                 "level": 2,
-	//                 "anchor": "#basics/standardProducts",
-	//                 "functions": [
-	//                     {
-	//                         "functionId": "F0002",
-	//                         "functionName": "标准产品管理",
-	//                         "operations": [
-	//                             {
-	//                                 "opId": "P0008",
-	//                                 "opName": "标准产品管理查看",
-	//                                 "opSort": "P0008",
-	//                                 "elementClass": "acl_view_ydsGood",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsWorkBooks",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods/{goodsId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsWorkBooks/byUse",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0009",
-	//                                 "opName": "标准产品管理新增",
-	//                                 "opSort": "P0009",
-	//                                 "elementClass": "acl_add_ydsGood",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods",
-	//                                         "serviceMethod": "POST"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods",
-	//                                         "serviceMethod": "POST"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods/{goodsId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods/count",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0010",
-	//                                 "opName": "标准产品管理编辑",
-	//                                 "opSort": "P0010",
-	//                                 "elementClass": "acl_edit_ydsGood",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods/{goodsId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods/{goodsId}",
-	//                                         "serviceMethod": "PUT"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0012",
-	//                                 "opName": "标准产品管理提交",
-	//                                 "opSort": "P0012",
-	//                                 "elementClass": "acl_commitEntity_ydsGood",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods/{goodsId}/checkState/commited",
-	//                                         "serviceMethod": "PUT"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods/{goodsId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods/{goodsId}/checkState/commited",
-	//                                         "serviceMethod": "PUT"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0015",
-	//                                 "opName": "标准产品管理导出",
-	//                                 "opSort": "P0015",
-	//                                 "elementClass": "acl_export_ydsGood",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods/{goodsId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods/ydsgoodsExcel",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0276",
-	//                                 "opName": "标准产品管理撤回",
-	//                                 "opSort": "P0276",
-	//                                 "elementClass": "acl_cancelCommit_ydsGood",
-	//                                 "webApis": []
-	//                             },
-	//                             {
-	//                                 "opId": "P0279",
-	//                                 "opName": "标准产品批量提交",
-	//                                 "opSort": "P0279",
-	//                                 "elementClass": "acl_commitEntities_ydsGood",
-	//                                 "webApis": []
-	//                             },
-	//                             {
-	//                                 "opId": "P0013",
-	//                                 "opName": "标准产品管理同步",
-	//                                 "opSort": "P0013",
-	//                                 "elementClass": "acl_view_ydsGood,acl_sync_ysdGood",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods/{goodsId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods/{goodsId}/checkState/reviewed",
-	//                                         "serviceMethod": "PUT"
-	//                                     }
-	//                                 ]
-	//                             }
-	//                         ]
-	//                     }
-	//                 ],
-	//                 "children": [],
-	//                 "topMenu": false
-	//             },
-	//             {
-	//                 "systemName": "收货系统",
-	//                 "menuId": "10001-003",
-	//                 "menuCode": "10001-003",
-	//                 "menuParentId": "10001",
-	//                 "icon": null,
-	//                 "menuSort": 3,
-	//                 "name": "标准产品批次",
-	//                 "level": 2,
-	//                 "anchor": "#spd/ydsGoodsLots",
-	//                 "functions": [
-	//                     {
-	//                         "functionId": "F0016",
-	//                         "functionName": "标准产品批次",
-	//                         "operations": [
-	//                             {
-	//                                 "opId": "P0105",
-	//                                 "opName": "标准产品批次查看",
-	//                                 "opSort": "P0105",
-	//                                 "elementClass": "acl_view_ydsGoodsLot",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoodsLots/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoodsLots",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoodsLots",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0107",
-	//                                 "opName": "标准产品批次新增",
-	//                                 "opSort": "P0107",
-	//                                 "elementClass": "acl_add_ydsGoodsLot",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoodsLots",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoodsLots",
-	//                                         "serviceMethod": "POST"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoodsLots",
-	//                                         "serviceMethod": "POST"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoodsLots/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoodsLots",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0106",
-	//                                 "opName": "标准产品批次编辑",
-	//                                 "opSort": "P0106",
-	//                                 "elementClass": "acl_edit_ydsGoodsLot",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoodsLots/{goodsLotId}",
-	//                                         "serviceMethod": "PUT"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoodsLots",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             }
-	//                         ]
-	//                     }
-	//                 ],
-	//                 "children": [],
-	//                 "topMenu": false
-	//             },
-	//             {
-	//                 "systemName": "收货系统",
-	//                 "menuId": "10001-004",
-	//                 "menuCode": "10001-004",
-	//                 "menuParentId": "10001",
-	//                 "icon": null,
-	//                 "menuSort": 4,
-	//                 "name": "企业产品管理",
-	//                 "level": 2,
-	//                 "anchor": "#basics/ydsEdsGoods",
-	//                 "functions": [
-	//                     {
-	//                         "functionId": "F0003",
-	//                         "functionName": "企业产品管理",
-	//                         "operations": [
-	//                             {
-	//                                 "opId": "P0016",
-	//                                 "opName": "企业产品管理查看",
-	//                                 "opSort": "P0016",
-	//                                 "elementClass": "acl_view_ydsEdsGoods",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoods",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoods/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoods/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoods",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoods/{goodsId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsWorkBooks/byUse",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsWorkBooks/byUse",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0018",
-	//                                 "opName": "企业产品管理新增",
-	//                                 "opSort": "P0018",
-	//                                 "elementClass": "acl_add_ydsEdsGoods",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoods",
-	//                                         "serviceMethod": "POST"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsWorkBooks",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods/byUse",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoods",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoods/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoods/{goodsId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoods",
-	//                                         "serviceMethod": "POST"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsWorkBooks/byUse",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoods",
-	//                                         "serviceMethod": "POST"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods/byUse/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0020",
-	//                                 "opName": "企业产品管理提交",
-	//                                 "opSort": "P0020",
-	//                                 "elementClass": "acl_commitEntity_ydsEdsGoods",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoods/{ydsEdsGoodsId}/checkState/commited",
-	//                                         "serviceMethod": "PUT"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoods",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoods/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoods/{goodsId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoods/{goodsId}/checkState/commited",
-	//                                         "serviceMethod": "PUT"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsWorkBooks/byUse",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0023",
-	//                                 "opName": "企业产品管理导出",
-	//                                 "opSort": "P0023",
-	//                                 "elementClass": "acl_export_ydsEdsGoods,acl_view_ydsEdsGoods",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoods",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoods/Excel",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoods/count",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0284",
-	//                                 "opName": "企业产品管理撤回",
-	//                                 "opSort": "P0284",
-	//                                 "elementClass": "acl_cancelCommit_ydsEdsGoods",
-	//                                 "webApis": []
-	//                             },
-	//                             {
-	//                                 "opId": "P0280",
-	//                                 "opName": "企业产品批量提交",
-	//                                 "opSort": "P0280",
-	//                                 "elementClass": "acl_commitEntities_ydsEdsGoods",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoods/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoods",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoods/{ydsEdsGoodsId}/checkState/commited",
-	//                                         "serviceMethod": "PUT"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoods/{edsGoodsId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsWorkBooks/byUse",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0017",
-	//                                 "opName": "企业产品管理编辑",
-	//                                 "opSort": "P0017",
-	//                                 "elementClass": "acl_edit_ydsEdsGoods",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoods/{goodsId}",
-	//                                         "serviceMethod": "PUT"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoods",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoods/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoods/{goodsId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsWorkBooks/byUse",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods/byUse/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods/byUse",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoods/{edsGoodsId}",
-	//                                         "serviceMethod": "PUT"
-	//                                     }
-	//                                 ]
-	//                             }
-	//                         ]
-	//                     }
-	//                 ],
-	//                 "children": [],
-	//                 "topMenu": false
-	//             },
-	//             {
-	//                 "systemName": "收货系统",
-	//                 "menuId": "10001-005",
-	//                 "menuCode": "10001-005",
-	//                 "menuParentId": "10001",
-	//                 "icon": null,
-	//                 "menuSort": 5,
-	//                 "name": "企业产品批次",
-	//                 "level": 2,
-	//                 "anchor": "#spd/ydsEdsGoodsLots",
-	//                 "functions": [
-	//                     {
-	//                         "functionId": "F0015",
-	//                         "functionName": "企业产品批次",
-	//                         "operations": [
-	//                             {
-	//                                 "opId": "P0102",
-	//                                 "opName": "企业产品批次查看",
-	//                                 "opSort": "P0102",
-	//                                 "elementClass": "acl_view_ydsEdsGoodsLot",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdReceives/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdReceives",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoodsLots/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoodsLots",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoods/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0103",
-	//                                 "opName": "企业产品批次编辑",
-	//                                 "opSort": "P0103",
-	//                                 "elementClass": "acl_edit_ydsEdsGoodsLot",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoodsLots/{edsGoodsLotId}",
-	//                                         "serviceMethod": "PUT"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoods/{edsGoodsId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoodsLots",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoodsLots/count",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0104",
-	//                                 "opName": "企业产品批次新增",
-	//                                 "opSort": "P0104",
-	//                                 "elementClass": "acl_add_ydsEdsGoodsLot",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoodsLots",
-	//                                         "serviceMethod": "POST"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoodsLots/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoodsLots",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoodsLots",
-	//                                         "serviceMethod": "POST"
-	//                                     }
-	//                                 ]
-	//                             }
-	//                         ]
-	//                     }
-	//                 ],
-	//                 "children": [],
-	//                 "topMenu": false
-	//             }
-	//         ],
-	//         "topMenu": true
-	//     },
-	//     {
-	//         "systemName": "收货系统",
-	//         "menuId": "10002",
-	//         "menuCode": "10003",
-	//         "menuParentId": "-1",
-	//         "icon": "fa-map-signs",
-	//         "menuSort": 2,
-	//         "name": "规则配置管理",
-	//         "level": 1,
-	//         "anchor": null,
-	//         "functions": null,
-	//         "children": [
-	//             {
-	//                 "systemName": "收货系统",
-	//                 "menuId": "10002-001",
-	//                 "menuCode": "10002-001",
-	//                 "menuParentId": "10002",
-	//                 "icon": null,
-	//                 "menuSort": 1,
-	//                 "name": "请领流向策略",
-	//                 "level": 2,
-	//                 "anchor": "#basics/spdDepotRoutes",
-	//                 "functions": [
-	//                     {
-	//                         "functionId": "F0036",
-	//                         "functionName": "请领流向策略",
-	//                         "operations": [
-	//                             {
-	//                                 "opId": "P0238",
-	//                                 "opName": "请领流向策略查看",
-	//                                 "opSort": "P0238",
-	//                                 "elementClass": "acl_view_spdDepotRoute",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotRoutes/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotRoutes",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotRoutes",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0241",
-	//                                 "opName": "请领流向策略删除",
-	//                                 "opSort": "P0241",
-	//                                 "elementClass": "acl_delete_spdDepotRoute",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotRoutes/{routeId}",
-	//                                         "serviceMethod": "DELETE"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotRoutes",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotRoutes/count",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0240",
-	//                                 "opName": "请领流向策略编辑",
-	//                                 "opSort": "P0240",
-	//                                 "elementClass": "acl_edit_spdDepotRoute",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotRoutes/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotRoutes",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0239",
-	//                                 "opName": "请领流向策略新增",
-	//                                 "opSort": "P0239",
-	//                                 "elementClass": "acl_add_spdDepotRoute",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotRoutes",
-	//                                         "serviceMethod": "POST"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotRoutes",
-	//                                         "serviceMethod": "POST"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotRoutes/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotRoutes",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/pcsDepots/byUse",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/pcsDepots/byUse/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/pcsDepots/byTakePoint/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/pcsDepots/byTakePoint",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             }
-	//                         ]
-	//                     }
-	//                 ],
-	//                 "children": [],
-	//                 "topMenu": false
-	//             },
-	//             {
-	//                 "systemName": "收货系统",
-	//                 "menuId": "10002-002",
-	//                 "menuCode": "10002-002",
-	//                 "menuParentId": "10002",
-	//                 "icon": null,
-	//                 "menuSort": 2,
-	//                 "name": "使用类型管理",
-	//                 "level": 2,
-	//                 "anchor": "#spd/spdUsedTypes",
-	//                 "functions": [
-	//                     {
-	//                         "functionId": "F0074",
-	//                         "functionName": "使用类型管理",
-	//                         "operations": [
-	//                             {
-	//                                 "opId": "P0644",
-	//                                 "opName": "使用类型管理查看",
-	//                                 "opSort": "P0644",
-	//                                 "elementClass": "acl_view_spdUsedType",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/pcsDepotViews/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdUsedTypes",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdUsedTypes/count",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0645",
-	//                                 "opName": "使用类型管理增加",
-	//                                 "opSort": "P0645",
-	//                                 "elementClass": "acl_add_spdUsedType",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/pcsDepotViews/byUsedDepot",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdUsedTypes",
-	//                                         "serviceMethod": "POST"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/pcsDepts/orgId,{orgId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/pcsDepotViews/byUsedDepot",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/pcsDepotViews/byUsedDepot/count",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0646",
-	//                                 "opName": "使用类型管理编辑",
-	//                                 "opSort": "P0646",
-	//                                 "elementClass": "acl_edit_spdUsedType",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdUsedTypes/{usedType}",
-	//                                         "serviceMethod": "PUT"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0647",
-	//                                 "opName": "使用类型管理删除",
-	//                                 "opSort": "P0647",
-	//                                 "elementClass": "acl_delete_spdUsedType",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdUsedTypes/{usedType}",
-	//                                         "serviceMethod": "DELETE"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0648",
-	//                                 "opName": "使用类型管理提交",
-	//                                 "opSort": "P0648",
-	//                                 "elementClass": "acl_commitEntity_spdUsedType",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdUsedTypes/{usedType}/checkState/commited",
-	//                                         "serviceMethod": "PUT"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdUsedTypes/{usedType}",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0649",
-	//                                 "opName": "使用类型管理撤回",
-	//                                 "opSort": "P0649",
-	//                                 "elementClass": "acl_cancelCommit_spdUsedType",
-	//                                 "webApis": []
-	//                             }
-	//                         ]
-	//                     }
-	//                 ],
-	//                 "children": [],
-	//                 "topMenu": false
-	//             },
-	//             {
-	//                 "systemName": "收货系统",
-	//                 "menuId": "10002-003",
-	//                 "menuCode": "10002-003",
-	//                 "menuParentId": "10002",
-	//                 "icon": null,
-	//                 "menuSort": 3,
-	//                 "name": "仓库帐页管理",
-	//                 "level": 2,
-	//                 "anchor": "#spd/spdDepotCards",
-	//                 "functions": [
-	//                     {
-	//                         "functionId": "F0017",
-	//                         "functionName": "仓库帐页管理",
-	//                         "operations": [
-	//                             {
-	//                                 "opId": "P0108",
-	//                                 "opName": "仓库帐页管理查看",
-	//                                 "opSort": "P0108",
-	//                                 "elementClass": "acl_view_spdDepotCard",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/depotShelfs/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotCards/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotCards",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/SpdDepotCardByStockTotalViews/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0109",
-	//                                 "opName": "仓库帐页管理编辑",
-	//                                 "opSort": "P0109",
-	//                                 "elementClass": "acl_edit_spdDepotCard",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotCards",
-	//                                         "serviceMethod": "PUT"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/depotShelfs/byLoseSheft,{depotId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/depotShelfs/byLoseSheft,{depotId}/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/depotShelfs/{shelfId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/depotShelfs/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/SpdDepotCardByStockTotalViews/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/depotShelfs/byWMGDepotShelf,{depotId}/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/depotShelfs/byWMGDepotShelf,{depotId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/depotShelfs/WMGDepotShelf",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/depotShelfs/WMGDepotShelf/count",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0110",
-	//                                 "opName": "仓库帐页管理新增",
-	//                                 "opSort": "P0110",
-	//                                 "elementClass": "acl_add_spdDepotCard",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/depotShelfs/WMGDepotShelf/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/depotShelfs/WMGDepotShelf",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotCards",
-	//                                         "serviceMethod": "POST"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotCards",
-	//                                         "serviceMethod": "POST"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotCards",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/depotShelfs/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/SpdDepotCardByStockTotalViews/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/pcsDepotAreas/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/depotShelfs/byLoseSheft,{depotId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/depotShelfs/byLoseSheft,{depotId}/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/depotShelfs/byWMGDepotShelf,{depotId}/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/depotShelfs/byWMGDepotShelf,{depotId}",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0111",
-	//                                 "opName": "仓库帐页管理删除",
-	//                                 "opSort": "P0111",
-	//                                 "elementClass": "acl_delete_spdDepotCard",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotCards/{cardId}",
-	//                                         "serviceMethod": "DELETE"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/SpdDepotCardByStockTotalViews/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/depotShelfs/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotCards/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotCards",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0307",
-	//                                 "opName": "仓库帐页管理撤回",
-	//                                 "opSort": "P0307",
-	//                                 "elementClass": "acl_cancelCommit_spdDepotCard",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotCards",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/depotShelfs/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/SpdDepotCardByStockTotalViews/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotCards/{cardId}/checkState/completed",
-	//                                         "serviceMethod": "PUT"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0277",
-	//                                 "opName": "仓库帐页管理提交",
-	//                                 "opSort": "P0277",
-	//                                 "elementClass": "acl_commitEntity_spdDepotCard",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotCards/{cardId}/checkState/commited",
-	//                                         "serviceMethod": "PUT"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotCards",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/depotShelfs/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/SpdDepotCardByStockTotalViews/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotCards/{cardId}",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             }
-	//                         ]
-	//                     }
-	//                 ],
-	//                 "children": [],
-	//                 "topMenu": false
-	//             },
-	//             {
-	//                 "systemName": "收货系统",
-	//                 "menuId": "10002-004",
-	//                 "menuCode": "10002-004",
-	//                 "menuParentId": "10002",
-	//                 "icon": null,
-	//                 "menuSort": 4,
-	//                 "name": "定数配置管理",
-	//                 "level": 2,
-	//                 "anchor": "#spd/spdFixeds",
-	//                 "functions": [
-	//                     {
-	//                         "functionId": "F0056",
-	//                         "functionName": "定数帐页管理",
-	//                         "operations": [
-	//                             {
-	//                                 "opId": "P0453",
-	//                                 "opName": "定数帐页管理编辑",
-	//                                 "opSort": "P0453",
-	//                                 "elementClass": "acl_edit_spdDepotFixedCard",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdFixeds/{fixedId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotFixedCards",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotFixedCards/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdFixeds/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotFixedCards",
-	//                                         "serviceMethod": "PUT"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0454",
-	//                                 "opName": "定数帐页管理新增",
-	//                                 "opSort": "P0454",
-	//                                 "elementClass": "acl_add_spdDepotFixedCard",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotCards/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotCards/byGoodsCard,{goodsId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotFixedCards",
-	//                                         "serviceMethod": "POST"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotFixedCards",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotFixedCards/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdFixeds/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotFixedCards",
-	//                                         "serviceMethod": "POST"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdFixeds/byUsed",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdFixeds/byUsed/count",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0455",
-	//                                 "opName": "定数帐页管理删除",
-	//                                 "opSort": "P0455",
-	//                                 "elementClass": "acl_delete_spdDepotFixedCard",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotFixedCards",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotFixedCards/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdFixeds/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotCards/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotCards/{cardId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdFixeds/{fixedId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotFixedCards/{cardFixedId}",
-	//                                         "serviceMethod": "DELETE"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0456",
-	//                                 "opName": "定数帐页管理提交",
-	//                                 "opSort": "P0456",
-	//                                 "elementClass": "acl_commitEntity_spdDepotFixedCard",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotFixedCards",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotFixedCards/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotFixedCards/{cardFixedId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotFixedCards/{cardFixedId}/checkState/commited",
-	//                                         "serviceMethod": "PUT"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotFixedCards/{cardFixedId}/checkState/commited",
-	//                                         "serviceMethod": "PUT"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0457",
-	//                                 "opName": "定数帐页管理撤回",
-	//                                 "opSort": "P0457",
-	//                                 "elementClass": "acl_cancelCommit_spdDepotFixedCard",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotFixedCards",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotFixedCards/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotFixedCards/{cardFixedId}",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0446",
-	//                                 "opName": "定数帐页管理查看",
-	//                                 "opSort": "P0446",
-	//                                 "elementClass": "acl_view_spdDepotFixedCard",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotFixedCards",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotFixedCards/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdFixeds/{fixedId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotCards/byGoodsCard,{goodsId}/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotCards/byGoodsCard,{goodsId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotFixedCards/{cardFixedId}",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             }
-	//                         ]
-	//                     }
-	//                 ],
-	//                 "children": [],
-	//                 "topMenu": false
-	//             },
-	//             {
-	//                 "systemName": "收货系统",
-	//                 "menuId": "10002-005",
-	//                 "menuCode": "10002-005",
-	//                 "menuParentId": "10002",
-	//                 "icon": null,
-	//                 "menuSort": 5,
-	//                 "name": "定数帐页管理",
-	//                 "level": 2,
-	//                 "anchor": "#spd/spdDepotFixedCards",
-	//                 "functions": [
-	//                     {
-	//                         "functionId": "F0055",
-	//                         "functionName": "定数配置管理",
-	//                         "operations": [
-	//                             {
-	//                                 "opId": "P0448",
-	//                                 "opName": "定数配置管理编辑",
-	//                                 "opSort": "P0448",
-	//                                 "elementClass": "acl_edit_spdFixed",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdFixeds/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdFixeds",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdFixeds",
-	//                                         "serviceMethod": "PUT"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0449",
-	//                                 "opName": "定数配置管理新增",
-	//                                 "opSort": "P0449",
-	//                                 "elementClass": "acl_add_spdFixed",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdFixeds",
-	//                                         "serviceMethod": "POST"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdFixeds",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdFixeds/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdFixeds",
-	//                                         "serviceMethod": "POST"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0450",
-	//                                 "opName": "定数配置管理删除",
-	//                                 "opSort": "P0450",
-	//                                 "elementClass": "acl_delete_spdFixed",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdFixeds",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdFixeds/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdFixeds/{fixedId}",
-	//                                         "serviceMethod": "DELETE"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0451",
-	//                                 "opName": "定数配置管理提交",
-	//                                 "opSort": "P0451",
-	//                                 "elementClass": "acl_commitEntity_spdFixed",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdFixeds",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdFixeds/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdFixeds/{fixedId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdFixeds/{fixedId}/checkState/commited",
-	//                                         "serviceMethod": "PUT"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0452",
-	//                                 "opName": "定数配置管理撤回",
-	//                                 "opSort": "P0452",
-	//                                 "elementClass": "acl_cancelCommit_spdFixed",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdFixeds",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdFixeds/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdFixeds/{fixedId}",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0445",
-	//                                 "opName": "定数配置管理查看",
-	//                                 "opSort": "P0445",
-	//                                 "elementClass": "acl_view_spdFixed",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdFixeds/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdFixeds",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             }
-	//                         ]
-	//                     }
-	//                 ],
-	//                 "children": [],
-	//                 "topMenu": false
-	//             }
-	//         ],
-	//         "topMenu": true
-	//     },
-	//     {
-	//         "systemName": "收货系统",
-	//         "menuId": "10003",
-	//         "menuCode": "10003",
-	//         "menuParentId": "-1",
-	//         "icon": "fa-cart-arrow-down",
-	//         "menuSort": 3,
-	//         "name": "采购业务管理",
-	//         "level": 1,
-	//         "anchor": null,
-	//         "functions": null,
-	//         "children": [
-	//             {
-	//                 "systemName": "收货系统",
-	//                 "menuId": "10003-001",
-	//                 "menuCode": "10003-001",
-	//                 "menuParentId": "10003",
-	//                 "icon": null,
-	//                 "menuSort": 1,
-	//                 "name": "物资价格维护",
-	//                 "level": 2,
-	//                 "anchor": "#spd/ydsGoodsInfos",
-	//                 "functions": [
-	//                     {
-	//                         "functionId": "F0011",
-	//                         "functionName": "物资价格维护",
-	//                         "operations": [
-	//                             {
-	//                                 "opId": "P0077",
-	//                                 "opName": "物资价格维护新增",
-	//                                 "opSort": "P0077",
-	//                                 "elementClass": "acl_add_ydsGoodsInfo",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoodsInfos",
-	//                                         "serviceMethod": "POST"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoodsInfos",
-	//                                         "serviceMethod": "POST"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoodsInfos/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoodsInfos",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0078",
-	//                                 "opName": "物资价格维护删除",
-	//                                 "opSort": "P0078",
-	//                                 "elementClass": "acl_delete_ydsGoodsInfo",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoodsInfos/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoodsInfos",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoodsInfos/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoodsInfos",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoodsInfos/{goodsId}",
-	//                                         "serviceMethod": "DELETE"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0079",
-	//                                 "opName": "物资价格维护编辑",
-	//                                 "opSort": "P0079",
-	//                                 "elementClass": "acl_edit_ydsGoodsInfo",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoodsInfos/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoodsInfos",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoodsInfos/{goodsId}",
-	//                                         "serviceMethod": "PUT"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0080",
-	//                                 "opName": "物资价格维护查看",
-	//                                 "opSort": "P0080",
-	//                                 "elementClass": "acl_view_ydsGoodsInfo",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoodsInfos/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoodsInfos",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoodsInfos/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoodsInfos",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             }
-	//                         ]
-	//                     }
-	//                 ],
-	//                 "children": [],
-	//                 "topMenu": false
-	//             },
-	//             {
-	//                 "systemName": "收货系统",
-	//                 "menuId": "10003-002",
-	//                 "menuCode": "10003-002",
-	//                 "menuParentId": "10003",
-	//                 "icon": null,
-	//                 "menuSort": 2,
-	//                 "name": "采购合同管理",
-	//                 "level": 2,
-	//                 "anchor": "#spd/spdPoContracts",
-	//                 "functions": [
-	//                     {
-	//                         "functionId": "F0012",
-	//                         "functionName": "采购合同管理",
-	//                         "operations": [
-	//                             {
-	//                                 "opId": "P0083",
-	//                                 "opName": "采购合同管理编辑",
-	//                                 "opSort": "P0083",
-	//                                 "elementClass": "acl_edit_spdPoContract,acl_edit_spdPoContractItem,acl_delete_spdPoContractItem,acl_add_spdPoContractItem,acl_view_spdPoContractItem",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractItems",
-	//                                         "serviceMethod": "POST"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContracts/{conId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractItems/conId,{conId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContracts/{conId}",
-	//                                         "serviceMethod": "PUT"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractItems/conId,{conId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractItems/{conItemId}",
-	//                                         "serviceMethod": "PUT"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/PcsDepts/byProcurementDept",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0084",
-	//                                 "opName": "采购合同管理新增",
-	//                                 "opSort": "P0084",
-	//                                 "elementClass": "acl_add_spdPoContract,acl_add_spdPoContractItem,acl_view_spdPoContractItem,acl_edit_spdPoContractItem,acl_delete_spdPoContractItem",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractItems",
-	//                                         "serviceMethod": "POST"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/PcsDepts/byProcurementType",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContracts/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContracts",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContracts",
-	//                                         "serviceMethod": "POST"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/PcsDepts/byUse",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/PcsDepts/byProcurementDept",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0085",
-	//                                 "opName": "采购合同管理删除",
-	//                                 "opSort": "P0085",
-	//                                 "elementClass": "acl_delete_spdPoContract,acl_delete_spdPoContractItem",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContracts/{conId}",
-	//                                         "serviceMethod": "DELETE"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContracts/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractItems/conId,{conId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractItems/{conItemId}",
-	//                                         "serviceMethod": "DELETE"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContracts",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0086",
-	//                                 "opName": "采购合同管理提交",
-	//                                 "opSort": "P0086",
-	//                                 "elementClass": "acl_commitEntity_spdPoContract",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContracts/{conId}/checkState/commited",
-	//                                         "serviceMethod": "PUT"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContracts/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContracts",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContracts/{conId}",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0087",
-	//                                 "opName": "采购合同管理审核",
-	//                                 "opSort": "P0087",
-	//                                 "elementClass": "acl_reviewEntity_spdPoContract",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContracts/{conId}",
-	//                                         "serviceMethod": "PUT"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0088",
-	//                                 "opName": "采购合同管理撤回",
-	//                                 "opSort": "P0088",
-	//                                 "elementClass": "acl_cancelCommit_spdPoContract",
-	//                                 "webApis": []
-	//                             },
-	//                             {
-	//                                 "opId": "P0082",
-	//                                 "opName": "采购合同管理查看",
-	//                                 "opSort": "P0082",
-	//                                 "elementClass": "acl_view_spdPoContract,acl_view_spdPoContractItem",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContracts/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContracts",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/PcsDepts/byProcurementType",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractItems/conId,{conId}",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             }
-	//                         ]
-	//                     }
-	//                 ],
-	//                 "children": [],
-	//                 "topMenu": false
-	//             },
-	//             {
-	//                 "systemName": "收货系统",
-	//                 "menuId": "10003-003",
-	//                 "menuCode": "10003-003",
-	//                 "menuParentId": "10003",
-	//                 "icon": null,
-	//                 "menuSort": 3,
-	//                 "name": "配额调节管理",
-	//                 "level": 2,
-	//                 "anchor": "#spd/spdPoContractItems",
-	//                 "functions": [
-	//                     {
-	//                         "functionId": "F0040",
-	//                         "functionName": "配额调节管理",
-	//                         "operations": [
-	//                             {
-	//                                 "opId": "P0478",
-	//                                 "opName": "配额调节管理编辑",
-	//                                 "opSort": "P0478",
-	//                                 "elementClass": "acl_edit_spdPoContractItemAdjust,acl_edit_spdPoContractAdjust",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractItems/byAdjust/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractItems/byAdjust",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContracts/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractAdjusts/conItemId,{conItemId}/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractAdjusts/conItemId,{conItemId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractAdjusts/{adjustId}",
-	//                                         "serviceMethod": "PUT"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0480",
-	//                                 "opName": "配额调节管理删除",
-	//                                 "opSort": "P0480",
-	//                                 "elementClass": "acl_edit_spdPoContractItemAdjust,acl_delete_spdPoContractAdjust",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractAdjusts/{adjustId}",
-	//                                         "serviceMethod": "DELETE"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractItems/byAdjust/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractItems/byAdjust",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractAdjusts/conItemId,{conItemId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractAdjusts/conItemId,{conItemId}/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContracts/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0479",
-	//                                 "opName": "配额调节管理新增",
-	//                                 "opSort": "P0479",
-	//                                 "elementClass": "acl_edit_spdPoContractItemAdjust,acl_add_spdPoContractAdjust",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractAdjusts",
-	//                                         "serviceMethod": "POST"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractItems/byAdjust/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractItems/byAdjust",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContracts/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractAdjusts/conItemId,{conItemId}/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractAdjusts/conItemId,{conItemId}",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0481",
-	//                                 "opName": "配额调节管理提交",
-	//                                 "opSort": "P0481",
-	//                                 "elementClass": "acl_edit_spdPoContractItemAdjust,acl_commitEntity_spdPoContractAdjust",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractItems/byAdjust/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractItems/byAdjust",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContracts/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractAdjusts/conItemId,{conItemId}/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractAdjusts/conItemId,{conItemId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractAdjusts/{adjustId}/checkState/commited",
-	//                                         "serviceMethod": "PUT"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractAdjusts/{adjustId}",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0482",
-	//                                 "opName": "配额调节管理审核",
-	//                                 "opSort": "P0482",
-	//                                 "elementClass": "acl_edit_spdPoContractItemAdjust,acl_reviewEntity_spdPoContractAdjust",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractAdjusts/{adjustId}/checkState/reviewed",
-	//                                         "serviceMethod": "PUT"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractItems/byAdjust/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractItems/byAdjust",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContracts/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractAdjusts/conItemId,{conItemId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractAdjusts/conItemId,{conItemId}/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractAdjusts/{adjustId}",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0098",
-	//                                 "opName": "配额调节管理查看",
-	//                                 "opSort": "P0098",
-	//                                 "elementClass": "acl_view_spdPoContractItemAdjust,acl_view_spdPoContractAdjust",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContracts/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractItems/byAdjust/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractItems/byAdjust",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractAdjusts/conItemId,{conItemId}/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractAdjusts/conItemId,{conItemId}",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             }
-	//                         ]
-	//                     }
-	//                 ],
-	//                 "children": [],
-	//                 "topMenu": false
-	//             },
-	//             {
-	//                 "systemName": "收货系统",
-	//                 "menuId": "10003-004",
-	//                 "menuCode": "10003-004",
-	//                 "menuParentId": "10003",
-	//                 "icon": null,
-	//                 "menuSort": 4,
-	//                 "name": "采购订单管理",
-	//                 "level": 2,
-	//                 "anchor": "#spd/spdPurchPos",
-	//                 "functions": [
-	//                     {
-	//                         "functionId": "F0013",
-	//                         "functionName": "采购订单管理",
-	//                         "operations": [
-	//                             {
-	//                                 "opId": "P0089",
-	//                                 "opName": "采购订单管理查看",
-	//                                 "opSort": "P0089",
-	//                                 "elementClass": "acl_view_spdPurch,acl_view_spdPurchItem",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchItems/detail/poId,{poId}/pdf",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotCards/{cardId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchs/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchs",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContracts/{poId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchs/{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchItems",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0090",
-	//                                 "opName": "采购订单管理编辑",
-	//                                 "opSort": "P0090",
-	//                                 "elementClass": "acl_edit_spdPurch,acl_edit_spdPurchItem,acl_view_spdPurchItem,acl_add_spdPurchItem,acl_delete_spdPurchItem",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchItems/poId,{poId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchs/byPurchase/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchs/byPurchase",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotCards/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotCards",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContracts/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContracts",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchItems",
-	//                                         "serviceMethod": "POST"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchs/{poId}",
-	//                                         "serviceMethod": "PUT"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchItems/{poItemId}",
-	//                                         "serviceMethod": "PUT"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotCards/{cardId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdGoodsContractViews/{depotId},{supplierOrg}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdGoodsContractViews/{depotId},{supplierOrg}/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchItems/poId,{poId}/count",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0091",
-	//                                 "opName": "采购订单管理增加",
-	//                                 "opSort": "P0091",
-	//                                 "elementClass": "acl_add_spdPurch,acl_add_spdPurchItem,acl_view_spdPurchItem,acl_edit_spdPurchItem,acl_delete_spdPurchItem",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchs",
-	//                                         "serviceMethod": "POST"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchs/byPurchase",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchs/byPurchase/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/pcsDepots/byReceivePoint,{ownerOrgId}/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/pcsDepots/byOwnerHospital,{ownerOrgId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotCards/byOwnerDepot,{depotId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotCards/byOwnerDepot,{depotId}/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchs",
-	//                                         "serviceMethod": "POST"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdGoodsContractViews/{depotId},{supplierOrg}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdGoodsContractViews/{depotId},{supplierOrg}/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchItems/poId,{poId}/count",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0092",
-	//                                 "opName": "采购订单管理删除",
-	//                                 "opSort": "P0092",
-	//                                 "elementClass": "acl_delete_spdPurch,acl_delete_spdPurchItem",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchs/{poId}",
-	//                                         "serviceMethod": "DELETE"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchItems/{poItemId}",
-	//                                         "serviceMethod": "DELETE"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchItems/poId,{poId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchs/byPurchase/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchs/byPurchase",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0094",
-	//                                 "opName": "采购订单管理审核",
-	//                                 "opSort": "P0094",
-	//                                 "elementClass": "acl_reviewEntity_spdPurch",
-	//                                 "webApis": []
-	//                             },
-	//                             {
-	//                                 "opId": "P0306",
-	//                                 "opName": "采购订单管理打印",
-	//                                 "opSort": "P0306",
-	//                                 "elementClass": "acl_export_PurchItem",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchItems/detail/poId,{poId}/pdf",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchItems/detail/poId,{poId}/pdf",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             }
-	//                         ]
-	//                     }
-	//                 ],
-	//                 "children": [],
-	//                 "topMenu": false
-	//             },
-	//             {
-	//                 "systemName": "收货系统",
-	//                 "menuId": "10003-005",
-	//                 "menuCode": "10003-005",
-	//                 "menuParentId": "10003",
-	//                 "icon": null,
-	//                 "menuSort": 5,
-	//                 "name": "备货业务管理",
-	//                 "level": 2,
-	//                 "anchor": "#spd/spdPurchRes",
-	//                 "functions": [
-	//                     {
-	//                         "functionId": "F0038",
-	//                         "functionName": "备货业务管理",
-	//                         "operations": [
-	//                             {
-	//                                 "opId": "P0258",
-	//                                 "opName": "备货业务管理增加",
-	//                                 "opSort": "P0258",
-	//                                 "elementClass": "acl_add_spdPurchRe,acl_add_spdPurchItemRe,acl_view_spdPurchRe,acl_view_spdPurchItemRe,acl_edit_spdPurchItemRe,acl_delete_spdPurchItemRe",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchs",
-	//                                         "serviceMethod": "POST"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchs/byStocking",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchs/byStocking/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/pcsDepots/byOwnerSupplier,{ownerOrgId}/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/pcsDepots/byOwnerSupplier,{ownerOrgId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchItems/{poItemId}",
-	//                                         "serviceMethod": "PUT"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0259",
-	//                                 "opName": "备货业务管理编辑",
-	//                                 "opSort": "P0259",
-	//                                 "elementClass": "acl_edit_spdPurchRe,acl_edit_spdPurchItemRe,acl_view_spdPurchItemRe,acl_add_spdPurchItemRe,acl_delete_spdPurchItemRe",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchs/byStocking",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchs/byStocking/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchItems/poId,{poId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchs/{poId}",
-	//                                         "serviceMethod": "PUT"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0260",
-	//                                 "opName": "备货业务管理查看",
-	//                                 "opSort": "P0260",
-	//                                 "elementClass": "acl_view_spdPurchRe,acl_view_spdPurchItemRe",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchItems/poId,{poId}",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0261",
-	//                                 "opName": "备货业务管理审核",
-	//                                 "opSort": "P0261",
-	//                                 "elementClass": "acl_reviewEntity_spdPurchRe",
-	//                                 "webApis": []
-	//                             },
-	//                             {
-	//                                 "opId": "P0262",
-	//                                 "opName": "备货业务管理提交",
-	//                                 "opSort": "P0262",
-	//                                 "elementClass": "acl_commitEntity_spdPurchRe",
-	//                                 "webApis": []
-	//                             },
-	//                             {
-	//                                 "opId": "P0264",
-	//                                 "opName": "备货业务管理删除",
-	//                                 "opSort": "P0264",
-	//                                 "elementClass": "acl_delete_spdPurchRe,acl_delete_spdPurchItemRe",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchs/byStocking",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchs/byStocking/count",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             }
-	//                         ]
-	//                     }
-	//                 ],
-	//                 "children": [],
-	//                 "topMenu": false
-	//             },
-	//             {
-	//                 "systemName": "收货系统",
-	//                 "menuId": "10003-006",
-	//                 "menuCode": "10003-006",
-	//                 "menuParentId": "10003",
-	//                 "icon": null,
-	//                 "menuSort": 6,
-	//                 "name": "业务模版管理",
-	//                 "level": 2,
-	//                 "anchor": "#spd/spdBizExamples",
-	//                 "functions": [
-	//                     {
-	//                         "functionId": "F0063",
-	//                         "functionName": "业务模版管理",
-	//                         "operations": [
-	//                             {
-	//                                 "opId": "P0493",
-	//                                 "opName": "业务模版管理查看",
-	//                                 "opSort": "P0493",
-	//                                 "elementClass": "acl_view_spdBizExample,acl_view_spdBizExampleItem",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdBizExampleItems/exampleId,{exampleId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdBizExampleItems/exampleId,{exampleId}/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdBizExamples/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdBizExamples",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0494",
-	//                                 "opName": "业务模版管理新增",
-	//                                 "opSort": "P0494",
-	//                                 "elementClass": "acl_add_spdBizExample,acl_add_spdBizExampleItem,acl_view_spdBizExampleItem,acl_edit_spdBizExampleItem,acl_delete _spdBizExampleItem",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdBizExamples/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdBizExamples",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdBizExamples",
-	//                                         "serviceMethod": "POST"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdBizExampleItems/exampleId,{exampleId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdBizExampleItems/exampleId,{exampleId}/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotCards/byUse/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotCards/byUse",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods/{goodsId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdBizExampleItems",
-	//                                         "serviceMethod": "POST"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0495",
-	//                                 "opName": "业务模版管理编辑",
-	//                                 "opSort": "P0495",
-	//                                 "elementClass": "acl_edit_spdBizExample,acl_edit_spdBizExampleItem,acl_view_spdBizExampleItem,acl_add_spdBizExampleItem,acl_delete _spdBizExampleItem",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdBizExampleItems/exampleId,{exampleId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdBizExampleItems/exampleId,{exampleId}/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdBizExamples/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdBizExamples",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotFixedCards/{cardFixedId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdBizExamples/{exampleId}",
-	//                                         "serviceMethod": "PUT"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods/{goodsId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdBizExampleItems/{exampleItemId}",
-	//                                         "serviceMethod": "PUT"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0496",
-	//                                 "opName": "业务模版管理删除",
-	//                                 "opSort": "P0496",
-	//                                 "elementClass": "acl_delete_spdBizExample,acl_delete_spdBizExampleItem",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdBizExamples/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdBizExamples",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdBizExamples/{exampleId}",
-	//                                         "serviceMethod": "DELETE"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdBizExampleItems/{exampleItemId}",
-	//                                         "serviceMethod": "DELETE"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0497",
-	//                                 "opName": "业务模版管理提交",
-	//                                 "opSort": "P0497",
-	//                                 "elementClass": null,
-	//                                 "webApis": []
-	//                             }
-	//                         ]
-	//                     }
-	//                 ],
-	//                 "children": [],
-	//                 "topMenu": false
-	//             }
-	//         ],
-	//         "topMenu": true
-	//     },
-	// ],
+	// const remote = window.require('electron').remote
+	// const fs = remote.require('fs')
+	'use strict';Object.defineProperty(exports,'__esModule',{value:true});exports.openMenus = openMenus;exports.checkedAll = checkedAll;exports.checkedMenus = checkedMenus;exports.receiveItems = receiveItems;exports.dispatchActions = dispatchActions;exports.selectedMenus = selectedMenus;exports.combineItems = combineItems;exports.firstMenusSubmit = firstMenusSubmit;exports.secondMenusSubmit = secondMenusSubmit;exports.receiveMenus = receiveMenus;var RECEIVE_MENUS='RECEIVE_MENUS';exports.RECEIVE_MENUS = RECEIVE_MENUS;var OPEN_MENUS='OPEN_MENUS';exports.OPEN_MENUS = OPEN_MENUS;var CHECKED_ALL='CHECKED_ALL';exports.CHECKED_ALL = CHECKED_ALL;var CHECKED_MENUS='CHECKED_MENUS';exports.CHECKED_MENUS = CHECKED_MENUS;var SELECTED_MENUS='SELECTED_MENUS';exports.SELECTED_MENUS = SELECTED_MENUS;var RECEIVE_ITEMS='RECEIVE_ITEMS';exports.RECEIVE_ITEMS = RECEIVE_ITEMS;var COMBINE_ITEMS='COMBINE_ITEMS';exports.COMBINE_ITEMS = COMBINE_ITEMS;var SECOND_MENUS_SUBMIT='SECOND_MENUS_SUBMIT';exports.SECOND_MENUS_SUBMIT = SECOND_MENUS_SUBMIT;var FIRST_MENUS_SUBMIT='FIRST_MENUS_SUBMIT';exports.FIRST_MENUS_SUBMIT = FIRST_MENUS_SUBMIT;function openMenus(menuId){return {type:OPEN_MENUS,menuId:menuId};}function checkedAll(menuId,id){return {type:CHECKED_ALL,menuId:menuId,id:id};}function checkedMenus(menuParentId,menuId){return {type:CHECKED_MENUS,menuId:menuId,menuParentId:menuParentId};}function receiveItems(id,menus){return {type:RECEIVE_ITEMS,items:menus,id:id};}function dispatchActions(menuId,items){return function(dispatch){dispatch(selectedMenus(menuId));dispatch(receiveItems(menuId,items));};}function selectedMenus(menuId){return {type:SELECTED_MENUS,menuId:menuId};}function combineItems(id,items){return {type:COMBINE_ITEMS,items:items,id:id};}function firstMenusSubmit(menuId,menuCode,menuSort,name){return {type:FIRST_MENUS_SUBMIT,menuId:menuId,menuCode:menuCode,menuSort:menuSort,name:name};}function secondMenusSubmit(menuId,menuCode,menuSort,name,menuParentId,anchor){return {type:SECOND_MENUS_SUBMIT,menuId:menuId,menuCode:menuCode,menuSort:menuSort,name:name,menuParentId:menuParentId,anchor:anchor};} //读取本地json文件获取列表,根据参数first,second 索引出点击菜单下的数组
+	// export function readItemsFile() {
+	//   return dispatch => {
+	//     return (fs.readFile('./test.json', 'utf-8', (err, data) => {
+	//         data = JSON.parse(data)
+	//         // const items = (data)
+	//         dispatch(receiveMenus(data))
+	//     }))
+	//   }
+	// }
+	//写入本地json文件
+	// export function writeItemsFile(data) {
+	//     return (fs.writeFile('./test.json', data) {
+	//         console.log('Ok')
+	//     })
+	// } 
+	//获取列表成功action
+	function receiveMenus(){console.log('获取data数据');return {type:RECEIVE_MENUS,menus:[{"systemName":"收货系统","menuId":"10001","menuCode":"10001","menuParentId":"-1","icon":"fa-database","menuSort":1,"name":"基础数据管理","level":1,"anchor":null,"functions":null,"children":[{"systemName":"收货系统","menuId":"10001-001","menuCode":"10001-001","menuParentId":"10001","icon":null,"menuSort":1,"name":"字典数据管理","level":2,"anchor":"#basics/ydsWorkbooks","functions":[{"functionId":"F0001","functionName":"字典数据管理","operations":[{"opId":"P0001","opName":"字典数据管理查看","opSort":"P0001","elementClass":"acl_view_ydsWorkBook","webApis":[{"serviceUrl":"/yard/spd/ydsWorkBooks","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsWorkBooks/{workbookId}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsWorkBooks","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsWorkBooks","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsWorkBooks/count","serviceMethod":"GET"}]},{"opId":"P0002","opName":"字典数据管理新增","opSort":"P0002","elementClass":"acl_add_ydsWorkBook","webApis":[{"serviceUrl":"/yard/spd/ydsWorkBooks","serviceMethod":"POST"},{"serviceUrl":"/yard/spd/ydsWorkBooks","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsWorkBooks/{workbookId}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsWorkBooks","serviceMethod":"POST"},{"serviceUrl":"/yard/spd/ydsWorkBooks/count","serviceMethod":"GET"}]},{"opId":"P0003","opName":"字典数据管理编辑","opSort":"P0003","elementClass":"acl_edit_ydsWorkBook","webApis":[{"serviceUrl":"/yard/spd/ydsWorkBooks/{workbookId}","serviceMethod":"PUT"},{"serviceUrl":"/yard/spd/ydsWorkBooks","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsWorkBooks/{workbookId}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsWorkBooks/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsWorkBooks/{workbookId}","serviceMethod":"PUT"}]}]}],"children":[],"topMenu":false},{"systemName":"收货系统","menuId":"10001-002","menuCode":"10001-002","menuParentId":"10001","icon":null,"menuSort":2,"name":"标准产品管理","level":2,"anchor":"#basics/standardProducts","functions":[{"functionId":"F0002","functionName":"标准产品管理","operations":[{"opId":"P0008","opName":"标准产品管理查看","opSort":"P0008","elementClass":"acl_view_ydsGood","webApis":[{"serviceUrl":"/yard/spd/ydsGoods/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsGoods","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsWorkBooks","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsGoods","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsGoods/{goodsId}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsGoods/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsWorkBooks/byUse","serviceMethod":"GET"}]},{"opId":"P0009","opName":"标准产品管理新增","opSort":"P0009","elementClass":"acl_add_ydsGood","webApis":[{"serviceUrl":"/yard/spd/ydsGoods","serviceMethod":"POST"},{"serviceUrl":"/yard/spd/ydsGoods","serviceMethod":"POST"},{"serviceUrl":"/yard/spd/ydsGoods","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsGoods/{goodsId}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsGoods/count","serviceMethod":"GET"}]},{"opId":"P0010","opName":"标准产品管理编辑","opSort":"P0010","elementClass":"acl_edit_ydsGood","webApis":[{"serviceUrl":"/yard/spd/ydsGoods","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsGoods/{goodsId}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsGoods/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsGoods/{goodsId}","serviceMethod":"PUT"}]},{"opId":"P0012","opName":"标准产品管理提交","opSort":"P0012","elementClass":"acl_commitEntity_ydsGood","webApis":[{"serviceUrl":"/yard/spd/ydsGoods/{goodsId}/checkState/commited","serviceMethod":"PUT"},{"serviceUrl":"/yard/spd/ydsGoods/{goodsId}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsGoods/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsGoods/{goodsId}/checkState/commited","serviceMethod":"PUT"},{"serviceUrl":"/yard/spd/ydsGoods","serviceMethod":"GET"}]},{"opId":"P0015","opName":"标准产品管理导出","opSort":"P0015","elementClass":"acl_export_ydsGood","webApis":[{"serviceUrl":"/yard/spd/ydsGoods","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsGoods/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsGoods/{goodsId}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsGoods/ydsgoodsExcel","serviceMethod":"GET"}]},{"opId":"P0276","opName":"标准产品管理撤回","opSort":"P0276","elementClass":"acl_cancelCommit_ydsGood","webApis":[]},{"opId":"P0279","opName":"标准产品批量提交","opSort":"P0279","elementClass":"acl_commitEntities_ydsGood","webApis":[]},{"opId":"P0013","opName":"标准产品管理同步","opSort":"P0013","elementClass":"acl_view_ydsGood,acl_sync_ysdGood","webApis":[{"serviceUrl":"/yard/spd/ydsGoods","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsGoods/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsGoods/{goodsId}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsGoods/{goodsId}/checkState/reviewed","serviceMethod":"PUT"}]}]}],"children":[],"topMenu":false},{"systemName":"收货系统","menuId":"10001-003","menuCode":"10001-003","menuParentId":"10001","icon":null,"menuSort":3,"name":"标准产品批次","level":2,"anchor":"#spd/ydsGoodsLots","functions":[{"functionId":"F0016","functionName":"标准产品批次","operations":[{"opId":"P0105","opName":"标准产品批次查看","opSort":"P0105","elementClass":"acl_view_ydsGoodsLot","webApis":[{"serviceUrl":"/yard/spd/ydsGoodsLots/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsGoodsLots","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsGoodsLots","serviceMethod":"GET"}]},{"opId":"P0107","opName":"标准产品批次新增","opSort":"P0107","elementClass":"acl_add_ydsGoodsLot","webApis":[{"serviceUrl":"/yard/spd/ydsGoodsLots","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsGoodsLots","serviceMethod":"POST"},{"serviceUrl":"/yard/spd/ydsGoodsLots","serviceMethod":"POST"},{"serviceUrl":"/yard/spd/ydsGoodsLots/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsGoodsLots","serviceMethod":"GET"}]},{"opId":"P0106","opName":"标准产品批次编辑","opSort":"P0106","elementClass":"acl_edit_ydsGoodsLot","webApis":[{"serviceUrl":"/yard/spd/ydsGoodsLots/{goodsLotId}","serviceMethod":"PUT"},{"serviceUrl":"/yard/spd/ydsGoodsLots","serviceMethod":"GET"}]}]}],"children":[],"topMenu":false},{"systemName":"收货系统","menuId":"10001-004","menuCode":"10001-004","menuParentId":"10001","icon":null,"menuSort":4,"name":"企业产品管理","level":2,"anchor":"#basics/ydsEdsGoods","functions":[{"functionId":"F0003","functionName":"企业产品管理","operations":[{"opId":"P0016","opName":"企业产品管理查看","opSort":"P0016","elementClass":"acl_view_ydsEdsGoods","webApis":[{"serviceUrl":"/yard/spd/ydsEdsGoods","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsEdsGoods/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsEdsGoods/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsEdsGoods","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsEdsGoods/{goodsId}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsWorkBooks/byUse","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsWorkBooks/byUse","serviceMethod":"GET"}]},{"opId":"P0018","opName":"企业产品管理新增","opSort":"P0018","elementClass":"acl_add_ydsEdsGoods","webApis":[{"serviceUrl":"/yard/spd/ydsEdsGoods","serviceMethod":"POST"},{"serviceUrl":"/yard/spd/ydsWorkBooks","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsGoods/byUse","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsEdsGoods","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsEdsGoods/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsEdsGoods/{goodsId}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsEdsGoods","serviceMethod":"POST"},{"serviceUrl":"/yard/spd/ydsWorkBooks/byUse","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsEdsGoods","serviceMethod":"POST"},{"serviceUrl":"/yard/spd/ydsGoods/ids,{ids}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsGoods/byUse/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsGoods/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsGoods","serviceMethod":"GET"}]},{"opId":"P0020","opName":"企业产品管理提交","opSort":"P0020","elementClass":"acl_commitEntity_ydsEdsGoods","webApis":[{"serviceUrl":"/yard/spd/ydsEdsGoods/{ydsEdsGoodsId}/checkState/commited","serviceMethod":"PUT"},{"serviceUrl":"/yard/spd/ydsGoods/ids,{ids}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsEdsGoods","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsEdsGoods/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsEdsGoods/{goodsId}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsEdsGoods/{goodsId}/checkState/commited","serviceMethod":"PUT"},{"serviceUrl":"/yard/spd/ydsWorkBooks/byUse","serviceMethod":"GET"}]},{"opId":"P0023","opName":"企业产品管理导出","opSort":"P0023","elementClass":"acl_export_ydsEdsGoods,acl_view_ydsEdsGoods","webApis":[{"serviceUrl":"/yard/spd/ydsEdsGoods","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsEdsGoods/Excel","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsEdsGoods/count","serviceMethod":"GET"}]},{"opId":"P0284","opName":"企业产品管理撤回","opSort":"P0284","elementClass":"acl_cancelCommit_ydsEdsGoods","webApis":[]},{"opId":"P0280","opName":"企业产品批量提交","opSort":"P0280","elementClass":"acl_commitEntities_ydsEdsGoods","webApis":[{"serviceUrl":"/yard/spd/ydsEdsGoods/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsEdsGoods","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsGoods/ids,{ids}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsEdsGoods/{ydsEdsGoodsId}/checkState/commited","serviceMethod":"PUT"},{"serviceUrl":"/yard/spd/ydsEdsGoods/{edsGoodsId}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsWorkBooks/byUse","serviceMethod":"GET"}]},{"opId":"P0017","opName":"企业产品管理编辑","opSort":"P0017","elementClass":"acl_edit_ydsEdsGoods","webApis":[{"serviceUrl":"/yard/spd/ydsEdsGoods/{goodsId}","serviceMethod":"PUT"},{"serviceUrl":"/yard/spd/ydsEdsGoods","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsEdsGoods/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsEdsGoods/{goodsId}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsWorkBooks/byUse","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsGoods/ids,{ids}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsGoods/byUse/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsGoods/byUse","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsEdsGoods/{edsGoodsId}","serviceMethod":"PUT"}]}]}],"children":[],"topMenu":false},{"systemName":"收货系统","menuId":"10001-005","menuCode":"10001-005","menuParentId":"10001","icon":null,"menuSort":5,"name":"企业产品批次","level":2,"anchor":"#spd/ydsEdsGoodsLots","functions":[{"functionId":"F0015","functionName":"企业产品批次","operations":[{"opId":"P0102","opName":"企业产品批次查看","opSort":"P0102","elementClass":"acl_view_ydsEdsGoodsLot","webApis":[{"serviceUrl":"/yard/spd/spdReceives/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdReceives","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsEdsGoodsLots/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsEdsGoodsLots","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsEdsGoods/ids,{ids}","serviceMethod":"GET"}]},{"opId":"P0103","opName":"企业产品批次编辑","opSort":"P0103","elementClass":"acl_edit_ydsEdsGoodsLot","webApis":[{"serviceUrl":"/yard/spd/ydsEdsGoodsLots/{edsGoodsLotId}","serviceMethod":"PUT"},{"serviceUrl":"/yard/spd/ydsEdsGoods/{edsGoodsId}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsEdsGoodsLots","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsEdsGoodsLots/count","serviceMethod":"GET"}]},{"opId":"P0104","opName":"企业产品批次新增","opSort":"P0104","elementClass":"acl_add_ydsEdsGoodsLot","webApis":[{"serviceUrl":"/yard/spd/ydsEdsGoodsLots","serviceMethod":"POST"},{"serviceUrl":"/yard/spd/ydsEdsGoodsLots/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsEdsGoodsLots","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsEdsGoodsLots","serviceMethod":"POST"}]}]}],"children":[],"topMenu":false}],"topMenu":true},{"systemName":"收货系统","menuId":"10002","menuCode":"10003","menuParentId":"-1","icon":"fa-map-signs","menuSort":2,"name":"规则配置管理","level":1,"anchor":null,"functions":null,"children":[{"systemName":"收货系统","menuId":"10002-001","menuCode":"10002-001","menuParentId":"10002","icon":null,"menuSort":1,"name":"请领流向策略","level":2,"anchor":"#basics/spdDepotRoutes","functions":[{"functionId":"F0036","functionName":"请领流向策略","operations":[{"opId":"P0238","opName":"请领流向策略查看","opSort":"P0238","elementClass":"acl_view_spdDepotRoute","webApis":[{"serviceUrl":"/yard/spd/spdDepotRoutes/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdDepotRoutes","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdDepotRoutes","serviceMethod":"GET"}]},{"opId":"P0241","opName":"请领流向策略删除","opSort":"P0241","elementClass":"acl_delete_spdDepotRoute","webApis":[{"serviceUrl":"/yard/spd/spdDepotRoutes/{routeId}","serviceMethod":"DELETE"},{"serviceUrl":"/yard/spd/spdDepotRoutes","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdDepotRoutes/count","serviceMethod":"GET"}]},{"opId":"P0240","opName":"请领流向策略编辑","opSort":"P0240","elementClass":"acl_edit_spdDepotRoute","webApis":[{"serviceUrl":"/yard/spd/spdDepotRoutes/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdDepotRoutes","serviceMethod":"GET"}]},{"opId":"P0239","opName":"请领流向策略新增","opSort":"P0239","elementClass":"acl_add_spdDepotRoute","webApis":[{"serviceUrl":"/yard/spd/spdDepotRoutes","serviceMethod":"POST"},{"serviceUrl":"/yard/spd/spdDepotRoutes","serviceMethod":"POST"},{"serviceUrl":"/yard/spd/spdDepotRoutes/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdDepotRoutes","serviceMethod":"GET"},{"serviceUrl":"/yard/pcs/pcsDepots/byUse","serviceMethod":"GET"},{"serviceUrl":"/yard/pcs/pcsDepots/byUse/count","serviceMethod":"GET"},{"serviceUrl":"/yard/pcs/pcsDepots/byTakePoint/count","serviceMethod":"GET"},{"serviceUrl":"/yard/pcs/pcsDepots/byTakePoint","serviceMethod":"GET"}]}]}],"children":[],"topMenu":false},{"systemName":"收货系统","menuId":"10002-002","menuCode":"10002-002","menuParentId":"10002","icon":null,"menuSort":2,"name":"使用类型管理","level":2,"anchor":"#spd/spdUsedTypes","functions":[{"functionId":"F0074","functionName":"使用类型管理","operations":[{"opId":"P0644","opName":"使用类型管理查看","opSort":"P0644","elementClass":"acl_view_spdUsedType","webApis":[{"serviceUrl":"/yard/pcs/pcsDepotViews/ids,{ids}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdUsedTypes","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdUsedTypes/count","serviceMethod":"GET"}]},{"opId":"P0645","opName":"使用类型管理增加","opSort":"P0645","elementClass":"acl_add_spdUsedType","webApis":[{"serviceUrl":"/yard/pcs/pcsDepotViews/byUsedDepot","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdUsedTypes","serviceMethod":"POST"},{"serviceUrl":"/yard/pcs/pcsDepts/orgId,{orgId}","serviceMethod":"GET"},{"serviceUrl":"/yard/pcs/pcsDepotViews/byUsedDepot","serviceMethod":"GET"},{"serviceUrl":"/yard/pcs/pcsDepotViews/byUsedDepot/count","serviceMethod":"GET"}]},{"opId":"P0646","opName":"使用类型管理编辑","opSort":"P0646","elementClass":"acl_edit_spdUsedType","webApis":[{"serviceUrl":"/yard/spd/spdUsedTypes/{usedType}","serviceMethod":"PUT"}]},{"opId":"P0647","opName":"使用类型管理删除","opSort":"P0647","elementClass":"acl_delete_spdUsedType","webApis":[{"serviceUrl":"/yard/spd/spdUsedTypes/{usedType}","serviceMethod":"DELETE"}]},{"opId":"P0648","opName":"使用类型管理提交","opSort":"P0648","elementClass":"acl_commitEntity_spdUsedType","webApis":[{"serviceUrl":"/yard/spd/spdUsedTypes/{usedType}/checkState/commited","serviceMethod":"PUT"},{"serviceUrl":"/yard/spd/spdUsedTypes/{usedType}","serviceMethod":"GET"}]},{"opId":"P0649","opName":"使用类型管理撤回","opSort":"P0649","elementClass":"acl_cancelCommit_spdUsedType","webApis":[]}]}],"children":[],"topMenu":false},{"systemName":"收货系统","menuId":"10002-003","menuCode":"10002-003","menuParentId":"10002","icon":null,"menuSort":3,"name":"仓库帐页管理","level":2,"anchor":"#spd/spdDepotCards","functions":[{"functionId":"F0017","functionName":"仓库帐页管理","operations":[{"opId":"P0108","opName":"仓库帐页管理查看","opSort":"P0108","elementClass":"acl_view_spdDepotCard","webApis":[{"serviceUrl":"/yard/pcs/depotShelfs/ids,{ids}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdDepotCards/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdDepotCards","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/SpdDepotCardByStockTotalViews/ids,{ids}","serviceMethod":"GET"}]},{"opId":"P0109","opName":"仓库帐页管理编辑","opSort":"P0109","elementClass":"acl_edit_spdDepotCard","webApis":[{"serviceUrl":"/yard/spd/spdDepotCards","serviceMethod":"PUT"},{"serviceUrl":"/yard/pcs/depotShelfs/byLoseSheft,{depotId}","serviceMethod":"GET"},{"serviceUrl":"/yard/pcs/depotShelfs/byLoseSheft,{depotId}/count","serviceMethod":"GET"},{"serviceUrl":"/yard/pcs/depotShelfs/{shelfId}","serviceMethod":"GET"},{"serviceUrl":"/yard/pcs/depotShelfs/ids,{ids}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/SpdDepotCardByStockTotalViews/ids,{ids}","serviceMethod":"GET"},{"serviceUrl":"/yard/pcs/depotShelfs/byWMGDepotShelf,{depotId}/count","serviceMethod":"GET"},{"serviceUrl":"/yard/pcs/depotShelfs/byWMGDepotShelf,{depotId}","serviceMethod":"GET"},{"serviceUrl":"/yard/pcs/depotShelfs/WMGDepotShelf","serviceMethod":"GET"},{"serviceUrl":"/yard/pcs/depotShelfs/WMGDepotShelf/count","serviceMethod":"GET"}]},{"opId":"P0110","opName":"仓库帐页管理新增","opSort":"P0110","elementClass":"acl_add_spdDepotCard","webApis":[{"serviceUrl":"/yard/pcs/depotShelfs/WMGDepotShelf/count","serviceMethod":"GET"},{"serviceUrl":"/yard/pcs/depotShelfs/WMGDepotShelf","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdDepotCards","serviceMethod":"POST"},{"serviceUrl":"/yard/spd/spdDepotCards","serviceMethod":"POST"},{"serviceUrl":"/yard/spd/spdDepotCards","serviceMethod":"GET"},{"serviceUrl":"/yard/pcs/depotShelfs/ids,{ids}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/SpdDepotCardByStockTotalViews/ids,{ids}","serviceMethod":"GET"},{"serviceUrl":"/yard/pcs/pcsDepotAreas/ids,{ids}","serviceMethod":"GET"},{"serviceUrl":"/yard/pcs/depotShelfs/byLoseSheft,{depotId}","serviceMethod":"GET"},{"serviceUrl":"/yard/pcs/depotShelfs/byLoseSheft,{depotId}/count","serviceMethod":"GET"},{"serviceUrl":"/yard/pcs/depotShelfs/byWMGDepotShelf,{depotId}/count","serviceMethod":"GET"},{"serviceUrl":"/yard/pcs/depotShelfs/byWMGDepotShelf,{depotId}","serviceMethod":"GET"}]},{"opId":"P0111","opName":"仓库帐页管理删除","opSort":"P0111","elementClass":"acl_delete_spdDepotCard","webApis":[{"serviceUrl":"/yard/spd/spdDepotCards/{cardId}","serviceMethod":"DELETE"},{"serviceUrl":"/yard/spd/SpdDepotCardByStockTotalViews/ids,{ids}","serviceMethod":"GET"},{"serviceUrl":"/yard/pcs/depotShelfs/ids,{ids}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdDepotCards/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdDepotCards","serviceMethod":"GET"}]},{"opId":"P0307","opName":"仓库帐页管理撤回","opSort":"P0307","elementClass":"acl_cancelCommit_spdDepotCard","webApis":[{"serviceUrl":"/yard/spd/spdDepotCards","serviceMethod":"GET"},{"serviceUrl":"/yard/pcs/depotShelfs/ids,{ids}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/SpdDepotCardByStockTotalViews/ids,{ids}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdDepotCards/{cardId}/checkState/completed","serviceMethod":"PUT"}]},{"opId":"P0277","opName":"仓库帐页管理提交","opSort":"P0277","elementClass":"acl_commitEntity_spdDepotCard","webApis":[{"serviceUrl":"/yard/spd/spdDepotCards/{cardId}/checkState/commited","serviceMethod":"PUT"},{"serviceUrl":"/yard/spd/spdDepotCards","serviceMethod":"GET"},{"serviceUrl":"/yard/pcs/depotShelfs/ids,{ids}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/SpdDepotCardByStockTotalViews/ids,{ids}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdDepotCards/{cardId}","serviceMethod":"GET"}]}]}],"children":[],"topMenu":false},{"systemName":"收货系统","menuId":"10002-004","menuCode":"10002-004","menuParentId":"10002","icon":null,"menuSort":4,"name":"定数配置管理","level":2,"anchor":"#spd/spdFixeds","functions":[{"functionId":"F0056","functionName":"定数帐页管理","operations":[{"opId":"P0453","opName":"定数帐页管理编辑","opSort":"P0453","elementClass":"acl_edit_spdDepotFixedCard","webApis":[{"serviceUrl":"/yard/spd/spdFixeds/{fixedId}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdDepotFixedCards","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdDepotFixedCards/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdFixeds/ids,{ids}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdDepotFixedCards","serviceMethod":"PUT"}]},{"opId":"P0454","opName":"定数帐页管理新增","opSort":"P0454","elementClass":"acl_add_spdDepotFixedCard","webApis":[{"serviceUrl":"/yard/spd/spdDepotCards/ids,{ids}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdDepotCards/byGoodsCard,{goodsId}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdDepotFixedCards","serviceMethod":"POST"},{"serviceUrl":"/yard/spd/spdDepotFixedCards","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdDepotFixedCards/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdFixeds/ids,{ids}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdDepotFixedCards","serviceMethod":"POST"},{"serviceUrl":"/yard/spd/spdFixeds/byUsed","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdFixeds/byUsed/count","serviceMethod":"GET"}]},{"opId":"P0455","opName":"定数帐页管理删除","opSort":"P0455","elementClass":"acl_delete_spdDepotFixedCard","webApis":[{"serviceUrl":"/yard/spd/spdDepotFixedCards","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdDepotFixedCards/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdFixeds/ids,{ids}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdDepotCards/ids,{ids}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdDepotCards/{cardId}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdFixeds/{fixedId}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdDepotFixedCards/{cardFixedId}","serviceMethod":"DELETE"}]},{"opId":"P0456","opName":"定数帐页管理提交","opSort":"P0456","elementClass":"acl_commitEntity_spdDepotFixedCard","webApis":[{"serviceUrl":"/yard/spd/spdDepotFixedCards","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdDepotFixedCards/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdDepotFixedCards/{cardFixedId}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdDepotFixedCards/{cardFixedId}/checkState/commited","serviceMethod":"PUT"},{"serviceUrl":"/yard/spd/spdDepotFixedCards/{cardFixedId}/checkState/commited","serviceMethod":"PUT"}]},{"opId":"P0457","opName":"定数帐页管理撤回","opSort":"P0457","elementClass":"acl_cancelCommit_spdDepotFixedCard","webApis":[{"serviceUrl":"/yard/spd/spdDepotFixedCards","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdDepotFixedCards/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdDepotFixedCards/{cardFixedId}","serviceMethod":"GET"}]},{"opId":"P0446","opName":"定数帐页管理查看","opSort":"P0446","elementClass":"acl_view_spdDepotFixedCard","webApis":[{"serviceUrl":"/yard/spd/spdDepotFixedCards","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdDepotFixedCards/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdFixeds/{fixedId}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdDepotCards/byGoodsCard,{goodsId}/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdDepotCards/byGoodsCard,{goodsId}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdDepotFixedCards/{cardFixedId}","serviceMethod":"GET"}]}]}],"children":[],"topMenu":false},{"systemName":"收货系统","menuId":"10002-005","menuCode":"10002-005","menuParentId":"10002","icon":null,"menuSort":5,"name":"定数帐页管理","level":2,"anchor":"#spd/spdDepotFixedCards","functions":[{"functionId":"F0055","functionName":"定数配置管理","operations":[{"opId":"P0448","opName":"定数配置管理编辑","opSort":"P0448","elementClass":"acl_edit_spdFixed","webApis":[{"serviceUrl":"/yard/spd/spdFixeds/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdFixeds","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdFixeds","serviceMethod":"PUT"}]},{"opId":"P0449","opName":"定数配置管理新增","opSort":"P0449","elementClass":"acl_add_spdFixed","webApis":[{"serviceUrl":"/yard/spd/spdFixeds","serviceMethod":"POST"},{"serviceUrl":"/yard/spd/spdFixeds","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdFixeds/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdFixeds","serviceMethod":"POST"}]},{"opId":"P0450","opName":"定数配置管理删除","opSort":"P0450","elementClass":"acl_delete_spdFixed","webApis":[{"serviceUrl":"/yard/spd/spdFixeds","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdFixeds/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdFixeds/{fixedId}","serviceMethod":"DELETE"}]},{"opId":"P0451","opName":"定数配置管理提交","opSort":"P0451","elementClass":"acl_commitEntity_spdFixed","webApis":[{"serviceUrl":"/yard/spd/spdFixeds","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdFixeds/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdFixeds/{fixedId}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdFixeds/{fixedId}/checkState/commited","serviceMethod":"PUT"}]},{"opId":"P0452","opName":"定数配置管理撤回","opSort":"P0452","elementClass":"acl_cancelCommit_spdFixed","webApis":[{"serviceUrl":"/yard/spd/spdFixeds","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdFixeds/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdFixeds/{fixedId}","serviceMethod":"GET"}]},{"opId":"P0445","opName":"定数配置管理查看","opSort":"P0445","elementClass":"acl_view_spdFixed","webApis":[{"serviceUrl":"/yard/spd/spdFixeds/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdFixeds","serviceMethod":"GET"}]}]}],"children":[],"topMenu":false}],"topMenu":true},{"systemName":"收货系统","menuId":"10003","menuCode":"10003","menuParentId":"-1","icon":"fa-cart-arrow-down","menuSort":3,"name":"采购业务管理","level":1,"anchor":null,"functions":null,"children":[{"systemName":"收货系统","menuId":"10003-001","menuCode":"10003-001","menuParentId":"10003","icon":null,"menuSort":1,"name":"物资价格维护","level":2,"anchor":"#spd/ydsGoodsInfos","functions":[{"functionId":"F0011","functionName":"物资价格维护","operations":[{"opId":"P0077","opName":"物资价格维护新增","opSort":"P0077","elementClass":"acl_add_ydsGoodsInfo","webApis":[{"serviceUrl":"/yard/spd/ydsGoodsInfos","serviceMethod":"POST"},{"serviceUrl":"/yard/spd/ydsGoodsInfos","serviceMethod":"POST"},{"serviceUrl":"/yard/spd/ydsGoodsInfos/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsGoodsInfos","serviceMethod":"GET"}]},{"opId":"P0078","opName":"物资价格维护删除","opSort":"P0078","elementClass":"acl_delete_ydsGoodsInfo","webApis":[{"serviceUrl":"/yard/spd/ydsGoodsInfos/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsGoodsInfos","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsGoodsInfos/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsGoodsInfos","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsGoodsInfos/{goodsId}","serviceMethod":"DELETE"}]},{"opId":"P0079","opName":"物资价格维护编辑","opSort":"P0079","elementClass":"acl_edit_ydsGoodsInfo","webApis":[{"serviceUrl":"/yard/spd/ydsGoodsInfos/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsGoodsInfos","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsGoodsInfos/{goodsId}","serviceMethod":"PUT"}]},{"opId":"P0080","opName":"物资价格维护查看","opSort":"P0080","elementClass":"acl_view_ydsGoodsInfo","webApis":[{"serviceUrl":"/yard/spd/ydsGoodsInfos/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsGoodsInfos","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsGoodsInfos/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsGoodsInfos","serviceMethod":"GET"}]}]}],"children":[],"topMenu":false},{"systemName":"收货系统","menuId":"10003-002","menuCode":"10003-002","menuParentId":"10003","icon":null,"menuSort":2,"name":"采购合同管理","level":2,"anchor":"#spd/spdPoContracts","functions":[{"functionId":"F0012","functionName":"采购合同管理","operations":[{"opId":"P0083","opName":"采购合同管理编辑","opSort":"P0083","elementClass":"acl_edit_spdPoContract,acl_edit_spdPoContractItem,acl_delete_spdPoContractItem,acl_add_spdPoContractItem,acl_view_spdPoContractItem","webApis":[{"serviceUrl":"/yard/spd/spdPoContractItems","serviceMethod":"POST"},{"serviceUrl":"/yard/spd/spdPoContracts/{conId}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdPoContractItems/conId,{conId}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdPoContracts/{conId}","serviceMethod":"PUT"},{"serviceUrl":"/yard/spd/spdPoContractItems/conId,{conId}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdPoContractItems/{conItemId}","serviceMethod":"PUT"},{"serviceUrl":"/yard/pcs/PcsDepts/byProcurementDept","serviceMethod":"GET"}]},{"opId":"P0084","opName":"采购合同管理新增","opSort":"P0084","elementClass":"acl_add_spdPoContract,acl_add_spdPoContractItem,acl_view_spdPoContractItem,acl_edit_spdPoContractItem,acl_delete_spdPoContractItem","webApis":[{"serviceUrl":"/yard/spd/spdPoContractItems","serviceMethod":"POST"},{"serviceUrl":"/yard/pcs/PcsDepts/byProcurementType","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdPoContracts/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdPoContracts","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdPoContracts","serviceMethod":"POST"},{"serviceUrl":"/yard/pcs/PcsDepts/byUse","serviceMethod":"GET"},{"serviceUrl":"/yard/pcs/PcsDepts/byProcurementDept","serviceMethod":"GET"}]},{"opId":"P0085","opName":"采购合同管理删除","opSort":"P0085","elementClass":"acl_delete_spdPoContract,acl_delete_spdPoContractItem","webApis":[{"serviceUrl":"/yard/spd/spdPoContracts/{conId}","serviceMethod":"DELETE"},{"serviceUrl":"/yard/spd/spdPoContracts/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdPoContractItems/conId,{conId}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdPoContractItems/{conItemId}","serviceMethod":"DELETE"},{"serviceUrl":"/yard/spd/spdPoContracts","serviceMethod":"GET"}]},{"opId":"P0086","opName":"采购合同管理提交","opSort":"P0086","elementClass":"acl_commitEntity_spdPoContract","webApis":[{"serviceUrl":"/yard/spd/spdPoContracts/{conId}/checkState/commited","serviceMethod":"PUT"},{"serviceUrl":"/yard/spd/spdPoContracts/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdPoContracts","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdPoContracts/{conId}","serviceMethod":"GET"}]},{"opId":"P0087","opName":"采购合同管理审核","opSort":"P0087","elementClass":"acl_reviewEntity_spdPoContract","webApis":[{"serviceUrl":"/yard/spd/spdPoContracts/{conId}","serviceMethod":"PUT"}]},{"opId":"P0088","opName":"采购合同管理撤回","opSort":"P0088","elementClass":"acl_cancelCommit_spdPoContract","webApis":[]},{"opId":"P0082","opName":"采购合同管理查看","opSort":"P0082","elementClass":"acl_view_spdPoContract,acl_view_spdPoContractItem","webApis":[{"serviceUrl":"/yard/spd/spdPoContracts/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdPoContracts","serviceMethod":"GET"},{"serviceUrl":"/yard/pcs/PcsDepts/byProcurementType","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdPoContractItems/conId,{conId}","serviceMethod":"GET"}]}]}],"children":[],"topMenu":false},{"systemName":"收货系统","menuId":"10003-003","menuCode":"10003-003","menuParentId":"10003","icon":null,"menuSort":3,"name":"配额调节管理","level":2,"anchor":"#spd/spdPoContractItems","functions":[{"functionId":"F0040","functionName":"配额调节管理","operations":[{"opId":"P0478","opName":"配额调节管理编辑","opSort":"P0478","elementClass":"acl_edit_spdPoContractItemAdjust,acl_edit_spdPoContractAdjust","webApis":[{"serviceUrl":"/yard/spd/spdPoContractItems/byAdjust/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdPoContractItems/byAdjust","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdPoContracts/ids,{ids}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdPoContractAdjusts/conItemId,{conItemId}/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdPoContractAdjusts/conItemId,{conItemId}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdPoContractAdjusts/{adjustId}","serviceMethod":"PUT"}]},{"opId":"P0480","opName":"配额调节管理删除","opSort":"P0480","elementClass":"acl_edit_spdPoContractItemAdjust,acl_delete_spdPoContractAdjust","webApis":[{"serviceUrl":"/yard/spd/spdPoContractAdjusts/{adjustId}","serviceMethod":"DELETE"},{"serviceUrl":"/yard/spd/spdPoContractItems/byAdjust/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdPoContractItems/byAdjust","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdPoContractAdjusts/conItemId,{conItemId}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdPoContractAdjusts/conItemId,{conItemId}/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdPoContracts/ids,{ids}","serviceMethod":"GET"}]},{"opId":"P0479","opName":"配额调节管理新增","opSort":"P0479","elementClass":"acl_edit_spdPoContractItemAdjust,acl_add_spdPoContractAdjust","webApis":[{"serviceUrl":"/yard/spd/spdPoContractAdjusts","serviceMethod":"POST"},{"serviceUrl":"/yard/spd/spdPoContractItems/byAdjust/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdPoContractItems/byAdjust","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdPoContracts/ids,{ids}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdPoContractAdjusts/conItemId,{conItemId}/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdPoContractAdjusts/conItemId,{conItemId}","serviceMethod":"GET"}]},{"opId":"P0481","opName":"配额调节管理提交","opSort":"P0481","elementClass":"acl_edit_spdPoContractItemAdjust,acl_commitEntity_spdPoContractAdjust","webApis":[{"serviceUrl":"/yard/spd/spdPoContractItems/byAdjust/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdPoContractItems/byAdjust","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdPoContracts/ids,{ids}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdPoContractAdjusts/conItemId,{conItemId}/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdPoContractAdjusts/conItemId,{conItemId}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdPoContractAdjusts/{adjustId}/checkState/commited","serviceMethod":"PUT"},{"serviceUrl":"/yard/spd/spdPoContractAdjusts/{adjustId}","serviceMethod":"GET"}]},{"opId":"P0482","opName":"配额调节管理审核","opSort":"P0482","elementClass":"acl_edit_spdPoContractItemAdjust,acl_reviewEntity_spdPoContractAdjust","webApis":[{"serviceUrl":"/yard/spd/spdPoContractAdjusts/{adjustId}/checkState/reviewed","serviceMethod":"PUT"},{"serviceUrl":"/yard/spd/spdPoContractItems/byAdjust/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdPoContractItems/byAdjust","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdPoContracts/ids,{ids}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdPoContractAdjusts/conItemId,{conItemId}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdPoContractAdjusts/conItemId,{conItemId}/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdPoContractAdjusts/{adjustId}","serviceMethod":"GET"}]},{"opId":"P0098","opName":"配额调节管理查看","opSort":"P0098","elementClass":"acl_view_spdPoContractItemAdjust,acl_view_spdPoContractAdjust","webApis":[{"serviceUrl":"/yard/spd/spdPoContracts/ids,{ids}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdPoContractItems/byAdjust/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdPoContractItems/byAdjust","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdPoContractAdjusts/conItemId,{conItemId}/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdPoContractAdjusts/conItemId,{conItemId}","serviceMethod":"GET"}]}]}],"children":[],"topMenu":false},{"systemName":"收货系统","menuId":"10003-004","menuCode":"10003-004","menuParentId":"10003","icon":null,"menuSort":4,"name":"采购订单管理","level":2,"anchor":"#spd/spdPurchPos","functions":[{"functionId":"F0013","functionName":"采购订单管理","operations":[{"opId":"P0089","opName":"采购订单管理查看","opSort":"P0089","elementClass":"acl_view_spdPurch,acl_view_spdPurchItem","webApis":[{"serviceUrl":"/yard/spd/spdPurchItems/detail/poId,{poId}/pdf","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdDepotCards/{cardId}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdPurchs/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdPurchs","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdPoContracts/{poId}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdPurchs/{ids}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdPurchItems","serviceMethod":"GET"}]},{"opId":"P0090","opName":"采购订单管理编辑","opSort":"P0090","elementClass":"acl_edit_spdPurch,acl_edit_spdPurchItem,acl_view_spdPurchItem,acl_add_spdPurchItem,acl_delete_spdPurchItem","webApis":[{"serviceUrl":"/yard/spd/spdPurchItems/poId,{poId}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdPurchs/byPurchase/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdPurchs/byPurchase","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdDepotCards/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdDepotCards","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdPoContracts/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdPoContracts","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdPurchItems","serviceMethod":"POST"},{"serviceUrl":"/yard/spd/spdPurchs/{poId}","serviceMethod":"PUT"},{"serviceUrl":"/yard/spd/spdPurchItems/{poItemId}","serviceMethod":"PUT"},{"serviceUrl":"/yard/spd/spdDepotCards/{cardId}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdGoodsContractViews/{depotId},{supplierOrg}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdGoodsContractViews/{depotId},{supplierOrg}/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdPurchItems/poId,{poId}/count","serviceMethod":"GET"}]},{"opId":"P0091","opName":"采购订单管理增加","opSort":"P0091","elementClass":"acl_add_spdPurch,acl_add_spdPurchItem,acl_view_spdPurchItem,acl_edit_spdPurchItem,acl_delete_spdPurchItem","webApis":[{"serviceUrl":"/yard/spd/spdPurchs","serviceMethod":"POST"},{"serviceUrl":"/yard/spd/spdPurchs/byPurchase","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdPurchs/byPurchase/count","serviceMethod":"GET"},{"serviceUrl":"/yard/pcs/pcsDepots/byReceivePoint,{ownerOrgId}/count","serviceMethod":"GET"},{"serviceUrl":"/yard/pcs/pcsDepots/byOwnerHospital,{ownerOrgId}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdDepotCards/byOwnerDepot,{depotId}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdDepotCards/byOwnerDepot,{depotId}/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdPurchs","serviceMethod":"POST"},{"serviceUrl":"/yard/spd/spdGoodsContractViews/{depotId},{supplierOrg}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdGoodsContractViews/{depotId},{supplierOrg}/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdPurchItems/poId,{poId}/count","serviceMethod":"GET"}]},{"opId":"P0092","opName":"采购订单管理删除","opSort":"P0092","elementClass":"acl_delete_spdPurch,acl_delete_spdPurchItem","webApis":[{"serviceUrl":"/yard/spd/spdPurchs/{poId}","serviceMethod":"DELETE"},{"serviceUrl":"/yard/spd/spdPurchItems/{poItemId}","serviceMethod":"DELETE"},{"serviceUrl":"/yard/spd/spdPurchItems/poId,{poId}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdPurchs/byPurchase/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdPurchs/byPurchase","serviceMethod":"GET"}]},{"opId":"P0094","opName":"采购订单管理审核","opSort":"P0094","elementClass":"acl_reviewEntity_spdPurch","webApis":[]},{"opId":"P0306","opName":"采购订单管理打印","opSort":"P0306","elementClass":"acl_export_PurchItem","webApis":[{"serviceUrl":"/yard/spd/spdPurchItems/detail/poId,{poId}/pdf","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdPurchItems/detail/poId,{poId}/pdf","serviceMethod":"GET"}]}]}],"children":[],"topMenu":false},{"systemName":"收货系统","menuId":"10003-005","menuCode":"10003-005","menuParentId":"10003","icon":null,"menuSort":5,"name":"备货业务管理","level":2,"anchor":"#spd/spdPurchRes","functions":[{"functionId":"F0038","functionName":"备货业务管理","operations":[{"opId":"P0258","opName":"备货业务管理增加","opSort":"P0258","elementClass":"acl_add_spdPurchRe,acl_add_spdPurchItemRe,acl_view_spdPurchRe,acl_view_spdPurchItemRe,acl_edit_spdPurchItemRe,acl_delete_spdPurchItemRe","webApis":[{"serviceUrl":"/yard/spd/spdPurchs","serviceMethod":"POST"},{"serviceUrl":"/yard/spd/spdPurchs/byStocking","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdPurchs/byStocking/count","serviceMethod":"GET"},{"serviceUrl":"/yard/pcs/pcsDepots/byOwnerSupplier,{ownerOrgId}/count","serviceMethod":"GET"},{"serviceUrl":"/yard/pcs/pcsDepots/byOwnerSupplier,{ownerOrgId}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdPurchItems/{poItemId}","serviceMethod":"PUT"}]},{"opId":"P0259","opName":"备货业务管理编辑","opSort":"P0259","elementClass":"acl_edit_spdPurchRe,acl_edit_spdPurchItemRe,acl_view_spdPurchItemRe,acl_add_spdPurchItemRe,acl_delete_spdPurchItemRe","webApis":[{"serviceUrl":"/yard/spd/spdPurchs/byStocking","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdPurchs/byStocking/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdPurchItems/poId,{poId}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdPurchs/{poId}","serviceMethod":"PUT"}]},{"opId":"P0260","opName":"备货业务管理查看","opSort":"P0260","elementClass":"acl_view_spdPurchRe,acl_view_spdPurchItemRe","webApis":[{"serviceUrl":"/yard/spd/spdPurchItems/poId,{poId}","serviceMethod":"GET"}]},{"opId":"P0261","opName":"备货业务管理审核","opSort":"P0261","elementClass":"acl_reviewEntity_spdPurchRe","webApis":[]},{"opId":"P0262","opName":"备货业务管理提交","opSort":"P0262","elementClass":"acl_commitEntity_spdPurchRe","webApis":[]},{"opId":"P0264","opName":"备货业务管理删除","opSort":"P0264","elementClass":"acl_delete_spdPurchRe,acl_delete_spdPurchItemRe","webApis":[{"serviceUrl":"/yard/spd/spdPurchs/byStocking","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdPurchs/byStocking/count","serviceMethod":"GET"}]}]}],"children":[],"topMenu":false},{"systemName":"收货系统","menuId":"10003-006","menuCode":"10003-006","menuParentId":"10003","icon":null,"menuSort":6,"name":"业务模版管理","level":2,"anchor":"#spd/spdBizExamples","functions":[{"functionId":"F0063","functionName":"业务模版管理","operations":[{"opId":"P0493","opName":"业务模版管理查看","opSort":"P0493","elementClass":"acl_view_spdBizExample,acl_view_spdBizExampleItem","webApis":[{"serviceUrl":"/yard/spd/spdBizExampleItems/exampleId,{exampleId}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdBizExampleItems/exampleId,{exampleId}/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdBizExamples/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdBizExamples","serviceMethod":"GET"}]},{"opId":"P0494","opName":"业务模版管理新增","opSort":"P0494","elementClass":"acl_add_spdBizExample,acl_add_spdBizExampleItem,acl_view_spdBizExampleItem,acl_edit_spdBizExampleItem,acl_delete _spdBizExampleItem","webApis":[{"serviceUrl":"/yard/spd/spdBizExamples/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdBizExamples","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdBizExamples","serviceMethod":"POST"},{"serviceUrl":"/yard/spd/spdBizExampleItems/exampleId,{exampleId}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdBizExampleItems/exampleId,{exampleId}/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdDepotCards/byUse/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdDepotCards/byUse","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsGoods/ids,{ids}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsGoods/{goodsId}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdBizExampleItems","serviceMethod":"POST"}]},{"opId":"P0495","opName":"业务模版管理编辑","opSort":"P0495","elementClass":"acl_edit_spdBizExample,acl_edit_spdBizExampleItem,acl_view_spdBizExampleItem,acl_add_spdBizExampleItem,acl_delete _spdBizExampleItem","webApis":[{"serviceUrl":"/yard/spd/spdBizExampleItems/exampleId,{exampleId}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdBizExampleItems/exampleId,{exampleId}/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdBizExamples/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdBizExamples","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/ydsGoods/ids,{ids}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdDepotFixedCards/{cardFixedId}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdBizExamples/{exampleId}","serviceMethod":"PUT"},{"serviceUrl":"/yard/spd/ydsGoods/{goodsId}","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdBizExampleItems/{exampleItemId}","serviceMethod":"PUT"}]},{"opId":"P0496","opName":"业务模版管理删除","opSort":"P0496","elementClass":"acl_delete_spdBizExample,acl_delete_spdBizExampleItem","webApis":[{"serviceUrl":"/yard/spd/spdBizExamples/count","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdBizExamples","serviceMethod":"GET"},{"serviceUrl":"/yard/spd/spdBizExamples/{exampleId}","serviceMethod":"DELETE"},{"serviceUrl":"/yard/spd/spdBizExampleItems/{exampleItemId}","serviceMethod":"DELETE"}]},{"opId":"P0497","opName":"业务模版管理提交","opSort":"P0497","elementClass":null,"webApis":[]}]}],"children":[],"topMenu":false}],"topMenu":true}]};}
 
 /***/ },
 /* 205 */
@@ -25273,46 +22652,25 @@
 	Object.defineProperty(exports, '__esModule', {
 	  value: true
 	});
-	exports.handleClose = handleClose;
-	exports.handleOpen = handleOpen;
-	exports.handleEdit = handleEdit;
 	exports.handleSubmit = handleSubmit;
-	exports.operationOpen = operationOpen;
-	exports.operationClose = operationClose;
-	exports.operationEdit = operationEdit;
-	var HANDLE_CLOSE = 'HANDLE_CLOSE';
-	exports.HANDLE_CLOSE = HANDLE_CLOSE;
-	var HANDLE_OPEN = 'HANDLE_OPEN';
-	exports.HANDLE_OPEN = HANDLE_OPEN;
-	var HANDLE_EDIT = 'HANDLE_EDIT';
-	exports.HANDLE_EDIT = HANDLE_EDIT;
+	exports.handleSelected = handleSelected;
+	exports.operationsSeleted = operationsSeleted;
+	exports.operationsSubmit = operationsSubmit;
+	exports.webApisSelected = webApisSelected;
+	exports.webApisSubmit = webApisSubmit;
 	var HANDLE_SUBMIT = 'HANDLE_SUBMIT';
 	exports.HANDLE_SUBMIT = HANDLE_SUBMIT;
-	var OPERATION_OPEN = 'OPERATION_OPEN';
-	exports.OPERATION_OPEN = OPERATION_OPEN;
-	var OPERATION_CLOSE = 'OPERATION_CLOSE';
-	exports.OPERATION_CLOSE = OPERATION_CLOSE;
-	var OPERATION_EDIT = 'OPERATION_EDIT';
+	var HANDLE_SELECTED = 'HANDLE_SELECTED';
+	exports.HANDLE_SELECTED = HANDLE_SELECTED;
+	var OPERATIONS_SELECTED = 'OPERATIONS_SELECTED';
+	exports.OPERATIONS_SELECTED = OPERATIONS_SELECTED;
+	var WEBAPIS_SELECTED = 'WEBAPIS_SELECTED';
+	exports.WEBAPIS_SELECTED = WEBAPIS_SELECTED;
+	var OPERATIONS_SUBMIT = 'OPERATIONS_SUBMIT';
+	exports.OPERATIONS_SUBMIT = OPERATIONS_SUBMIT;
+	var WEBAPIS_SUBMIT = 'WEBAPIS_SUBMIT';
 
-	exports.OPERATION_EDIT = OPERATION_EDIT;
-
-	function handleClose() {
-	  return {
-	    type: HANDLE_CLOSE
-	  };
-	}
-
-	function handleOpen() {
-	  return {
-	    type: HANDLE_OPEN
-	  };
-	}
-
-	function handleEdit() {
-	  return {
-	    type: HANDLE_EDIT
-	  };
-	}
+	exports.WEBAPIS_SUBMIT = WEBAPIS_SUBMIT;
 
 	function handleSubmit(functionId, functionName) {
 	  return {
@@ -25322,23 +22680,44 @@
 	  };
 	}
 
-	function operationOpen(opId) {
+	function handleSelected(id) {
 	  return {
-	    type: OPERATION_OPEN,
-	    opId: opId
+	    type: HANDLE_SELECTED,
+	    id: id
 	  };
 	}
 
-	function operationClose() {
+	function operationsSeleted(id) {
 	  return {
-	    type: OPERATION_CLOSE
+	    type: OPERATIONS_SELECTED,
+	    id: id
 	  };
 	}
 
-	function operationEdit(opId) {
+	function operationsSubmit(id, opId, opName, opSort, elementClass) {
 	  return {
-	    type: OPERATION_EDIT,
-	    opId: opId
+	    type: OPERATIONS_SUBMIT,
+	    id: id,
+	    opId: opId,
+	    opName: opName,
+	    opSort: opSort,
+	    elementClass: elementClass
+	  };
+	}
+
+	function webApisSelected(id) {
+	  return {
+	    type: WEBAPIS_SELECTED,
+	    id: id
+	  };
+	}
+
+	function webApisSubmit(id, serviceMethod, serviceUrl) {
+	  return {
+	    type: WEBAPIS_SUBMIT,
+	    id: id,
+	    serviceMethod: serviceMethod,
+	    serviceUrl: serviceUrl
 	  };
 	}
 
@@ -25368,15 +22747,22 @@
 	        menu.open = false;
 	        menu.checked = false;
 	        menu.key = i;
-	        menu.children.map(function (child) {
+	        menu.children.map(function (child, j) {
 	          child.checked = false;
 	          child.selected = false;
+	          child.key = j;
+	          child.functions.map(function (fun) {
+	            fun.checked = false;
+	            fun.operations.map(function (operation, x) {
+	              operation.checked = false, operation.webApis.map(function (api, y) {
+	                api.checked = false, api.id = x * 10 + y;
+	              });
+	            });
+	          });
 	        });
 	        return menu;
 	      });
-	    // Object.assign({}, state, {
-	    //   posts: action.items
-	    // })
+
 	    /**
 	     * 选中该一级菜单
 	     */
@@ -25385,20 +22771,39 @@
 	        return menu.menuId === action.menuId ? Object.assign({}, menu, {
 	          open: !menu.open }) : menu;
 	      });
-	    // {...menu, open: !menu.open}:menu)
 	    /**
-	     * 点击勾选该一级菜单下所有二级菜单
+	     * 点击勾选该一级菜单下所有二、三级菜单
 	     */
 	    case _actionsMenus.CHECKED_ALL:
 	      var all = state[action.id].children.every(function (child) {
 	        return child.checked;
 	      });
-	      console.log(all);
+	      var allChecked = state[action.id].children.every(function (child) {
+	        return child.functions.every(function (fun) {
+	          return fun.operations.every(function (operation) {
+	            return operation.checked;
+	          });
+	        });
+	      });
+	      console.log(allChecked);
+	      // console.log(all)
 	      return state.map(function (menu) {
 	        return menu.menuId === action.menuId ? Object.assign({}, menu, {
+	          checked: !menu.checked,
 	          children: menu.children.map(function (child) {
 	            return Object.assign({}, child, {
-	              checked: !all });
+	              checked: !all,
+	              functions: child.functions.map(function (fun) {
+	                return Object.assign({}, fun, {
+	                  checked: !fun.checked,
+	                  operations: fun.operations.map(function (operation) {
+	                    return Object.assign({}, operation, {
+	                      checked: !allChecked
+	                    });
+	                  })
+	                });
+	              })
+	            });
 	          })
 	        }) : menu;
 	      });
@@ -25433,16 +22838,15 @@
 	          })
 	        });
 	      });
-
+	    /**
+	     * 合并items修改后的数据
+	     */
 	    case _actionsMenus.COMBINE_ITEMS:
-	      // const items = action.id
 	      var funId = state.map(function (menu) {
 	        return menu.children.map(function (child) {
 	          return child.menuId;
 	        });
 	      });
-	      console.log(typeof action.items);
-	      // console.log(funId)
 	      return state.map(function (menu) {
 	        return Object.assign({}, menu, {
 	          children: menu.children.map(function (child) {
@@ -25451,6 +22855,36 @@
 	            }) : child;
 	          })
 	        });
+	      });
+	    /**
+	     * 提交修改一级菜单数据
+	     */
+	    case _actionsMenus.FIRST_MENUS_SUBMIT:
+	      return state.map(function (menu) {
+	        return menu.menuId === action.menuId ? Object.assign({}, menu, {
+	          menuId: action.menuId,
+	          menuCode: action.menuCode,
+	          menuSort: action.menuSort,
+	          name: action.name
+	        }) : menu;
+	      });
+	    /**
+	     * 提交修改二级菜单数据
+	     */
+	    case _actionsMenus.SECOND_MENUS_SUBMIT:
+	      return state.map(function (menu) {
+	        return menu.menuId === action.menuParentId ? Object.assign({}, menu, {
+	          children: menu.children.map(function (child) {
+	            return child.menuId === action.menuId ? Object.assign({}, child, {
+	              menuId: action.menuId,
+	              menuCode: action.menuCode,
+	              menuSort: action.menuSort,
+	              name: action.name,
+	              menuParentId: action.menuParentId,
+	              anchor: action.anchor
+	            }) : child;
+	          })
+	        }) : menu;
 	      });
 
 	    default:
@@ -27086,6 +24520,10 @@
 
 	var _materialUiLibStylesColors = __webpack_require__(250);
 
+	var _materialUiLibCheckbox = __webpack_require__(307);
+
+	var _materialUiLibCheckbox2 = _interopRequireDefault(_materialUiLibCheckbox);
+
 	var _actionsMenus = __webpack_require__(204);
 
 	var MenusActions = _interopRequireWildcard(_actionsMenus);
@@ -27094,11 +24532,11 @@
 
 	var ItemsActions = _interopRequireWildcard(_actionsItems);
 
-	var _componentsItemsItems = __webpack_require__(307);
+	var _componentsItemsItems = __webpack_require__(315);
 
 	var _componentsItemsItems2 = _interopRequireDefault(_componentsItemsItems);
 
-	var _componentsMenusMenus = __webpack_require__(348);
+	var _componentsMenusMenus = __webpack_require__(340);
 
 	var _componentsMenusMenus2 = _interopRequireDefault(_componentsMenusMenus);
 
@@ -27114,25 +24552,18 @@
 	  _createClass(App, [{
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
-	      // console.log('执行app componentDidMount')
-	      this.props.menusActions.readItemsFile();
-	    }
-	  }, {
-	    key: 'componentWillReceiveProps',
-	    value: function componentWillReceiveProps(nextState) {
-	      // console.log('执行 app componentReceiveProps')
-	      var Id = nextState.items.map(function (item) {
-	        return item.id;
-	      })[0]; //这个是和后面的menuId做对比判断的，map出来的是数组所以Id === menuId 为false，因为这个只有一个子集，所以直接用[0]取值
-	      if (nextState.items !== this.props.items) {
-	        //不加这个判断很容易进行死循环，一直更新
-	        this.props.menusActions.combineItems(Id, nextState.items);
-	      }
-	      // console.log('执行 app componentReceiveProps 完成')
+	      // this.props.menusActions.readItemsFile()  //electron下，用fs读取文件
+	      this.props.menusActions.receiveMenus(); //web下，假数据
 	    }
 
-	    // <SideBar
-	    //  handleClick={this.handleClick.bind(this)}/>
+	    // componentWillReceiveProps(nextState) {
+	    //   // console.log('执行 app componentReceiveProps')
+	    //   const Id = (nextState.items.map(item => item.id))[0] //这个是和后面的menuId做对比判断的，map出来的是数组所以Id === menuId 为false，因为这个只有一个子集，所以直接用[0]取值
+	    //   if(nextState.items !== this.props.items) {  //不加这个判断很容易进行死循环，一直更新
+	    //     this.props.menusActions.combineItems(Id, nextState.items)
+	    //   }
+	    //   // console.log('执行 app componentReceiveProps 完成')
+	    // }
 
 	  }, {
 	    key: 'render',
@@ -36387,585 +33818,6 @@
 
 	'use strict';
 
-	Object.defineProperty(exports, '__esModule', {
-	  value: true
-	});
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var _react = __webpack_require__(66);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _materialUiLibTableTable = __webpack_require__(308);
-
-	var _materialUiLibTableTable2 = _interopRequireDefault(_materialUiLibTableTable);
-
-	var _materialUiLibTableTableHeaderColumn = __webpack_require__(309);
-
-	var _materialUiLibTableTableHeaderColumn2 = _interopRequireDefault(_materialUiLibTableTableHeaderColumn);
-
-	var _materialUiLibTableTableRow = __webpack_require__(310);
-
-	var _materialUiLibTableTableRow2 = _interopRequireDefault(_materialUiLibTableTableRow);
-
-	var _materialUiLibTableTableHeader = __webpack_require__(311);
-
-	var _materialUiLibTableTableHeader2 = _interopRequireDefault(_materialUiLibTableTableHeader);
-
-	var _materialUiLibTableTableRowColumn = __webpack_require__(320);
-
-	var _materialUiLibTableTableRowColumn2 = _interopRequireDefault(_materialUiLibTableTableRowColumn);
-
-	var _materialUiLibTableTableBody = __webpack_require__(321);
-
-	var _materialUiLibTableTableBody2 = _interopRequireDefault(_materialUiLibTableTableBody);
-
-	var _materialUiLibFloatingActionButton = __webpack_require__(323);
-
-	var _materialUiLibFloatingActionButton2 = _interopRequireDefault(_materialUiLibFloatingActionButton);
-
-	var _materialUiLibSvgIconsContentCreate = __webpack_require__(324);
-
-	var _materialUiLibSvgIconsContentCreate2 = _interopRequireDefault(_materialUiLibSvgIconsContentCreate);
-
-	var _materialUiLibSvgIconsContentForward = __webpack_require__(325);
-
-	var _materialUiLibSvgIconsContentForward2 = _interopRequireDefault(_materialUiLibSvgIconsContentForward);
-
-	var _materialUiLibRaisedButton = __webpack_require__(326);
-
-	var _materialUiLibRaisedButton2 = _interopRequireDefault(_materialUiLibRaisedButton);
-
-	var _SearchSearch = __webpack_require__(327);
-
-	var _SearchSearch2 = _interopRequireDefault(_SearchSearch);
-
-	var _DialogDialog = __webpack_require__(337);
-
-	var _DialogDialog2 = _interopRequireDefault(_DialogDialog);
-
-	var style = {
-	  tableCreate: {
-	    width: 40
-	  },
-	  table: {
-	    overflowX: 'hidden'
-	  },
-	  raisedButton: {
-	    margin: 10
-	  }
-	};
-
-	var Items = (function (_Component) {
-	  _inherits(Items, _Component);
-
-	  function Items(props) {
-	    _classCallCheck(this, Items);
-
-	    _get(Object.getPrototypeOf(Items.prototype), 'constructor', this).call(this, props);
-	  }
-
-	  _createClass(Items, [{
-	    key: 'render',
-	    value: function render() {
-	      var _props = this.props;
-	      var _props$items = _props.items;
-	      var items = _props$items === undefined ? [] : _props$items;
-	      var itemsActions = _props.itemsActions;
-
-	      return _react2['default'].createElement(
-	        'div',
-	        null,
-	        _react2['default'].createElement(_SearchSearch2['default'], {
-	          searchTitle: items }),
-	        _react2['default'].createElement(
-	          _materialUiLibTableTable2['default'],
-	          {
-	            style: style.table
-	          },
-	          _react2['default'].createElement(
-	            _materialUiLibTableTableHeader2['default'],
-	            null,
-	            _react2['default'].createElement(
-	              _materialUiLibTableTableRow2['default'],
-	              null,
-	              _react2['default'].createElement(
-	                _materialUiLibTableTableHeaderColumn2['default'],
-	                null,
-	                'functionId'
-	              ),
-	              _react2['default'].createElement(
-	                _materialUiLibTableTableHeaderColumn2['default'],
-	                null,
-	                'functionName'
-	              ),
-	              _react2['default'].createElement(
-	                _materialUiLibTableTableHeaderColumn2['default'],
-	                { style: style.tableCreate },
-	                'check'
-	              ),
-	              _react2['default'].createElement(
-	                _materialUiLibTableTableHeaderColumn2['default'],
-	                { style: style.tableCreate },
-	                'edit'
-	              )
-	            )
-	          ),
-	          _react2['default'].createElement(
-	            _materialUiLibTableTableBody2['default'],
-	            null,
-	            items.map(function (item, i) {
-	              return _react2['default'].createElement(
-	                _materialUiLibTableTableRow2['default'],
-	                {
-	                  key: i },
-	                _react2['default'].createElement(
-	                  _materialUiLibTableTableRowColumn2['default'],
-	                  null,
-	                  item.functionId
-	                ),
-	                _react2['default'].createElement(
-	                  _materialUiLibTableTableRowColumn2['default'],
-	                  null,
-	                  item.functionName
-	                ),
-	                _react2['default'].createElement(
-	                  _materialUiLibTableTableRowColumn2['default'],
-	                  { style: style.tableCreate },
-	                  _react2['default'].createElement(
-	                    _materialUiLibFloatingActionButton2['default'],
-	                    { mini: true, secondary: true, onClick: function () {
-	                        return itemsActions.handleOpen();
-	                      } },
-	                    _react2['default'].createElement(_materialUiLibSvgIconsContentForward2['default'], null)
-	                  )
-	                ),
-	                _react2['default'].createElement(
-	                  _materialUiLibTableTableRowColumn2['default'],
-	                  { onClick: function () {
-	                      return itemsActions.handleOpen();
-	                    }, style: style.tableCreate },
-	                  _react2['default'].createElement(
-	                    _materialUiLibFloatingActionButton2['default'],
-	                    { mini: true, secondary: true, onClick: function () {
-	                        return itemsActions.handleEdit();
-	                      } },
-	                    _react2['default'].createElement(_materialUiLibSvgIconsContentCreate2['default'], null)
-	                  )
-	                ),
-	                _react2['default'].createElement(_DialogDialog2['default'], {
-	                  open: item.open,
-	                  functions: item,
-	                  itemsActions: itemsActions,
-	                  handleClose: function () {
-	                    return itemsActions.handleClose();
-	                  }
-	                })
-	              );
-	            })
-	          )
-	        ),
-	        _react2['default'].createElement(
-	          'div',
-	          { className: 'exp-imp' },
-	          _react2['default'].createElement(_materialUiLibRaisedButton2['default'], { label: '导 入', secondary: true, style: style.raisedButton }),
-	          _react2['default'].createElement(_materialUiLibRaisedButton2['default'], { label: '导 出', secondary: true, style: style.raisedButton })
-	        )
-	      );
-	    }
-	  }]);
-
-	  return Items;
-	})(_react.Component);
-
-	exports['default'] = Items;
-	module.exports = exports['default'];
-
-/***/ },
-/* 308 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _react = __webpack_require__(66);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactDom = __webpack_require__(170);
-
-	var _reactDom2 = _interopRequireDefault(_reactDom);
-
-	var _stylePropable = __webpack_require__(224);
-
-	var _stylePropable2 = _interopRequireDefault(_stylePropable);
-
-	var _getMuiTheme = __webpack_require__(271);
-
-	var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
-
-	var Table = _react2.default.createClass({
-	  displayName: 'Table',
-
-	  propTypes: {
-	    /**
-	     * Set to true to indicate that all rows should be selected.
-	     */
-	    allRowsSelected: _react2.default.PropTypes.bool,
-
-	    /**
-	     * Override the inline-styles of the body's table element.
-	     */
-	    bodyStyle: _react2.default.PropTypes.object,
-
-	    /**
-	     * Children passed to table.
-	     */
-	    children: _react2.default.PropTypes.node,
-
-	    /**
-	     * The css class name of the root element.
-	     */
-	    className: _react2.default.PropTypes.string,
-
-	    /**
-	     * If true, the footer will appear fixed below the table.
-	     * The default value is true.
-	     */
-	    fixedFooter: _react2.default.PropTypes.bool,
-
-	    /**
-	     * If true, the header will appear fixed above the table.
-	     * The default value is true.
-	     */
-	    fixedHeader: _react2.default.PropTypes.bool,
-
-	    /**
-	     * Override the inline-styles of the footer's table element.
-	     */
-	    footerStyle: _react2.default.PropTypes.object,
-
-	    /**
-	     * Override the inline-styles of the header's table element.
-	     */
-	    headerStyle: _react2.default.PropTypes.object,
-
-	    /**
-	     * The height of the table.
-	     */
-	    height: _react2.default.PropTypes.string,
-
-	    /**
-	     * If true, multiple table rows can be selected.
-	     * CTRL/CMD+Click and SHIFT+Click are valid actions.
-	     * The default value is false.
-	     */
-	    multiSelectable: _react2.default.PropTypes.bool,
-
-	    /**
-	     * Called when a row cell is clicked.
-	     * rowNumber is the row number and columnId is
-	     * the column number or the column key.
-	     */
-	    onCellClick: _react2.default.PropTypes.func,
-
-	    /**
-	     * Called when a table cell is hovered.
-	     * rowNumber is the row number of the hovered row
-	     * and columnId is the column number or the column key of the cell.
-	     */
-	    onCellHover: _react2.default.PropTypes.func,
-
-	    /**
-	     * Called when a table cell is no longer hovered.
-	     * rowNumber is the row number of the row and columnId
-	     * is the column number or the column key of the cell.
-	     */
-	    onCellHoverExit: _react2.default.PropTypes.func,
-
-	    /**
-	     * Called when a table row is hovered.
-	     * rowNumber is the row number of the hovered row.
-	     */
-	    onRowHover: _react2.default.PropTypes.func,
-
-	    /**
-	     * Called when a table row is no longer hovered.
-	     * rowNumber is the row number of the row that is no longer hovered.
-	     */
-	    onRowHoverExit: _react2.default.PropTypes.func,
-
-	    /**
-	     * Called when a row is selected.
-	     * selectedRows is an array of all row selections.
-	     * IF all rows have been selected, the string "all"
-	     * will be returned instead to indicate that all rows have been selected.
-	     */
-	    onRowSelection: _react2.default.PropTypes.func,
-
-	    /**
-	     * If true, table rows can be selected.
-	     * If multiple row selection is desired, enable multiSelectable.
-	     * The default value is true.
-	     */
-	    selectable: _react2.default.PropTypes.bool,
-
-	    /**
-	     * Override the inline-styles of the root element.
-	     */
-	    style: _react2.default.PropTypes.object,
-
-	    /**
-	     * Override the inline-styles of the table's wrapper element.
-	     */
-	    wrapperStyle: _react2.default.PropTypes.object
-	  },
-
-	  contextTypes: {
-	    muiTheme: _react2.default.PropTypes.object
-	  },
-
-	  //for passing default theme context to children
-	  childContextTypes: {
-	    muiTheme: _react2.default.PropTypes.object
-	  },
-
-	  mixins: [_stylePropable2.default],
-
-	  getDefaultProps: function getDefaultProps() {
-	    return {
-	      allRowsSelected: false,
-	      fixedFooter: true,
-	      fixedHeader: true,
-	      height: 'inherit',
-	      multiSelectable: false,
-	      selectable: true
-	    };
-	  },
-	  getInitialState: function getInitialState() {
-	    return {
-	      muiTheme: this.context.muiTheme || (0, _getMuiTheme2.default)(),
-	      allRowsSelected: this.props.allRowsSelected
-	    };
-	  },
-	  getChildContext: function getChildContext() {
-	    return {
-	      muiTheme: this.state.muiTheme
-	    };
-	  },
-
-	  //to update theme inside state whenever a new theme is passed down
-	  //from the parent / owner using context
-	  componentWillReceiveProps: function componentWillReceiveProps(nextProps, nextContext) {
-	    var newMuiTheme = nextContext.muiTheme ? nextContext.muiTheme : this.state.muiTheme;
-	    this.setState({ muiTheme: newMuiTheme });
-	  },
-	  getTheme: function getTheme() {
-	    return this.state.muiTheme.table;
-	  },
-	  getStyles: function getStyles() {
-	    var styles = {
-	      root: {
-	        backgroundColor: this.getTheme().backgroundColor,
-	        padding: '0 ' + this.state.muiTheme.rawTheme.spacing.desktopGutter + 'px',
-	        width: '100%',
-	        borderCollapse: 'collapse',
-	        borderSpacing: 0,
-	        tableLayout: 'fixed',
-	        fontFamily: this.state.muiTheme.rawTheme.fontFamily
-	      },
-	      bodyTable: {
-	        height: this.props.fixedHeader || this.props.fixedFooter ? this.props.height : 'auto',
-	        overflowX: 'hidden',
-	        overflowY: 'auto'
-	      },
-	      tableWrapper: {
-	        height: this.props.fixedHeader || this.props.fixedFooter ? 'auto' : this.props.height,
-	        overflow: 'auto'
-	      }
-	    };
-
-	    return styles;
-	  },
-	  isScrollbarVisible: function isScrollbarVisible() {
-	    var tableDivHeight = _reactDom2.default.findDOMNode(this.refs.tableDiv).clientHeight;
-	    var tableBodyHeight = _reactDom2.default.findDOMNode(this.refs.tableBody).clientHeight;
-
-	    return tableBodyHeight > tableDivHeight;
-	  },
-	  _createTableHeader: function _createTableHeader(base) {
-	    return _react2.default.cloneElement(base, {
-	      enableSelectAll: base.props.enableSelectAll && this.props.selectable && this.props.multiSelectable,
-	      onSelectAll: this._onSelectAll,
-	      selectAllSelected: this.state.allRowsSelected
-	    });
-	  },
-	  _createTableBody: function _createTableBody(base) {
-	    return _react2.default.cloneElement(base, {
-	      allRowsSelected: this.state.allRowsSelected,
-	      multiSelectable: this.props.multiSelectable,
-	      onCellClick: this._onCellClick,
-	      onCellHover: this._onCellHover,
-	      onCellHoverExit: this._onCellHoverExit,
-	      onRowHover: this._onRowHover,
-	      onRowHoverExit: this._onRowHoverExit,
-	      onRowSelection: this._onRowSelection,
-	      selectable: this.props.selectable,
-	      style: this.mergeStyles({ height: this.props.height }, base.props.style)
-	    });
-	  },
-	  _createTableFooter: function _createTableFooter(base) {
-	    return base;
-	  },
-	  _onCellClick: function _onCellClick(rowNumber, columnNumber) {
-	    if (this.props.onCellClick) this.props.onCellClick(rowNumber, columnNumber);
-	  },
-	  _onCellHover: function _onCellHover(rowNumber, columnNumber) {
-	    if (this.props.onCellHover) this.props.onCellHover(rowNumber, columnNumber);
-	  },
-	  _onCellHoverExit: function _onCellHoverExit(rowNumber, columnNumber) {
-	    if (this.props.onCellHoverExit) this.props.onCellHoverExit(rowNumber, columnNumber);
-	  },
-	  _onRowHover: function _onRowHover(rowNumber) {
-	    if (this.props.onRowHover) this.props.onRowHover(rowNumber);
-	  },
-	  _onRowHoverExit: function _onRowHoverExit(rowNumber) {
-	    if (this.props.onRowHoverExit) this.props.onRowHoverExit(rowNumber);
-	  },
-	  _onRowSelection: function _onRowSelection(selectedRows) {
-	    if (this.state.allRowsSelected) this.setState({ allRowsSelected: false });
-	    if (this.props.onRowSelection) this.props.onRowSelection(selectedRows);
-	  },
-	  _onSelectAll: function _onSelectAll() {
-	    if (this.props.onRowSelection) {
-	      if (!this.state.allRowsSelected) {
-	        this.props.onRowSelection('all');
-	      } else {
-	        this.props.onRowSelection('none');
-	      }
-	    }
-
-	    this.setState({ allRowsSelected: !this.state.allRowsSelected });
-	  },
-	  render: function render() {
-	    var _this = this;
-
-	    var _props = this.props;
-	    var children = _props.children;
-	    var className = _props.className;
-	    var fixedFooter = _props.fixedFooter;
-	    var fixedHeader = _props.fixedHeader;
-	    var style = _props.style;
-	    var wrapperStyle = _props.wrapperStyle;
-	    var headerStyle = _props.headerStyle;
-	    var bodyStyle = _props.bodyStyle;
-	    var footerStyle = _props.footerStyle;
-
-	    var other = _objectWithoutProperties(_props, ['children', 'className', 'fixedFooter', 'fixedHeader', 'style', 'wrapperStyle', 'headerStyle', 'bodyStyle', 'footerStyle']);
-
-	    var styles = this.getStyles();
-
-	    var tHead = undefined;
-	    var tFoot = undefined;
-	    var tBody = undefined;
-
-	    _react2.default.Children.forEach(children, function (child) {
-	      if (!_react2.default.isValidElement(child)) return;
-
-	      var displayName = child.type.displayName;
-	      if (displayName === 'TableBody') {
-	        tBody = _this._createTableBody(child);
-	      } else if (displayName === 'TableHeader') {
-	        tHead = _this._createTableHeader(child);
-	      } else if (displayName === 'TableFooter') {
-	        tFoot = _this._createTableFooter(child);
-	      }
-	    });
-
-	    // If we could not find a table-header and a table-body, do not attempt to display anything.
-	    if (!tBody && !tHead) return null;
-
-	    var mergedTableStyle = this.mergeStyles(styles.root, style);
-	    var headerTable = undefined;
-	    var footerTable = undefined;
-	    var inlineHeader = undefined;
-	    var inlineFooter = undefined;
-
-	    if (fixedHeader) {
-	      headerTable = _react2.default.createElement(
-	        'div',
-	        { style: this.prepareStyles(headerStyle) },
-	        _react2.default.createElement(
-	          'table',
-	          { className: className, style: mergedTableStyle },
-	          tHead
-	        )
-	      );
-	    } else {
-	      inlineHeader = tHead;
-	    }
-
-	    if (tFoot !== undefined) {
-	      if (fixedFooter) {
-	        footerTable = _react2.default.createElement(
-	          'div',
-	          { style: this.prepareStyles(footerStyle) },
-	          _react2.default.createElement(
-	            'table',
-	            { className: className, style: this.prepareStyles(mergedTableStyle) },
-	            tFoot
-	          )
-	        );
-	      } else {
-	        inlineFooter = tFoot;
-	      }
-	    }
-
-	    return _react2.default.createElement(
-	      'div',
-	      { style: this.prepareStyles(styles.tableWrapper, wrapperStyle) },
-	      headerTable,
-	      _react2.default.createElement(
-	        'div',
-	        { style: this.prepareStyles(styles.bodyTable, bodyStyle), ref: 'tableDiv' },
-	        _react2.default.createElement(
-	          'table',
-	          { className: className, style: mergedTableStyle, ref: 'tableBody' },
-	          inlineHeader,
-	          inlineFooter,
-	          tBody
-	        )
-	      ),
-	      footerTable
-	    );
-	  }
-	});
-
-	exports.default = Table;
-	module.exports = exports['default'];
-
-/***/ },
-/* 309 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 	Object.defineProperty(exports, "__esModule", {
@@ -36976,706 +33828,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _stylePropable = __webpack_require__(224);
-
-	var _stylePropable2 = _interopRequireDefault(_stylePropable);
-
-	var _tooltip = __webpack_require__(302);
-
-	var _tooltip2 = _interopRequireDefault(_tooltip);
-
-	var _getMuiTheme = __webpack_require__(271);
-
-	var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
-
-	var TableHeaderColumn = _react2.default.createClass({
-	  displayName: 'TableHeaderColumn',
-
-	  propTypes: {
-	    children: _react2.default.PropTypes.node,
-
-	    /**
-	     * The css class name of the root element.
-	     */
-	    className: _react2.default.PropTypes.string,
-
-	    /**
-	     * Number to identify the header row. This property
-	     * is automatically populated when used with TableHeader.
-	     */
-	    columnNumber: _react2.default.PropTypes.number,
-
-	    /**
-	     * Key prop for table header column.
-	     */
-	    key: _react2.default.PropTypes.string,
-
-	    /**
-	     * Callback function for click event.
-	     */
-	    onClick: _react2.default.PropTypes.func,
-
-	    /**
-	     * Override the inline-styles of the root element.
-	     */
-	    style: _react2.default.PropTypes.object,
-
-	    /**
-	     * The string to supply to the tooltip. If not
-	     * string is supplied no tooltip will be shown.
-	     */
-	    tooltip: _react2.default.PropTypes.string,
-
-	    /**
-	     * Additional styling that can be applied to the tooltip.
-	     */
-	    tooltipStyle: _react2.default.PropTypes.object
-	  },
-
-	  contextTypes: {
-	    muiTheme: _react2.default.PropTypes.object
-	  },
-
-	  //for passing default theme context to children
-	  childContextTypes: {
-	    muiTheme: _react2.default.PropTypes.object
-	  },
-
-	  mixins: [_stylePropable2.default],
-
-	  getInitialState: function getInitialState() {
-	    return {
-	      muiTheme: this.context.muiTheme || (0, _getMuiTheme2.default)(),
-	      hovered: false
-	    };
-	  },
-	  getChildContext: function getChildContext() {
-	    return {
-	      muiTheme: this.state.muiTheme
-	    };
-	  },
-
-	  //to update theme inside state whenever a new theme is passed down
-	  //from the parent / owner using context
-	  componentWillReceiveProps: function componentWillReceiveProps(nextProps, nextContext) {
-	    var newMuiTheme = nextContext.muiTheme ? nextContext.muiTheme : this.state.muiTheme;
-	    this.setState({ muiTheme: newMuiTheme });
-	  },
-	  getTheme: function getTheme() {
-	    return this.state.muiTheme.tableHeaderColumn;
-	  },
-	  getStyles: function getStyles() {
-	    var theme = this.getTheme();
-	    var styles = {
-	      root: {
-	        fontWeight: 'normal',
-	        fontSize: 12,
-	        paddingLeft: theme.spacing,
-	        paddingRight: theme.spacing,
-	        height: theme.height,
-	        textAlign: 'left',
-	        whiteSpace: 'nowrap',
-	        textOverflow: 'ellipsis',
-	        color: this.getTheme().textColor,
-	        position: 'relative'
-	      },
-	      tooltip: {
-	        boxSizing: 'border-box',
-	        marginTop: theme.height / 2
-	      }
-	    };
-
-	    return styles;
-	  },
-	  _onMouseEnter: function _onMouseEnter() {
-	    if (this.props.tooltip !== undefined) this.setState({ hovered: true });
-	  },
-	  _onMouseLeave: function _onMouseLeave() {
-	    if (this.props.tooltip !== undefined) this.setState({ hovered: false });
-	  },
-	  _onClick: function _onClick(e) {
-	    if (this.props.onClick) this.props.onClick(e, this.props.columnNumber);
-	  },
-	  render: function render() {
-	    var styles = this.getStyles();
-	    var handlers = {
-	      onMouseEnter: this._onMouseEnter,
-	      onMouseLeave: this._onMouseLeave,
-	      onClick: this._onClick
-	    };
-	    var _props = this.props;
-	    var className = _props.className;
-	    var columnNumber = _props.columnNumber;
-	    var onClick = _props.onClick;
-	    var style = _props.style;
-	    var tooltip = _props.tooltip;
-	    var tooltipStyle = _props.tooltipStyle;
-
-	    var other = _objectWithoutProperties(_props, ['className', 'columnNumber', 'onClick', 'style', 'tooltip', 'tooltipStyle']);
-
-	    if (this.props.tooltip !== undefined) {
-	      tooltip = _react2.default.createElement(_tooltip2.default, {
-	        label: this.props.tooltip,
-	        show: this.state.hovered,
-	        style: this.mergeStyles(styles.tooltip, tooltipStyle)
-	      });
-	    }
-
-	    return _react2.default.createElement(
-	      'th',
-	      _extends({
-	        key: this.props.key,
-	        className: className,
-	        style: this.prepareStyles(styles.root, style)
-	      }, handlers, other),
-	      tooltip,
-	      this.props.children
-	    );
-	  }
-	});
-
-	exports.default = TableHeaderColumn;
-	module.exports = exports['default'];
-
-/***/ },
-/* 310 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _react = __webpack_require__(66);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _stylePropable = __webpack_require__(224);
-
-	var _stylePropable2 = _interopRequireDefault(_stylePropable);
-
-	var _getMuiTheme = __webpack_require__(271);
-
-	var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
-
-	var TableRow = _react2.default.createClass({
-	  displayName: 'TableRow',
-
-	  propTypes: {
-	    /**
-	     * Children passed to table row.
-	     */
-	    children: _react2.default.PropTypes.node,
-
-	    /**
-	     * The css class name of the root element.
-	     */
-	    className: _react2.default.PropTypes.string,
-
-	    /**
-	     * If true, row border will be displayed for the row.
-	     * If false, no border will be drawn.
-	     */
-	    displayBorder: _react2.default.PropTypes.bool,
-
-	    /**
-	     * Controls whether or not the row reponseds to hover events.
-	     */
-	    hoverable: _react2.default.PropTypes.bool,
-
-	    /**
-	     * Controls whether or not the row should be rendered as being
-	     * hovered. This property is evaluated in addition to this.state.hovered
-	     * and can be used to synchronize the hovered state with some other
-	     * external events.
-	     */
-	    hovered: _react2.default.PropTypes.bool,
-
-	    /**
-	     * Called when a row cell is clicked.
-	     * rowNumber is the row number and columnId is
-	     * the column number or the column key.
-	     */
-	    onCellClick: _react2.default.PropTypes.func,
-
-	    /**
-	     * Called when a table cell is hovered.
-	     * rowNumber is the row number of the hovered row
-	     * and columnId is the column number or the column key of the cell.
-	     */
-	    onCellHover: _react2.default.PropTypes.func,
-
-	    /**
-	     * Called when a table cell is no longer hovered.
-	     * rowNumber is the row number of the row and columnId
-	     * is the column number or the column key of the cell.
-	     */
-	    onCellHoverExit: _react2.default.PropTypes.func,
-
-	    /**
-	     * Called when row is clicked.
-	     */
-	    onRowClick: _react2.default.PropTypes.func,
-
-	    /**
-	     * Called when a table row is hovered.
-	     * rowNumber is the row number of the hovered row.
-	     */
-	    onRowHover: _react2.default.PropTypes.func,
-
-	    /**
-	     * Called when a table row is no longer hovered.
-	     * rowNumber is the row number of the row that is no longer hovered.
-	     */
-	    onRowHoverExit: _react2.default.PropTypes.func,
-
-	    /**
-	     * Number to identify the row. This property is
-	     * automatically populated when used with the TableBody component.
-	     */
-	    rowNumber: _react2.default.PropTypes.number,
-
-	    /**
-	     * If true, table rows can be selected. If multiple row
-	     * selection is desired, enable multiSelectable.
-	     * The default value is true.
-	     */
-	    selectable: _react2.default.PropTypes.bool,
-
-	    /**
-	     * Indicates that a particular row is selected.
-	     * This property can be used to programmatically select rows.
-	     */
-	    selected: _react2.default.PropTypes.bool,
-
-	    /**
-	     * Indicates whether or not the row is striped.
-	     */
-	    striped: _react2.default.PropTypes.bool,
-
-	    /**
-	     * Override the inline-styles of the root element.
-	     */
-	    style: _react2.default.PropTypes.object
-	  },
-
-	  contextTypes: {
-	    muiTheme: _react2.default.PropTypes.object
-	  },
-
-	  //for passing default theme context to children
-	  childContextTypes: {
-	    muiTheme: _react2.default.PropTypes.object
-	  },
-
-	  mixins: [_stylePropable2.default],
-
-	  getDefaultProps: function getDefaultProps() {
-	    return {
-	      displayBorder: true,
-	      hoverable: false,
-	      hovered: false,
-	      selectable: true,
-	      selected: false,
-	      striped: false
-	    };
-	  },
-	  getInitialState: function getInitialState() {
-	    return {
-	      muiTheme: this.context.muiTheme || (0, _getMuiTheme2.default)(),
-	      hovered: false
-	    };
-	  },
-	  getChildContext: function getChildContext() {
-	    return {
-	      muiTheme: this.state.muiTheme
-	    };
-	  },
-
-	  //to update theme inside state whenever a new theme is passed down
-	  //from the parent / owner using context
-	  componentWillReceiveProps: function componentWillReceiveProps(nextProps, nextContext) {
-	    var newMuiTheme = nextContext.muiTheme ? nextContext.muiTheme : this.state.muiTheme;
-	    this.setState({ muiTheme: newMuiTheme });
-	  },
-	  getTheme: function getTheme() {
-	    return this.state.muiTheme.tableRow;
-	  },
-	  getStyles: function getStyles() {
-	    var theme = this.getTheme();
-	    var cellBgColor = 'inherit';
-	    if (this.props.hovered || this.state.hovered) {
-	      cellBgColor = theme.hoverColor;
-	    } else if (this.props.selected) {
-	      cellBgColor = theme.selectedColor;
-	    } else if (this.props.striped) {
-	      cellBgColor = theme.stripeColor;
-	    }
-
-	    var styles = {
-	      root: {
-	        borderBottom: '1px solid ' + theme.borderColor,
-	        color: theme.textColor,
-	        height: theme.height
-	      },
-	      cell: {
-	        backgroundColor: cellBgColor
-	      }
-	    };
-
-	    if (!this.props.displayBorder) {
-	      styles.root.borderBottom = '';
-	    }
-
-	    return styles;
-	  },
-	  _createColumns: function _createColumns() {
-	    var _this = this;
-
-	    var columnNumber = 1;
-	    return _react2.default.Children.map(this.props.children, function (child) {
-	      if (_react2.default.isValidElement(child)) {
-	        return _this._createColumn(child, columnNumber++);
-	      }
-	    });
-	  },
-	  _createColumn: function _createColumn(child, columnNumber) {
-	    var key = this.props.rowNumber + '-' + columnNumber;
-	    var styles = this.getStyles();
-	    var handlers = {
-	      onClick: this._onCellClick,
-	      onHover: this._onCellHover,
-	      onHoverExit: this._onCellHoverExit
-	    };
-
-	    return _react2.default.cloneElement(child, _extends({
-	      columnNumber: columnNumber,
-	      hoverable: this.props.hoverable,
-	      key: child.props.key || key,
-	      style: this.mergeStyles(styles.cell, child.props.style)
-	    }, handlers));
-	  },
-	  _onRowClick: function _onRowClick(e) {
-	    if (this.props.selectable && this.props.onRowClick) this.props.onRowClick(e, this.props.rowNumber);
-	  },
-	  _onRowHover: function _onRowHover(e) {
-	    if (this.props.onRowHover) this.props.onRowHover(e, this.props.rowNumber);
-	  },
-	  _onRowHoverExit: function _onRowHoverExit(e) {
-	    if (this.props.onRowHoverExit) this.props.onRowHoverExit(e, this.props.rowNumber);
-	  },
-	  _onCellClick: function _onCellClick(e, columnIndex) {
-	    if (this.props.selectable && this.props.onCellClick) this.props.onCellClick(e, this.props.rowNumber, columnIndex);
-	    e.ctrlKey = true;
-	    this._onRowClick(e);
-	  },
-	  _onCellHover: function _onCellHover(e, columnIndex) {
-	    if (this.props.hoverable) {
-	      this.setState({ hovered: true });
-	      if (this.props.onCellHover) this.props.onCellHover(e, this.props.rowNumber, columnIndex);
-	      this._onRowHover(e);
-	    }
-	  },
-	  _onCellHoverExit: function _onCellHoverExit(e, columnIndex) {
-	    if (this.props.hoverable) {
-	      this.setState({ hovered: false });
-	      if (this.props.onCellHoverExit) this.props.onCellHoverExit(e, this.props.rowNumber, columnIndex);
-	      this._onRowHoverExit(e);
-	    }
-	  },
-	  render: function render() {
-	    var _props = this.props;
-	    var className = _props.className;
-	    var displayBorder = _props.displayBorder;
-	    var hoverable = _props.hoverable;
-	    var onCellClick = _props.onCellClick;
-	    var onCellHover = _props.onCellHover;
-	    var onCellHoverExit = _props.onCellHoverExit;
-	    var onRowClick = _props.onRowClick;
-	    var onRowHover = _props.onRowHover;
-	    var onRowHoverExit = _props.onRowHoverExit;
-	    var rowNumber = _props.rowNumber;
-	    var selectable = _props.selectable;
-	    var selected = _props.selected;
-	    var striped = _props.striped;
-	    var style = _props.style;
-
-	    var other = _objectWithoutProperties(_props, ['className', 'displayBorder', 'hoverable', 'onCellClick', 'onCellHover', 'onCellHoverExit', 'onRowClick', 'onRowHover', 'onRowHoverExit', 'rowNumber', 'selectable', 'selected', 'striped', 'style']);
-
-	    var rowColumns = this._createColumns();
-
-	    return _react2.default.createElement(
-	      'tr',
-	      _extends({
-	        className: className,
-	        style: this.prepareStyles(this.getStyles().root, style)
-	      }, other),
-	      rowColumns
-	    );
-	  }
-	});
-
-	exports.default = TableRow;
-	module.exports = exports['default'];
-
-/***/ },
-/* 311 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _react = __webpack_require__(66);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _checkbox = __webpack_require__(312);
-
-	var _checkbox2 = _interopRequireDefault(_checkbox);
-
-	var _stylePropable = __webpack_require__(224);
-
-	var _stylePropable2 = _interopRequireDefault(_stylePropable);
-
-	var _tableHeaderColumn = __webpack_require__(309);
-
-	var _tableHeaderColumn2 = _interopRequireDefault(_tableHeaderColumn);
-
-	var _getMuiTheme = __webpack_require__(271);
-
-	var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
-
-	var TableHeader = _react2.default.createClass({
-	  displayName: 'TableHeader',
-
-	  propTypes: {
-	    /**
-	     * Controls whether or not header rows should be
-	     * adjusted for a checkbox column. If the select all
-	     * checkbox is true, this property will not influence
-	     * the number of columns. This is mainly useful for
-	     * "super header" rows so that the checkbox column
-	     * does not create an offset that needs to be accounted
-	     * for manually.
-	     */
-	    adjustForCheckbox: _react2.default.PropTypes.bool,
-
-	    /**
-	     * Children passed to table header.
-	     */
-	    children: _react2.default.PropTypes.node,
-
-	    /**
-	     * The css class name of the root element.
-	     */
-	    className: _react2.default.PropTypes.string,
-
-	    /**
-	     * Controls whether or not the select all checkbox is displayed.
-	     */
-	    displaySelectAll: _react2.default.PropTypes.bool,
-
-	    /**
-	     * If set to true, the select all button will be interactable.
-	     * If set to false, the button will not be interactable.
-	     * To hide the checkbox, set displaySelectAll to false.
-	     */
-	    enableSelectAll: _react2.default.PropTypes.bool,
-
-	    /**
-	     * Callback when select all has been checked.
-	     */
-	    onSelectAll: _react2.default.PropTypes.func,
-
-	    /**
-	     * True when select all has been checked.
-	     */
-	    selectAllSelected: _react2.default.PropTypes.bool,
-
-	    /**
-	     * Override the inline-styles of the root element.
-	     */
-	    style: _react2.default.PropTypes.object
-	  },
-
-	  contextTypes: {
-	    muiTheme: _react2.default.PropTypes.object
-	  },
-
-	  //for passing default theme context to children
-	  childContextTypes: {
-	    muiTheme: _react2.default.PropTypes.object
-	  },
-
-	  mixins: [_stylePropable2.default],
-
-	  getDefaultProps: function getDefaultProps() {
-	    return {
-	      adjustForCheckbox: true,
-	      displaySelectAll: true,
-	      enableSelectAll: true,
-	      selectAllSelected: false
-	    };
-	  },
-	  getInitialState: function getInitialState() {
-	    return {
-	      muiTheme: this.context.muiTheme || (0, _getMuiTheme2.default)()
-	    };
-	  },
-	  getChildContext: function getChildContext() {
-	    return {
-	      muiTheme: this.state.muiTheme
-	    };
-	  },
-
-	  //to update theme inside state whenever a new theme is passed down
-	  //from the parent / owner using context
-	  componentWillReceiveProps: function componentWillReceiveProps(nextProps, nextContext) {
-	    var newMuiTheme = nextContext.muiTheme ? nextContext.muiTheme : this.state.muiTheme;
-	    this.setState({ muiTheme: newMuiTheme });
-	  },
-	  getTheme: function getTheme() {
-	    return this.state.muiTheme.tableHeader;
-	  },
-	  getStyles: function getStyles() {
-	    var styles = {
-	      root: {
-	        borderBottom: '1px solid ' + this.getTheme().borderColor
-	      }
-	    };
-
-	    return styles;
-	  },
-	  _createSuperHeaderRows: function _createSuperHeaderRows() {
-	    var numChildren = _react2.default.Children.count(this.props.children);
-	    if (numChildren === 1) return undefined;
-
-	    var superHeaders = [];
-	    for (var index = 0; index < numChildren - 1; index++) {
-	      var child = this.props.children[index];
-
-	      if (!_react2.default.isValidElement(child)) continue;
-
-	      var props = {
-	        key: 'sh' + index,
-	        rowNumber: index
-	      };
-	      superHeaders.push(this._createSuperHeaderRow(child, props));
-	    }
-
-	    if (superHeaders.length) return superHeaders;
-	  },
-	  _createSuperHeaderRow: function _createSuperHeaderRow(child, props) {
-	    var children = [];
-	    if (this.props.adjustForCheckbox) {
-	      children.push(this._getCheckboxPlaceholder(props));
-	    }
-	    _react2.default.Children.forEach(child.props.children, function (child) {
-	      children.push(child);
-	    });
-
-	    return _react2.default.cloneElement(child, props, children);
-	  },
-	  _createBaseHeaderRow: function _createBaseHeaderRow() {
-	    var numChildren = _react2.default.Children.count(this.props.children);
-	    var child = numChildren === 1 ? this.props.children : this.props.children[numChildren - 1];
-	    var props = {
-	      key: 'h' + numChildren,
-	      rowNumber: numChildren
-	    };
-
-	    var children = [this._getSelectAllCheckboxColumn(props)];
-	    _react2.default.Children.forEach(child.props.children, function (child) {
-	      children.push(child);
-	    });
-
-	    return _react2.default.cloneElement(child, props, children);
-	  },
-	  _getCheckboxPlaceholder: function _getCheckboxPlaceholder(props) {
-	    if (!this.props.adjustForCheckbox) return null;
-
-	    var key = 'hpcb' + props.rowNumber;
-	    return _react2.default.createElement(_tableHeaderColumn2.default, { key: key, style: { width: 24 } });
-	  },
-	  _getSelectAllCheckboxColumn: function _getSelectAllCheckboxColumn(props) {
-	    if (!this.props.displaySelectAll) return this._getCheckboxPlaceholder(props);
-
-	    var checkbox = _react2.default.createElement(_checkbox2.default, {
-	      key: 'selectallcb',
-	      name: 'selectallcb',
-	      value: 'selected',
-	      disabled: !this.props.enableSelectAll,
-	      checked: this.props.selectAllSelected,
-	      onCheck: this._onSelectAll
-	    });
-
-	    var key = 'hpcb' + props.rowNumber;
-	    return _react2.default.createElement(
-	      _tableHeaderColumn2.default,
-	      { key: key, style: { width: 24 } },
-	      checkbox
-	    );
-	  },
-	  _onSelectAll: function _onSelectAll(e, checked) {
-	    if (this.props.onSelectAll) this.props.onSelectAll(checked);
-	  },
-	  render: function render() {
-	    var _props = this.props;
-	    var className = _props.className;
-	    var style = _props.style;
-
-	    var other = _objectWithoutProperties(_props, ['className', 'style']);
-
-	    var superHeaderRows = this._createSuperHeaderRows();
-	    var baseHeaderRow = this._createBaseHeaderRow();
-
-	    return _react2.default.createElement(
-	      'thead',
-	      { className: className, style: this.prepareStyles(this.getStyles().root, style) },
-	      superHeaderRows,
-	      baseHeaderRow
-	    );
-	  }
-	});
-
-	exports.default = TableHeader;
-	module.exports = exports['default'];
-
-/***/ },
-/* 312 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _react = __webpack_require__(66);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _enhancedSwitch = __webpack_require__(313);
+	var _enhancedSwitch = __webpack_require__(308);
 
 	var _enhancedSwitch2 = _interopRequireDefault(_enhancedSwitch);
 
@@ -37687,11 +33840,11 @@
 
 	var _transitions2 = _interopRequireDefault(_transitions);
 
-	var _checkBoxOutlineBlank = __webpack_require__(318);
+	var _checkBoxOutlineBlank = __webpack_require__(313);
 
 	var _checkBoxOutlineBlank2 = _interopRequireDefault(_checkBoxOutlineBlank);
 
-	var _checkBox = __webpack_require__(319);
+	var _checkBox = __webpack_require__(314);
 
 	var _checkBox2 = _interopRequireDefault(_checkBox);
 
@@ -37921,7 +34074,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 313 */
+/* 308 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -37952,15 +34105,15 @@
 
 	var _transitions2 = _interopRequireDefault(_transitions);
 
-	var _uniqueId = __webpack_require__(314);
+	var _uniqueId = __webpack_require__(309);
 
 	var _uniqueId2 = _interopRequireDefault(_uniqueId);
 
-	var _windowListenable = __webpack_require__(315);
+	var _windowListenable = __webpack_require__(310);
 
 	var _windowListenable2 = _interopRequireDefault(_windowListenable);
 
-	var _clearfix = __webpack_require__(316);
+	var _clearfix = __webpack_require__(311);
 
 	var _clearfix2 = _interopRequireDefault(_clearfix);
 
@@ -38401,7 +34554,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14)))
 
 /***/ },
-/* 314 */
+/* 309 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -38419,7 +34572,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 315 */
+/* 310 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -38455,7 +34608,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 316 */
+/* 311 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -38470,7 +34623,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _beforeAfterWrapper = __webpack_require__(317);
+	var _beforeAfterWrapper = __webpack_require__(312);
 
 	var _beforeAfterWrapper2 = _interopRequireDefault(_beforeAfterWrapper);
 
@@ -38522,7 +34675,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 317 */
+/* 312 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -38676,7 +34829,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 318 */
+/* 313 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -38717,7 +34870,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 319 */
+/* 314 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -38758,1181 +34911,106 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 320 */
+/* 315 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-	Object.defineProperty(exports, "__esModule", {
+	Object.defineProperty(exports, '__esModule', {
 	  value: true
 	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var _react = __webpack_require__(66);
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _stylePropable = __webpack_require__(224);
+	var _materialUiLibRaisedButton = __webpack_require__(316);
 
-	var _stylePropable2 = _interopRequireDefault(_stylePropable);
+	var _materialUiLibRaisedButton2 = _interopRequireDefault(_materialUiLibRaisedButton);
 
-	var _getMuiTheme = __webpack_require__(271);
+	var _SearchSearch = __webpack_require__(317);
 
-	var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
+	var _SearchSearch2 = _interopRequireDefault(_SearchSearch);
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	var _ChildrenItems = __webpack_require__(328);
 
-	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+	var _ChildrenItems2 = _interopRequireDefault(_ChildrenItems);
 
-	var TableRowColumn = _react2.default.createClass({
-	  displayName: 'TableRowColumn',
-
-	  propTypes: {
-	    children: _react2.default.PropTypes.node,
-
-	    /**
-	     * The css class name of the root element.
-	     */
-	    className: _react2.default.PropTypes.string,
-
-	    /**
-	     * Number to identify the header row. This property
-	     * is automatically populated when used with TableHeader.
-	     */
-	    columnNumber: _react2.default.PropTypes.number,
-
-	    /**
-	     * If true, this column responds to hover events.
-	     */
-	    hoverable: _react2.default.PropTypes.bool,
-
-	    /**
-	     * Key for this element.
-	     */
-	    key: _react2.default.PropTypes.string,
-
-	    /**
-	     * Callback function for click event.
-	     */
-	    onClick: _react2.default.PropTypes.func,
-
-	    /**
-	     * Callback function for hover event.
-	     */
-	    onHover: _react2.default.PropTypes.func,
-
-	    /**
-	     * Callback function for hover exit event.
-	     */
-	    onHoverExit: _react2.default.PropTypes.func,
-
-	    /**
-	     * Override the inline-styles of the root element.
-	     */
-	    style: _react2.default.PropTypes.object
-	  },
-
-	  contextTypes: {
-	    muiTheme: _react2.default.PropTypes.object
-	  },
-
-	  //for passing default theme context to children
-	  childContextTypes: {
-	    muiTheme: _react2.default.PropTypes.object
-	  },
-
-	  mixins: [_stylePropable2.default],
-
-	  getDefaultProps: function getDefaultProps() {
-	    return {
-	      hoverable: false
-	    };
-	  },
-	  getInitialState: function getInitialState() {
-	    return {
-	      muiTheme: this.context.muiTheme || (0, _getMuiTheme2.default)(),
-	      hovered: false
-	    };
-	  },
-	  getChildContext: function getChildContext() {
-	    return {
-	      muiTheme: this.state.muiTheme
-	    };
-	  },
-
-	  //to update theme inside state whenever a new theme is passed down
-	  //from the parent / owner using context
-	  componentWillReceiveProps: function componentWillReceiveProps(nextProps, nextContext) {
-	    var newMuiTheme = nextContext.muiTheme ? nextContext.muiTheme : this.state.muiTheme;
-	    this.setState({ muiTheme: newMuiTheme });
-	  },
-	  getTheme: function getTheme() {
-	    return this.state.muiTheme.tableRowColumn;
-	  },
-	  getStyles: function getStyles() {
-	    var theme = this.getTheme();
-	    var styles = {
-	      root: {
-	        paddingLeft: theme.spacing,
-	        paddingRight: theme.spacing,
-	        height: theme.height,
-	        textAlign: 'left',
-	        fontSize: 13,
-	        overflow: 'hidden',
-	        whiteSpace: 'nowrap',
-	        textOverflow: 'ellipsis'
-	      }
-	    };
-
-	    if (_react2.default.Children.count(this.props.children) === 1 && !isNaN(this.props.children)) {
-	      styles.textAlign = 'right';
-	    }
-
-	    return styles;
-	  },
-	  _onClick: function _onClick(e) {
-	    if (this.props.onClick) this.props.onClick(e, this.props.columnNumber);
-	  },
-	  _onMouseEnter: function _onMouseEnter(e) {
-	    if (this.props.hoverable) {
-	      this.setState({ hovered: true });
-	      if (this.props.onHover) this.props.onHover(e, this.props.columnNumber);
-	    }
-	  },
-	  _onMouseLeave: function _onMouseLeave(e) {
-	    if (this.props.hoverable) {
-	      this.setState({ hovered: false });
-	      if (this.props.onHoverExit) this.props.onHoverExit(e, this.props.columnNumber);
-	    }
-	  },
-	  render: function render() {
-	    var _props = this.props;
-	    var className = _props.className;
-	    var columnNumber = _props.columnNumber;
-	    var hoverable = _props.hoverable;
-	    var onClick = _props.onClick;
-	    var onHover = _props.onHover;
-	    var onHoverExit = _props.onHoverExit;
-	    var style = _props.style;
-
-	    var other = _objectWithoutProperties(_props, ['className', 'columnNumber', 'hoverable', 'onClick', 'onHover', 'onHoverExit', 'style']);
-
-	    var styles = this.getStyles();
-	    var handlers = {
-	      onClick: this._onClick,
-	      onMouseEnter: this._onMouseEnter,
-	      onMouseLeave: this._onMouseLeave
-	    };
-
-	    return _react2.default.createElement(
-	      'td',
-	      _extends({
-	        key: this.props.key,
-	        className: className,
-	        style: this.prepareStyles(styles.root, style)
-	      }, handlers, other),
-	      this.props.children
-	    );
-	  }
-	});
-
-	exports.default = TableRowColumn;
-	module.exports = exports['default'];
-
-/***/ },
-/* 321 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _react = __webpack_require__(66);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _checkbox = __webpack_require__(312);
-
-	var _checkbox2 = _interopRequireDefault(_checkbox);
-
-	var _tableRowColumn = __webpack_require__(320);
-
-	var _tableRowColumn2 = _interopRequireDefault(_tableRowColumn);
-
-	var _clickAwayable = __webpack_require__(322);
-
-	var _clickAwayable2 = _interopRequireDefault(_clickAwayable);
-
-	var _stylePropable = __webpack_require__(224);
-
-	var _stylePropable2 = _interopRequireDefault(_stylePropable);
-
-	var _getMuiTheme = __webpack_require__(271);
-
-	var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
-
-	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
-	var TableBody = _react2.default.createClass({
-	  displayName: 'TableBody',
-
-	  propTypes: {
-	    /**
-	     * Set to true to indicate that all rows should be selected.
-	     */
-	    allRowsSelected: _react2.default.PropTypes.bool,
-
-	    /**
-	     * Children passed to table body.
-	     */
-	    children: _react2.default.PropTypes.node,
-
-	    /**
-	     * The css class name of the root element.
-	     */
-	    className: _react2.default.PropTypes.string,
-
-	    /**
-	     * Controls whether or not to deselect all selected
-	     * rows after clicking outside the table.
-	     */
-	    deselectOnClickaway: _react2.default.PropTypes.bool,
-
-	    /**
-	     * Controls the display of the row checkbox. The default value is true.
-	     */
-	    displayRowCheckbox: _react2.default.PropTypes.bool,
-
-	    /**
-	     * If true, multiple table rows can be selected.
-	     * CTRL/CMD+Click and SHIFT+Click are valid actions.
-	     * The default value is false.
-	     */
-	    multiSelectable: _react2.default.PropTypes.bool,
-
-	    /**
-	     * Callback function for when a cell is clicked.
-	     */
-	    onCellClick: _react2.default.PropTypes.func,
-
-	    /**
-	     * Called when a table cell is hovered. rowNumber
-	     * is the row number of the hovered row and columnId
-	     * is the column number or the column key of the cell.
-	     */
-	    onCellHover: _react2.default.PropTypes.func,
-
-	    /**
-	     * Called when a table cell is no longer hovered.
-	     * rowNumber is the row number of the row and columnId
-	     * is the column number or the column key of the cell.
-	     */
-	    onCellHoverExit: _react2.default.PropTypes.func,
-
-	    /**
-	     * Called when a table row is hovered.
-	     * rowNumber is the row number of the hovered row.
-	     */
-	    onRowHover: _react2.default.PropTypes.func,
-
-	    /**
-	     * Called when a table row is no longer
-	     * hovered. rowNumber is the row number of the row
-	     * that is no longer hovered.
-	     */
-	    onRowHoverExit: _react2.default.PropTypes.func,
-
-	    /**
-	     * Called when a row is selected. selectedRows is an
-	     * array of all row selections. IF all rows have been selected,
-	     * the string "all" will be returned instead to indicate that
-	     * all rows have been selected.
-	     */
-	    onRowSelection: _react2.default.PropTypes.func,
-
-	    /**
-	     * Controls whether or not the rows are pre-scanned to determine
-	     * initial state. If your table has a large number of rows and
-	     * you are experiencing a delay in rendering, turn off this property.
-	     */
-	    preScanRows: _react2.default.PropTypes.bool,
-
-	    /**
-	     * If true, table rows can be selected. If multiple
-	     * row selection is desired, enable multiSelectable.
-	     * The default value is true.
-	     */
-	    selectable: _react2.default.PropTypes.bool,
-
-	    /**
-	     * If true, table rows will be highlighted when
-	     * the cursor is hovering over the row. The default
-	     * value is false.
-	     */
-	    showRowHover: _react2.default.PropTypes.bool,
-
-	    /**
-	     * If true, every other table row starting
-	     * with the first row will be striped. The default value is false.
-	     */
-	    stripedRows: _react2.default.PropTypes.bool,
-
-	    /**
-	     * Override the inline-styles of the root element.
-	     */
-	    style: _react2.default.PropTypes.object
-	  },
-
-	  contextTypes: {
-	    muiTheme: _react2.default.PropTypes.object
-	  },
-
-	  //for passing default theme context to children
-	  childContextTypes: {
-	    muiTheme: _react2.default.PropTypes.object
-	  },
-
-	  mixins: [_clickAwayable2.default, _stylePropable2.default],
-
-	  getDefaultProps: function getDefaultProps() {
-	    return {
-	      allRowsSelected: false,
-	      deselectOnClickaway: true,
-	      displayRowCheckbox: true,
-	      multiSelectable: false,
-	      preScanRows: true,
-	      selectable: true,
-	      style: {}
-	    };
-	  },
-	  getInitialState: function getInitialState() {
-	    return {
-	      muiTheme: this.context.muiTheme || (0, _getMuiTheme2.default)(),
-	      selectedRows: this._calculatePreselectedRows(this.props)
-	    };
-	  },
-	  getChildContext: function getChildContext() {
-	    return {
-	      muiTheme: this.state.muiTheme
-	    };
-	  },
-
-	  //to update theme inside state whenever a new theme is passed down
-	  //from the parent / owner using context
-	  componentWillReceiveProps: function componentWillReceiveProps(nextProps, nextContext) {
-	    var newMuiTheme = nextContext.muiTheme ? nextContext.muiTheme : this.state.muiTheme;
-	    this.setState({ muiTheme: newMuiTheme });
-
-	    var newState = {};
-
-	    if (this.props.allRowsSelected && !nextProps.allRowsSelected) {
-	      newState.selectedRows = this.state.selectedRows.length > 0 ? [this.state.selectedRows[this.state.selectedRows.length - 1]] : [];
-	    } else {
-	      newState.selectedRows = this._calculatePreselectedRows(nextProps);
-	    }
-
-	    this.setState(newState);
-	  },
-	  componentClickAway: function componentClickAway() {
-	    if (this.props.deselectOnClickaway && this.state.selectedRows.length) {
-	      this.setState({ selectedRows: [] });
-	      if (this.props.onRowSelection) this.props.onRowSelection([]);
-	    }
-	  },
-	  _createRows: function _createRows() {
-	    var _this = this;
-
-	    var numChildren = _react2.default.Children.count(this.props.children);
-	    var rowNumber = 0;
-	    var handlers = {
-	      onCellClick: this._onCellClick,
-	      onCellHover: this._onCellHover,
-	      onCellHoverExit: this._onCellHoverExit,
-	      onRowHover: this._onRowHover,
-	      onRowHoverExit: this._onRowHoverExit,
-	      onRowClick: this._onRowClick
-	    };
-
-	    return _react2.default.Children.map(this.props.children, function (child) {
-	      if (_react2.default.isValidElement(child)) {
-	        var _ret = function () {
-	          var props = {
-	            displayRowCheckbox: _this.props.displayRowCheckbox,
-	            hoverable: _this.props.showRowHover,
-	            selected: _this._isRowSelected(rowNumber),
-	            striped: _this.props.stripedRows && rowNumber % 2 === 0,
-	            rowNumber: rowNumber++
-	          };
-	          var checkboxColumn = _this._createRowCheckboxColumn(props);
-
-	          if (rowNumber === numChildren) {
-	            props.displayBorder = false;
-	          }
-
-	          var children = [checkboxColumn];
-	          _react2.default.Children.forEach(child.props.children, function (child) {
-	            children.push(child);
-	          });
-
-	          return {
-	            v: _react2.default.cloneElement(child, _extends({}, props, handlers), children)
-	          };
-	        }();
-
-	        if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
-	      }
-	    });
-	  },
-	  _createRowCheckboxColumn: function _createRowCheckboxColumn(rowProps) {
-	    if (!this.props.displayRowCheckbox) return null;
-
-	    var key = rowProps.rowNumber + '-cb';
-	    var checkbox = _react2.default.createElement(_checkbox2.default, {
-	      ref: 'rowSelectCB',
-	      name: key,
-	      value: 'selected',
-	      disabled: !this.props.selectable,
-	      checked: rowProps.selected
-	    });
-
-	    return _react2.default.createElement(
-	      _tableRowColumn2.default,
-	      {
-	        key: key,
-	        columnNumber: 0,
-	        style: { width: 24 }
-	      },
-	      checkbox
-	    );
-	  },
-	  _calculatePreselectedRows: function _calculatePreselectedRows(props) {
-	    // Determine what rows are 'pre-selected'.
-	    var preSelectedRows = [];
-
-	    if (props.selectable && props.preScanRows) {
-	      (function () {
-	        var index = 0;
-	        _react2.default.Children.forEach(props.children, function (child) {
-	          if (_react2.default.isValidElement(child)) {
-	            if (child.props.selected && (preSelectedRows.length === 0 || props.multiSelectable)) {
-	              preSelectedRows.push(index);
-	            }
-
-	            index++;
-	          }
-	        });
-	      })();
-	    }
-
-	    return preSelectedRows;
-	  },
-	  _isRowSelected: function _isRowSelected(rowNumber) {
-	    if (this.props.allRowsSelected) {
-	      return true;
-	    }
-
-	    for (var i = 0; i < this.state.selectedRows.length; i++) {
-	      var selection = this.state.selectedRows[i];
-
-	      if ((typeof selection === 'undefined' ? 'undefined' : _typeof(selection)) === 'object') {
-	        if (this._isValueInRange(rowNumber, selection)) return true;
-	      } else {
-	        if (selection === rowNumber) return true;
-	      }
-	    }
-
-	    return false;
-	  },
-	  _isValueInRange: function _isValueInRange(value, range) {
-	    if (!range) return false;
-
-	    if (range.start <= value && value <= range.end || range.end <= value && value <= range.start) {
-	      return true;
-	    }
-
-	    return false;
-	  },
-	  _onRowClick: function _onRowClick(e, rowNumber) {
-	    e.stopPropagation();
-
-	    if (this.props.selectable) {
-	      // Prevent text selection while selecting rows.
-	      window.getSelection().removeAllRanges();
-	      this._processRowSelection(e, rowNumber);
-	    }
-	  },
-	  _processRowSelection: function _processRowSelection(e, rowNumber) {
-	    var selectedRows = this.state.selectedRows;
-
-	    if (e.shiftKey && this.props.multiSelectable && selectedRows.length) {
-	      var lastIndex = selectedRows.length - 1;
-	      var lastSelection = selectedRows[lastIndex];
-
-	      if ((typeof lastSelection === 'undefined' ? 'undefined' : _typeof(lastSelection)) === 'object') {
-	        lastSelection.end = rowNumber;
-	      } else {
-	        selectedRows.splice(lastIndex, 1, { start: lastSelection, end: rowNumber });
-	      }
-	    } else if ((e.ctrlKey && !e.metaKey || e.metaKey && !e.ctrlKey) && this.props.multiSelectable) {
-	      var idx = selectedRows.indexOf(rowNumber);
-	      if (idx < 0) {
-	        var foundRange = false;
-	        for (var i = 0; i < selectedRows.length; i++) {
-	          var range = selectedRows[i];
-	          if ((typeof range === 'undefined' ? 'undefined' : _typeof(range)) !== 'object') continue;
-
-	          if (this._isValueInRange(rowNumber, range)) {
-	            var _selectedRows;
-
-	            foundRange = true;
-	            var values = this._splitRange(range, rowNumber);
-	            (_selectedRows = selectedRows).splice.apply(_selectedRows, [i, 1].concat(_toConsumableArray(values)));
-	          }
-	        }
-
-	        if (!foundRange) selectedRows.push(rowNumber);
-	      } else {
-	        selectedRows.splice(idx, 1);
-	      }
-	    } else {
-	      if (selectedRows.length === 1 && selectedRows[0] === rowNumber) {
-	        selectedRows = [];
-	      } else {
-	        selectedRows = [rowNumber];
-	      }
-	    }
-
-	    this.setState({ selectedRows: selectedRows });
-	    if (this.props.onRowSelection) this.props.onRowSelection(this._flattenRanges(selectedRows));
-	  },
-	  _splitRange: function _splitRange(range, splitPoint) {
-	    var splitValues = [];
-	    var startOffset = range.start - splitPoint;
-	    var endOffset = range.end - splitPoint;
-
-	    // Process start half
-	    splitValues.push.apply(splitValues, _toConsumableArray(this._genRangeOfValues(splitPoint, startOffset)));
-
-	    // Process end half
-	    splitValues.push.apply(splitValues, _toConsumableArray(this._genRangeOfValues(splitPoint, endOffset)));
-
-	    return splitValues;
-	  },
-	  _genRangeOfValues: function _genRangeOfValues(start, offset) {
-	    var values = [];
-	    var dir = offset > 0 ? -1 : 1; // This forces offset to approach 0 from either direction.
-	    while (offset !== 0) {
-	      values.push(start + offset);
-	      offset += dir;
-	    }
-
-	    return values;
-	  },
-	  _flattenRanges: function _flattenRanges(selectedRows) {
-	    var rows = [];
-	    var _iteratorNormalCompletion = true;
-	    var _didIteratorError = false;
-	    var _iteratorError = undefined;
-
-	    try {
-	      for (var _iterator = selectedRows[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-	        var selection = _step.value;
-
-	        if ((typeof selection === 'undefined' ? 'undefined' : _typeof(selection)) === 'object') {
-	          var values = this._genRangeOfValues(selection.end, selection.start - selection.end);
-	          rows.push.apply(rows, [selection.end].concat(_toConsumableArray(values)));
-	        } else {
-	          rows.push(selection);
-	        }
-	      }
-	    } catch (err) {
-	      _didIteratorError = true;
-	      _iteratorError = err;
-	    } finally {
-	      try {
-	        if (!_iteratorNormalCompletion && _iterator.return) {
-	          _iterator.return();
-	        }
-	      } finally {
-	        if (_didIteratorError) {
-	          throw _iteratorError;
-	        }
-	      }
-	    }
-
-	    return rows.sort();
-	  },
-	  _onCellClick: function _onCellClick(e, rowNumber, columnNumber) {
-	    e.stopPropagation();
-	    if (this.props.onCellClick) this.props.onCellClick(rowNumber, this._getColumnId(columnNumber));
-	  },
-	  _onCellHover: function _onCellHover(e, rowNumber, columnNumber) {
-	    if (this.props.onCellHover) this.props.onCellHover(rowNumber, this._getColumnId(columnNumber));
-	    this._onRowHover(e, rowNumber);
-	  },
-	  _onCellHoverExit: function _onCellHoverExit(e, rowNumber, columnNumber) {
-	    if (this.props.onCellHoverExit) this.props.onCellHoverExit(rowNumber, this._getColumnId(columnNumber));
-	    this._onRowHoverExit(e, rowNumber);
-	  },
-	  _onRowHover: function _onRowHover(e, rowNumber) {
-	    if (this.props.onRowHover) this.props.onRowHover(rowNumber);
-	  },
-	  _onRowHoverExit: function _onRowHoverExit(e, rowNumber) {
-	    if (this.props.onRowHoverExit) this.props.onRowHoverExit(rowNumber);
-	  },
-	  _getColumnId: function _getColumnId(columnNumber) {
-	    var columnId = columnNumber;
-	    if (this.props.displayRowCheckbox) columnId--;
-
-	    return columnId;
-	  },
-	  render: function render() {
-	    var _props = this.props;
-	    var className = _props.className;
-	    var style = _props.style;
-
-	    var other = _objectWithoutProperties(_props, ['className', 'style']);
-
-	    var rows = this._createRows();
-
-	    return _react2.default.createElement(
-	      'tbody',
-	      { className: className, style: this.prepareStyles(style) },
-	      rows
-	    );
-	  }
-	});
-
-	exports.default = TableBody;
-	module.exports = exports['default'];
-
-/***/ },
-/* 322 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _reactDom = __webpack_require__(170);
-
-	var _reactDom2 = _interopRequireDefault(_reactDom);
-
-	var _events = __webpack_require__(263);
-
-	var _events2 = _interopRequireDefault(_events);
-
-	var _dom = __webpack_require__(299);
-
-	var _dom2 = _interopRequireDefault(_dom);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	exports.default = {
-
-	  //When the component mounts, listen to click events and check if we need to
-	  //Call the componentClickAway function.
-
-	  componentDidMount: function componentDidMount() {
-	    if (!this.manuallyBindClickAway) this._bindClickAway();
-	  },
-	  componentWillUnmount: function componentWillUnmount() {
-	    this._unbindClickAway();
-	  },
-	  _checkClickAway: function _checkClickAway(event) {
-	    if (this.isMounted()) {
-	      var el = _reactDom2.default.findDOMNode(this);
-
-	      // Check if the target is inside the current component
-	      if (event.target !== el && !_dom2.default.isDescendant(el, event.target) && document.documentElement.contains(event.target)) {
-	        if (this.componentClickAway) this.componentClickAway(event);
-	      }
-	    }
-	  },
-	  _bindClickAway: function _bindClickAway() {
-	    // On touch-enabled devices, both events fire, and the handler is called twice,
-	    // but it's fine since all operations for which the mixin is used
-	    // are idempotent.
-	    _events2.default.on(document, 'mouseup', this._checkClickAway);
-	    _events2.default.on(document, 'touchend', this._checkClickAway);
-	  },
-	  _unbindClickAway: function _unbindClickAway() {
-	    _events2.default.off(document, 'mouseup', this._checkClickAway);
-	    _events2.default.off(document, 'touchend', this._checkClickAway);
+	var style = {
+	  raisedButton: {
+	    margin: 10
 	  }
 	};
-	module.exports = exports['default'];
 
-/***/ },
-/* 323 */
-/***/ function(module, exports, __webpack_require__) {
+	var Items = (function (_Component) {
+	  _inherits(Items, _Component);
 
-	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
+	  function Items(props) {
+	    _classCallCheck(this, Items);
 
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	    _get(Object.getPrototypeOf(Items.prototype), 'constructor', this).call(this, props);
+	  }
 
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
+	  _createClass(Items, [{
+	    key: 'render',
+	    value: function render() {
+	      var _props = this.props;
+	      var _props$items = _props.items;
+	      var items = _props$items === undefined ? [] : _props$items;
+	      var itemsActions = _props.itemsActions;
 
-	var _react = __webpack_require__(66);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactDom = __webpack_require__(170);
-
-	var _reactDom2 = _interopRequireDefault(_reactDom);
-
-	var _stylePropable = __webpack_require__(224);
-
-	var _stylePropable2 = _interopRequireDefault(_stylePropable);
-
-	var _transitions = __webpack_require__(254);
-
-	var _transitions2 = _interopRequireDefault(_transitions);
-
-	var _colors = __webpack_require__(250);
-
-	var _colors2 = _interopRequireDefault(_colors);
-
-	var _colorManipulator = __webpack_require__(289);
-
-	var _colorManipulator2 = _interopRequireDefault(_colorManipulator);
-
-	var _enhancedButton = __webpack_require__(256);
-
-	var _enhancedButton2 = _interopRequireDefault(_enhancedButton);
-
-	var _fontIcon = __webpack_require__(301);
-
-	var _fontIcon2 = _interopRequireDefault(_fontIcon);
-
-	var _paper = __webpack_require__(305);
-
-	var _paper2 = _interopRequireDefault(_paper);
-
-	var _children = __webpack_require__(260);
-
-	var _children2 = _interopRequireDefault(_children);
-
-	var _getMuiTheme = __webpack_require__(271);
-
-	var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
-
-	var _warning = __webpack_require__(246);
-
-	var _warning2 = _interopRequireDefault(_warning);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
-
-	var FloatingActionButton = _react2.default.createClass({
-	  displayName: 'FloatingActionButton',
-
-	  propTypes: {
-	    /**
-	     * This value will override the default background color for the button.
-	     * However it will not override the default disabled background color.
-	     * This has to be set separately using the disabledColor attribute.
-	     */
-	    backgroundColor: _react2.default.PropTypes.string,
-
-	    /**
-	     * This is what displayed inside the floating action button; for example, a SVG Icon.
-	     */
-	    children: _react2.default.PropTypes.node,
-
-	    /**
-	     * Disables the button if set to true.
-	     */
-	    disabled: _react2.default.PropTypes.bool,
-
-	    /**
-	     * This value will override the default background color for the button when it is disabled.
-	     */
-	    disabledColor: _react2.default.PropTypes.string,
-
-	    /**
-	     * URL to link to when button clicked if `linkButton` is set to true.
-	     */
-	    href: _react2.default.PropTypes.string,
-
-	    /**
-	     * The icon within the FloatingActionButton is a FontIcon component.
-	     * This property is the classname of the icon to be displayed inside the button.
-	     * An alternative to adding an iconClassName would be to manually insert a
-	     * FontIcon component or custom SvgIcon component or as a child of FloatingActionButton.
-	     */
-	    iconClassName: _react2.default.PropTypes.string,
-
-	    /**
-	     * This is the equivalent to iconClassName except that it is used for
-	     * overriding the inline-styles of the FontIcon component.
-	     */
-	    iconStyle: _react2.default.PropTypes.object,
-
-	    /**
-	     * Enables use of `href` property to provide a URL to link to if set to true.
-	     */
-	    linkButton: _react2.default.PropTypes.bool,
-
-	    /**
-	     * If true, the button will be a small floating action button.
-	     */
-	    mini: _react2.default.PropTypes.bool,
-
-	    /**
-	     * Called when mouse down event occurs on the button.
-	     */
-	    onMouseDown: _react2.default.PropTypes.func,
-
-	    /**
-	     * Called when mouse enter event occurs on the button.
-	     */
-	    onMouseEnter: _react2.default.PropTypes.func,
-
-	    /**
-	     * Called when mouse leave event occurs on the button.
-	     */
-	    onMouseLeave: _react2.default.PropTypes.func,
-
-	    /**
-	     * Called when mouse up event occurs on the button.
-	     */
-	    onMouseUp: _react2.default.PropTypes.func,
-
-	    /**
-	     * Called when touch end event occurs on the button.
-	     */
-	    onTouchEnd: _react2.default.PropTypes.func,
-
-	    /**
-	     * Called when touch start event occurs on the button.
-	     */
-	    onTouchStart: _react2.default.PropTypes.func,
-
-	    /**
-	     * If true, the button will use the secondary button colors.
-	     */
-	    secondary: _react2.default.PropTypes.bool,
-
-	    /**
-	     * Override the inline-styles of the root element.
-	     */
-	    style: _react2.default.PropTypes.object
-	  },
-
-	  contextTypes: {
-	    muiTheme: _react2.default.PropTypes.object
-	  },
-
-	  //for passing default theme context to children
-	  childContextTypes: {
-	    muiTheme: _react2.default.PropTypes.object
-	  },
-
-	  mixins: [_stylePropable2.default],
-
-	  getDefaultProps: function getDefaultProps() {
-	    return {
-	      disabled: false,
-	      disabledColor: _colors2.default.grey300,
-	      mini: false,
-	      secondary: false
-	    };
-	  },
-	  getInitialState: function getInitialState() {
-	    var zDepth = this.props.disabled ? 0 : 2;
-
-	    return {
-	      hovered: false,
-	      initialZDepth: zDepth,
-	      touch: false,
-	      zDepth: zDepth,
-	      muiTheme: this.context.muiTheme || (0, _getMuiTheme2.default)()
-	    };
-	  },
-	  getChildContext: function getChildContext() {
-	    return {
-	      muiTheme: this.state.muiTheme
-	    };
-	  },
-	  componentDidMount: function componentDidMount() {
-	    process.env.NODE_ENV !== "production" ? (0, _warning2.default)(!this.props.iconClassName || !this.props.children, 'You have set both an iconClassName and a child icon. ' + 'It is recommended you use only one method when adding ' + 'icons to FloatingActionButtons.') : undefined;
-	  },
-	  componentWillReceiveProps: function componentWillReceiveProps(newProps, nextContext) {
-	    var newMuiTheme = nextContext.muiTheme ? nextContext.muiTheme : this.state.muiTheme;
-	    this.setState({ muiTheme: newMuiTheme });
-
-	    if (newProps.disabled !== this.props.disabled) {
-	      var zDepth = newProps.disabled ? 0 : 2;
-
-	      this.setState({
-	        zDepth: zDepth,
-	        initialZDepth: zDepth
-	      });
-	    }
-	  },
-	  _getBackgroundColor: function _getBackgroundColor() {
-	    return this.props.disabled ? this.props.disabledColor || this.getTheme().disabledColor : this.props.backgroundColor ? this.props.backgroundColor : this.props.secondary ? this.getTheme().secondaryColor : this.getTheme().color;
-	  },
-	  getTheme: function getTheme() {
-	    return this.state.muiTheme.floatingActionButton;
-	  },
-	  _getIconColor: function _getIconColor() {
-	    return this.props.disabled ? this.getTheme().disabledTextColor : this.props.secondary ? this.getTheme().secondaryIconColor : this.getTheme().iconColor;
-	  },
-	  getStyles: function getStyles() {
-	    var themeVariables = this.state.muiTheme.floatingActionButton;
-
-	    var styles = {
-	      root: {
-	        transition: _transitions2.default.easeOut(),
-	        display: 'inline-block'
-	      },
-	      container: {
-	        transition: _transitions2.default.easeOut(),
-	        position: 'relative',
-	        height: themeVariables.buttonSize,
-	        width: themeVariables.buttonSize,
-	        padding: 0,
-	        overflow: 'hidden',
-	        backgroundColor: this._getBackgroundColor(),
-	        borderRadius: '50%',
-	        textAlign: 'center',
-	        verticalAlign: 'bottom'
-	      },
-	      containerWhenMini: {
-	        height: themeVariables.miniSize,
-	        width: themeVariables.miniSize
-	      },
-	      overlay: {
-	        transition: _transitions2.default.easeOut(),
-	        top: 0
-	      },
-	      overlayWhenHovered: {
-	        backgroundColor: _colorManipulator2.default.fade(this._getIconColor(), 0.4)
-	      },
-	      icon: {
-	        height: themeVariables.buttonSize,
-	        lineHeight: themeVariables.buttonSize + 'px',
-	        fill: themeVariables.iconColor,
-	        color: this._getIconColor()
-	      },
-	      iconWhenMini: {
-	        height: themeVariables.miniSize,
-	        lineHeight: themeVariables.miniSize + 'px'
-	      }
-	    };
-	    return styles;
-	  },
-	  _handleMouseDown: function _handleMouseDown(e) {
-	    //only listen to left clicks
-	    if (e.button === 0) {
-	      this.setState({ zDepth: this.state.initialZDepth + 1 });
-	    }
-	    if (this.props.onMouseDown) this.props.onMouseDown(e);
-	  },
-	  _handleMouseUp: function _handleMouseUp(e) {
-	    this.setState({ zDepth: this.state.initialZDepth });
-	    if (this.props.onMouseUp) this.props.onMouseUp(e);
-	  },
-	  _handleMouseLeave: function _handleMouseLeave(e) {
-	    if (!this.refs.container.isKeyboardFocused()) this.setState({ zDepth: this.state.initialZDepth, hovered: false });
-	    if (this.props.onMouseLeave) this.props.onMouseLeave(e);
-	  },
-	  _handleMouseEnter: function _handleMouseEnter(e) {
-	    if (!this.refs.container.isKeyboardFocused() && !this.state.touch) {
-	      this.setState({ hovered: true });
-	    }
-	    if (this.props.onMouseEnter) this.props.onMouseEnter(e);
-	  },
-	  _handleTouchStart: function _handleTouchStart(e) {
-	    this.setState({
-	      touch: true,
-	      zDepth: this.state.initialZDepth + 1
-	    });
-	    if (this.props.onTouchStart) this.props.onTouchStart(e);
-	  },
-	  _handleTouchEnd: function _handleTouchEnd(e) {
-	    this.setState({ zDepth: this.state.initialZDepth });
-	    if (this.props.onTouchEnd) this.props.onTouchEnd(e);
-	  },
-	  _handleKeyboardFocus: function _handleKeyboardFocus(e, keyboardFocused) {
-	    if (keyboardFocused && !this.props.disabled) {
-	      this.setState({ zDepth: this.state.initialZDepth + 1 });
-	      _reactDom2.default.findDOMNode(this.refs.overlay).style.backgroundColor = _colorManipulator2.default.fade(this.getStyles().icon.color, 0.4);
-	    } else if (!this.state.hovered) {
-	      this.setState({ zDepth: this.state.initialZDepth });
-	      _reactDom2.default.findDOMNode(this.refs.overlay).style.backgroundColor = 'transparent';
-	    }
-	  },
-	  render: function render() {
-	    var _props = this.props;
-	    var disabled = _props.disabled;
-	    var mini = _props.mini;
-	    var secondary = _props.secondary;
-	    var iconStyle = _props.iconStyle;
-	    var iconClassName = _props.iconClassName;
-
-	    var other = _objectWithoutProperties(_props, ['disabled', 'mini', 'secondary', 'iconStyle', 'iconClassName']);
-
-	    var styles = this.getStyles();
-
-	    var iconElement = undefined;
-	    if (iconClassName) {
-	      iconElement = _react2.default.createElement(_fontIcon2.default, {
-	        className: iconClassName,
-	        style: this.mergeStyles(styles.icon, mini && styles.iconWhenMini, iconStyle)
-	      });
-	    }
-
-	    var children = _children2.default.extend(this.props.children, {
-	      style: this.mergeStyles(styles.icon, mini && styles.iconWhenMini, iconStyle)
-	    });
-
-	    var buttonEventHandlers = disabled ? null : {
-	      onMouseDown: this._handleMouseDown,
-	      onMouseUp: this._handleMouseUp,
-	      onMouseLeave: this._handleMouseLeave,
-	      onMouseEnter: this._handleMouseEnter,
-	      onTouchStart: this._handleTouchStart,
-	      onTouchEnd: this._handleTouchEnd,
-	      onKeyboardFocus: this._handleKeyboardFocus
-	    };
-
-	    return _react2.default.createElement(
-	      _paper2.default,
-	      {
-	        style: this.mergeStyles(styles.root, this.props.style),
-	        zDepth: this.state.zDepth,
-	        circle: true
-	      },
-	      _react2.default.createElement(
-	        _enhancedButton2.default,
-	        _extends({}, other, buttonEventHandlers, {
-	          ref: 'container',
-	          disabled: disabled,
-	          style: this.mergeStyles(styles.container, this.props.mini && styles.containerWhenMini, iconStyle),
-	          focusRippleColor: styles.icon.color,
-	          touchRippleColor: styles.icon.color
+	      return _react2['default'].createElement(
+	        'div',
+	        null,
+	        _react2['default'].createElement(_SearchSearch2['default'], {
+	          searchTitle: items
 	        }),
-	        _react2.default.createElement(
+	        _react2['default'].createElement(_ChildrenItems2['default'], {
+	          array: ['functionId', 'functionName'],
+	          items: items,
+	          forward: false,
+	          _handleChecked: itemsActions.handleSelected,
+	          itemsActions: itemsActions
+	        }),
+	        items.map(function (item, i) {
+	          return _react2['default'].createElement(_ChildrenItems2['default'], {
+	            key: i,
+	            items: item.operations,
+	            forward: true,
+	            array: ['opId', 'opSort', 'opName', 'elementClass'],
+	            _handleChecked: itemsActions.operationsSeleted,
+	            itemsActions: itemsActions
+	          });
+	        }),
+	        _react2['default'].createElement(
 	          'div',
-	          {
-	            ref: 'overlay',
-	            style: this.prepareStyles(styles.overlay, this.state.hovered && !this.props.disabled && styles.overlayWhenHovered)
-	          },
-	          iconElement,
-	          children
+	          { className: 'exp-imp' },
+	          _react2['default'].createElement(_materialUiLibRaisedButton2['default'], { label: '导 入', secondary: true, style: style.raisedButton }),
+	          _react2['default'].createElement(_materialUiLibRaisedButton2['default'], { label: '导 出', secondary: true, style: style.raisedButton }),
+	          _react2['default'].createElement(_materialUiLibRaisedButton2['default'], { label: '保 存', primary: true, style: style.raisedButton })
 	        )
-	      )
-	    );
-	  }
-	});
+	      );
+	    }
+	  }]);
 
-	exports.default = FloatingActionButton;
-	module.exports = exports['default'];
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14)))
+	  return Items;
+	})(_react.Component);
 
-/***/ },
-/* 324 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _react = __webpack_require__(66);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactAddonsPureRenderMixin = __webpack_require__(257);
-
-	var _reactAddonsPureRenderMixin2 = _interopRequireDefault(_reactAddonsPureRenderMixin);
-
-	var _svgIcon = __webpack_require__(304);
-
-	var _svgIcon2 = _interopRequireDefault(_svgIcon);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var ContentCreate = _react2.default.createClass({
-	  displayName: 'ContentCreate',
-
-	  mixins: [_reactAddonsPureRenderMixin2.default],
-
-	  render: function render() {
-	    return _react2.default.createElement(
-	      _svgIcon2.default,
-	      this.props,
-	      _react2.default.createElement('path', { d: 'M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z' })
-	    );
-	  }
-	});
-
-	exports.default = ContentCreate;
+	exports['default'] = Items;
 	module.exports = exports['default'];
 
 /***/ },
-/* 325 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _react = __webpack_require__(66);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactAddonsPureRenderMixin = __webpack_require__(257);
-
-	var _reactAddonsPureRenderMixin2 = _interopRequireDefault(_reactAddonsPureRenderMixin);
-
-	var _svgIcon = __webpack_require__(304);
-
-	var _svgIcon2 = _interopRequireDefault(_svgIcon);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var ContentForward = _react2.default.createClass({
-	  displayName: 'ContentForward',
-
-	  mixins: [_reactAddonsPureRenderMixin2.default],
-
-	  render: function render() {
-	    return _react2.default.createElement(
-	      _svgIcon2.default,
-	      this.props,
-	      _react2.default.createElement('path', { d: 'M12 8V4l8 8-8 8v-4H4V8z' })
-	    );
-	  }
-	});
-
-	exports.default = ContentForward;
-	module.exports = exports['default'];
-
-/***/ },
-/* 326 */
+/* 316 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -40380,7 +35458,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 327 */
+/* 317 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -40407,23 +35485,23 @@
 
 	var _materialUiLibPaper2 = _interopRequireDefault(_materialUiLibPaper);
 
-	var _materialUiLibTextField = __webpack_require__(328);
+	var _materialUiLibTextField = __webpack_require__(318);
 
 	var _materialUiLibTextField2 = _interopRequireDefault(_materialUiLibTextField);
 
-	var _materialUiLibRaisedButton = __webpack_require__(326);
+	var _materialUiLibRaisedButton = __webpack_require__(316);
 
 	var _materialUiLibRaisedButton2 = _interopRequireDefault(_materialUiLibRaisedButton);
 
-	var _materialUiLibSvgIconsContentRemove = __webpack_require__(335);
+	var _materialUiLibSvgIconsContentRemove = __webpack_require__(325);
 
 	var _materialUiLibSvgIconsContentRemove2 = _interopRequireDefault(_materialUiLibSvgIconsContentRemove);
 
-	var _materialUiLibFloatingActionButton = __webpack_require__(323);
+	var _materialUiLibFloatingActionButton = __webpack_require__(326);
 
 	var _materialUiLibFloatingActionButton2 = _interopRequireDefault(_materialUiLibFloatingActionButton);
 
-	var _materialUiLibSvgIconsContentAdd = __webpack_require__(336);
+	var _materialUiLibSvgIconsContentAdd = __webpack_require__(327);
 
 	var _materialUiLibSvgIconsContentAdd2 = _interopRequireDefault(_materialUiLibSvgIconsContentAdd);
 
@@ -40434,7 +35512,7 @@
 	    display: 'flex',
 	    paddingLeft: 10,
 	    alignItems: 'center',
-	    justifyContent: 'space-between'
+	    justifyContent: 'initial'
 	  },
 	  raisedButton: {
 	    margin: 10
@@ -40489,20 +35567,6 @@
 	          searchTitle.map(function (title, i) {
 	            return title.functionName;
 	          })
-	        ),
-	        _react2['default'].createElement(
-	          'span',
-	          { className: 'handle' },
-	          _react2['default'].createElement(
-	            _materialUiLibFloatingActionButton2['default'],
-	            { secondary: true, onTouchTap: this.handleOpen.bind(this), mini: true, style: styles.actionButton },
-	            _react2['default'].createElement(_materialUiLibSvgIconsContentAdd2['default'], null)
-	          ),
-	          _react2['default'].createElement(
-	            _materialUiLibFloatingActionButton2['default'],
-	            { secondary: true, onTouchTap: this.handleOpen.bind(this), mini: true, style: styles.actionButton },
-	            _react2['default'].createElement(_materialUiLibSvgIconsContentRemove2['default'], null)
-	          )
 	        )
 	      );
 	    }
@@ -40515,7 +35579,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 328 */
+/* 318 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -40524,7 +35588,7 @@
 	  value: true
 	});
 
-	var _TextField = __webpack_require__(329);
+	var _TextField = __webpack_require__(319);
 
 	var _TextField2 = _interopRequireDefault(_TextField);
 
@@ -40534,7 +35598,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 329 */
+/* 319 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -40543,7 +35607,7 @@
 	  value: true
 	});
 
-	var _TextField = __webpack_require__(330);
+	var _TextField = __webpack_require__(320);
 
 	var _TextField2 = _interopRequireDefault(_TextField);
 
@@ -40553,7 +35617,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 330 */
+/* 320 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -40584,11 +35648,11 @@
 
 	var _transitions2 = _interopRequireDefault(_transitions);
 
-	var _uniqueId = __webpack_require__(314);
+	var _uniqueId = __webpack_require__(309);
 
 	var _uniqueId2 = _interopRequireDefault(_uniqueId);
 
-	var _enhancedTextarea = __webpack_require__(331);
+	var _enhancedTextarea = __webpack_require__(321);
 
 	var _enhancedTextarea2 = _interopRequireDefault(_enhancedTextarea);
 
@@ -40600,15 +35664,15 @@
 
 	var _contextPure2 = _interopRequireDefault(_contextPure);
 
-	var _TextFieldHint = __webpack_require__(332);
+	var _TextFieldHint = __webpack_require__(322);
 
 	var _TextFieldHint2 = _interopRequireDefault(_TextFieldHint);
 
-	var _TextFieldLabel = __webpack_require__(333);
+	var _TextFieldLabel = __webpack_require__(323);
 
 	var _TextFieldLabel2 = _interopRequireDefault(_TextFieldLabel);
 
-	var _TextFieldUnderline = __webpack_require__(334);
+	var _TextFieldUnderline = __webpack_require__(324);
 
 	var _TextFieldUnderline2 = _interopRequireDefault(_TextFieldUnderline);
 
@@ -41119,7 +36183,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14)))
 
 /***/ },
-/* 331 */
+/* 321 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -41325,7 +36389,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 332 */
+/* 322 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -41403,7 +36467,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 333 */
+/* 323 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -41515,7 +36579,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 334 */
+/* 324 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -41653,7 +36717,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 335 */
+/* 325 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -41694,7 +36758,380 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 336 */
+/* 326 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(66);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactDom = __webpack_require__(170);
+
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+
+	var _stylePropable = __webpack_require__(224);
+
+	var _stylePropable2 = _interopRequireDefault(_stylePropable);
+
+	var _transitions = __webpack_require__(254);
+
+	var _transitions2 = _interopRequireDefault(_transitions);
+
+	var _colors = __webpack_require__(250);
+
+	var _colors2 = _interopRequireDefault(_colors);
+
+	var _colorManipulator = __webpack_require__(289);
+
+	var _colorManipulator2 = _interopRequireDefault(_colorManipulator);
+
+	var _enhancedButton = __webpack_require__(256);
+
+	var _enhancedButton2 = _interopRequireDefault(_enhancedButton);
+
+	var _fontIcon = __webpack_require__(301);
+
+	var _fontIcon2 = _interopRequireDefault(_fontIcon);
+
+	var _paper = __webpack_require__(305);
+
+	var _paper2 = _interopRequireDefault(_paper);
+
+	var _children = __webpack_require__(260);
+
+	var _children2 = _interopRequireDefault(_children);
+
+	var _getMuiTheme = __webpack_require__(271);
+
+	var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
+
+	var _warning = __webpack_require__(246);
+
+	var _warning2 = _interopRequireDefault(_warning);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+
+	var FloatingActionButton = _react2.default.createClass({
+	  displayName: 'FloatingActionButton',
+
+	  propTypes: {
+	    /**
+	     * This value will override the default background color for the button.
+	     * However it will not override the default disabled background color.
+	     * This has to be set separately using the disabledColor attribute.
+	     */
+	    backgroundColor: _react2.default.PropTypes.string,
+
+	    /**
+	     * This is what displayed inside the floating action button; for example, a SVG Icon.
+	     */
+	    children: _react2.default.PropTypes.node,
+
+	    /**
+	     * Disables the button if set to true.
+	     */
+	    disabled: _react2.default.PropTypes.bool,
+
+	    /**
+	     * This value will override the default background color for the button when it is disabled.
+	     */
+	    disabledColor: _react2.default.PropTypes.string,
+
+	    /**
+	     * URL to link to when button clicked if `linkButton` is set to true.
+	     */
+	    href: _react2.default.PropTypes.string,
+
+	    /**
+	     * The icon within the FloatingActionButton is a FontIcon component.
+	     * This property is the classname of the icon to be displayed inside the button.
+	     * An alternative to adding an iconClassName would be to manually insert a
+	     * FontIcon component or custom SvgIcon component or as a child of FloatingActionButton.
+	     */
+	    iconClassName: _react2.default.PropTypes.string,
+
+	    /**
+	     * This is the equivalent to iconClassName except that it is used for
+	     * overriding the inline-styles of the FontIcon component.
+	     */
+	    iconStyle: _react2.default.PropTypes.object,
+
+	    /**
+	     * Enables use of `href` property to provide a URL to link to if set to true.
+	     */
+	    linkButton: _react2.default.PropTypes.bool,
+
+	    /**
+	     * If true, the button will be a small floating action button.
+	     */
+	    mini: _react2.default.PropTypes.bool,
+
+	    /**
+	     * Called when mouse down event occurs on the button.
+	     */
+	    onMouseDown: _react2.default.PropTypes.func,
+
+	    /**
+	     * Called when mouse enter event occurs on the button.
+	     */
+	    onMouseEnter: _react2.default.PropTypes.func,
+
+	    /**
+	     * Called when mouse leave event occurs on the button.
+	     */
+	    onMouseLeave: _react2.default.PropTypes.func,
+
+	    /**
+	     * Called when mouse up event occurs on the button.
+	     */
+	    onMouseUp: _react2.default.PropTypes.func,
+
+	    /**
+	     * Called when touch end event occurs on the button.
+	     */
+	    onTouchEnd: _react2.default.PropTypes.func,
+
+	    /**
+	     * Called when touch start event occurs on the button.
+	     */
+	    onTouchStart: _react2.default.PropTypes.func,
+
+	    /**
+	     * If true, the button will use the secondary button colors.
+	     */
+	    secondary: _react2.default.PropTypes.bool,
+
+	    /**
+	     * Override the inline-styles of the root element.
+	     */
+	    style: _react2.default.PropTypes.object
+	  },
+
+	  contextTypes: {
+	    muiTheme: _react2.default.PropTypes.object
+	  },
+
+	  //for passing default theme context to children
+	  childContextTypes: {
+	    muiTheme: _react2.default.PropTypes.object
+	  },
+
+	  mixins: [_stylePropable2.default],
+
+	  getDefaultProps: function getDefaultProps() {
+	    return {
+	      disabled: false,
+	      disabledColor: _colors2.default.grey300,
+	      mini: false,
+	      secondary: false
+	    };
+	  },
+	  getInitialState: function getInitialState() {
+	    var zDepth = this.props.disabled ? 0 : 2;
+
+	    return {
+	      hovered: false,
+	      initialZDepth: zDepth,
+	      touch: false,
+	      zDepth: zDepth,
+	      muiTheme: this.context.muiTheme || (0, _getMuiTheme2.default)()
+	    };
+	  },
+	  getChildContext: function getChildContext() {
+	    return {
+	      muiTheme: this.state.muiTheme
+	    };
+	  },
+	  componentDidMount: function componentDidMount() {
+	    process.env.NODE_ENV !== "production" ? (0, _warning2.default)(!this.props.iconClassName || !this.props.children, 'You have set both an iconClassName and a child icon. ' + 'It is recommended you use only one method when adding ' + 'icons to FloatingActionButtons.') : undefined;
+	  },
+	  componentWillReceiveProps: function componentWillReceiveProps(newProps, nextContext) {
+	    var newMuiTheme = nextContext.muiTheme ? nextContext.muiTheme : this.state.muiTheme;
+	    this.setState({ muiTheme: newMuiTheme });
+
+	    if (newProps.disabled !== this.props.disabled) {
+	      var zDepth = newProps.disabled ? 0 : 2;
+
+	      this.setState({
+	        zDepth: zDepth,
+	        initialZDepth: zDepth
+	      });
+	    }
+	  },
+	  _getBackgroundColor: function _getBackgroundColor() {
+	    return this.props.disabled ? this.props.disabledColor || this.getTheme().disabledColor : this.props.backgroundColor ? this.props.backgroundColor : this.props.secondary ? this.getTheme().secondaryColor : this.getTheme().color;
+	  },
+	  getTheme: function getTheme() {
+	    return this.state.muiTheme.floatingActionButton;
+	  },
+	  _getIconColor: function _getIconColor() {
+	    return this.props.disabled ? this.getTheme().disabledTextColor : this.props.secondary ? this.getTheme().secondaryIconColor : this.getTheme().iconColor;
+	  },
+	  getStyles: function getStyles() {
+	    var themeVariables = this.state.muiTheme.floatingActionButton;
+
+	    var styles = {
+	      root: {
+	        transition: _transitions2.default.easeOut(),
+	        display: 'inline-block'
+	      },
+	      container: {
+	        transition: _transitions2.default.easeOut(),
+	        position: 'relative',
+	        height: themeVariables.buttonSize,
+	        width: themeVariables.buttonSize,
+	        padding: 0,
+	        overflow: 'hidden',
+	        backgroundColor: this._getBackgroundColor(),
+	        borderRadius: '50%',
+	        textAlign: 'center',
+	        verticalAlign: 'bottom'
+	      },
+	      containerWhenMini: {
+	        height: themeVariables.miniSize,
+	        width: themeVariables.miniSize
+	      },
+	      overlay: {
+	        transition: _transitions2.default.easeOut(),
+	        top: 0
+	      },
+	      overlayWhenHovered: {
+	        backgroundColor: _colorManipulator2.default.fade(this._getIconColor(), 0.4)
+	      },
+	      icon: {
+	        height: themeVariables.buttonSize,
+	        lineHeight: themeVariables.buttonSize + 'px',
+	        fill: themeVariables.iconColor,
+	        color: this._getIconColor()
+	      },
+	      iconWhenMini: {
+	        height: themeVariables.miniSize,
+	        lineHeight: themeVariables.miniSize + 'px'
+	      }
+	    };
+	    return styles;
+	  },
+	  _handleMouseDown: function _handleMouseDown(e) {
+	    //only listen to left clicks
+	    if (e.button === 0) {
+	      this.setState({ zDepth: this.state.initialZDepth + 1 });
+	    }
+	    if (this.props.onMouseDown) this.props.onMouseDown(e);
+	  },
+	  _handleMouseUp: function _handleMouseUp(e) {
+	    this.setState({ zDepth: this.state.initialZDepth });
+	    if (this.props.onMouseUp) this.props.onMouseUp(e);
+	  },
+	  _handleMouseLeave: function _handleMouseLeave(e) {
+	    if (!this.refs.container.isKeyboardFocused()) this.setState({ zDepth: this.state.initialZDepth, hovered: false });
+	    if (this.props.onMouseLeave) this.props.onMouseLeave(e);
+	  },
+	  _handleMouseEnter: function _handleMouseEnter(e) {
+	    if (!this.refs.container.isKeyboardFocused() && !this.state.touch) {
+	      this.setState({ hovered: true });
+	    }
+	    if (this.props.onMouseEnter) this.props.onMouseEnter(e);
+	  },
+	  _handleTouchStart: function _handleTouchStart(e) {
+	    this.setState({
+	      touch: true,
+	      zDepth: this.state.initialZDepth + 1
+	    });
+	    if (this.props.onTouchStart) this.props.onTouchStart(e);
+	  },
+	  _handleTouchEnd: function _handleTouchEnd(e) {
+	    this.setState({ zDepth: this.state.initialZDepth });
+	    if (this.props.onTouchEnd) this.props.onTouchEnd(e);
+	  },
+	  _handleKeyboardFocus: function _handleKeyboardFocus(e, keyboardFocused) {
+	    if (keyboardFocused && !this.props.disabled) {
+	      this.setState({ zDepth: this.state.initialZDepth + 1 });
+	      _reactDom2.default.findDOMNode(this.refs.overlay).style.backgroundColor = _colorManipulator2.default.fade(this.getStyles().icon.color, 0.4);
+	    } else if (!this.state.hovered) {
+	      this.setState({ zDepth: this.state.initialZDepth });
+	      _reactDom2.default.findDOMNode(this.refs.overlay).style.backgroundColor = 'transparent';
+	    }
+	  },
+	  render: function render() {
+	    var _props = this.props;
+	    var disabled = _props.disabled;
+	    var mini = _props.mini;
+	    var secondary = _props.secondary;
+	    var iconStyle = _props.iconStyle;
+	    var iconClassName = _props.iconClassName;
+
+	    var other = _objectWithoutProperties(_props, ['disabled', 'mini', 'secondary', 'iconStyle', 'iconClassName']);
+
+	    var styles = this.getStyles();
+
+	    var iconElement = undefined;
+	    if (iconClassName) {
+	      iconElement = _react2.default.createElement(_fontIcon2.default, {
+	        className: iconClassName,
+	        style: this.mergeStyles(styles.icon, mini && styles.iconWhenMini, iconStyle)
+	      });
+	    }
+
+	    var children = _children2.default.extend(this.props.children, {
+	      style: this.mergeStyles(styles.icon, mini && styles.iconWhenMini, iconStyle)
+	    });
+
+	    var buttonEventHandlers = disabled ? null : {
+	      onMouseDown: this._handleMouseDown,
+	      onMouseUp: this._handleMouseUp,
+	      onMouseLeave: this._handleMouseLeave,
+	      onMouseEnter: this._handleMouseEnter,
+	      onTouchStart: this._handleTouchStart,
+	      onTouchEnd: this._handleTouchEnd,
+	      onKeyboardFocus: this._handleKeyboardFocus
+	    };
+
+	    return _react2.default.createElement(
+	      _paper2.default,
+	      {
+	        style: this.mergeStyles(styles.root, this.props.style),
+	        zDepth: this.state.zDepth,
+	        circle: true
+	      },
+	      _react2.default.createElement(
+	        _enhancedButton2.default,
+	        _extends({}, other, buttonEventHandlers, {
+	          ref: 'container',
+	          disabled: disabled,
+	          style: this.mergeStyles(styles.container, this.props.mini && styles.containerWhenMini, iconStyle),
+	          focusRippleColor: styles.icon.color,
+	          touchRippleColor: styles.icon.color
+	        }),
+	        _react2.default.createElement(
+	          'div',
+	          {
+	            ref: 'overlay',
+	            style: this.prepareStyles(styles.overlay, this.state.hovered && !this.props.disabled && styles.overlayWhenHovered)
+	          },
+	          iconElement,
+	          children
+	        )
+	      )
+	    );
+	  }
+	});
+
+	exports.default = FloatingActionButton;
+	module.exports = exports['default'];
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14)))
+
+/***/ },
+/* 327 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -41735,7 +37172,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 337 */
+/* 328 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -41758,87 +37195,250 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _materialUiLibDialog = __webpack_require__(338);
+	var _materialUiLibCheckbox = __webpack_require__(307);
+
+	var _materialUiLibCheckbox2 = _interopRequireDefault(_materialUiLibCheckbox);
+
+	var _materialUiLibFloatingActionButton = __webpack_require__(326);
+
+	var _materialUiLibFloatingActionButton2 = _interopRequireDefault(_materialUiLibFloatingActionButton);
+
+	var _materialUiLibSvgIconsContentCreate = __webpack_require__(329);
+
+	var _materialUiLibSvgIconsContentCreate2 = _interopRequireDefault(_materialUiLibSvgIconsContentCreate);
+
+	var _materialUiLibDialog = __webpack_require__(330);
 
 	var _materialUiLibDialog2 = _interopRequireDefault(_materialUiLibDialog);
 
-	var _materialUiLibFlatButton = __webpack_require__(339);
+	var _materialUiLibSvgIconsContentForward = __webpack_require__(336);
 
-	var _materialUiLibFlatButton2 = _interopRequireDefault(_materialUiLibFlatButton);
+	var _materialUiLibSvgIconsContentForward2 = _interopRequireDefault(_materialUiLibSvgIconsContentForward);
 
-	var _materialUiLibRaisedButton = __webpack_require__(326);
+	var _materialUiLibSvgIconsContentAdd = __webpack_require__(327);
 
-	var _materialUiLibRaisedButton2 = _interopRequireDefault(_materialUiLibRaisedButton);
+	var _materialUiLibSvgIconsContentAdd2 = _interopRequireDefault(_materialUiLibSvgIconsContentAdd);
 
-	var _materialUiLibDivider = __webpack_require__(344);
+	var _DialogFunctionsDialog = __webpack_require__(337);
 
-	var _materialUiLibDivider2 = _interopRequireDefault(_materialUiLibDivider);
+	var _DialogFunctionsDialog2 = _interopRequireDefault(_DialogFunctionsDialog);
 
-	var _materialUiLibTextField = __webpack_require__(328);
+	var _DialogOperationsDialog = __webpack_require__(338);
 
-	var _materialUiLibTextField2 = _interopRequireDefault(_materialUiLibTextField);
-
-	var _FunctionsDialog = __webpack_require__(346);
-
-	var _FunctionsDialog2 = _interopRequireDefault(_FunctionsDialog);
+	var _DialogOperationsDialog2 = _interopRequireDefault(_DialogOperationsDialog);
 
 	var style = {
-	  textField: {
-	    marginLeft: 16
-	  },
 	  dialog: {
 	    width: '80%',
 	    maxWidth: 'none'
+	  },
+	  actionButton: {
+	    position: 'relative',
+	    left: '48%',
+	    margin: '0 10px 20px'
 	  }
 	};
 
-	var DialogExampleAlert = (function (_React$Component) {
-	  _inherits(DialogExampleAlert, _React$Component);
+	var ChildrenItems = (function (_Component) {
+	  _inherits(ChildrenItems, _Component);
 
-	  function DialogExampleAlert(props) {
-	    _classCallCheck(this, DialogExampleAlert);
+	  function ChildrenItems(props) {
+	    _classCallCheck(this, ChildrenItems);
 
-	    _get(Object.getPrototypeOf(DialogExampleAlert.prototype), 'constructor', this).call(this, props);
+	    _get(Object.getPrototypeOf(ChildrenItems.prototype), 'constructor', this).call(this, props);
+	    this.handleClose = this.handleClose.bind(this);
+	    this.state = {
+	      open: false,
+	      edit: false,
+	      content: ''
+	    };
 	  }
 
-	  _createClass(DialogExampleAlert, [{
+	  _createClass(ChildrenItems, [{
+	    key: 'handleOpen',
+	    value: function handleOpen(content) {
+	      this.setState({ open: true, operations: content });
+	    }
+	  }, {
+	    key: 'handleEdit',
+	    value: function handleEdit(content) {
+	      this.setState({ open: true, edit: true, operations: content });
+	    }
+	  }, {
+	    key: 'handleClose',
+	    value: function handleClose() {
+	      this.setState({ open: false, edit: false });
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
+	      var _this = this;
+
 	      var _props = this.props;
-	      var handleClose = _props.handleClose;
-	      var functions = _props.functions;
-	      var open = _props.open;
+	      var items = _props.items;
 	      var itemsActions = _props.itemsActions;
+	      var array = _props.array;
+	      var forward = _props.forward;
+	      var _handleChecked = _props._handleChecked;
+
+	      var forwardAdd = forward ? _react2['default'].createElement(
+	        _materialUiLibFloatingActionButton2['default'],
+	        { secondary: true, mini: true, style: style.actionButton },
+	        _react2['default'].createElement(_materialUiLibSvgIconsContentAdd2['default'], null)
+	      ) : '';
+
+	      var dialogChildren = forward ? _react2['default'].createElement(_DialogOperationsDialog2['default'], {
+	        edit: this.state.edit,
+	        itemsActions: itemsActions,
+	        array: ['opId', 'opSort', 'opName', 'elementClass'],
+	        operations: this.state.operations }) : _react2['default'].createElement(_DialogFunctionsDialog2['default'], {
+	        array: ['functionId', 'functionName'],
+	        functions: this.state.operations,
+	        itemsActions: itemsActions });
 
 	      return _react2['default'].createElement(
 	        'div',
 	        null,
 	        _react2['default'].createElement(
-	          _materialUiLibDialog2['default'],
-	          {
-	            modal: false,
-	            open: open,
-	            contentStyle: style.dialog,
-	            onRequestClose: function () {
-	              return handleClose();
-	            }
-	          },
-	          _react2['default'].createElement(_FunctionsDialog2['default'], {
-	            itemsActions: itemsActions,
-	            functions: functions })
-	        )
+	          'table',
+	          { className: 'tableItems' },
+	          _react2['default'].createElement(
+	            'thead',
+	            { className: 'theadItems' },
+	            _react2['default'].createElement(
+	              'tr',
+	              null,
+	              _react2['default'].createElement(
+	                'th',
+	                { className: 'toolItems' },
+	                _react2['default'].createElement(_materialUiLibCheckbox2['default'], { disabled: true })
+	              ),
+	              array.map(function (arr, i) {
+	                return _react2['default'].createElement(
+	                  'th',
+	                  { className: 'thItems', key: i },
+	                  arr
+	                );
+	              }),
+	              forward ? _react2['default'].createElement(
+	                'th',
+	                { className: 'toolItems' },
+	                'forward'
+	              ) : '',
+	              _react2['default'].createElement(
+	                'th',
+	                { className: 'toolItems' },
+	                'edit'
+	              )
+	            )
+	          ),
+	          _react2['default'].createElement(
+	            'tbody',
+	            null,
+	            items.map(function (item, i) {
+	              return _react2['default'].createElement(
+	                'tr',
+	                { key: i },
+	                _react2['default'].createElement(
+	                  'td',
+	                  { className: 'toolItems' },
+	                  _react2['default'].createElement(_materialUiLibCheckbox2['default'], { checked: item.checked, onClick: function () {
+	                      return _handleChecked(item.opId);
+	                    } })
+	                ),
+	                array.map(function (arr) {
+	                  return _react2['default'].createElement(
+	                    'td',
+	                    { className: 'tdItems' },
+	                    item[arr]
+	                  );
+	                }),
+	                forward ? _react2['default'].createElement(
+	                  'td',
+	                  { className: 'toolItems' },
+	                  _react2['default'].createElement(
+	                    _materialUiLibFloatingActionButton2['default'],
+	                    { mini: true, secondary: true, onTouchTap: _this.handleOpen.bind(_this, item) },
+	                    _react2['default'].createElement(_materialUiLibSvgIconsContentForward2['default'], null)
+	                  )
+	                ) : '',
+	                _react2['default'].createElement(
+	                  'td',
+	                  { className: 'toolItems' },
+	                  _react2['default'].createElement(
+	                    _materialUiLibFloatingActionButton2['default'],
+	                    { mini: true, secondary: true, onTouchTap: _this.handleEdit.bind(_this, item) },
+	                    _react2['default'].createElement(_materialUiLibSvgIconsContentCreate2['default'], null)
+	                  )
+	                )
+	              );
+	            })
+	          ),
+	          _react2['default'].createElement(
+	            _materialUiLibDialog2['default'],
+	            {
+	              modal: false,
+	              open: this.state.open,
+	              contentStyle: style.dialog,
+	              onRequestClose: this.handleClose
+	            },
+	            dialogChildren
+	          )
+	        ),
+	        forwardAdd
 	      );
 	    }
 	  }]);
 
-	  return DialogExampleAlert;
-	})(_react2['default'].Component);
+	  return ChildrenItems;
+	})(_react.Component);
 
-	exports['default'] = DialogExampleAlert;
+	exports['default'] = ChildrenItems;
 	module.exports = exports['default'];
 
 /***/ },
-/* 338 */
+/* 329 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(66);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactAddonsPureRenderMixin = __webpack_require__(257);
+
+	var _reactAddonsPureRenderMixin2 = _interopRequireDefault(_reactAddonsPureRenderMixin);
+
+	var _svgIcon = __webpack_require__(304);
+
+	var _svgIcon2 = _interopRequireDefault(_svgIcon);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var ContentCreate = _react2.default.createClass({
+	  displayName: 'ContentCreate',
+
+	  mixins: [_reactAddonsPureRenderMixin2.default],
+
+	  render: function render() {
+	    return _react2.default.createElement(
+	      _svgIcon2.default,
+	      this.props,
+	      _react2.default.createElement('path', { d: 'M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z' })
+	    );
+	  }
+	});
+
+	exports.default = ContentCreate;
+	module.exports = exports['default'];
+
+/***/ },
+/* 330 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -41857,7 +37457,7 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _windowListenable = __webpack_require__(315);
+	var _windowListenable = __webpack_require__(310);
 
 	var _windowListenable2 = _interopRequireDefault(_windowListenable);
 
@@ -41873,15 +37473,15 @@
 
 	var _stylePropable2 = _interopRequireDefault(_stylePropable);
 
-	var _flatButton = __webpack_require__(339);
+	var _flatButton = __webpack_require__(331);
 
 	var _flatButton2 = _interopRequireDefault(_flatButton);
 
-	var _overlay = __webpack_require__(341);
+	var _overlay = __webpack_require__(333);
 
 	var _overlay2 = _interopRequireDefault(_overlay);
 
-	var _renderToLayer = __webpack_require__(342);
+	var _renderToLayer = __webpack_require__(334);
 
 	var _renderToLayer2 = _interopRequireDefault(_renderToLayer);
 
@@ -41897,7 +37497,7 @@
 
 	var _warning2 = _interopRequireDefault(_warning);
 
-	var _deprecatedPropType = __webpack_require__(343);
+	var _deprecatedPropType = __webpack_require__(335);
 
 	var _deprecatedPropType2 = _interopRequireDefault(_deprecatedPropType);
 
@@ -42494,7 +38094,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14)))
 
 /***/ },
-/* 339 */
+/* 331 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -42535,7 +38135,7 @@
 
 	var _enhancedButton2 = _interopRequireDefault(_enhancedButton);
 
-	var _flatButtonLabel = __webpack_require__(340);
+	var _flatButtonLabel = __webpack_require__(332);
 
 	var _flatButtonLabel2 = _interopRequireDefault(_flatButtonLabel);
 
@@ -42852,7 +38452,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 340 */
+/* 332 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -42954,7 +38554,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 341 */
+/* 333 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -43099,7 +38699,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 342 */
+/* 334 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -43274,7 +38874,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 343 */
+/* 335 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -43303,12 +38903,10 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14)))
 
 /***/ },
-/* 344 */
+/* 336 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -43318,121 +38916,35 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _muiThemeable = __webpack_require__(345);
+	var _reactAddonsPureRenderMixin = __webpack_require__(257);
 
-	var _muiThemeable2 = _interopRequireDefault(_muiThemeable);
+	var _reactAddonsPureRenderMixin2 = _interopRequireDefault(_reactAddonsPureRenderMixin);
 
-	var _styles = __webpack_require__(225);
+	var _svgIcon = __webpack_require__(304);
+
+	var _svgIcon2 = _interopRequireDefault(_svgIcon);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+	var ContentForward = _react2.default.createClass({
+	  displayName: 'ContentForward',
 
-	var propTypes = {
-	  /**
-	   * The css class name of the root element.
-	   */
-	  className: _react2.default.PropTypes.string,
+	  mixins: [_reactAddonsPureRenderMixin2.default],
 
-	  /**
-	   * If true, the `Divider` will be indented `72px`.
-	   */
-	  inset: _react2.default.PropTypes.bool,
-
-	  /**
-	   * The material-ui theme applied to this component.
-	   * @ignore
-	   */
-	  muiTheme: _react2.default.PropTypes.object.isRequired,
-
-	  /**
-	   * Override the inline-styles of the root element.
-	   */
-	  style: _react2.default.PropTypes.object
-	};
-
-	var defaultProps = {
-	  inset: false
-	};
-
-	var Divider = function Divider(props) {
-	  var inset = props.inset;
-	  var muiTheme = props.muiTheme;
-	  var style = props.style;
-
-	  var other = _objectWithoutProperties(props, ['inset', 'muiTheme', 'style']);
-
-	  var styles = {
-	    root: {
-	      margin: 0,
-	      marginTop: -1,
-	      marginLeft: inset ? 72 : 0,
-	      height: 1,
-	      border: 'none',
-	      backgroundColor: muiTheme.rawTheme.palette.borderColor
-	    }
-	  };
-
-	  return _react2.default.createElement('hr', _extends({}, other, { style: (0, _styles.prepareStyles)(muiTheme, (0, _styles.mergeStyles)(styles.root, style)) }));
-	};
-
-	Divider.displayName = 'Divider';
-	Divider.propTypes = propTypes;
-	Divider.defaultProps = defaultProps;
-	Divider = (0, _muiThemeable2.default)(Divider);
-
-	exports.default = Divider;
-	module.exports = exports['default'];
-
-/***/ },
-/* 345 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	  render: function render() {
+	    return _react2.default.createElement(
+	      _svgIcon2.default,
+	      this.props,
+	      _react2.default.createElement('path', { d: 'M12 8V4l8 8-8 8v-4H4V8z' })
+	    );
+	  }
 	});
-	exports.default = muiThemeable;
 
-	var _react = __webpack_require__(66);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _getMuiTheme = __webpack_require__(271);
-
-	var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function getDisplayName(WrappedComponent) {
-	  return WrappedComponent.displayName || WrappedComponent.name || 'Component';
-	}
-
-	function muiThemeable(WrappedComponent) {
-	  var MuiComponent = function MuiComponent(props, _ref) {
-	    var _ref$muiTheme = _ref.muiTheme;
-	    var muiTheme = _ref$muiTheme === undefined ? (0, _getMuiTheme2.default)() : _ref$muiTheme;
-
-	    return _react2.default.createElement(WrappedComponent, _extends({}, props, { muiTheme: muiTheme }));
-	  };
-
-	  MuiComponent.displayName = getDisplayName(WrappedComponent);
-	  MuiComponent.contextTypes = {
-	    muiTheme: _react2.default.PropTypes.object
-	  };
-	  MuiComponent.childContextTypes = {
-	    muiTheme: _react2.default.PropTypes.object
-	  };
-
-	  return MuiComponent;
-	}
+	exports.default = ContentForward;
 	module.exports = exports['default'];
 
 /***/ },
-/* 346 */
+/* 337 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -43447,6 +38959,8 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i]; return arr2; } else { return Array.from(arr); } }
+
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
@@ -43455,110 +38969,43 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _materialUiLibPaper = __webpack_require__(305);
-
-	var _materialUiLibPaper2 = _interopRequireDefault(_materialUiLibPaper);
-
-	var _materialUiLibFlatButton = __webpack_require__(339);
-
-	var _materialUiLibFlatButton2 = _interopRequireDefault(_materialUiLibFlatButton);
-
-	var _materialUiLibTextField = __webpack_require__(328);
+	var _materialUiLibTextField = __webpack_require__(318);
 
 	var _materialUiLibTextField2 = _interopRequireDefault(_materialUiLibTextField);
 
-	var _materialUiLibFloatingActionButton = __webpack_require__(323);
+	var _materialUiLibFlatButton = __webpack_require__(331);
 
-	var _materialUiLibFloatingActionButton2 = _interopRequireDefault(_materialUiLibFloatingActionButton);
-
-	var _materialUiLibSvgIconsContentAdd = __webpack_require__(336);
-
-	var _materialUiLibSvgIconsContentAdd2 = _interopRequireDefault(_materialUiLibSvgIconsContentAdd);
-
-	var _materialUiLibTableTable = __webpack_require__(308);
-
-	var _materialUiLibTableTable2 = _interopRequireDefault(_materialUiLibTableTable);
-
-	var _materialUiLibTableTableHeaderColumn = __webpack_require__(309);
-
-	var _materialUiLibTableTableHeaderColumn2 = _interopRequireDefault(_materialUiLibTableTableHeaderColumn);
-
-	var _materialUiLibTableTableRow = __webpack_require__(310);
-
-	var _materialUiLibTableTableRow2 = _interopRequireDefault(_materialUiLibTableTableRow);
-
-	var _materialUiLibTableTableHeader = __webpack_require__(311);
-
-	var _materialUiLibTableTableHeader2 = _interopRequireDefault(_materialUiLibTableTableHeader);
-
-	var _materialUiLibTableTableRowColumn = __webpack_require__(320);
-
-	var _materialUiLibTableTableRowColumn2 = _interopRequireDefault(_materialUiLibTableTableRowColumn);
-
-	var _materialUiLibTableTableBody = __webpack_require__(321);
-
-	var _materialUiLibTableTableBody2 = _interopRequireDefault(_materialUiLibTableTableBody);
-
-	var _materialUiLibSvgIconsContentCreate = __webpack_require__(324);
-
-	var _materialUiLibSvgIconsContentCreate2 = _interopRequireDefault(_materialUiLibSvgIconsContentCreate);
-
-	var _materialUiLibSvgIconsContentForward = __webpack_require__(325);
-
-	var _materialUiLibSvgIconsContentForward2 = _interopRequireDefault(_materialUiLibSvgIconsContentForward);
-
-	var _materialUiLibDialog = __webpack_require__(338);
-
-	var _materialUiLibDialog2 = _interopRequireDefault(_materialUiLibDialog);
-
-	var _OperationsDialog = __webpack_require__(347);
-
-	var _OperationsDialog2 = _interopRequireDefault(_OperationsDialog);
+	var _materialUiLibFlatButton2 = _interopRequireDefault(_materialUiLibFlatButton);
 
 	var style = {
 	  textField: {
 	    marginLeft: 20,
 	    width: '90%'
 	  },
-	  paper: {
-	    overflowY: 'auto',
-	    overflowX: 'hidden',
-	    paddingBottom: 20
-	  },
-	  actionButton: {
-	    margin: 16
-	  },
-	  tableCreate: {
-	    width: 40
+	  flatButton: {
+	    float: 'right',
+	    margin: '20px 20px 0'
 	  }
 	};
 
-	var FunctionsDialog = (function (_Component) {
-	  _inherits(FunctionsDialog, _Component);
+	var ChildrenItems = (function (_Component) {
+	  _inherits(ChildrenItems, _Component);
 
-	  function FunctionsDialog(props) {
-	    _classCallCheck(this, FunctionsDialog);
+	  function ChildrenItems(props) {
+	    _classCallCheck(this, ChildrenItems);
 
-	    _get(Object.getPrototypeOf(FunctionsDialog.prototype), 'constructor', this).call(this, props);
+	    _get(Object.getPrototypeOf(ChildrenItems.prototype), 'constructor', this).call(this, props);
 	    this.state = {
 	      functionId: this.props.functions.functionId,
-	      functionName: this.props.functions.functionName
-	    };
+	      functionName: this.props.functions.functionName };
 	  }
 
-	  _createClass(FunctionsDialog, [{
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {
-	      // console.log('执行componentDidMount')
-	      // console.log(this.props.functions)
-	    }
-	  }, {
+	  _createClass(ChildrenItems, [{
 	    key: 'handleChange',
+	    //todo 复用这里怎么使用变量替代呢？2016.12.12
 	    value: function handleChange(name, event) {
-	      // console.log(name)
 	      var newState = {};
 	      newState[name] = event.target.value;
-	      // console.log(newState)
 	      this.setState(newState);
 	    }
 	  }, {
@@ -43569,163 +39016,43 @@
 	      var _props = this.props;
 	      var functions = _props.functions;
 	      var itemsActions = _props.itemsActions;
+	      var array = _props.array;
 
-	      var element = functions.edit ? _react2['default'].createElement(
-	        'div',
-	        null,
-	        _react2['default'].createElement(
-	          'h3',
-	          { className: 'dialogTitle' },
-	          'functions'
-	        ),
-	        _react2['default'].createElement(_materialUiLibTextField2['default'], {
-	          onChange: this.handleChange.bind(this, "functionId"),
-	          value: this.state.functionId,
-	          hintText: 'functionId',
-	          floatingLabelText: 'functionId',
-	          style: style.textField }),
-	        _react2['default'].createElement(_materialUiLibTextField2['default'], {
-	          onChange: this.handleChange.bind(this, "functionName"),
-	          value: this.state.functionName,
-	          hintText: 'functionName',
-	          floatingLabelText: 'functionName',
-	          style: style.textField }),
-	        _react2['default'].createElement(
-	          'span',
-	          { className: 'dialogButton' },
-	          _react2['default'].createElement(_materialUiLibFlatButton2['default'], { label: 'Cancel', secondary: true, onTouchTap: function () {
-	              return itemsActions.handleClose();
-	            } }),
-	          _react2['default'].createElement(_materialUiLibFlatButton2['default'], {
-	            label: 'Submit',
-	            primary: true,
-	            keyboardFocused: true,
-	            onTouchTap: function () {
-	              return itemsActions.handleSubmit(_this.state.functionId, _this.state.functionName);
-	            } })
-	        )
-	      ) : _react2['default'].createElement(
-	        _materialUiLibTableTable2['default'],
-	        { multiSelectable: true },
-	        _react2['default'].createElement(
-	          _materialUiLibTableTableHeader2['default'],
-	          null,
-	          _react2['default'].createElement(
-	            _materialUiLibTableTableRow2['default'],
-	            null,
-	            _react2['default'].createElement(
-	              _materialUiLibTableTableHeaderColumn2['default'],
-	              { tooltip: 'The opId' },
-	              'opId'
-	            ),
-	            _react2['default'].createElement(
-	              _materialUiLibTableTableHeaderColumn2['default'],
-	              { tooltip: 'The opSort' },
-	              'opSort'
-	            ),
-	            _react2['default'].createElement(
-	              _materialUiLibTableTableHeaderColumn2['default'],
-	              { tooltip: 'The opName' },
-	              'opName'
-	            ),
-	            _react2['default'].createElement(
-	              _materialUiLibTableTableHeaderColumn2['default'],
-	              { tooltip: 'The elementClass' },
-	              'elementClass'
-	            ),
-	            _react2['default'].createElement(
-	              _materialUiLibTableTableHeaderColumn2['default'],
-	              { style: style.tableCreate, tooltip: 'The check' },
-	              'check'
-	            ),
-	            _react2['default'].createElement(
-	              _materialUiLibTableTableHeaderColumn2['default'],
-	              { style: style.tableCreate, tooltip: 'The edit' },
-	              'edit'
-	            )
-	          )
-	        ),
-	        _react2['default'].createElement(
-	          _materialUiLibTableTableBody2['default'],
-	          { deselectOnClickaway: false },
-	          functions.operations.map(function (operation, i) {
-	            return _react2['default'].createElement(
-	              _materialUiLibTableTableRow2['default'],
-	              { key: i, operations: operation },
-	              _react2['default'].createElement(
-	                _materialUiLibTableTableRowColumn2['default'],
-	                null,
-	                operation.opId
-	              ),
-	              _react2['default'].createElement(
-	                _materialUiLibTableTableRowColumn2['default'],
-	                null,
-	                operation.opSort
-	              ),
-	              _react2['default'].createElement(
-	                _materialUiLibTableTableRowColumn2['default'],
-	                null,
-	                operation.opName
-	              ),
-	              _react2['default'].createElement(
-	                _materialUiLibTableTableRowColumn2['default'],
-	                null,
-	                operation.elementClass
-	              ),
-	              _react2['default'].createElement(
-	                _materialUiLibTableTableRowColumn2['default'],
-	                { style: style.tableCreate },
-	                _react2['default'].createElement(
-	                  _materialUiLibFloatingActionButton2['default'],
-	                  { mini: true, secondary: true, onTouchTap: function () {
-	                      return itemsActions.operationOpen(operation.opId);
-	                    } },
-	                  _react2['default'].createElement(_materialUiLibSvgIconsContentForward2['default'], null)
-	                )
-	              ),
-	              _react2['default'].createElement(
-	                _materialUiLibTableTableRowColumn2['default'],
-	                { style: style.tableCreate },
-	                _react2['default'].createElement(
-	                  _materialUiLibFloatingActionButton2['default'],
-	                  { mini: true, secondary: true, onTouchTap: function () {
-	                      return itemsActions.operationEdit(operation.opId);
-	                    } },
-	                  _react2['default'].createElement(_materialUiLibSvgIconsContentCreate2['default'], null)
-	                )
-	              ),
-	              _react2['default'].createElement(
-	                _materialUiLibDialog2['default'],
-	                {
-	                  modal: false,
-	                  onRequestClose: function () {
-	                    return itemsActions.operationClose();
-	                  },
-	                  open: operation.open },
-	                _react2['default'].createElement(_OperationsDialog2['default'], {
-	                  operations: operation })
-	              )
-	            );
-	          })
-	        )
-	      );
+	      var submitContent = array.map(function (arr) {
+	        return _this.state[arr];
+	      });
 
 	      return _react2['default'].createElement(
-	        _materialUiLibPaper2['default'],
-	        { style: style.paper, zDepth: 2 },
-	        element
+	        'span',
+	        null,
+	        array.map(function (arr, i) {
+	          return _react2['default'].createElement(_materialUiLibTextField2['default'], {
+	            value: _this.state[arr],
+	            hintText: arr,
+	            floatingLabelText: arr,
+	            onChange: _this.handleChange.bind(_this, arr),
+	            style: style.textField });
+	        }),
+	        _react2['default'].createElement(_materialUiLibFlatButton2['default'], {
+	          style: style.flatButton,
+	          label: 'Submit',
+	          primary: true,
+	          keyboardFocused: true,
+	          onTouchTap: function () {
+	            return itemsActions.handleSubmit.apply(itemsActions, _toConsumableArray(submitContent));
+	          } })
 	      );
 	    }
 	  }]);
 
-	  return FunctionsDialog;
+	  return ChildrenItems;
 	})(_react.Component);
 
-	exports['default'] = FunctionsDialog;
+	exports['default'] = ChildrenItems;
 	module.exports = exports['default'];
 
 /***/ },
-/* 347 */
+/* 338 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -43748,182 +39075,337 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _materialUiLibPaper = __webpack_require__(305);
+	var _materialUiLibCheckbox = __webpack_require__(307);
 
-	var _materialUiLibPaper2 = _interopRequireDefault(_materialUiLibPaper);
+	var _materialUiLibCheckbox2 = _interopRequireDefault(_materialUiLibCheckbox);
 
-	var _materialUiLibTextField = __webpack_require__(328);
-
-	var _materialUiLibTextField2 = _interopRequireDefault(_materialUiLibTextField);
-
-	var _materialUiLibFloatingActionButton = __webpack_require__(323);
+	var _materialUiLibFloatingActionButton = __webpack_require__(326);
 
 	var _materialUiLibFloatingActionButton2 = _interopRequireDefault(_materialUiLibFloatingActionButton);
 
-	var _materialUiLibSvgIconsContentAdd = __webpack_require__(336);
-
-	var _materialUiLibSvgIconsContentAdd2 = _interopRequireDefault(_materialUiLibSvgIconsContentAdd);
-
-	var _materialUiLibTableTable = __webpack_require__(308);
-
-	var _materialUiLibTableTable2 = _interopRequireDefault(_materialUiLibTableTable);
-
-	var _materialUiLibTableTableHeaderColumn = __webpack_require__(309);
-
-	var _materialUiLibTableTableHeaderColumn2 = _interopRequireDefault(_materialUiLibTableTableHeaderColumn);
-
-	var _materialUiLibTableTableRow = __webpack_require__(310);
-
-	var _materialUiLibTableTableRow2 = _interopRequireDefault(_materialUiLibTableTableRow);
-
-	var _materialUiLibTableTableHeader = __webpack_require__(311);
-
-	var _materialUiLibTableTableHeader2 = _interopRequireDefault(_materialUiLibTableTableHeader);
-
-	var _materialUiLibTableTableRowColumn = __webpack_require__(320);
-
-	var _materialUiLibTableTableRowColumn2 = _interopRequireDefault(_materialUiLibTableTableRowColumn);
-
-	var _materialUiLibTableTableBody = __webpack_require__(321);
-
-	var _materialUiLibTableTableBody2 = _interopRequireDefault(_materialUiLibTableTableBody);
-
-	var _materialUiLibSvgIconsContentCreate = __webpack_require__(324);
+	var _materialUiLibSvgIconsContentCreate = __webpack_require__(329);
 
 	var _materialUiLibSvgIconsContentCreate2 = _interopRequireDefault(_materialUiLibSvgIconsContentCreate);
 
-	var _materialUiLibSvgIconsContentForward = __webpack_require__(325);
+	var _materialUiLibTextField = __webpack_require__(318);
 
-	var _materialUiLibSvgIconsContentForward2 = _interopRequireDefault(_materialUiLibSvgIconsContentForward);
+	var _materialUiLibTextField2 = _interopRequireDefault(_materialUiLibTextField);
 
-	var _materialUiLibDialog = __webpack_require__(338);
+	var _materialUiLibFlatButton = __webpack_require__(331);
+
+	var _materialUiLibFlatButton2 = _interopRequireDefault(_materialUiLibFlatButton);
+
+	var _materialUiLibSvgIconsContentAdd = __webpack_require__(327);
+
+	var _materialUiLibSvgIconsContentAdd2 = _interopRequireDefault(_materialUiLibSvgIconsContentAdd);
+
+	var _materialUiLibDialog = __webpack_require__(330);
 
 	var _materialUiLibDialog2 = _interopRequireDefault(_materialUiLibDialog);
+
+	var _WebApisDialog = __webpack_require__(339);
+
+	var _WebApisDialog2 = _interopRequireDefault(_WebApisDialog);
 
 	var style = {
 	  textField: {
 	    marginLeft: 20,
-	    width: '100%'
+	    width: '90%'
 	  },
-	  paper: {
-	    overflowY: 'auto',
-	    overflowX: 'hidden',
-	    height: 260
+	  flatButton: {
+	    float: 'right',
+	    margin: '20px 20px 0'
+	  },
+	  dialog: {
+	    width: '80%',
+	    maxWidth: 'none'
 	  },
 	  actionButton: {
-	    margin: 16
-	  },
-	  tableCreate: {
-	    width: 40
-	  },
-	  tableHeader: {
-	    width: 60
+	    position: 'absolute',
+	    bottom: 0,
+	    left: '44%',
+	    margin: '20px 20px 10px'
 	  }
 	};
 
-	var OperationsDialog = (function (_Component) {
-	  _inherits(OperationsDialog, _Component);
+	var ChildrenItems = (function (_Component) {
+	  _inherits(ChildrenItems, _Component);
 
-	  function OperationsDialog(props) {
-	    _classCallCheck(this, OperationsDialog);
+	  function ChildrenItems(props) {
+	    _classCallCheck(this, ChildrenItems);
 
-	    _get(Object.getPrototypeOf(OperationsDialog.prototype), 'constructor', this).call(this, props);
+	    _get(Object.getPrototypeOf(ChildrenItems.prototype), 'constructor', this).call(this, props);
+	    this.handleClose = this.handleClose.bind(this);
+	    this.state = {
+	      opId: this.props.operations.opId,
+	      opName: this.props.operations.opName,
+	      opSort: this.props.operations.opSort,
+	      elementClass: this.props.operations.elementClass,
+	      open: false,
+	      api: ''
+	    };
 	  }
 
-	  _createClass(OperationsDialog, [{
+	  _createClass(ChildrenItems, [{
+	    key: 'handleChange',
+	    value: function handleChange(name, event) {
+	      var newState = {};
+	      newState[name] = event.target.value;
+	      console.log(newState);
+	      this.setState(newState);
+	    }
+	  }, {
+	    key: 'handleEdit',
+	    value: function handleEdit(content) {
+	      this.setState({ open: true, api: content });
+	    }
+	  }, {
+	    key: 'handleClose',
+	    value: function handleClose() {
+	      this.setState({ open: false });
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
+	      var _this = this;
+
 	      var _props = this.props;
 	      var operations = _props.operations;
+	      var edit = _props.edit;
 	      var itemsActions = _props.itemsActions;
+	      var array = _props.array;
 
-	      var element = operations.edit ? _react2['default'].createElement(
-	        'div',
+	      var element = edit ? _react2['default'].createElement(
+	        'span',
 	        null,
-	        _react2['default'].createElement(
-	          'h3',
-	          { className: 'dialogTitle' },
-	          'operations'
-	        ),
-	        _react2['default'].createElement(_materialUiLibTextField2['default'], { defaultValue: operations.opId, hintText: 'opId', floatingLabelText: 'opId', style: style.textField }),
-	        _react2['default'].createElement(_materialUiLibTextField2['default'], { defaultValue: operations.opSort, hintText: 'opSort', floatingLabelText: 'opSort', style: style.textField }),
-	        _react2['default'].createElement(_materialUiLibTextField2['default'], { defaultValue: operations.opName, hintText: 'opName', floatingLabelText: 'opName', style: style.textField }),
-	        _react2['default'].createElement(_materialUiLibTextField2['default'], { defaultValue: operations.elementClass, hintText: 'elementClass', floatingLabelText: 'elementClass', style: style.textField })
+	        array.map(function (arr, i) {
+	          return _react2['default'].createElement(_materialUiLibTextField2['default'], {
+	            value: _this.state[arr],
+	            hintText: arr,
+	            floatingLabelText: arr,
+	            onChange: _this.handleChange.bind(_this, arr),
+	            style: style.textField });
+	        }),
+	        _react2['default'].createElement(_materialUiLibFlatButton2['default'], {
+	          style: style.flatButton,
+	          label: 'Submit',
+	          primary: true,
+	          keyboardFocused: true,
+	          onTouchTap: function () {
+	            return itemsActions.operationsSubmit(operations.opId, _this.state.opId, _this.state.opName, _this.state.opSort, _this.state.elementClass);
+	          } })
 	      ) : _react2['default'].createElement(
-	        _materialUiLibTableTable2['default'],
-	        { multiSelectable: true },
+	        'table',
+	        { className: 'tableItems' },
 	        _react2['default'].createElement(
-	          _materialUiLibTableTableHeader2['default'],
-	          null,
+	          'thead',
+	          { className: 'theadItems' },
 	          _react2['default'].createElement(
-	            _materialUiLibTableTableRow2['default'],
+	            'tr',
 	            null,
 	            _react2['default'].createElement(
-	              _materialUiLibTableTableHeaderColumn2['default'],
-	              { style: style.tableHeader, tooltip: 'The serviceMethod' },
+	              'th',
+	              { className: 'toolItems' },
+	              _react2['default'].createElement(_materialUiLibCheckbox2['default'], { disabled: true })
+	            ),
+	            _react2['default'].createElement(
+	              'th',
+	              { className: 'thItems' },
 	              'serviceMethod'
 	            ),
 	            _react2['default'].createElement(
-	              _materialUiLibTableTableHeaderColumn2['default'],
-	              { tooltip: 'The serviceUrl' },
+	              'th',
+	              { className: 'thItems' },
 	              'serviceUrl'
 	            ),
 	            _react2['default'].createElement(
-	              _materialUiLibTableTableHeaderColumn2['default'],
-	              { style: style.tableCreate, tooltip: 'The edit' },
+	              'th',
+	              { className: 'toolItems' },
 	              'edit'
 	            )
 	          )
 	        ),
 	        _react2['default'].createElement(
-	          _materialUiLibTableTableBody2['default'],
-	          { deselectOnClickaway: false },
+	          'tbody',
+	          null,
 	          operations.webApis.map(function (api, i) {
 	            return _react2['default'].createElement(
-	              _materialUiLibTableTableRow2['default'],
-	              { key: i, webApis: api },
+	              'tr',
+	              { key: i },
 	              _react2['default'].createElement(
-	                _materialUiLibTableTableRowColumn2['default'],
-	                { style: style.tableHeader },
+	                'td',
+	                { className: 'toolItems' },
+	                _react2['default'].createElement(_materialUiLibCheckbox2['default'], { checked: api.checked, onClick: function () {
+	                    return itemsActions.webApisSelected(api.id);
+	                  } })
+	              ),
+	              _react2['default'].createElement(
+	                'td',
+	                { className: 'tdItems' },
 	                api.serviceMethod
 	              ),
 	              _react2['default'].createElement(
-	                _materialUiLibTableTableRowColumn2['default'],
-	                null,
+	                'td',
+	                { className: 'tdItems' },
 	                api.serviceUrl
 	              ),
 	              _react2['default'].createElement(
-	                _materialUiLibTableTableRowColumn2['default'],
-	                { style: style.tableCreate },
+	                'td',
+	                { className: 'toolItems' },
 	                _react2['default'].createElement(
 	                  _materialUiLibFloatingActionButton2['default'],
-	                  { mini: true, secondary: true, onTouchTap: function () {
-	                      return itemsActions.operationEdit(operation.opId);
-	                    } },
+	                  { mini: true, secondary: true, onTouchTap: _this.handleEdit.bind(_this, api) },
 	                  _react2['default'].createElement(_materialUiLibSvgIconsContentCreate2['default'], null)
 	                )
 	              )
 	            );
 	          })
+	        ),
+	        _react2['default'].createElement(
+	          _materialUiLibDialog2['default'],
+	          {
+	            modal: false,
+	            open: this.state.open,
+	            contentStyle: style.dialog,
+	            onRequestClose: this.handleClose
+	          },
+	          _react2['default'].createElement(_WebApisDialog2['default'], {
+	            array: ['serviceMethod', 'serviceUrl'],
+	            itemsActions: itemsActions,
+	            api: this.state.api })
+	        ),
+	        _react2['default'].createElement(
+	          _materialUiLibFloatingActionButton2['default'],
+	          { secondary: true, mini: true, style: style.actionButton },
+	          _react2['default'].createElement(_materialUiLibSvgIconsContentAdd2['default'], null)
 	        )
 	      );
 
 	      return _react2['default'].createElement(
-	        _materialUiLibPaper2['default'],
-	        { style: style.paper, zDepth: 2 },
+	        'span',
+	        null,
 	        element
 	      );
 	    }
 	  }]);
 
-	  return OperationsDialog;
+	  return ChildrenItems;
 	})(_react.Component);
 
-	exports['default'] = OperationsDialog;
+	exports['default'] = ChildrenItems;
 	module.exports = exports['default'];
 
 /***/ },
-/* 348 */
+/* 339 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i]; return arr2; } else { return Array.from(arr); } }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var _react = __webpack_require__(66);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _materialUiLibTextField = __webpack_require__(318);
+
+	var _materialUiLibTextField2 = _interopRequireDefault(_materialUiLibTextField);
+
+	var _materialUiLibFlatButton = __webpack_require__(331);
+
+	var _materialUiLibFlatButton2 = _interopRequireDefault(_materialUiLibFlatButton);
+
+	var style = {
+	  textField: {
+	    marginLeft: 20,
+	    width: '90%'
+	  },
+	  flatButton: {
+	    float: 'right',
+	    margin: '20px 20px 0'
+	  }
+	};
+
+	var ChildrenItems = (function (_Component) {
+	  _inherits(ChildrenItems, _Component);
+
+	  function ChildrenItems(props) {
+	    _classCallCheck(this, ChildrenItems);
+
+	    _get(Object.getPrototypeOf(ChildrenItems.prototype), 'constructor', this).call(this, props);
+	    this.state = {
+	      serviceMethod: this.props.api.serviceMethod,
+	      serviceUrl: this.props.api.serviceUrl
+	    };
+	  }
+
+	  _createClass(ChildrenItems, [{
+	    key: 'handleChange',
+	    value: function handleChange(name, event) {
+	      var newState = {};
+	      newState[name] = event.target.value;
+	      console.log(newState);
+	      this.setState(newState);
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _this = this;
+
+	      var _props = this.props;
+	      var api = _props.api;
+	      var itemsActions = _props.itemsActions;
+	      var array = _props.array;
+
+	      var submitContent = array.map(function (arr) {
+	        return _this.state[arr];
+	      });
+
+	      return _react2['default'].createElement(
+	        'span',
+	        null,
+	        array.map(function (arr, i) {
+	          return _react2['default'].createElement(_materialUiLibTextField2['default'], {
+	            value: _this.state[arr],
+	            hintText: arr,
+	            floatingLabelText: arr,
+	            onChange: _this.handleChange.bind(_this, arr),
+	            style: style.textField });
+	        }),
+	        _react2['default'].createElement(_materialUiLibFlatButton2['default'], {
+	          style: style.flatButton,
+	          label: 'Submit',
+	          primary: true,
+	          keyboardFocused: true,
+	          onTouchTap: function () {
+	            return itemsActions.webApisSubmit.apply(itemsActions, [api.id].concat(_toConsumableArray(submitContent)));
+	          } })
+	      );
+	    }
+	  }]);
+
+	  return ChildrenItems;
+	})(_react.Component);
+
+	exports['default'] = ChildrenItems;
+	module.exports = exports['default'];
+
+/***/ },
+/* 340 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -43950,20 +39432,85 @@
 
 	var _materialUiLibPaper2 = _interopRequireDefault(_materialUiLibPaper);
 
-	var _MenusItems = __webpack_require__(349);
+	var _materialUiLibFloatingActionButton = __webpack_require__(326);
+
+	var _materialUiLibFloatingActionButton2 = _interopRequireDefault(_materialUiLibFloatingActionButton);
+
+	var _materialUiLibSvgIconsContentAdd = __webpack_require__(327);
+
+	var _materialUiLibSvgIconsContentAdd2 = _interopRequireDefault(_materialUiLibSvgIconsContentAdd);
+
+	var _materialUiLibSvgIconsContentCreate = __webpack_require__(329);
+
+	var _materialUiLibSvgIconsContentCreate2 = _interopRequireDefault(_materialUiLibSvgIconsContentCreate);
+
+	var _materialUiLibDialog = __webpack_require__(330);
+
+	var _materialUiLibDialog2 = _interopRequireDefault(_materialUiLibDialog);
+
+	var _MenusItems = __webpack_require__(341);
 
 	var _MenusItems2 = _interopRequireDefault(_MenusItems);
+
+	var _DialogEditSecondMenusDialog = __webpack_require__(342);
+
+	var _DialogEditSecondMenusDialog2 = _interopRequireDefault(_DialogEditSecondMenusDialog);
+
+	var _DialogEditFirstMenusDialog = __webpack_require__(343);
+
+	var _DialogEditFirstMenusDialog2 = _interopRequireDefault(_DialogEditFirstMenusDialog);
+
+	var style = {
+	  dialog: {
+	    width: '80%',
+	    maxWidth: 'none'
+	  },
+	  actionButton: {
+	    marginLeft: 20
+	  }
+	};
 
 	var Menus = (function (_Component) {
 	  _inherits(Menus, _Component);
 
-	  function Menus() {
+	  function Menus(props) {
 	    _classCallCheck(this, Menus);
 
-	    _get(Object.getPrototypeOf(Menus.prototype), 'constructor', this).apply(this, arguments);
+	    _get(Object.getPrototypeOf(Menus.prototype), 'constructor', this).call(this, props);
+	    this.handleClose = this.handleClose.bind(this);
+	    this.state = {
+	      open: false,
+	      first: false,
+	      content: ''
+	    };
 	  }
 
 	  _createClass(Menus, [{
+	    key: 'handleEdit',
+	    value: function handleEdit() {
+	      //todo 这个要修改二级菜单必须要有勾选一级菜单才行，要修改一级菜单就要全部取消勾选一级菜单下的所有二级菜单，逻辑欠妥
+	      var menus = this.props.menus.filter(function (menu) {
+	        return menu.checked === true;
+	      });
+	      if (menus.length === 0) {
+	        alert('勾选');
+	        return;
+	      }
+	      var functions = menus[0].children.filter(function (child) {
+	        return child.checked === true;
+	      });
+	      if (functions.length !== 0) {
+	        this.setState({ open: true, first: false, content: functions[0] });
+	      } else if (menus.length !== 0) {
+	        this.setState({ open: true, first: true, content: menus[0] });
+	      }
+	    }
+	  }, {
+	    key: 'handleClose',
+	    value: function handleClose() {
+	      this.setState({ open: false });
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var _props = this.props;
@@ -43971,18 +39518,52 @@
 	      var actions = _props.actions;
 
 	      return _react2['default'].createElement(
-	        'ul',
-	        { className: 'menusBox' },
-	        menus.map(function (menu, i) {
-	          return _react2['default'].createElement(_MenusItems2['default'], {
-	            key: i,
-	            open: actions.openMenus,
-	            _dispatchActions: actions.dispatchActions,
-	            _checkedAll: actions.checkedAll,
-	            _checkedMenus: actions.checkedMenus,
-	            menuItems: menu
-	          });
-	        })
+	        'span',
+	        { className: 'mainLeftMenus' },
+	        _react2['default'].createElement(
+	          'ul',
+	          { className: 'menusBox' },
+	          menus.map(function (menu, i) {
+	            return _react2['default'].createElement(_MenusItems2['default'], {
+	              key: i,
+	              open: actions.openMenus,
+	              _dispatchActions: actions.dispatchActions,
+	              _checkedAll: actions.checkedAll,
+	              _checkedMenus: actions.checkedMenus,
+	              menuItems: menu
+	            });
+	          })
+	        ),
+	        _react2['default'].createElement(
+	          'span',
+	          { className: 'buttonBox' },
+	          _react2['default'].createElement(
+	            _materialUiLibFloatingActionButton2['default'],
+	            { secondary: true, mini: true, style: style.actionButton },
+	            _react2['default'].createElement(_materialUiLibSvgIconsContentAdd2['default'], null)
+	          ),
+	          _react2['default'].createElement(
+	            _materialUiLibFloatingActionButton2['default'],
+	            { secondary: true, mini: true, style: style.actionButton, onTouchTap: this.handleEdit.bind(this) },
+	            _react2['default'].createElement(_materialUiLibSvgIconsContentCreate2['default'], null)
+	          )
+	        ),
+	        _react2['default'].createElement(
+	          _materialUiLibDialog2['default'],
+	          {
+	            modal: false,
+	            open: this.state.open,
+	            contentStyle: style.dialog,
+	            onRequestClose: this.handleClose
+	          },
+	          this.state.first ? _react2['default'].createElement(_DialogEditFirstMenusDialog2['default'], {
+	            menus: this.state.content,
+	            menusActions: actions,
+	            array: ['menuId', 'menuCode', 'menuSort', 'name'] }) : _react2['default'].createElement(_DialogEditSecondMenusDialog2['default'], {
+	            menus: this.state.content,
+	            menusActions: actions,
+	            array: ['menuId', 'menuCode', 'menuSort', 'name', 'menuParentId', 'anchor'] })
+	        )
 	      );
 	    }
 	  }]);
@@ -43994,7 +39575,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 349 */
+/* 341 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -44017,11 +39598,9 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _materialUiLibCheckbox = __webpack_require__(312);
+	var _materialUiLibCheckbox = __webpack_require__(307);
 
 	var _materialUiLibCheckbox2 = _interopRequireDefault(_materialUiLibCheckbox);
-
-	// import cs from 'classnames'
 
 	var style = {
 	  checkbox: {
@@ -44054,9 +39633,7 @@
 	        'span',
 	        { open: menuItems.open },
 	        _react2['default'].createElement(_materialUiLibCheckbox2['default'], {
-	          checked: menuItems.children.every(function (child) {
-	            return child.checked;
-	          }),
+	          checked: menuItems.checked,
 	          onClick: function () {
 	            return _checkedAll(menuItems.menuId, menuItems.key);
 	          },
@@ -44064,6 +39641,7 @@
 	        _react2['default'].createElement(
 	          'span',
 	          {
+	            className: 'itemsSpan',
 	            onClick: function () {
 	              return open(menuItems.menuId);
 	            } },
@@ -44087,13 +39665,14 @@
 	              _react2['default'].createElement(_materialUiLibCheckbox2['default'], {
 	                checked: child.checked,
 	                onClick: function () {
-	                  return _checkedMenus(child.menuId);
+	                  return _checkedMenus(child.menuParentId, child.menuId);
 	                },
 	                style: style.checkbox }),
 	              _react2['default'].createElement(
 	                'span',
 	                {
 	                  child: child,
+	                  className: 'itemsSpan',
 	                  onClick: function () {
 	                    return _dispatchActions(child.menuId, child.functions);
 	                  } },
@@ -44118,13 +39697,239 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 350 */
+/* 342 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var isReactClassish = __webpack_require__(351),
-	    isReactElementish = __webpack_require__(352);
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i]; return arr2; } else { return Array.from(arr); } }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var _react = __webpack_require__(66);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _materialUiLibTextField = __webpack_require__(318);
+
+	var _materialUiLibTextField2 = _interopRequireDefault(_materialUiLibTextField);
+
+	var _materialUiLibFlatButton = __webpack_require__(331);
+
+	var _materialUiLibFlatButton2 = _interopRequireDefault(_materialUiLibFlatButton);
+
+	var style = {
+	  textField: {
+	    marginLeft: 20,
+	    width: '46%'
+	  },
+	  flatButton: {
+	    float: 'right',
+	    margin: '20px 20px 0'
+	  }
+	};
+
+	var ChildrenItems = (function (_Component) {
+	  _inherits(ChildrenItems, _Component);
+
+	  function ChildrenItems(props) {
+	    _classCallCheck(this, ChildrenItems);
+
+	    _get(Object.getPrototypeOf(ChildrenItems.prototype), 'constructor', this).call(this, props);
+	    this.state = {
+	      anchor: this.props.menus.anchor,
+	      menuCode: this.props.menus.menuCode,
+	      menuId: this.props.menus.menuId,
+	      menuParentId: this.props.menus.menuParentId,
+	      menuSort: this.props.menus.menuSort,
+	      name: this.props.menus.name
+	    };
+	  }
+
+	  _createClass(ChildrenItems, [{
+	    key: 'handleChange',
+	    value: function handleChange(name, event) {
+	      var newState = {};
+	      newState[name] = event.target.value;
+	      console.log(newState);
+	      this.setState(newState);
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _this = this;
+
+	      var _props = this.props;
+	      var menus = _props.menus;
+	      var menusActions = _props.menusActions;
+	      var array = _props.array;
+
+	      var submitContent = array.map(function (arr) {
+	        return _this.state[arr];
+	      });
+
+	      return _react2['default'].createElement(
+	        'span',
+	        null,
+	        array.map(function (arr, i) {
+	          return _react2['default'].createElement(_materialUiLibTextField2['default'], {
+	            value: _this.state[arr],
+	            hintText: arr,
+	            floatingLabelText: arr,
+	            onChange: _this.handleChange.bind(_this, arr),
+	            style: style.textField });
+	        }),
+	        _react2['default'].createElement(_materialUiLibFlatButton2['default'], {
+	          style: style.flatButton,
+	          label: 'Submit',
+	          primary: true,
+	          keyboardFocused: true,
+	          onTouchTap: function () {
+	            return menusActions.secondMenusSubmit.apply(menusActions, _toConsumableArray(submitContent));
+	          }
+	        })
+	      );
+	    }
+	  }]);
+
+	  return ChildrenItems;
+	})(_react.Component);
+
+	exports['default'] = ChildrenItems;
+	module.exports = exports['default'];
+
+/***/ },
+/* 343 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i]; return arr2; } else { return Array.from(arr); } }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var _react = __webpack_require__(66);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _materialUiLibTextField = __webpack_require__(318);
+
+	var _materialUiLibTextField2 = _interopRequireDefault(_materialUiLibTextField);
+
+	var _materialUiLibFlatButton = __webpack_require__(331);
+
+	var _materialUiLibFlatButton2 = _interopRequireDefault(_materialUiLibFlatButton);
+
+	var style = {
+	  textField: {
+	    marginLeft: 20,
+	    width: '46%'
+	  },
+	  flatButton: {
+	    float: 'right',
+	    margin: '20px 20px 0'
+	  }
+	};
+
+	var ChildrenItems = (function (_Component) {
+	  _inherits(ChildrenItems, _Component);
+
+	  function ChildrenItems(props) {
+	    _classCallCheck(this, ChildrenItems);
+
+	    _get(Object.getPrototypeOf(ChildrenItems.prototype), 'constructor', this).call(this, props);
+	    this.state = {
+	      menuCode: this.props.menus.menuCode,
+	      menuId: this.props.menus.menuId,
+	      menuSort: this.props.menus.menuSort,
+	      name: this.props.menus.name
+	    };
+	  }
+
+	  _createClass(ChildrenItems, [{
+	    key: 'handleChange',
+	    value: function handleChange(name, event) {
+	      var newState = {};
+	      newState[name] = event.target.value;
+	      console.log(newState);
+	      this.setState(newState);
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _this = this;
+
+	      var _props = this.props;
+	      var menus = _props.menus;
+	      var menusActions = _props.menusActions;
+	      var array = _props.array;
+
+	      var submitContent = array.map(function (arr) {
+	        return _this.state[arr];
+	      });
+
+	      return _react2['default'].createElement(
+	        'span',
+	        null,
+	        array.map(function (arr, i) {
+	          return _react2['default'].createElement(_materialUiLibTextField2['default'], {
+	            value: _this.state[arr],
+	            hintText: arr,
+	            floatingLabelText: arr,
+	            onChange: _this.handleChange.bind(_this, arr),
+	            style: style.textField });
+	        }),
+	        _react2['default'].createElement(_materialUiLibFlatButton2['default'], {
+	          style: style.flatButton,
+	          label: 'Submit',
+	          primary: true,
+	          keyboardFocused: true,
+	          onTouchTap: function () {
+	            return menusActions.firstMenusSubmit.apply(menusActions, _toConsumableArray(submitContent));
+	          }
+	        })
+	      );
+	    }
+	  }]);
+
+	  return ChildrenItems;
+	})(_react.Component);
+
+	exports['default'] = ChildrenItems;
+	module.exports = exports['default'];
+
+/***/ },
+/* 344 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var isReactClassish = __webpack_require__(345),
+	    isReactElementish = __webpack_require__(346);
 
 	function makeExportsHot(m, React) {
 	  if (isReactElementish(m.exports, React)) {
@@ -44178,7 +39983,7 @@
 
 
 /***/ },
-/* 351 */
+/* 345 */
 /***/ function(module, exports) {
 
 	function hasRender(Class) {
@@ -44228,10 +40033,10 @@
 	module.exports = isReactClassish;
 
 /***/ },
-/* 352 */
+/* 346 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var isReactClassish = __webpack_require__(351);
+	var isReactClassish = __webpack_require__(345);
 
 	function isReactElementish(obj, React) {
 	  if (!obj) {

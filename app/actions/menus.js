@@ -8,7 +8,9 @@ export const CHECKED_MENUS = 'CHECKED_MENUS'
 export const SELECTED_MENUS = 'SELECTED_MENUS'
 export const RECEIVE_ITEMS = 'RECEIVE_ITEMS'
 export const COMBINE_ITEMS = 'COMBINE_ITEMS'
-export const EDIT_FIRST_MENUS = 'EDIT_FIRST_MENUS'
+export const SECOND_MENUS_SUBMIT = 'SECOND_MENUS_SUBMIT'
+export const FIRST_MENUS_SUBMIT = 'FIRST_MENUS_SUBMIT'
+export const ADD_FIRST_MENUS = 'ADD_FIRST_MENUS'
 
 export function openMenus(menuId) {
   return {
@@ -63,11 +65,40 @@ export function combineItems(id, items) {
   }
 }
 
-export function editFirstMenus() {
+export function firstMenusSubmit(menuId, menuCode, menuSort, name) {
   return {
-    type: EDIT_FIRST_MENUS,
+    type: FIRST_MENUS_SUBMIT,
+    menuId,
+    menuCode,
+    menuSort, 
+    name
   }
 }
+
+export function secondMenusSubmit(menuId, menuCode, menuSort, name, menuParentId, anchor) {
+  return {
+    type: SECOND_MENUS_SUBMIT,
+    menuId, 
+    menuCode, 
+    menuSort, 
+    name, 
+    menuParentId, 
+    anchor
+  }
+}
+
+export function addFirstMenus(menuId, menuCode, menuSort, name, icon) {
+  return {
+    type: ADD_FIRST_MENUS,
+    menuId,
+    menuCode,
+    menuSort, 
+    name,
+    icon    
+  }
+}
+
+
 
 //读取本地json文件获取列表,根据参数first,second 索引出点击菜单下的数组
 // export function readItemsFile() {

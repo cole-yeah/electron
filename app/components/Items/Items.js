@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react'
 import RaisedButton from 'material-ui/lib/raised-button'
-import Search from '../Search/Search'
 import ChildrenItems from './ChildrenItems'
 
 const style = {
@@ -19,9 +18,6 @@ export default class Items extends Component {
     const { items=[], itemsActions } = this.props
     return (
       <div>
-        <Search
-          searchTitle={items} 
-        />
 
         <ChildrenItems
           array={['functionId', 'functionName']}

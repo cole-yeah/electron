@@ -5,7 +5,7 @@ import FlatButton from 'material-ui/lib/flat-button'
 const style = {
   textField: {
     marginLeft: 20,
-    width: '90%',
+    width: '46%'
   },
   flatButton: {
     float: 'right',
@@ -17,8 +17,11 @@ export default class ChildrenItems extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      serviceMethod: this.props.api.serviceMethod,
-      serviceUrl: this.props.api.serviceUrl,
+      menuId: 'P0001',
+      menuCode: 'P0001',
+      icon: 'fa-database',
+      menuSort: 1,
+      name: '基础数据管理'
     }
   }
 
@@ -29,7 +32,7 @@ export default class ChildrenItems extends Component {
   }
 
   render() {
-    const { api, itemsActions, array } = this.props
+    const { itemsActions, array } = this.props
     let submitContent = array.map(arr => this.state[arr])
 
     return (
@@ -49,7 +52,8 @@ export default class ChildrenItems extends Component {
           label="Submit" 
           primary={true} 
           keyboardFocused={true}
-          onTouchTap={() => itemsActions.webApisSubmit(api.id, ...submitContent)} />
+          onTouchTap={() => itemsActions.addFirstMenus(...submitContent)}
+        />
       </span>
     )
   }

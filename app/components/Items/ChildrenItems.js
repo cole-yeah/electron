@@ -5,10 +5,10 @@ import ContentCreate from 'material-ui/lib/svg-icons/content/create'
 import Dialog from 'material-ui/lib/dialog'
 import ContentForward from 'material-ui/lib/svg-icons/content/forward'
 import ContentAdd from 'material-ui/lib/svg-icons/content/add'
+import Colors from 'material-ui/lib/styles/colors'
 
-import FunctionsDialog from '../Dialog/FunctionsDialog'
+import EditMenusDialog from '../Dialog/EditMenusDialog'
 import OperationsDialog from '../Dialog/OperationsDialog'
-import AddOperationsDialog from '../Dialog/AddOperationsDialog'
 
 const style = {
   dialog: {
@@ -30,7 +30,7 @@ export default class ChildrenItems extends Component {
       open: false,
       edit: false,
       addItems: false,
-      content: ''
+      operations: ''
     }
   }
 
@@ -52,28 +52,24 @@ export default class ChildrenItems extends Component {
 
   render() {
     const { items, itemsActions, array, forward, _handleChecked } = this.props
-    
-    let forwardAdd = (
-        forward?<FloatingActionButton secondary={true} mini={true} style={style.actionButton} onTouchTap={this.handleAdd.bind(this)}>
-          <ContentAdd />
-        </FloatingActionButton>:'' )
 
     let dialogChildren = (
       this.state.addItems?
-        (<AddOperationsDialog
-            itemsActions={itemsActions}
+        (<EditMenusDialog   //有点问题，一开始点增加里面为空，因为这个this.state.operations还没有赋值进去  2016.12.14
+            menus={this.state.operations}
+            _MenusSubmit={itemsActions.addOperationsSubmit}
             array={['opId', 'opSort', 'opName', 'elementClass']}/>)
         :(forward?
           <OperationsDialog
             edit={this.state.edit}
             itemsActions={itemsActions}
-            array={['opId', 'opSort', 'opName', 'elementClass']}
             operations={this.state.operations}
+            array={['opId', 'opSort', 'opName', 'elementClass']}
           />:       
-          <FunctionsDialog
+          <EditMenusDialog
+            menus={this.state.operations}
+            _MenusSubmit={itemsActions.handleSubmit}
             array={['functionId', 'functionName']}
-            functions={this.state.operations}
-            itemsActions={itemsActions}
           />) 
         )
 
@@ -87,7 +83,7 @@ export default class ChildrenItems extends Component {
                 array.map((arr, i) => 
                   <th className="thItems" key={i}>{arr}</th>)
               }
-              {forward?<th className="toolItems">forward</th>:''}
+              <th className="toolItems">forward</th>
               <th className="toolItems">edit</th>
             </tr>
             </thead>
@@ -102,15 +98,11 @@ export default class ChildrenItems extends Component {
                     <td className="tdItems">{item[arr]}</td>
                   )
                 }
-                {forward?<td className="toolItems">
-                  <FloatingActionButton mini={true} secondary={true} onTouchTap={this.handleOpen.bind(this, item)}>
-                    <ContentForward />
-                  </FloatingActionButton>
-                </td>:''}
                 <td className="toolItems">
-                  <FloatingActionButton mini={true} secondary={true} onTouchTap={this.handleEdit.bind(this, item)}>
-                    <ContentCreate />
-                  </FloatingActionButton>
+                  <ContentForward color={Colors.cyan500} onTouchTap={this.handleOpen.bind(this, item)} />
+                </td>
+                <td className="toolItems">
+                  <ContentCreate color={Colors.cyan500} onTouchTap={this.handleEdit.bind(this, item)} />
                 </td>
               </tr>
             )
@@ -128,7 +120,11 @@ export default class ChildrenItems extends Component {
           </Dialog>
 
         </table>
-        {forwardAdd}
+
+        <FloatingActionButton secondary={true} mini={true} style={style.actionButton} onTouchTap={this.handleAdd.bind(this)}>
+          <ContentAdd />
+        </FloatingActionButton>
+
       </div>
     )
   }

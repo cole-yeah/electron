@@ -13,15 +13,26 @@ const style = {
   }
 }
 
-export default class ChildrenItems extends Component {
+export default class EditMenusDialog extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      menuId: 'P0001',
-      menuCode: 'P0001',
-      icon: 'fa-database',
-      menuSort: 1,
-      name: '基础数据管理'
+      /**menus */
+      anchor: this.props.menus.anchor || '',
+      menuCode: this.props.menus.menuCode || '',
+      menuId: this.props.menus.menuId || '',
+      menuParentId: this.props.menus.menuParentId || '',
+      menuSort: this.props.menus.menuSort || '',
+      name: this.props.menus.name || '',
+      icon: this.props.menus.icon || '',
+      /**add functions */
+      functionId: this.props.menus.functionId || '',
+      functionName: this.props.menus.functionName || '',
+      /**add webApis */
+      opId: this.props.menus.opId || '',
+      opSort: this.props.menus.opSort || '',
+      opName: this.props.menus.opName || '',
+      elementClass: this.props.menus.elementClass || ''
     }
   }
 
@@ -32,7 +43,7 @@ export default class ChildrenItems extends Component {
   }
 
   render() {
-    const { itemsActions, array } = this.props
+    const { menus, _MenusSubmit, array } = this.props
     let submitContent = array.map(arr => this.state[arr])
 
     return (
@@ -52,7 +63,7 @@ export default class ChildrenItems extends Component {
           label="Submit" 
           primary={true} 
           keyboardFocused={true}
-          onTouchTap={() => itemsActions.addFirstMenus(...submitContent)}
+          onTouchTap={() => _MenusSubmit(...submitContent)}
         />
       </span>
     )

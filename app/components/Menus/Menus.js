@@ -6,9 +6,7 @@ import ContentCreate from 'material-ui/lib/svg-icons/content/create'
 import Dialog from 'material-ui/lib/dialog'
 
 import MenusItems from './MenusItems'
-import EditSecondMenusDialog from '../Dialog/EditSecondMenusDialog'
-import EditFirstMenusDialog from '../Dialog/EditFirstMenusDialog'
-import AddFirstMenus from '../Dialog/AddFirstMenus'
+import EditMenusDialog from '../Dialog/EditMenusDialog'
 
 const style = {
   dialog: {
@@ -41,16 +39,15 @@ export default class Menus extends Component {
       return
     }
     const functions =  menus[0].children.filter(child => child.checked === true) 
-    if(functions.length !== 0) {
-      this.setState({addMenus: false, open: true, first: false, content: functions[0]})
-    } else if(menus.length !== 0) {
-      this.setState({addMenus: false, open: true, first: true, content: menus[0]})
-    }
+    functions.length !== 0?
+      (this.setState({addMenus: false, open: true, first: false, content: functions[0]})):
+        (menus.length !== 0?(this.setState({addMenus: false, open: true, first: true, content: menus[0]})):this.state)
+
   }
 
   handleAdd() {
-    // const menus = this.props.menus.filter(menu => menu.checked === true)
-    this.setState({open: true, addMenus: true })
+    const menus = this.props.menus.filter(menu => menu.checked === true)
+    menus.length === 0?this.setState({open: true, first: true, addMenus: true }):this.setState({open: true, first: false, addMenus: true })
   }
 
   handleClose() {
@@ -92,25 +89,28 @@ export default class Menus extends Component {
         >
           {
             this.state.addMenus?
-              (this.state.first?
-                <div>123</div>
-                :
-                <AddFirstMenus
+              (
+                this.state.first?
+                (<EditMenusDialog
+                  menus={this.state.content}
+                  _MenusSubmit={actions.addFirstMenus}
                   array={[ 'menuId', 'menuCode', 'menuSort', 'name', 'icon' ]}
-                  itemsActions={actions}
                 />):
-                (this.state.first?
-                  <EditFirstMenusDialog
-                    menus={this.state.content}
-                    menusActions={actions}
-                    array={[ 'menuId', 'menuCode', 'menuSort', 'name' ]}
-                  />:
-                  <EditSecondMenusDialog
-                    menus={this.state.content}
-                    menusActions={actions}
-                    array={[ 'menuId', 'menuCode', 'menuSort', 'name', 'menuParentId', 'anchor' ]}
-                  />
-                )
+                (<div>456</div>)//新增一二级菜单
+              ):
+              (
+                this.state.first?
+                (<EditMenusDialog
+                  menus={this.state.content}
+                  _MenusSubmit={actions.firstMenusSubmit}
+                  array={[ 'menuId', 'menuCode', 'menuSort', 'name' ]}
+                />):
+                (<EditMenusDialog
+                  menus={this.state.content}
+                  _MenusSubmit={actions.secondMenusSubmit}
+                  array={[ 'menuId', 'menuCode', 'menuSort', 'name', 'menuParentId', 'anchor' ]}
+                />)
+              )       //修改一二级菜单
           }
         </Dialog>
 

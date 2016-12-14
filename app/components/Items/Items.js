@@ -2,9 +2,15 @@ import React, { Component, PropTypes } from 'react'
 import RaisedButton from 'material-ui/lib/raised-button'
 import ChildrenItems from './ChildrenItems'
 
+import Dialog from 'material-ui/lib/dialog'
+
 const style = {
   raisedButton: {
     margin: 10
+  },
+  dialog: {
+    width: '80%',
+    maxWidth: 'none',
   }
 }
 
@@ -15,7 +21,7 @@ export default class Items extends Component {
   }    
 
   render() {
-    const { items=[], itemsActions } = this.props
+    const { items, itemsActions } = this.props
     return (
       <div>
 
@@ -25,7 +31,7 @@ export default class Items extends Component {
           forward={false}
           _handleChecked={itemsActions.handleSelected}
           itemsActions={itemsActions}
-          />
+        />
 
           {
             items.map((item, i) =>

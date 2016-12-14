@@ -6,6 +6,7 @@ import TextField from 'material-ui/lib/text-field'
 import FlatButton from 'material-ui/lib/flat-button'
 import ContentAdd from 'material-ui/lib/svg-icons/content/add'
 import Dialog from 'material-ui/lib/dialog'
+import Colors from 'material-ui/lib/styles/colors'
 
 import WebApisDialog from './WebApisDialog'
 import AddWebApisDialog from './AddWebApisDialog'
@@ -49,7 +50,6 @@ export default class ChildrenItems extends Component {
   handleChange(name, event) {
     let newState = {}
     newState[name] = event.target.value
-    // console.log(newState)
     this.setState(newState)
   }
 
@@ -105,9 +105,7 @@ export default class ChildrenItems extends Component {
                     <td className="tdItems">{api.serviceMethod}</td>
                     <td className="tdItems">{api.serviceUrl}</td>
                     <td className="toolItems">
-                      <FloatingActionButton mini={true} secondary={true} onTouchTap={this.handleEdit.bind(this, api)}>
-                        <ContentCreate />
-                      </FloatingActionButton>
+                      <ContentCreate color={Colors.cyan500} onTouchTap={this.handleEdit.bind(this, api)} />
                     </td>
                   </tr>
                 )

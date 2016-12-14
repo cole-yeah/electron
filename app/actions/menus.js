@@ -237,6 +237,96 @@ export function receiveMenus() {
                                 ]
                             }
                         ]
+                    },
+                    {
+                        "functionId": "F0066",
+                        "functionName": "字典数据管理1",
+                        "operations": [
+                            {
+                                "opId": "P0001",
+                                "opName": "字典数据管理查看",
+                                "opSort": "P0001",
+                                "elementClass": "acl_view_ydsWorkBook",
+                                "webApis": [
+                                    {
+                                        "serviceUrl": "/yard/spd/ydsWorkBooks",
+                                        "serviceMethod": "GET"
+                                    },
+                                    {
+                                        "serviceUrl": "/yard/spd/ydsWorkBooks/{workbookId}",
+                                        "serviceMethod": "GET"
+                                    },
+                                    {
+                                        "serviceUrl": "/yard/spd/ydsWorkBooks",
+                                        "serviceMethod": "GET"
+                                    },
+                                    {
+                                        "serviceUrl": "/yard/spd/ydsWorkBooks",
+                                        "serviceMethod": "GET"
+                                    },
+                                    {
+                                        "serviceUrl": "/yard/spd/ydsWorkBooks/count",
+                                        "serviceMethod": "GET"
+                                    }
+                                ]
+                            },
+                            {
+                                "opId": "P0002",
+                                "opName": "字典数据管理新增",
+                                "opSort": "P0002",
+                                "elementClass": "acl_add_ydsWorkBook",
+                                "webApis": [
+                                    {
+                                        "serviceUrl": "/yard/spd/ydsWorkBooks",
+                                        "serviceMethod": "POST"
+                                    },
+                                    {
+                                        "serviceUrl": "/yard/spd/ydsWorkBooks",
+                                        "serviceMethod": "GET"
+                                    },
+                                    {
+                                        "serviceUrl": "/yard/spd/ydsWorkBooks/{workbookId}",
+                                        "serviceMethod": "GET"
+                                    },
+                                    {
+                                        "serviceUrl": "/yard/spd/ydsWorkBooks",
+                                        "serviceMethod": "POST"
+                                    },
+                                    {
+                                        "serviceUrl": "/yard/spd/ydsWorkBooks/count",
+                                        "serviceMethod": "GET"
+                                    }
+                                ]
+                            },
+                            {
+                                "opId": "P0003",
+                                "opName": "字典数据管理编辑",
+                                "opSort": "P0003",
+                                "elementClass": "acl_edit_ydsWorkBook",
+                                "webApis": [
+                                    {
+                                        "serviceUrl": "/yard/spd/ydsWorkBooks/{workbookId}",
+                                        "serviceMethod": "PUT"
+                                    },
+                                    {
+                                        "serviceUrl": "/yard/spd/ydsWorkBooks",
+                                        "serviceMethod": "GET"
+                                    },
+                                    {
+                                        "serviceUrl": "/yard/spd/ydsWorkBooks/{workbookId}",
+                                        "serviceMethod": "GET"
+                                    },
+                                    {
+                                        "serviceUrl": "/yard/spd/ydsWorkBooks/count",
+                                        "serviceMethod": "GET"
+                                    },
+                                    {
+                                        "serviceUrl": "/yard/spd/ydsWorkBooks/{workbookId}",
+                                        "serviceMethod": "PUT"
+                                    }
+                                ]
+                            }
+                        ]
                     }
                 ],
                 "children": [],

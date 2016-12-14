@@ -116,9 +116,11 @@ li{
     opacity: 0.3;
 }
 .toolItems{
-    width: 80px;
+    width: 40px;
     padding:4px;
     border-bottom: 1px solid #e0e0e0;
+    text-align: center;
+    cursor: pointer;
 }
 .tdItems, .thItems {
     max-width: 10em;

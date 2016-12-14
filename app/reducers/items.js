@@ -31,6 +31,7 @@ export function items(state=[], action) {
  * 点击勾选与否functions  
  */
     case HANDLE_SELECTED:
+      // return state.map(item => Object.assign({}, item, { checked: !item.checked}))  //到时有多个functions
       return [Object.assign({}, state[0], { checked: !state[0].checked })]
 /**
  * 提交修改operations的值，并合并到menus中

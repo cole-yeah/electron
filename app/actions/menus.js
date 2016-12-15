@@ -43,12 +43,12 @@ export function receiveItems(id,menus) {
   }
 }
 
-export function dispatchActions(menuId, items) {
-  return dispatch => {
-    dispatch(selectedMenus(menuId))
-    dispatch(receiveItems(menuId,items))
-  }
-}
+// export function dispatchActions(menuId, items) {
+//   return dispatch => {
+//     dispatch(selectedMenus(menuId))
+//     dispatch(receiveItems(menuId,items))
+//   }
+// }
 
 export function selectedMenus(menuId) {
   return {
@@ -239,89 +239,129 @@ export function receiveMenus() {
                         ]
                     },
                     {
-                        "functionId": "F0066",
-                        "functionName": "字典数据管理1",
+                        "functionId": "F0020",
+                        "functionName": "科室收货确认",
                         "operations": [
                             {
-                                "opId": "P0001",
-                                "opName": "字典数据管理查看",
-                                "opSort": "P0001",
-                                "elementClass": "acl_view_ydsWorkBook",
+                                "opId": "P0116",
+                                "opName": "科室收货确认查看",
+                                "opSort": "P0116",
+                                "elementClass": "acl_view_spdReceiveAbteilung",
                                 "webApis": [
                                     {
-                                        "serviceUrl": "/yard/spd/ydsWorkBooks",
-                                        "serviceMethod": "GET"
-                                    },
-                                    {
-                                        "serviceUrl": "/yard/spd/ydsWorkBooks/{workbookId}",
-                                        "serviceMethod": "GET"
-                                    },
-                                    {
-                                        "serviceUrl": "/yard/spd/ydsWorkBooks",
-                                        "serviceMethod": "GET"
-                                    },
-                                    {
-                                        "serviceUrl": "/yard/spd/ydsWorkBooks",
-                                        "serviceMethod": "GET"
-                                    },
-                                    {
-                                        "serviceUrl": "/yard/spd/ydsWorkBooks/count",
-                                        "serviceMethod": "GET"
-                                    }
-                                ]
-                            },
-                            {
-                                "opId": "P0002",
-                                "opName": "字典数据管理新增",
-                                "opSort": "P0002",
-                                "elementClass": "acl_add_ydsWorkBook",
-                                "webApis": [
-                                    {
-                                        "serviceUrl": "/yard/spd/ydsWorkBooks",
-                                        "serviceMethod": "POST"
-                                    },
-                                    {
-                                        "serviceUrl": "/yard/spd/ydsWorkBooks",
-                                        "serviceMethod": "GET"
-                                    },
-                                    {
-                                        "serviceUrl": "/yard/spd/ydsWorkBooks/{workbookId}",
-                                        "serviceMethod": "GET"
-                                    },
-                                    {
-                                        "serviceUrl": "/yard/spd/ydsWorkBooks",
-                                        "serviceMethod": "POST"
-                                    },
-                                    {
-                                        "serviceUrl": "/yard/spd/ydsWorkBooks/count",
-                                        "serviceMethod": "GET"
-                                    }
-                                ]
-                            },
-                            {
-                                "opId": "P0003",
-                                "opName": "字典数据管理编辑",
-                                "opSort": "P0003",
-                                "elementClass": "acl_edit_ydsWorkBook",
-                                "webApis": [
-                                    {
-                                        "serviceUrl": "/yard/spd/ydsWorkBooks/{workbookId}",
+                                        "serviceUrl": "/yard/spd/spdTasks/{taskId}/checkState/reviewed",
                                         "serviceMethod": "PUT"
                                     },
                                     {
-                                        "serviceUrl": "/yard/spd/ydsWorkBooks",
+                                        "serviceUrl": "/yard/spd/spdSellerSends/ids,{ids}",
                                         "serviceMethod": "GET"
                                     },
                                     {
-                                        "serviceUrl": "/yard/spd/ydsWorkBooks/{workbookId}",
+                                        "serviceUrl": "/yard/spd/spdReceiveItems/receiveCode,{receiveCode}",
                                         "serviceMethod": "GET"
                                     },
                                     {
-                                        "serviceUrl": "/yard/spd/ydsWorkBooks/count",
+                                        "serviceUrl": "/yard/spd/spdReceives/byAbteilungCode/code,{code}",
                                         "serviceMethod": "GET"
                                     },
                                     {
-                                        "serviceUrl": "/yard/spd/ydsWorkBooks/{workbookId}",
+                                        "serviceUrl": "/yard/spd/ydsGoods/ids,{ids}",
+                                        "serviceMethod": "GET"
+                                    },
+                                    {
+                                        "serviceUrl": "/yard/spd/spdReceives/byAbteilungChecked",
+                                        "serviceMethod": "GET"
+                                    },
+                                    {
+                                        "serviceUrl": "/yard/spd/spdReceives/byAbteilungChecked/count",
+                                        "serviceMethod": "GET"
+                                    }
+                                ]
+                            },
+                            {
+                                "opId": "P0117",
+                                "opName": "科室收货确认保存",
+                                "opSort": "P0117",
+                                "elementClass": "acl_update_spdReceiveAbteilung",
+                                "webApis": [
+                                    {
+                                        "serviceUrl": "/yard/spd/spdReceives/{receiveId}",
+                                        "serviceMethod": "GET"
+                                    },
+                                    {
+                                        "serviceUrl": "/yard/spd/spdReceiveItems/{receiveItemId}",
+                                        "serviceMethod": "PUT"
+                                    },
+                                    {
+                                        "serviceUrl": "/yard/spd/spdSellerSends/ids,{ids}",
+                                        "serviceMethod": "GET"
+                                    },
+                                    {
+                                        "serviceUrl": "/yard/spd/spdReceiveItems/receiveCode,{receiveCode}",
+                                        "serviceMethod": "GET"
+                                    },
+                                    {
+                                        "serviceUrl": "/yard/spd/ydsGoods/ids,{ids}",
+                                        "serviceMethod": "GET"
+                                    },
+                                    {
+                                        "serviceUrl": "/yard/spd/spdReceives/byAbteilungChecked",
+                                        "serviceMethod": "GET"
+                                    },
+                                    {
+                                        "serviceUrl": "/yard/spd/spdReceives/byAbteilungChecked/count",
+                                        "serviceMethod": "GET"
+                                    },
+                                    {
+                                        "serviceUrl": "/yard/spd/spdReceiveItems/{receiveItemId}",
+                                        "serviceMethod": "GET"
+                                    }
+                                ]
+                            },
+                            {
+                                "opId": "P0114",
+                                "opName": "科室收货确认确认收货",
+                                "opSort": "P0114",
+                                "elementClass": "acl_confirm_spdReceiveAbteilung",
+                                "webApis": [
+                                    {
+                                        "serviceUrl": "/yard/spd/spdSellerSends/ids,{ids}",
+                                        "serviceMethod": "GET"
+                                    },
+                                    {
+                                        "serviceUrl": "/yard/spd/spdReceives/{receiveId}/checkState/reviewed",
+                                        "serviceMethod": "PUT"
+                                    },
+                                    {
+                                        "serviceUrl": "/yard/spd/spdReceiveItems/receiveCode,{receiveCode}",
+                                        "serviceMethod": "GET"
+                                    },
+                                    {
+                                        "serviceUrl": "/yard/spd/ydsGoods/ids,{ids}",
+                                        "serviceMethod": "GET"
+                                    },
+                                    {
+                                        "serviceUrl": "/yard/spd/spdReceives/{receiveId}/checkState/reviewed",
+                                        "serviceMethod": "PUT"
+                                    },
+                                    {
+                                        "serviceUrl": "/yard/spd/spdReceives/byAbteilungChecked/count",
+                                        "serviceMethod": "GET"
+                                    },
+                                    {
+                                        "serviceUrl": "/yard/spd/spdReceives/byAbteilungChecked",
+                                        "serviceMethod": "GET"
+                                    }
+                                ]
+                            },
+                            {
+                                "opId": "P0656",
+                                "opName": "科室收货确认收货入库",
+                                "opSort": "P0656",
+                                "elementClass": "acl_inStorage_spdReceiveAbteilung",
+                                "webApis": [
+                                    {
+                                        "serviceUrl": "/yard/spd/spdReceives/{receiveId}/checkState/byQuick/reviewed",
                                         "serviceMethod": "PUT"
                                     }
                                 ]

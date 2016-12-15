@@ -14,4 +14,9 @@ npm run dev -- browser open localhost:3000
 但是因为使用的是ui框架的input，嵌套比较深，不用通过this.refs.xxx.value获取相应的值;3.那就把几个页面所需要的state都写到this.state上，如果为false则赋值为''，
 如： haha: this.props.api.haha || ''
 
+//todo 2016.12.15
+组件的复用差不多了，自己写的代码也是看的醉醉的，很乱。也有挺多问题暴露出来：
+1.operations修改是会删除一些东西，每修改一次删一个，暂未debug
+2.webApis新增的点击是单选……原因可能为未给其独一无二的id值取判断
+3.修改的时候要根据什么去修改到相应的位置呢？id值？id值应该也会被相应的修改的。。
 

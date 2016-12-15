@@ -1,9 +1,9 @@
 import React, { Component, PropTypes } from 'react'
 import Dialog from 'material-ui/lib/dialog'
 
-import WebApisDialog from './WebApisDialog'
 import ForwardTable from './ForwardTable'
 import EditTextField from './EditTextField'
+import OperationsDialog from '../Dialog/OperationsDialog'
 
 const style = {
   dialog: {
@@ -12,7 +12,7 @@ const style = {
   }
 }
 
-export default class OperationsDialog extends Component {
+export default class FunctionsDialog extends Component {
   constructor(props) {
     super(props)
     this.handleClose = this.handleClose.bind(this)
@@ -42,50 +42,40 @@ export default class OperationsDialog extends Component {
   }
 
   render() {
-    const { opera, edit, itemsActions } = this.props
+    const { content, edit, itemsActions } = this.props
 
     let element = (
       edit?
         <EditTextField
-          menus={opera}
-          _MenusSubmit={itemsActions.operationsSubmit}
-          array={['opId', 'opSort', 'opName', 'elementClass']}
+          menus={content}
+          _MenusSubmit={itemsActions.handleSubmit}
+          array={['functionId', 'functionName']}//不同点
         />:
         <ForwardTable
-          forward={false}
-          items={opera.webApis}
-          _handleChecked={itemsActions.webApisSelected}
+          forward={true}//不同点  控制是否有下一级，true为有，false反之
+          items={content.operations}//不同点   下一级为operations,若webApis则为webApis
+          _handleChecked={itemsActions.operationsSelected}//不同点
           _handleEdit={this.handleEdit}
           _handleAdd={this.handleAdd}
           _handleOpen={this.handleOpen}
-          array={['serviceMethod', 'serviceUrl']}
+          array={['opId', 'opSort', 'opName', 'elementClass']}//不同点
         />
     )
 
     return (
       <span>
         {element}
-
         <Dialog
           modal={false}
           open={this.state.open}
           contentStyle={style.dialog}
           onRequestClose={this.handleClose}
         >
-          {this.state.addItems?
-            <WebApisDialog
-              array={['serviceMethod', 'serviceUrl']}
-              itemsActions={itemsActions}
-              opId = {opera.opId}
-              api={opera.webApis.length !== 0?opera.webApis[0]:(opera.webApis.serviceMethod='',opera.webApis.serviceUrl='')}
-            />
-            :(<WebApisDialog
-                array={['serviceMethod', 'serviceUrl']}
-                itemsActions={itemsActions}
-                opId={this.state.api.id}
-                api={this.state.api}
-              />)
-          }
+          <OperationsDialog
+            edit={this.state.edit}
+            itemsActions={itemsActions}
+            opera={this.state.api}
+          />
         </Dialog>
       </span>
     )

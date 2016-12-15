@@ -6,7 +6,7 @@ import ContentCreate from 'material-ui/lib/svg-icons/content/create'
 import Dialog from 'material-ui/lib/dialog'
 
 import MenusItems from './MenusItems'
-import EditMenusDialog from '../Dialog/EditMenusDialog'
+import EditTextField from '../Dialog/EditTextField'
 
 const style = {
   dialog: {
@@ -64,7 +64,7 @@ export default class Menus extends Component {
               <MenusItems
                 key={i}
                 open={actions.openMenus}
-                _dispatchActions={actions.dispatchActions}
+                _dispatchActions={actions.receiveItems}
                 _checkedAll={actions.checkedAll}
                 _checkedMenus={actions.checkedMenus}
                 menuItems={menu}
@@ -91,7 +91,7 @@ export default class Menus extends Component {
             this.state.addMenus?
               (
                 this.state.first?
-                (<EditMenusDialog
+                (<EditTextField
                   menus={this.state.content}
                   _MenusSubmit={actions.addFirstMenus}
                   array={[ 'menuId', 'menuCode', 'menuSort', 'name', 'icon' ]}
@@ -100,12 +100,12 @@ export default class Menus extends Component {
               ):
               (
                 this.state.first?
-                (<EditMenusDialog
+                (<EditTextField
                   menus={this.state.content}
                   _MenusSubmit={actions.firstMenusSubmit}
                   array={[ 'menuId', 'menuCode', 'menuSort', 'name' ]}
                 />):
-                (<EditMenusDialog
+                (<EditTextField
                   menus={this.state.content}
                   _MenusSubmit={actions.secondMenusSubmit}
                   array={[ 'menuId', 'menuCode', 'menuSort', 'name', 'menuParentId', 'anchor' ]}

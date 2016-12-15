@@ -13,7 +13,7 @@ const style = {
   }
 }
 
-export default class EditMenusDialog extends Component {
+export default class EditTextField extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -28,7 +28,7 @@ export default class EditMenusDialog extends Component {
       /**add functions */
       functionId: this.props.menus.functionId || '',
       functionName: this.props.menus.functionName || '',
-      /**add webApis */
+      /**add webApis||edit operations */
       opId: this.props.menus.opId || '',
       opSort: this.props.menus.opSort || '',
       opName: this.props.menus.opName || '',

@@ -22,12 +22,13 @@ export function menus(state=[], action) {
         menu.key = i
         menu.children.map((child, j) => {
           child.checked = false
-          child.selected = false
           child.key = j
           child.functions.map(fun => {
             fun.checked = false
+            fun.id = fun.functionsId
             fun.operations.map((operation, x) => {
               operation.checked = false,
+              operation.id = operation.opId,
               operation.webApis.map((api, y) => {
                 api.checked = false,
                 api.id = (x*10) + y
@@ -86,13 +87,13 @@ export function menus(state=[], action) {
  * 选择该二级菜单
  */
     case SELECTED_MENUS:
-      state.map(menu => menu.children.map(child => child.selected = false))
-      return state.map(menu => Object.assign({}, menu, {
-        children: menu.children.map(child => child.menuId === action.menuId?
-          Object.assign({}, child, {
-            selected: true 
-          }):child)
-        }))
+      // state.map(menu => menu.children.map(child => child.selected = false))
+      // return state.map(menu => Object.assign({}, menu, {
+      //   children: menu.children.map(child => child.menuId === action.menuId?
+      //     Object.assign({}, child, {
+      //       selected: true 
+      //     }):child)
+      //   }))
 /**
  * 合并items修改后的数据
  */

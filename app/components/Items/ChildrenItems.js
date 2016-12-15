@@ -51,7 +51,7 @@ export default class ChildrenItems extends Component {
         (<EditTextField   //有点问题，一开始点增加里面为空，因为这个this.state.operations还没有赋值进去  2016.12.14
             menus={this.state.nextContent}
             _MenusSubmit={itemsActions.addOperationsSubmit}
-            array={['opId', 'opSort', 'opName', 'elementClass']}/>)
+            array={['functionId', 'functionName']}/>)
         :(<FunctionsDialog
             edit={this.state.edit}
             itemsActions={itemsActions}

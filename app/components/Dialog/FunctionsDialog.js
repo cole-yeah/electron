@@ -22,15 +22,16 @@ export default class FunctionsDialog extends Component {
     this.state = {
       open: false,
       addItems: false,
-      api: '',
+      edit:false,
+      nextContent: '',
     }
   }
   handleOpen(content) {
-    this.setState({open: true, addItems: false, api: content})
+    this.setState({open: true, addItems: false, nextContent: content})
   }
 
   handleEdit(content) {
-    this.setState({open: true, addItems: false, edit: true, api: content})
+    this.setState({open: true, addItems: false, edit: true, nextContent: content})
   }
 
   handleAdd(content) {
@@ -38,7 +39,7 @@ export default class FunctionsDialog extends Component {
   }
 
   handleClose() {
-    this.setState({open: false})
+    this.setState({edit: false, open: false})
   }
 
   render() {
@@ -71,11 +72,17 @@ export default class FunctionsDialog extends Component {
           contentStyle={style.dialog}
           onRequestClose={this.handleClose}
         >
-          <OperationsDialog
-            edit={this.state.edit}
-            itemsActions={itemsActions}
-            opera={this.state.api}
-          />
+          {this.state.addItems?
+            <EditTextField 
+              menus={this.state.nextContent}
+              _MenusSubmit={itemsActions.addOperationsSubmit}
+              array={['opId', 'opSort', 'opName', 'elementClass']}
+            />:
+            <OperationsDialog
+              edit={this.state.edit}
+              itemsActions={itemsActions}
+              content={this.state.nextContent}
+            />}
         </Dialog>
       </span>
     )

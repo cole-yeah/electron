@@ -17,8 +17,8 @@ export default class ChildrenItems extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      serviceMethod: this.props.api.serviceMethod,
-      serviceUrl: this.props.api.serviceUrl,
+      serviceMethod: this.props.content.serviceMethod,
+      serviceUrl: this.props.content.serviceUrl,
     }
   }
 

@@ -12,18 +12,18 @@ export const SECOND_MENUS_SUBMIT = 'SECOND_MENUS_SUBMIT'
 export const FIRST_MENUS_SUBMIT = 'FIRST_MENUS_SUBMIT'
 export const ADD_FIRST_MENUS = 'ADD_FIRST_MENUS'
 
-export function openMenus(menuId) {
+export function openMenus(key) {
   return {
     type: OPEN_MENUS,
-    menuId,
+    key,
   }
 }
 
-export function checkedAll(menuId, id) {
+export function checkedAll(menuId, key) {
   return {
     type: CHECKED_ALL,
     menuId,
-    id,
+    key,
   }
 }
 
@@ -35,11 +35,11 @@ export function checkedMenus(menuParentId, menuId) {
   }
 }
 
-export function receiveItems(id,menus) {
+export function receiveItems(key,menus) {
   return {
     type: RECEIVE_ITEMS,
     items: menus,
-    id,
+    key,
   }
 }
 
@@ -57,11 +57,11 @@ export function selectedMenus(menuId) {
   }
 }
 
-export function combineItems(id, items) {
+export function combineItems(key, items) {
   return {
     type: COMBINE_ITEMS,
     items,
-    id
+    key
   }
 }
 

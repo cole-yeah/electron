@@ -15,42 +15,42 @@ export function handleSubmit(functionId, functionName) {
   }
 }
 
-export function handleSelected(id) {
+export function handleSelected(key) {
   return {
     type: HANDLE_SELECTED,
-    id
+    key
   }
 }
 
-export function operationsSeleted(id) {
+export function operationsSelected(key) {
   return {
     type: OPERATIONS_SELECTED,
-    id
+    key
   }
 }
 
-export function operationsSubmit(id, opId, opName, opSort, elementClass) {
+export function operationsSubmit( key, opId,  opSort, opName,elementClass) {
   return {
     type: OPERATIONS_SUBMIT,
-    id,
+    key,
     opId, 
-    opName,
     opSort,
+    opName,
     elementClass
   }
 }
 
-export function webApisSelected(id) {
+export function webApisSelected(key) {
   return {
     type: WEBAPIS_SELECTED,
-    id
+    key
   }
 }
 
-export function webApisSubmit(id, serviceMethod, serviceUrl) {
+export function webApisSubmit(key, serviceMethod, serviceUrl) {
   return {
     type: WEBAPIS_SUBMIT,
-    id,
+    key,
     serviceMethod,
     serviceUrl
   }

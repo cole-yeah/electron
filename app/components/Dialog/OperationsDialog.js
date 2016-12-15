@@ -22,15 +22,15 @@ export default class OperationsDialog extends Component {
     this.state = {
       open: false,
       addItems: false,
-      api: '',
+      nextContent: '',
     }
   }
   handleOpen(content) {
-    this.setState({open: true, addItems: false, api: content})
+    this.setState({open: true, addItems: false, nextContent: content})
   }
 
   handleEdit(content) {
-    this.setState({open: true, addItems: false, edit: true, api: content})
+    this.setState({open: true, addItems: false, nextContent: content})
   }
 
   handleAdd(content) {
@@ -42,18 +42,18 @@ export default class OperationsDialog extends Component {
   }
 
   render() {
-    const { opera, edit, itemsActions } = this.props
+    const { content, edit, itemsActions } = this.props
 
     let element = (
       edit?
         <EditTextField
-          menus={opera}
+          menus={content}
           _MenusSubmit={itemsActions.operationsSubmit}
           array={['opId', 'opSort', 'opName', 'elementClass']}
         />:
         <ForwardTable
           forward={false}
-          items={opera.webApis}
+          items={content.webApis}
           _handleChecked={itemsActions.webApisSelected}
           _handleEdit={this.handleEdit}
           _handleAdd={this.handleAdd}
@@ -76,14 +76,14 @@ export default class OperationsDialog extends Component {
             <WebApisDialog
               array={['serviceMethod', 'serviceUrl']}
               itemsActions={itemsActions}
-              opId = {opera.opId}
-              api={opera.webApis.length !== 0?opera.webApis[0]:(opera.webApis.serviceMethod='',opera.webApis.serviceUrl='')}
+              opId = {content.opId}
+              content={content.webApis.length !== 0?content.webApis[0]:(content.webApis.serviceMethod='',content.webApis.serviceUrl='')}
             />
             :(<WebApisDialog
                 array={['serviceMethod', 'serviceUrl']}
                 itemsActions={itemsActions}
-                opId={this.state.api.id}
-                api={this.state.api}
+                opId={this.state.nextContent.id}
+                content={this.state.nextContent}
               />)
           }
         </Dialog>

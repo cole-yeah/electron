@@ -39,8 +39,8 @@ export function items(state=[], action) {
     case OPERATIONS_SUBMIT:
     console.log(action.id)
       return state.map(item => Object.assign({}, item, {
-        operations: item.operations.map(operation => operation.opId === action.id?
-          Object.assign({}, operation, {opId: action.opId, opName: action.opName, opSort: action.opSort, elementClass: action.elementClass}):operation)
+        operations: item.operations.map(operation => operation.key === action.key?
+          Object.assign({}, operation, {opId: action.opId, opSort: action.opSort, opName: action.opName, elementClass: action.elementClass}):operation)
         }
       ))
 
@@ -49,7 +49,7 @@ export function items(state=[], action) {
  */
     case OPERATIONS_SELECTED:
       return state.map(item => Object.assign({}, item, {
-        operations: item.operations.map(operation => operation.opId === action.id?
+        operations: item.operations.map(operation => operation.key === action.key?
           Object.assign({}, operation, { checked: !operation.checked }):operation)
       }))
 /**
@@ -58,7 +58,7 @@ export function items(state=[], action) {
     case WEBAPIS_SELECTED:
       return state.map(item => Object.assign({}, item, {
         operations: item.operations.map(operation => Object.assign({}, operation, {
-          webApis: operation.webApis.map(api => api.id === action.id?
+          webApis: operation.webApis.map(api => api.key === action.key?
             Object.assign({}, api, {checked: !api.checked}):api)
         }))
       }))
@@ -68,7 +68,7 @@ export function items(state=[], action) {
     case WEBAPIS_SUBMIT:
       return state.map(item => Object.assign({}, item, {
         operations: item.operations.map(operation => Object.assign({}, operation, {
-          webApis: operation.webApis.map(api => api.id === action.id?
+          webApis: operation.webApis.map(api => api.key === action.key?
             Object.assign({}, api, { serviceMethod: action.serviceMethod, serviceUrl: action.serviceUrl }):api)
         }))
       }))

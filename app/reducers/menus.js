@@ -22,16 +22,17 @@ export function menus(state=[], action) {
         menu.key = i
         menu.children.map((child, j) => {
           child.checked = false
-          child.key = j
-          child.functions.map(fun => {
+          child.key = i+'-'+j
+          child.functions.map((fun, k) => {
             fun.checked = false
-            fun.id = fun.functionsId
+            fun.key = i+'-'+j+'-'+k,
             fun.operations.map((operation, x) => {
               operation.checked = false,
+              operation.key = i+'-'+j+'-'+k+'-'+x,
               operation.id = operation.opId,
               operation.webApis.map((api, y) => {
                 api.checked = false,
-                api.id = (x*10) + y
+                api.key = i+'-'+j+'-'+k+'-'+x+'-'+y
               })
             })
           })
@@ -44,7 +45,7 @@ export function menus(state=[], action) {
  */
     case OPEN_MENUS:
       return state.map(menu =>
-        menu.menuId === action.menuId?
+        menu.key === action.key?
           Object.assign({}, menu, {
             open: !menu.open}
           ):menu)
@@ -52,14 +53,14 @@ export function menus(state=[], action) {
  * 点击勾选该一级菜单下所有二、三级菜单
  */
     case CHECKED_ALL:
-      const all = state[action.id].children.every(child => child.checked)
-      const allChecked = state[action.id].children.every(child =>
+      const all = state[action.key].children.every(child => child.checked)
+      const allChecked = state[action.key].children.every(child =>
           child.functions.every(fun => 
             fun.operations.every(operation => 
               operation.checked))
         )
       return state.map( menu => 
-          menu.menuId === action.menuId?
+          menu.key === action.key?
             Object.assign({}, menu, {
               checked: !menu.checked,
               children: menu.children.map(child => Object.assign({}, child, {
@@ -78,7 +79,7 @@ export function menus(state=[], action) {
     case CHECKED_MENUS:
       return state.map(menu => 
         Object.assign({}, menu, {
-          children: menu.children.map(child => child.menuId === action.menuId?
+          children: menu.children.map(child => child.key === action.key?
             Object.assign({}, child, {
               checked: !child.checked
             }):child)
@@ -100,7 +101,7 @@ export function menus(state=[], action) {
     case COMBINE_ITEMS:
       const funId = state.map(menu => menu.children.map(child => child.menuId))
       return state.map(menu => Object.assign({}, menu, {
-        children: menu.children.map(child => action.id === child.menuId?
+        children: menu.children.map(child => action.key === child.key?
           Object.assign({}, child, { 
             functions: action.items 
           }):child)
@@ -109,7 +110,7 @@ export function menus(state=[], action) {
  * 提交修改一级菜单数据
  */
     case FIRST_MENUS_SUBMIT:
-      return state.map(menu => menu.menuId === action.menuId?
+      return state.map(menu => menu.key === action.key?
         Object.assign({}, menu, {
           menuId: action.menuId,
           menuCode: action.menuCode,
@@ -121,7 +122,7 @@ export function menus(state=[], action) {
  */
     case SECOND_MENUS_SUBMIT:
       return state.map(menu => menu.menuId === action.menuParentId?(Object.assign({}, menu, {
-        children: menu.children.map(child => child.menuId === action.menuId?
+        children: menu.children.map(child => child.key === action.key?
           Object.assign({}, child, {
             menuId: action.menuId, 
             menuCode: action.menuCode, 

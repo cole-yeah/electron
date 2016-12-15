@@ -22,7 +22,7 @@ export default class MenusItems extends Component {
           style={style.checkbox}/>
         <span
           className="itemsSpan"
-          onClick={() => open(menuItems.menuId)}>{menuItems.name}</span>
+          onClick={() => open(menuItems.key)}>{menuItems.name}</span>
         <span className="arrow">{menuItems.open?'▲':'▼'}</span>
         <ul className={menuItems.open?'block':'none'}>
           {

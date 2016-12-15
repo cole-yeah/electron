@@ -19,19 +19,19 @@ export function menus(state=[], action) {
       return action.menus.map((menu, i) => {
         menu.open = false
         menu.checked = false
-        menu.key = i
+        menu.key = i+'-'+0+'-'+0+'-'+0+'-'+0
         menu.children.map((child, j) => {
           child.checked = false
-          child.key = i+'-'+j
+          child.key = i+'-'+j+'-'+0+'-'+0+'-'+0
           child.functions.map((fun, k) => {
             fun.checked = false
-            fun.key = i+'-'+j+'-'+k,
+            fun.key = i+'-'+j+'-'+k+'-'+0+'-'+0
             fun.operations.map((operation, x) => {
               operation.checked = false,
-              operation.key = i+'-'+j+'-'+k+'-'+x,
-              operation.id = operation.opId,
+              operation.key = i+'-'+j+'-'+k+'-'+x+'-'+0
+              operation.id = operation.opId
               operation.webApis.map((api, y) => {
-                api.checked = false,
+                api.checked = false
                 api.key = i+'-'+j+'-'+k+'-'+x+'-'+y
               })
             })
@@ -53,8 +53,9 @@ export function menus(state=[], action) {
  * 点击勾选该一级菜单下所有二、三级菜单
  */
     case CHECKED_ALL:
-      const all = state[action.key].children.every(child => child.checked)
-      const allChecked = state[action.key].children.every(child =>
+      const id = parseInt((action.key).split('-')[0])
+      const all = state[id].children.every(child => child.checked)
+      const allChecked = state[id].children.every(child =>
           child.functions.every(fun => 
             fun.operations.every(operation => 
               operation.checked))
@@ -99,7 +100,7 @@ export function menus(state=[], action) {
  * 合并items修改后的数据
  */
     case COMBINE_ITEMS:
-      const funId = state.map(menu => menu.children.map(child => child.menuId))
+      const funId = state.map(menu => menu.children.map(child => child.key))
       return state.map(menu => Object.assign({}, menu, {
         children: menu.children.map(child => action.key === child.key?
           Object.assign({}, child, { 

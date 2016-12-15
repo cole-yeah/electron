@@ -78,13 +78,13 @@ export default class OperationsDialog extends Component {
               itemsActions={itemsActions}
               opId = {content.opId}
               content={content.webApis.length !== 0?content.webApis[0]:(content.webApis.serviceMethod='',content.webApis.serviceUrl='')}
+            />:
+            <WebApisDialog
+              array={['serviceMethod', 'serviceUrl']}
+              itemsActions={itemsActions}
+              opId={this.state.nextContent.id}
+              content={this.state.nextContent}
             />
-            :(<WebApisDialog
-                array={['serviceMethod', 'serviceUrl']}
-                itemsActions={itemsActions}
-                opId={this.state.nextContent.id}
-                content={this.state.nextContent}
-              />)
           }
         </Dialog>
       </span>

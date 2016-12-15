@@ -33,12 +33,12 @@ export default class MenusItems extends Component {
                 className={child.selected?'bgColor':''}>
                 <Checkbox
                   checked={child.checked}
-                  onClick={() => _checkedMenus(child.menuParentId, child.menuId)}
+                  onClick={() => _checkedMenus(child.key)}
                   style={style.checkbox}/>
                 <span
                   child={child}
                   className="itemsSpan"
-                  onClick={() => _dispatchActions(child.menuId, child.functions)}>{child.name}</span>
+                  onClick={() => _dispatchActions(child.key, child.functions)}>{child.name}</span>
               </li>)
           }
         </ul>

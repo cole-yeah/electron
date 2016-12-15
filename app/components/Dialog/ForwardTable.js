@@ -40,7 +40,7 @@ export default class ChildrenItems extends Component {
           {
             items.map((item, i) =>
               <tr key={i}>
-                <td className="toolItems"><Checkbox checked={item.checked} onClick={() => _handleChecked(item.id||item.opId||'')}/></td>
+                <td className="toolItems"><Checkbox checked={item.checked} onClick={() => _handleChecked(item.key||'')}/></td>
                 {
                   array.map(arr => 
                     <td className="tdItems">{item[arr]}</td>

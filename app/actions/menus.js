@@ -27,15 +27,14 @@ export function checkedAll(menuId, key) {
   }
 }
 
-export function checkedMenus(menuParentId, menuId) {
+export function checkedMenus( key) {
   return {
     type: CHECKED_MENUS,
-    menuId,
-    menuParentId
+    key
   }
 }
 
-export function receiveItems(key,menus) {
+export function receiveItems(key, menus) {
   return {
     type: RECEIVE_ITEMS,
     items: menus,

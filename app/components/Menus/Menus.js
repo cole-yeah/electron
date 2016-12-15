@@ -22,6 +22,8 @@ export default class Menus extends Component {
   constructor(props) {
     super(props)
     this.handleClose = this.handleClose.bind(this)
+    this.handleAdd = this.handleAdd.bind(this)
+    this.handleEdit = this.handleEdit.bind(this)
     this.state = {
       open: false,
       first: false,
@@ -68,15 +70,15 @@ export default class Menus extends Component {
                 _checkedAll={actions.checkedAll}
                 _checkedMenus={actions.checkedMenus}
                 menuItems={menu}
-                />)
+              />)
           }
         </ul>
 
         <span className="buttonBox">
-          <FloatingActionButton secondary={true} mini={true} style={style.actionButton} onTouchTap={this.handleAdd.bind(this)}>
+          <FloatingActionButton secondary={true} mini={true} style={style.actionButton} onTouchTap={this.handleAdd}>
             <ContentAdd />
           </FloatingActionButton>
-          <FloatingActionButton secondary={true} mini={true} style={style.actionButton} onTouchTap={this.handleEdit.bind(this)}>
+          <FloatingActionButton secondary={true} mini={true} style={style.actionButton} onTouchTap={this.handleEdit}>
             <ContentCreate />
           </FloatingActionButton>
         </span>
@@ -91,25 +93,25 @@ export default class Menus extends Component {
             this.state.addMenus?
               (
                 this.state.first?
-                (<EditTextField
+                <EditTextField
                   menus={this.state.content}
                   _MenusSubmit={actions.addFirstMenus}
                   array={[ 'menuId', 'menuCode', 'menuSort', 'name', 'icon' ]}
-                />):
-                (<div>456</div>)//新增一二级菜单
+                />:
+                <div>456</div>//新增一二级菜单
               ):
               (
                 this.state.first?
-                (<EditTextField
+                <EditTextField
                   menus={this.state.content}
                   _MenusSubmit={actions.firstMenusSubmit}
                   array={[ 'menuId', 'menuCode', 'menuSort', 'name' ]}
-                />):
-                (<EditTextField
+                />:
+                <EditTextField
                   menus={this.state.content}
                   _MenusSubmit={actions.secondMenusSubmit}
                   array={[ 'menuId', 'menuCode', 'menuSort', 'name', 'menuParentId', 'anchor' ]}
-                />)
+                />
               )       //修改一二级菜单
           }
         </Dialog>

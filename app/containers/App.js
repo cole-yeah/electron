@@ -23,11 +23,11 @@ class App extends Component {
   }                  
 
   componentWillReceiveProps(nextState) {
-    const Id = (nextState.items.map(item => item.id))[0] //这个是和后面的menuId做对比判断的，map出来的是数组所以Id === menuId 为false，因为这个只有一个子集，所以直接用[0]取值
+    const key = (nextState.items.map(item => item.key))[0] //这个是和后面的menuId做对比判断的，map出来的是数组所以Id === menuId 为false，因为这个只有一个子集，所以直接用[0]取值
     if(nextState.items !== this.props.items) {  //不加这个判断很容易进行死循环，一直更新
-      this.props.menusActions.combineItems(Id, nextState.items)
+      this.props.menusActions.combineItems(key, nextState.items)
     }
-  }
+  }//item.key不能combine的原因是key不一样，如一个为0-0，另一个为0-0-0，所以不相等 2016.12.15
 
   render() {
     const {items, menusActions, itemsActions, menus} = this.props

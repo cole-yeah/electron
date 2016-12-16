@@ -122,6 +122,7 @@ export function menus(state=[], action) {
  * 提交修改二级菜单数据
  */
     case SECOND_MENUS_SUBMIT:
+      console.log(action.key)
       return state.map(menu => menu.menuId === action.menuParentId?(Object.assign({}, menu, {
         children: menu.children.map(child => child.key === action.key?
           Object.assign({}, child, {
@@ -137,13 +138,14 @@ export function menus(state=[], action) {
  * 提交新增一级菜单数据
  */
     case ADD_FIRST_MENUS:
-      // console.log('提交新增一级菜单数据')
+      const i = state.length
       state.push({
         menuId: action.menuId,
         menuCode: action.menuCode,
-        icon: action.icon,
         menuSort: action.menuSort,
         name: action.name,
+        icon: action.icon,
+        key: i+'-'+0+'-'+0+'-'+0+'-'+0,
         children: [],
         systemName: '收货系统',
         menuParent: '-1',
@@ -157,22 +159,22 @@ export function menus(state=[], action) {
  */
     case ADD_SECOND_MENUS:
       console.log('提交新增二级菜单数据')
-      // state.map(item => item.menuId === action.menuId?Object.assign({}, item, {
-      //   children: item.children.push({
-      //     systemName: "收货系统",
-      //     menuId: action.menuId,
-      //     menuCode: action.menuCode,
-      //     menuParentId: action.menuParentId,
-      //     menuSort: action.menuSort,
-      //     anchor: action.anchor,
-      //     name: action.name,
-      //     "icon": null,
-      //     level: 2,
-      //     functions: [],
-      //     children: [],
-      //     topMenu: false          
-      //   })
-      // }):item)
+      state.map(menu => menu.menuId === action.menuParentId?Object.assign({}, menu, {
+        children: menu.children.push({
+          menuId: action.menuId,
+          menuCode: action.menuCode,
+          menuSort: action.menuSort,
+          name: action.name,
+          menuParentId: action.menuParentId,
+          anchor: action.anchor,
+          systemName: "收货系统",
+          "icon": null,
+          level: 2,
+          functions: [],
+          children: [],
+          topMenu: false          
+        })
+      }):menu)
 
     default:
       return state

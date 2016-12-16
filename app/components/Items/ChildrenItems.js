@@ -23,7 +23,8 @@ export default class ChildrenItems extends Component {
       open: false,
       edit: false,
       addItems: false,
-      nextContent: ''
+      nextContent: '',
+      nextKey: ''
     }
   }
 
@@ -35,8 +36,8 @@ export default class ChildrenItems extends Component {
     this.setState({open: true, addItems: false, edit: true, nextContent: content})
   }
 
-  handleAdd(content) {
-    this.setState({open: true, addItems: true})
+  handleAdd(content, key) {
+    this.setState({open: true, addItems: true, nextKey: key})
   }
 
   handleClose() {
@@ -44,28 +45,14 @@ export default class ChildrenItems extends Component {
   }
 
   render() {
-    const { items, itemsActions, forward, _handleChecked } = this.props
-
-    let dialogChildren = (
-      this.state.addItems?
-        <EditTextField   //有点问题，一开始点增加里面为空，因为这个this.state.operations还没有赋值进去  2016.12.14
-          menus={this.state.nextContent}
-          _MenusSubmit={itemsActions.addOperationsSubmit}
-          array={['functionId', 'functionName']}
-        />:
-        <FunctionsDialog
-          edit={this.state.edit}
-          itemsActions={itemsActions}
-          content={this.state.nextContent}
-        /> 
-      )
+    const { items, itemsActions } = this.props
 
     return (
       <div>
         <ForwardTable
           forward={true}
           items={items}
-          _handleChecked={_handleChecked}
+          _handleChecked={itemsActions.handleSelected}
           _handleEdit={this.handleEdit}
           _handleAdd={this.handleAdd}
           _handleOpen={this.handleOpen}
@@ -78,7 +65,20 @@ export default class ChildrenItems extends Component {
           contentStyle={style.dialog}
           onRequestClose={this.handleClose}
         >
-          {dialogChildren}
+          {
+            this.state.addItems?
+              <EditTextField   //有点问题，一开始点增加里面为空，因为这个this.state.operations还没有赋值进去  2016.12.14
+                menus={this.state.nextContent}
+                key={this.state.nextKey}
+                _MenusSubmit={itemsActions.addFunctionsSubmit}
+                array={['functionId', 'functionName']}
+              />:
+              <FunctionsDialog
+                edit={this.state.edit}
+                itemsActions={itemsActions}
+                content={this.state.nextContent}
+              />
+          }
         </Dialog>
         
       </div>

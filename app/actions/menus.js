@@ -11,6 +11,7 @@ export const COMBINE_ITEMS = 'COMBINE_ITEMS'
 export const SECOND_MENUS_SUBMIT = 'SECOND_MENUS_SUBMIT'
 export const FIRST_MENUS_SUBMIT = 'FIRST_MENUS_SUBMIT'
 export const ADD_FIRST_MENUS = 'ADD_FIRST_MENUS'
+export const ADD_SECOND_MENUS = 'ADD_SECOND_MENUS'
 
 export function openMenus(key) {
   return {
@@ -27,7 +28,7 @@ export function checkedAll(menuId, key) {
   }
 }
 
-export function checkedMenus( key) {
+export function checkedMenus(key) {
   return {
     type: CHECKED_MENUS,
     key
@@ -64,9 +65,10 @@ export function combineItems(key, items) {
   }
 }
 
-export function firstMenusSubmit(menuId, menuCode, menuSort, name) {
+export function firstMenusSubmit(key, menuId, menuCode, menuSort, name) {
   return {
     type: FIRST_MENUS_SUBMIT,
+    key,
     menuId,
     menuCode,
     menuSort, 
@@ -74,9 +76,10 @@ export function firstMenusSubmit(menuId, menuCode, menuSort, name) {
   }
 }
 
-export function secondMenusSubmit(menuId, menuCode, menuSort, name, menuParentId, anchor) {
+export function secondMenusSubmit(key, menuId, menuCode, menuSort, name, menuParentId, anchor) {
   return {
     type: SECOND_MENUS_SUBMIT,
+    key,
     menuId, 
     menuCode, 
     menuSort, 
@@ -86,9 +89,10 @@ export function secondMenusSubmit(menuId, menuCode, menuSort, name, menuParentId
   }
 }
 
-export function addFirstMenus(menuId, menuCode, menuSort, name, icon) {
+export function addFirstMenus(key, menuId, menuCode, menuSort, name, icon) {
   return {
     type: ADD_FIRST_MENUS,
+    key,
     menuId,
     menuCode,
     menuSort, 
@@ -97,7 +101,18 @@ export function addFirstMenus(menuId, menuCode, menuSort, name, icon) {
   }
 }
 
-
+export function addSecondMenus(key, menuId, menuCode, menuSort, name, menuParentId, anchor) {
+  return {
+    type: ADD_SECOND_MENUS,
+    key,
+    menuId,
+    menuCode,
+    menuSort, 
+    name,
+    menuParentId,
+    anchor    
+  }
+}
 
 //读取本地json文件获取列表,根据参数first,second 索引出点击菜单下的数组
 // export function readItemsFile() {

@@ -22,7 +22,6 @@ export default class Items extends Component {
         <ChildrenItems
           items={items}
           forward={false}
-          _handleChecked={itemsActions.handleSelected}
           itemsActions={itemsActions}
         />
 

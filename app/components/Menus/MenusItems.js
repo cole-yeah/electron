@@ -11,7 +11,6 @@ const style = {
 
 export default class MenusItems extends Component {
 
-
   render() {
     const { menuItems, open, _checkedAll, _checkedMenus, _dispatchActions } = this.props
     let element = (

@@ -25,14 +25,17 @@ export default class EditTextField extends Component {
       menuSort: this.props.menus.menuSort || '',
       name: this.props.menus.name || '',
       icon: this.props.menus.icon || '',
-      /**add functions */
+      /**functions */
       functionId: this.props.menus.functionId || '',
       functionName: this.props.menus.functionName || '',
-      /**add webApis||edit operations */
+      /*operations */
       opId: this.props.menus.opId || '',
       opSort: this.props.menus.opSort || '',
       opName: this.props.menus.opName || '',
-      elementClass: this.props.menus.elementClass || ''
+      elementClass: this.props.menus.elementClass || '',
+      /**webApis*/
+      serviceMethod: this.props.menus.serviceMethod || '',
+      serviceUrl: this.props.menus.serviceUrl || '',
     }
   }
 
@@ -43,14 +46,15 @@ export default class EditTextField extends Component {
   }
 
   render() {
-    const { menus, _MenusSubmit, array } = this.props
+    const { menus, key, _MenusSubmit, array } = this.props
     let submitContent = array.map(arr => this.state[arr])
 
     return (
       <span>
         {
           array.map((arr, i) => 
-            <TextField 
+            <TextField
+              key={i} 
               value={this.state[arr]} 
               hintText={arr} 
               floatingLabelText={arr}
@@ -63,7 +67,7 @@ export default class EditTextField extends Component {
           label="Submit" 
           primary={true} 
           keyboardFocused={true}
-          onTouchTap={() => _MenusSubmit(...submitContent)}
+          onTouchTap={() => _MenusSubmit(key, menus.key, ...submitContent)}
         />
       </span>
     )

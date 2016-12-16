@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import Dialog from 'material-ui/lib/dialog'
 
-import WebApisDialog from './WebApisDialog'
 import ForwardTable from './ForwardTable'
 import EditTextField from './EditTextField'
 
@@ -38,7 +37,7 @@ export default class OperationsDialog extends Component {
   }
 
   handleClose() {
-    this.setState({open: false})
+    this.setState({open: false, addItems: true})
   }
 
   render() {
@@ -72,20 +71,15 @@ export default class OperationsDialog extends Component {
           contentStyle={style.dialog}
           onRequestClose={this.handleClose}
         >
-          {this.state.addItems?
-            <WebApisDialog
+
+          {
+            <EditTextField 
+              menus={this.state.nextContent}
+              _MenusSubmit={this.state.addItems?itemsActions.addWebApisSubmit:itemsActions.webApisSubmit}
               array={['serviceMethod', 'serviceUrl']}
-              itemsActions={itemsActions}
-              opId = {content.opId}
-              content={content.webApis.length !== 0?content.webApis[0]:(content.webApis.serviceMethod='',content.webApis.serviceUrl='')}
-            />:
-            <WebApisDialog
-              array={['serviceMethod', 'serviceUrl']}
-              itemsActions={itemsActions}
-              opId={this.state.nextContent.id}
-              content={this.state.nextContent}
             />
           }
+
         </Dialog>
       </span>
     )

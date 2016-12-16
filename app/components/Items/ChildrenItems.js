@@ -23,7 +23,8 @@ export default class ChildrenItems extends Component {
       open: false,
       edit: false,
       addItems: false,
-      nextContent: ''
+      nextContent: '',
+      nextKey: '',
     }
   }
 
@@ -35,8 +36,8 @@ export default class ChildrenItems extends Component {
     this.setState({open: true, addItems: false, edit: true, nextContent: content})
   }
 
-  handleAdd(content) {
-    this.setState({open: true, addItems: true})
+  handleAdd(key) {
+    this.setState({open: true, addItems: true, nextKey: key})
   }
 
   handleClose() {
@@ -45,7 +46,7 @@ export default class ChildrenItems extends Component {
 
   render() {
     const { items, itemsActions } = this.props
-
+/**wwwwww */ //2.key的值可以正常获取
     return (
       <div>
         <ForwardTable
@@ -68,6 +69,7 @@ export default class ChildrenItems extends Component {
             this.state.addItems?
               <EditTextField   //有点问题，一开始点增加里面为空，因为这个this.state.operations还没有赋值进去  2016.12.14
                 menus={this.state.nextContent}
+                Key={this.state.nextKey}
                 _MenusSubmit={itemsActions.addFunctionsSubmit}
                 array={['functionId', 'functionName']}
               />:
@@ -75,6 +77,7 @@ export default class ChildrenItems extends Component {
                 edit={this.state.edit}
                 itemsActions={itemsActions}
                 content={this.state.nextContent}
+                Key={this.state.nextKey}
               />
           }
         </Dialog>

@@ -107,6 +107,10 @@ li{
     margin-left: 60px;
 }
 /*items样式*/
+.tableBox {
+    max-height: 600px;
+    overflow-y: auto;
+}
 .tableItems{
     width: 100%;
     text-align: left;

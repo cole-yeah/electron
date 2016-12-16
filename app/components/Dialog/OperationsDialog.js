@@ -22,6 +22,7 @@ export default class OperationsDialog extends Component {
       open: false,
       addItems: false,
       nextContent: '',
+      nextKey:''
     }
   }
   handleOpen(content) {
@@ -32,8 +33,8 @@ export default class OperationsDialog extends Component {
     this.setState({open: true, addItems: false, nextContent: content})
   }
 
-  handleAdd(content) {
-    this.setState({open: true, addItems: true})
+  handleAdd(key) {
+    this.setState({open: true, addItems: true, nextKey: key})
   }
 
   handleClose() {
@@ -41,12 +42,13 @@ export default class OperationsDialog extends Component {
   }
 
   render() {
-    const { content, edit, itemsActions } = this.props
+    const { content, key, edit, itemsActions } = this.props
 
     let element = (
       edit?
         <EditTextField
           menus={content}
+          Key={key}
           _MenusSubmit={itemsActions.operationsSubmit}
           array={['opId', 'opSort', 'opName', 'elementClass']}
         />:
@@ -75,6 +77,7 @@ export default class OperationsDialog extends Component {
           {
             <EditTextField 
               menus={this.state.nextContent}
+              Key={this.state.nextKey}
               _MenusSubmit={this.state.addItems?itemsActions.addWebApisSubmit:itemsActions.webApisSubmit}
               array={['serviceMethod', 'serviceUrl']}
             />

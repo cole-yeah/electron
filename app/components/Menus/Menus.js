@@ -94,6 +94,7 @@ export default class Menus extends Component {
           {//todo 新增的content获取的是根据上次点击set的state，欠妥 2016.12.16
             <EditTextField
               menus={this.state.content}
+              Key={this.state.nextKey}
               _MenusSubmit={
                 this.state.addMenus?
                   (this.state.first?actions.addFirstMenus:actions.addSecondMenus):

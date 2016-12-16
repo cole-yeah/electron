@@ -24,6 +24,7 @@ export default class FunctionsDialog extends Component {
       addItems: false,
       edit:false,
       nextContent: '',
+      nextKey: '',
     }
   }
   handleOpen(content) {
@@ -34,8 +35,8 @@ export default class FunctionsDialog extends Component {
     this.setState({open: true, addItems: false, edit: true, nextContent: content})
   }
 
-  handleAdd(content) {
-    this.setState({open: true, addItems: true})
+  handleAdd(key) {
+    this.setState({open: true, addItems: true, nextKey: key})
   }
 
   handleClose() {
@@ -43,12 +44,13 @@ export default class FunctionsDialog extends Component {
   }
 
   render() {
-    const { content, edit, itemsActions } = this.props
+    const { content, key, edit, itemsActions } = this.props
 
     let element = (
       edit?
         <EditTextField
           menus={content}
+          Key={key}
           _MenusSubmit={itemsActions.handleSubmit}
           array={['functionId', 'functionName']}//不同点
         />:
@@ -75,6 +77,7 @@ export default class FunctionsDialog extends Component {
           {this.state.addItems?
             <EditTextField 
               menus={this.state.nextContent}
+              Key={this.state.nextKey}
               _MenusSubmit={itemsActions.addOperationsSubmit}
               array={['opId', 'opSort', 'opName', 'elementClass']}
             />:

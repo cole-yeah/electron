@@ -44,9 +44,9 @@ export default class EditTextField extends Component {
     newState[name] = event.target.value
     this.setState(newState)
   }
-
+/**hahahah */  //3.key在这里为undefined
   render() {
-    const { menus, _MenusSubmit, array } = this.props
+    const { Key, menus, _MenusSubmit, array } = this.props
     let submitContent = array.map(arr => this.state[arr])
 
     return (
@@ -67,7 +67,7 @@ export default class EditTextField extends Component {
           label="Submit" 
           primary={true} 
           keyboardFocused={true}
-          onTouchTap={() => _MenusSubmit(menus.key, ...submitContent)}
+          onTouchTap={() => _MenusSubmit(Key, menus.key||'', ...submitContent)}
         />
       </span>
     )

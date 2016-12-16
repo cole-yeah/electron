@@ -20,10 +20,10 @@ export default class ChildrenItems extends Component {
 
   render() {
     const { items=[], array, forward, _handleOpen, _handleAdd, _handleEdit, _handleChecked } = this.props
-
+/**pppppppp */ //1.key的值可以正常获取
     return (
-      <div>
-        <table className="tableItems">
+      <div className="tableBox">
+        <table className="tableItems" hahah={items}>
           <thead className="theadItems">
             <tr>
               <th className="toolItems"><Checkbox disabled={true} /></th>
@@ -60,7 +60,7 @@ export default class ChildrenItems extends Component {
 
         </table>
 
-        <FloatingActionButton secondary={true} mini={true} style={style.actionButton} onTouchTap={() => _handleAdd()}>
+        <FloatingActionButton secondary={true} mini={true} style={style.actionButton} onTouchTap={() => _handleAdd(items[0].key)}>
           <ContentAdd />
         </FloatingActionButton>
 

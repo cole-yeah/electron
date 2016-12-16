@@ -82,8 +82,7 @@ export default class FunctionsDialog extends Component {
               edit={this.state.edit}
               itemsActions={itemsActions}
               content={this.state.nextContent}
-            />
-          }
+            />}
         </Dialog>
       </span>
     )

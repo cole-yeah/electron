@@ -51,7 +51,7 @@ export function items(state=[], action) {
  * 提交修改functions的值，并合并到menus中
  */
     case HANDLE_SUBMIT:
-      return state.map(item => Object.assign({}, item, { functionId: action.functionId, functionName: action.functionName}))//要增加判断，相等则进行取代2016.12.15
+      return state.map(item => item.key === action.key?Object.assign({}, item, { functionId: action.functionId, functionName: action.functionName}):item)//要增加判断，相等则进行取代2016.12.15
 
 /**
  * 提交修改operations的值，并合并到menus中

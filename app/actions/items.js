@@ -34,9 +34,10 @@ export function webApisSelected(key) {
 /**
  * 提交修改action
  */
-export function handleSubmit(functionId, functionName) {
+export function handleSubmit(key, functionId, functionName) {
   return {
     type: HANDLE_SUBMIT,
+    key,
     functionId,
     functionName,
   }
@@ -64,20 +65,18 @@ export function webApisSubmit(key, serviceMethod, serviceUrl) {
 /**
  * 新增修改action
  */
-export function addFunctionsSubmit(nextKey, key, functionId, functionName) {
+export function addFunctionsSubmit(key, functionId, functionName) {
   return {
     type: ADD_FUNCTIONS_SUBMIT,
-    nextKey,
     key,
     functionId,
     functionName
   }
 }
 
-export function addOperationsSubmit(nextKey, key, opId, opSort, opName, elementClass) {
+export function addOperationsSubmit(key, opId, opSort, opName, elementClass) {
   return {
     type: ADD_OPERATIONS_SUBMIT,
-    nextKey,
     key,
     opId, 
     opSort, 
@@ -86,10 +85,9 @@ export function addOperationsSubmit(nextKey, key, opId, opSort, opName, elementC
   }
 }
 
-export function addWebApisSubmit(nextKey, key, serviceMethod, serviceUrl) {
+export function addWebApisSubmit(key, serviceMethod, serviceUrl) {
   return {
     type: ADD_WEBAPIS_SUBMIT,
-    nextKey,
     key,
     serviceMethod,
     serviceUrl,

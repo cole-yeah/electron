@@ -63,7 +63,7 @@
 /******/ 	}
 
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "35dd17f88a6c0cf6c286"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "5611460670bb5f0bdd46"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 
@@ -41730,7 +41730,7 @@
 	    };
 	  },
 	  getInitialState: function getInitialState() {
-	    var zDepth = this.props.disabled ? 0 : 0;//修改背景阴影，原本为2
+	    var zDepth = this.props.disabled ? 0 : 0;//设置为0之后，取消背景阴影
 
 	    return {
 	      hovered: false,

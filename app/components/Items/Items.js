@@ -2,8 +2,8 @@ import React, { Component, PropTypes } from 'react'
 import RaisedButton from 'material-ui/lib/raised-button'
 import ChildrenItems from './ChildrenItems'
 
-const remote = window.require('electron').remote
-const fs = remote.require('fs')
+// const remote = window.require('electron').remote
+// const fs = remote.require('fs')
 
 
 const style = {
@@ -19,10 +19,14 @@ export default class Items extends Component {
   }
 
   writeItemsFile(data) {
-      data = JSON.stringify(data)
-      // console.log(typeof(data))
-      // console.log(data) //todo TypeError: Cannot read property 'type' of undefined
-      fs.writeFileSync('./test.json', data, 'utf-8')  
+      // data = JSON.stringify(data)
+      // fs.writeFileSync('./test.json', data, 'utf-8')  
+      const aa = data.filter(item => item.checked===true)
+      const bb = aa.map(xi => xi.children.filter(child => child.checked === true))//导出勾选的数组应该是先从最底下的开始遍历，一层一层遍历，最后合并成一个新的数组
+      console.log(aa)
+      console.log(bb)
+      // console.log(data.filter(item => item.checked === true?item.children.filter(child => child.checked === true):''))
+
   }    
 
   render() {

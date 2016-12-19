@@ -43,13 +43,6 @@ export function receiveItems(key, menus) {
   }
 }
 
-// export function dispatchActions(menuId, items) {
-//   return dispatch => {
-//     dispatch(selectedMenus(menuId))
-//     dispatch(receiveItems(menuId,items))
-//   }
-// }
-
 export function selectedMenus(menuId) {
   return {
     type: SELECTED_MENUS,
@@ -129,17 +122,11 @@ export function readItemsFile() {
   }
 }
 
-//写入本地json文件
-export function writeItemsFile(data) {
-    // data = JSON.stringify(data)
-    return (fs.writeFileSync('./test.json', 
-      data, 'utf-8')
-    )
-} 
 
 //获取列表成功action
 export function receiveMenus(data) {
   console.log('获取data数据')
+  // console.log(typeof(data))
   return {
     type: RECEIVE_MENUS,
     menus:data

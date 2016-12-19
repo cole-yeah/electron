@@ -63,7 +63,7 @@
 /******/ 	}
 
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "f5fb732ac5ba0fb7b631"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "35dd17f88a6c0cf6c286"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 
@@ -22539,9 +22539,6 @@
 	  switch (action.type) {
 	    case _actionsMenus.RECEIVE_ITEMS:
 	      return action.items;
-	    // return action.items.map(item => {
-	    //   return item
-	    // })
 
 	    /**
 	     * 点击勾选与否functions  
@@ -22688,18 +22685,11 @@
 /* 204 */
 /***/ function(module, exports) {
 
-	'use strict';Object.defineProperty(exports,'__esModule',{value:true});exports.openMenus = openMenus;exports.checkedAll = checkedAll;exports.checkedMenus = checkedMenus;exports.receiveItems = receiveItems;exports.selectedMenus = selectedMenus;exports.combineItems = combineItems;exports.firstMenusSubmit = firstMenusSubmit;exports.secondMenusSubmit = secondMenusSubmit;exports.addFirstMenus = addFirstMenus;exports.addSecondMenus = addSecondMenus;exports.readItemsFile = readItemsFile;exports.writeItemsFile = writeItemsFile;exports.receiveMenus = receiveMenus;var remote=window.require('electron').remote;var fs=remote.require('fs');var RECEIVE_MENUS='RECEIVE_MENUS';exports.RECEIVE_MENUS = RECEIVE_MENUS;var OPEN_MENUS='OPEN_MENUS';exports.OPEN_MENUS = OPEN_MENUS;var CHECKED_ALL='CHECKED_ALL';exports.CHECKED_ALL = CHECKED_ALL;var CHECKED_MENUS='CHECKED_MENUS';exports.CHECKED_MENUS = CHECKED_MENUS;var SELECTED_MENUS='SELECTED_MENUS';exports.SELECTED_MENUS = SELECTED_MENUS;var RECEIVE_ITEMS='RECEIVE_ITEMS';exports.RECEIVE_ITEMS = RECEIVE_ITEMS;var COMBINE_ITEMS='COMBINE_ITEMS';exports.COMBINE_ITEMS = COMBINE_ITEMS;var SECOND_MENUS_SUBMIT='SECOND_MENUS_SUBMIT';exports.SECOND_MENUS_SUBMIT = SECOND_MENUS_SUBMIT;var FIRST_MENUS_SUBMIT='FIRST_MENUS_SUBMIT';exports.FIRST_MENUS_SUBMIT = FIRST_MENUS_SUBMIT;var ADD_FIRST_MENUS='ADD_FIRST_MENUS';exports.ADD_FIRST_MENUS = ADD_FIRST_MENUS;var ADD_SECOND_MENUS='ADD_SECOND_MENUS';exports.ADD_SECOND_MENUS = ADD_SECOND_MENUS;function openMenus(key){return {type:OPEN_MENUS,key:key};}function checkedAll(menuId,key){return {type:CHECKED_ALL,menuId:menuId,key:key};}function checkedMenus(key){return {type:CHECKED_MENUS,key:key};}function receiveItems(key,menus){return {type:RECEIVE_ITEMS,items:menus,key:key};} // export function dispatchActions(menuId, items) {
-	//   return dispatch => {
-	//     dispatch(selectedMenus(menuId))
-	//     dispatch(receiveItems(menuId,items))
-	//   }
-	// }
-	function selectedMenus(menuId){return {type:SELECTED_MENUS,menuId:menuId};}function combineItems(key,items){return {type:COMBINE_ITEMS,items:items,key:key};}function firstMenusSubmit(nextKey,key,menuId,menuCode,menuSort,name){return {type:FIRST_MENUS_SUBMIT,nextKey:nextKey,key:key,menuId:menuId,menuCode:menuCode,menuSort:menuSort,name:name};}function secondMenusSubmit(nextKey,key,menuId,menuCode,menuSort,name,menuParentId,anchor){return {type:SECOND_MENUS_SUBMIT,nextKey:nextKey,key:key,menuId:menuId,menuCode:menuCode,menuSort:menuSort,name:name,menuParentId:menuParentId,anchor:anchor};}function addFirstMenus(nextKey,key,menuId,menuCode,menuSort,name,icon){return {type:ADD_FIRST_MENUS,nextKey:nextKey,key:key,menuId:menuId,menuCode:menuCode,menuSort:menuSort,name:name,icon:icon};}function addSecondMenus(nextKey,key,menuId,menuCode,menuSort,name,menuParentId,anchor){return {type:ADD_SECOND_MENUS,nextKey:nextKey,key:key,menuId:menuId,menuCode:menuCode,menuSort:menuSort,name:name,menuParentId:menuParentId,anchor:anchor};} //读取本地json文件获取列表,根据参数first,second 索引出点击菜单下的数组
+	'use strict';Object.defineProperty(exports,'__esModule',{value:true});exports.openMenus = openMenus;exports.checkedAll = checkedAll;exports.checkedMenus = checkedMenus;exports.receiveItems = receiveItems;exports.selectedMenus = selectedMenus;exports.combineItems = combineItems;exports.firstMenusSubmit = firstMenusSubmit;exports.secondMenusSubmit = secondMenusSubmit;exports.addFirstMenus = addFirstMenus;exports.addSecondMenus = addSecondMenus;exports.readItemsFile = readItemsFile;exports.receiveMenus = receiveMenus;var remote=window.require('electron').remote;var fs=remote.require('fs');var RECEIVE_MENUS='RECEIVE_MENUS';exports.RECEIVE_MENUS = RECEIVE_MENUS;var OPEN_MENUS='OPEN_MENUS';exports.OPEN_MENUS = OPEN_MENUS;var CHECKED_ALL='CHECKED_ALL';exports.CHECKED_ALL = CHECKED_ALL;var CHECKED_MENUS='CHECKED_MENUS';exports.CHECKED_MENUS = CHECKED_MENUS;var SELECTED_MENUS='SELECTED_MENUS';exports.SELECTED_MENUS = SELECTED_MENUS;var RECEIVE_ITEMS='RECEIVE_ITEMS';exports.RECEIVE_ITEMS = RECEIVE_ITEMS;var COMBINE_ITEMS='COMBINE_ITEMS';exports.COMBINE_ITEMS = COMBINE_ITEMS;var SECOND_MENUS_SUBMIT='SECOND_MENUS_SUBMIT';exports.SECOND_MENUS_SUBMIT = SECOND_MENUS_SUBMIT;var FIRST_MENUS_SUBMIT='FIRST_MENUS_SUBMIT';exports.FIRST_MENUS_SUBMIT = FIRST_MENUS_SUBMIT;var ADD_FIRST_MENUS='ADD_FIRST_MENUS';exports.ADD_FIRST_MENUS = ADD_FIRST_MENUS;var ADD_SECOND_MENUS='ADD_SECOND_MENUS';exports.ADD_SECOND_MENUS = ADD_SECOND_MENUS;function openMenus(key){return {type:OPEN_MENUS,key:key};}function checkedAll(menuId,key){return {type:CHECKED_ALL,menuId:menuId,key:key};}function checkedMenus(key){return {type:CHECKED_MENUS,key:key};}function receiveItems(key,menus){return {type:RECEIVE_ITEMS,items:menus,key:key};}function selectedMenus(menuId){return {type:SELECTED_MENUS,menuId:menuId};}function combineItems(key,items){return {type:COMBINE_ITEMS,items:items,key:key};}function firstMenusSubmit(nextKey,key,menuId,menuCode,menuSort,name){return {type:FIRST_MENUS_SUBMIT,nextKey:nextKey,key:key,menuId:menuId,menuCode:menuCode,menuSort:menuSort,name:name};}function secondMenusSubmit(nextKey,key,menuId,menuCode,menuSort,name,menuParentId,anchor){return {type:SECOND_MENUS_SUBMIT,nextKey:nextKey,key:key,menuId:menuId,menuCode:menuCode,menuSort:menuSort,name:name,menuParentId:menuParentId,anchor:anchor};}function addFirstMenus(nextKey,key,menuId,menuCode,menuSort,name,icon){return {type:ADD_FIRST_MENUS,nextKey:nextKey,key:key,menuId:menuId,menuCode:menuCode,menuSort:menuSort,name:name,icon:icon};}function addSecondMenus(nextKey,key,menuId,menuCode,menuSort,name,menuParentId,anchor){return {type:ADD_SECOND_MENUS,nextKey:nextKey,key:key,menuId:menuId,menuCode:menuCode,menuSort:menuSort,name:name,menuParentId:menuParentId,anchor:anchor};} //读取本地json文件获取列表,根据参数first,second 索引出点击菜单下的数组
 	function readItemsFile(){return function(dispatch){return fs.readFile('./test.json','utf-8',function(err,data){data = JSON.parse(data); // const items = (data)
-	dispatch(receiveMenus(data));});};} //写入本地json文件
-	function writeItemsFile(data){ // data = JSON.stringify(data)
-	return fs.writeFileSync('./test.json',data,'utf-8');} //获取列表成功action
-	function receiveMenus(data){console.log('获取data数据');return {type:RECEIVE_MENUS,menus:data //     [
+	dispatch(receiveMenus(data));});};} //获取列表成功action
+	function receiveMenus(data){console.log('获取data数据'); // console.log(typeof(data))
+	return {type:RECEIVE_MENUS,menus:data //     [
 	//     {
 	//         "systemName": "收货系统",
 	//         "menuId": "10001",
@@ -37869,6 +37859,9 @@
 
 	var _ChildrenItems2 = _interopRequireDefault(_ChildrenItems);
 
+	var remote = window.require('electron').remote;
+	var fs = remote.require('fs');
+
 	var style = {
 	  raisedButton: {
 	    margin: 10
@@ -37885,13 +37878,20 @@
 	  }
 
 	  _createClass(Items, [{
+	    key: 'writeItemsFile',
+	    value: function writeItemsFile(data) {
+	      data = JSON.stringify(data);
+	      // console.log(typeof(data))
+	      // console.log(data) //todo TypeError: Cannot read property 'type' of undefined
+	      fs.writeFileSync('./test.json', data, 'utf-8');
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var _props = this.props;
 	      var items = _props.items;
 	      var menus = _props.menus;
 	      var itemsActions = _props.itemsActions;
-	      var menusActions = _props.menusActions;
 
 	      return _react2['default'].createElement(
 	        'div',
@@ -37906,9 +37906,7 @@
 	          { className: 'exp-imp' },
 	          _react2['default'].createElement(_materialUiLibRaisedButton2['default'], { label: '导 入', secondary: true, style: style.raisedButton }),
 	          _react2['default'].createElement(_materialUiLibRaisedButton2['default'], { label: '导 出', secondary: true, style: style.raisedButton }),
-	          _react2['default'].createElement(_materialUiLibRaisedButton2['default'], { label: '保 存', primary: true, style: style.raisedButton, onTouchTap: function () {
-	              return menusActions.writeItemsFile(menus);
-	            } })
+	          _react2['default'].createElement(_materialUiLibRaisedButton2['default'], { label: '保 存', primary: true, style: style.raisedButton, onTouchTap: this.writeItemsFile.bind(this, menus) })
 	        )
 	      );
 	    }

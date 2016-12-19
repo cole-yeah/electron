@@ -31,7 +31,8 @@ export default class Menus extends Component {
       first: false,
       addFirst: false,
       addMenus: true,
-      content: ''
+      content: '',
+      nextKey: '0-0-0-0-0'//todo 给个初始化的值，在点击增加一级菜单时会触发二级菜单的function，若传过去的key为空，则会导致后面的split这个方法报错  逻辑欠妥待优化 2016.12.19
     }
   }
 
@@ -51,7 +52,7 @@ export default class Menus extends Component {
 
   handleAdd() {
     const menus = this.props.menus.filter(menu => menu.checked === true)
-    menus.length === 0?this.setState({open: true, first: true, addMenus: true }):this.setState({open: true, first: false, addMenus: true })
+    menus.length === 0?this.setState({open: true, first: true, addMenus: true }):this.setState({open: true, first: false, addMenus: true, nextKey: menus[0].key })
   }
 
   handleClose() {

@@ -18,8 +18,8 @@ class App extends Component {
   }
 
   componentDidMount() {
-    // this.props.menusActions.readItemsFile()  //electron下，用fs读取文件
-    this.props.menusActions.receiveMenus()  //web下，假数据
+    this.props.menusActions.readItemsFile()  //electron下，用fs读取文件
+    // this.props.menusActions.receiveMenus()  //web下，假数据
   }                  
 
   componentWillReceiveProps(nextState) {
@@ -52,6 +52,8 @@ class App extends Component {
           <div className="MainRight">
             <Items
               itemsActions={itemsActions}
+              menusActions={menusActions}
+              menus={menus}
               items={items}/>
           </div>
 

@@ -138,14 +138,14 @@ export function menus(state=[], action) {
  * 提交新增一级菜单数据
  */
     case ADD_FIRST_MENUS:
-      const i = state.length
+      const a = state.length
       state.push({
         menuId: action.menuId,
         menuCode: action.menuCode,
         menuSort: action.menuSort,
         name: action.name,
         icon: action.icon,
-        key: i+'-'+0+'-'+0+'-'+0+'-'+0,
+        key: a+'-'+0+'-'+0+'-'+0+'-'+0,
         children: [],
         systemName: '收货系统',
         menuParent: '-1',
@@ -158,7 +158,8 @@ export function menus(state=[], action) {
  * 提交新增二级菜单数据
  */
     case ADD_SECOND_MENUS:
-      console.log('提交新增二级菜单数据')
+      const b = parseInt((action.nextKey).split('-')[0])
+      const c = state[b].children.length
       state.map(menu => menu.menuId === action.menuParentId?Object.assign({}, menu, {
         children: menu.children.push({
           menuId: action.menuId,
@@ -167,6 +168,7 @@ export function menus(state=[], action) {
           name: action.name,
           menuParentId: action.menuParentId,
           anchor: action.anchor,
+          key: b+'-'+c+'-'+0+'-'+0+'-'+0,
           systemName: "收货系统",
           "icon": null,
           level: 2,

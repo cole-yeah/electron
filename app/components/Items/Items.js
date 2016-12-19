@@ -15,7 +15,7 @@ export default class Items extends Component {
   }    
 
   render() {
-    const { items, itemsActions } = this.props
+    const { items, menus, itemsActions, menusActions } = this.props
     return (
       <div>
 
@@ -28,7 +28,7 @@ export default class Items extends Component {
         <div className="exp-imp">
           <RaisedButton label="导 入" secondary={true} style={style.raisedButton} />
           <RaisedButton label="导 出" secondary={true} style={style.raisedButton} />
-          <RaisedButton label="保 存" primary={true} style={style.raisedButton} />
+          <RaisedButton label="保 存" primary={true} style={style.raisedButton} onTouchTap={() => menusActions.writeItemsFile(menus)} />
         </div>
       </div>
     )

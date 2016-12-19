@@ -67,7 +67,7 @@ export default class EditTextField extends Component {
           label="Submit" 
           primary={true} 
           keyboardFocused={true}
-          onTouchTap={() => _MenusSubmit(Key, menus.key||'', ...submitContent)}
+          onTouchTap={() => _MenusSubmit(Key, menus.key, ...submitContent)}
         />
       </span>
     )

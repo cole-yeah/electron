@@ -20,7 +20,7 @@ export default class ChildrenItems extends Component {
 
   render() {
     const { items=[], array, forward, _handleOpen, _handleAdd, _handleEdit, _handleChecked, keys } = this.props
-/**pppppppp */ //1.key的值可以正常获取
+/**debug1 */ //1.key的值可以正常获取
     return (
       <div className="tableBox">
         <table className="tableItems" hahah={items}>
@@ -40,7 +40,7 @@ export default class ChildrenItems extends Component {
           {
             items.map((item, i) =>
               <tr key={i}>
-                <td className="toolItems"><Checkbox checked={item.checked} onClick={() => _handleChecked(item.key||'')}/></td>
+                <td className="toolItems"><Checkbox checked={item.checked} onClick={() => _handleChecked(item.key)}/></td>
                 {
                   array.map(arr => 
                     <td className="tdItems">{item[arr]}</td>

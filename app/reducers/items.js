@@ -113,6 +113,9 @@ export function items(state=[], action) {
         })  //todo 这里有点不明白，一return的话就会报childrenItems下的items.map is not a function错误. debug之后发现items变成了长度，不再是数组..
       }):item)  // 是push的原因, array.push('xx')为数组，var other = array.push('xx')为长度
 
+/**
+ * 提交新增webApis的值，并合并到menus中  
+ */
     case ADD_WEBAPIS_SUBMIT:
       console.log(action.nextKey)
       const h = parseInt((action.nextKey).split('-')[0])

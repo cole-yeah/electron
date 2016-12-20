@@ -1,9 +1,3 @@
-/*.MainRight{
-    width: calc(100%-210px);
-    width: -webkit-calc(100%-210px);
-    width: -o-calc(100%-210px);
-    width: -moz-calc(100%-210px);
-}*/
 *{
     font-family: Microsoft YaHei;
 }
@@ -42,16 +36,6 @@ li{
     right: 20px;
     z-index: 19;
 }
-.dialogTitle{
-    margin:0 0 0 1em;
-    padding-top: 1em;
-    color: #00bcd4;
-}
-.searchTitle{
-    font-weight: 600;
-    color: #00bcd4;
-    margin-left: 60px;
-}
 /*menus样式*/
 .mainLeftMenus {
     width: 240px;
@@ -59,19 +43,10 @@ li{
     overflow-y:scroll;
     margin-bottom: 130px;  
 }
-.menusBox{
-    /*width: 200px;
-    margin-left: -40px;
-    overflow-y:scroll;
-    margin-bottom: 130px;*/
-}
 .menusBox>li{
     margin:8px 0;
     cursor: pointer;
 }
-/*.menusBox ul{
-    display: none;
-}*/
 .block{
     display: block;
     margin-left: -40px;

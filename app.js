@@ -63,7 +63,7 @@
 /******/ 	}
 
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "5c7de6e8e6dd87955353"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "00842dce71940465eabc"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 
@@ -624,7 +624,7 @@
 	  _react2['default'].createElement(_containersApp2['default'], null)
 	), document.getElementById('app'));
 
-	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(342); if (makeExportsHot(module, __webpack_require__(66))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "index.jsx" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
+	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(346); if (makeExportsHot(module, __webpack_require__(66))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "index.jsx" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)(module)))
 
 /***/ },
@@ -24729,6 +24729,8 @@
 
 	var _componentsMenusMenus2 = _interopRequireDefault(_componentsMenusMenus);
 
+	__webpack_require__(342);
+
 	var App = (function (_Component) {
 	  _inherits(App, _Component);
 
@@ -24810,7 +24812,7 @@
 	  return {
 	    items: state.items,
 	    menus: state.menus,
-	    keys: state.keys
+	    keys: state.keys //todo 新增menus下的key，用来创建新增菜单下functions,感觉就用在这个地方有点浪费性能，待优化  2016.12.20
 	  };
 	}
 
@@ -35751,14 +35753,14 @@
 	      var keys = _props.keys;
 	      var itemsActions = _props.itemsActions;
 
-	      /**wwwwww */ //2.key的值可以正常获取
+	      /**debug2 */ //2.key的值可以正常获取
 	      return _react2['default'].createElement(
 	        'div',
 	        null,
 	        _react2['default'].createElement(_DialogForwardTable2['default'], {
 	          forward: true,
 	          items: items,
-	          keys: keys,
+	          keys: keys, //functions的新增需要从menus传keys过来
 	          _handleChecked: itemsActions.handleSelected,
 	          _handleEdit: this.handleEdit,
 	          _handleAdd: this.handleAdd,
@@ -35775,12 +35777,12 @@
 	          },
 	          this.state.addItems ? _react2['default'].createElement(_DialogEditTextField2['default'], //有点问题，一开始点增加里面为空，因为这个this.state.operations还没有赋值进去  2016.12.14
 	          { menus: this.state.nextContent,
-	            Key: this.state.nextKey,
+	            Key: this.state.nextKey, //nextKey 的值其实就是从forwardTable通过handleAdd函数setState然后传过来的，这个值用于去生成新增的functions、operations、webApis下的key
 	            _MenusSubmit: itemsActions.addFunctionsSubmit,
 	            array: ['functionId', 'functionName']
 	          }) : _react2['default'].createElement(_DialogFunctionsDialog2['default'], {
 	            edit: this.state.edit,
-	            keys: keys,
+	            keys: items.key, //operations的新增需要从functions传keys过来  //todo 这里的items为什么不用items[0],因为只有一个数组吗？可能以后这个会改动 2016.12.20
 	            itemsActions: itemsActions,
 	            content: this.state.nextContent,
 	            Key: this.state.nextKey
@@ -38582,6 +38584,7 @@
 	  function FunctionsDialog(props) {
 	    _classCallCheck(this, FunctionsDialog);
 
+	    //一般来说
 	    _get(Object.getPrototypeOf(FunctionsDialog.prototype), 'constructor', this).call(this, props);
 	    this.handleClose = this.handleClose.bind(this);
 	    this.handleEdit = this.handleEdit.bind(this);
@@ -38634,7 +38637,7 @@
 	      }) : _react2['default'].createElement(_ForwardTable2['default'], {
 	        forward: true, //不同点  控制是否有下一级，true为有，false反之
 	        items: content.operations, //不同点   下一级为operations,若webApis则为webApis
-	        keys: keys,
+	        keys: keys, //operations的新增需要从functions传keys过来
 	        _handleChecked: itemsActions.operationsSelected, //不同点
 	        _handleEdit: this.handleEdit,
 	        _handleAdd: this.handleAdd,
@@ -38656,11 +38659,12 @@
 	          },
 	          this.state.addItems ? _react2['default'].createElement(_EditTextField2['default'], {
 	            menus: this.state.nextContent,
-	            Key: this.state.nextKey,
+	            Key: this.state.nextKey, //nextKey 的值其实就是从forwardTable通过handleAdd函数setState然后传过来的，这个值用于去生成新增的functions、operations、webApis下的key
 	            _MenusSubmit: itemsActions.addOperationsSubmit,
 	            array: ['opId', 'opSort', 'opName', 'elementClass']
 	          }) : _react2['default'].createElement(_DialogOperationsDialog2['default'], {
 	            edit: this.state.edit,
+	            keys: content.operations[0].key,
 	            itemsActions: itemsActions,
 	            content: this.state.nextContent
 	          })
@@ -38753,7 +38757,7 @@
 	      var _handleChecked = _props._handleChecked;
 	      var keys = _props.keys;
 
-	      /**pppppppp */ //1.key的值可以正常获取
+	      /**debug1 */ //1.key的值可以正常获取
 	      return _react2['default'].createElement(
 	        'div',
 	        { className: 'tableBox' },
@@ -38801,7 +38805,7 @@
 	                  'td',
 	                  { className: 'toolItems' },
 	                  _react2['default'].createElement(_materialUiLibCheckbox2['default'], { checked: item.checked, onClick: function () {
-	                      return _handleChecked(item.key || '');
+	                      return _handleChecked(item.key);
 	                    } })
 	                ),
 	                array.map(function (arr) {
@@ -39432,6 +39436,7 @@
 	      var key = _props.key;
 	      var edit = _props.edit;
 	      var itemsActions = _props.itemsActions;
+	      var keys = _props.keys;
 
 	      var element = edit ? _react2['default'].createElement(_EditTextField2['default'], {
 	        menus: content,
@@ -39441,6 +39446,7 @@
 	      }) : _react2['default'].createElement(_ForwardTable2['default'], {
 	        forward: false,
 	        items: content.webApis,
+	        keys: keys,
 	        _handleChecked: itemsActions.webApisSelected,
 	        _handleEdit: this.handleEdit,
 	        _handleAdd: this.handleAdd,
@@ -39462,7 +39468,7 @@
 	          },
 	          _react2['default'].createElement(_EditTextField2['default'], {
 	            menus: this.state.nextContent,
-	            Key: this.state.nextKey,
+	            Key: this.state.nextKey, //nextKey 的值其实就是从forwardTable通过handleAdd函数setState然后传过来的，这个值用于去生成新增的functions、operations、webApis下的key
 	            _MenusSubmit: this.state.addItems ? itemsActions.addWebApisSubmit : itemsActions.webApisSubmit,
 	            array: ['serviceMethod', 'serviceUrl']
 	          })
@@ -39785,10 +39791,331 @@
 /* 342 */
 /***/ function(module, exports, __webpack_require__) {
 
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+
+	// load the styles
+	var content = __webpack_require__(343);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(345)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(true) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept(343, function() {
+				var newContent = __webpack_require__(343);
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 343 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(344)();
+	// imports
+
+
+	// module
+	exports.push([module.id, "*{\r\n    font-family: Microsoft YaHei;\r\n}\r\nli{\r\n    list-style: none;\r\n}\r\n.MainBody{\r\n    display: flex;\r\n    align-items: stretch;\r\n    position: fixed;\r\n    height: 100%;\r\n    width: calc(100% + 6px);\r\n}\r\n.MainLeft{\r\n    display: flex;\r\n}\r\n.MainRight{\r\n    display: inline-flex;\r\n    width:100%;\r\n    overflow-y: auto;\r\n    margin-bottom:60px;\r\n    background: white;\r\n    z-index: 9;\r\n    margin-left: -12px;\r\n}\r\n.MainRight>div{\r\n    width:100%;\r\n    min-height: 160px;\r\n}\r\n.text{\r\n    text-decoration: none;\r\n}\r\n.exp-imp{\r\n    position: fixed;\r\n    bottom: 20px;\r\n    right: 20px;\r\n    z-index: 19;\r\n}\r\n/*menus样式*/\r\n.mainLeftMenus {\r\n    width: 240px;\r\n    margin-left: -40px;\r\n    overflow-y:scroll;\r\n    margin-bottom: 130px;  \r\n}\r\n.menusBox>li{\r\n    margin:8px 0;\r\n    cursor: pointer;\r\n}\r\n.block{\r\n    display: block;\r\n    margin-left: -40px;\r\n}\r\n.none{\r\n    display: none;\r\n}\r\n.bgColor{\r\n    background: none rgba(0, 0, 0, 0.2);\r\n}\r\n.menus{\r\n    margin-left: -40px;\r\n    display: block;\r\n}\r\n.block>li{\r\n    padding: 8px 0 8px 20px;\r\n}\r\n.itemsSpan {\r\n    padding: 8px 4px;\r\n}\r\n.arrow{\r\n    float: right;\r\n    margin-right: 10px;\r\n    color: #00bcd4;\r\n}\r\n.dialogButton{\r\n    float: right;\r\n    margin:20px 20px 0 0;\r\n}\r\n.buttonBox{\r\n    position: fixed;\r\n    bottom: 32px;\r\n    margin-left: 60px;\r\n}\r\n/*items样式*/\r\n.tableBox {\r\n    max-height: 600px;\r\n    overflow-y: auto;\r\n}\r\n.tableItems{\r\n    width: 100%;\r\n    text-align: left;\r\n    margin-bottom: 10px;\r\n}\r\n.theadItems{\r\n    opacity: 0.3;\r\n}\r\n.toolItems{\r\n    width: 40px;\r\n    padding:4px;\r\n    border-bottom: 1px solid #e0e0e0;\r\n    text-align: center;\r\n    cursor: pointer;\r\n}\r\n.tdItems, .thItems {\r\n    max-width: 10em;\r\n    overflow: hidden;\r\n    text-overflow: ellipsis;\r\n    padding:4px;\r\n    border-bottom: 1px solid #e0e0e0;\r\n}", ""]);
+
+	// exports
+
+
+/***/ },
+/* 344 */
+/***/ function(module, exports) {
+
+	/*
+		MIT License http://www.opensource.org/licenses/mit-license.php
+		Author Tobias Koppers @sokra
+	*/
+	// css base code, injected by the css-loader
+	module.exports = function() {
+		var list = [];
+
+		// return the list of modules as css string
+		list.toString = function toString() {
+			var result = [];
+			for(var i = 0; i < this.length; i++) {
+				var item = this[i];
+				if(item[2]) {
+					result.push("@media " + item[2] + "{" + item[1] + "}");
+				} else {
+					result.push(item[1]);
+				}
+			}
+			return result.join("");
+		};
+
+		// import a list of modules into the list
+		list.i = function(modules, mediaQuery) {
+			if(typeof modules === "string")
+				modules = [[null, modules, ""]];
+			var alreadyImportedModules = {};
+			for(var i = 0; i < this.length; i++) {
+				var id = this[i][0];
+				if(typeof id === "number")
+					alreadyImportedModules[id] = true;
+			}
+			for(i = 0; i < modules.length; i++) {
+				var item = modules[i];
+				// skip already imported module
+				// this implementation is not 100% perfect for weird media query combinations
+				//  when a module is imported multiple times with different media queries.
+				//  I hope this will never occur (Hey this way we have smaller bundles)
+				if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
+					if(mediaQuery && !item[2]) {
+						item[2] = mediaQuery;
+					} else if(mediaQuery) {
+						item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
+					}
+					list.push(item);
+				}
+			}
+		};
+		return list;
+	};
+
+
+/***/ },
+/* 345 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*
+		MIT License http://www.opensource.org/licenses/mit-license.php
+		Author Tobias Koppers @sokra
+	*/
+	var stylesInDom = {},
+		memoize = function(fn) {
+			var memo;
+			return function () {
+				if (typeof memo === "undefined") memo = fn.apply(this, arguments);
+				return memo;
+			};
+		},
+		isOldIE = memoize(function() {
+			return /msie [6-9]\b/.test(window.navigator.userAgent.toLowerCase());
+		}),
+		getHeadElement = memoize(function () {
+			return document.head || document.getElementsByTagName("head")[0];
+		}),
+		singletonElement = null,
+		singletonCounter = 0;
+
+	module.exports = function(list, options) {
+		if(false) {
+			if(typeof document !== "object") throw new Error("The style-loader cannot be used in a non-browser environment");
+		}
+
+		options = options || {};
+		// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
+		// tags it will allow on a page
+		if (typeof options.singleton === "undefined") options.singleton = isOldIE();
+
+		var styles = listToStyles(list);
+		addStylesToDom(styles, options);
+
+		return function update(newList) {
+			var mayRemove = [];
+			for(var i = 0; i < styles.length; i++) {
+				var item = styles[i];
+				var domStyle = stylesInDom[item.id];
+				domStyle.refs--;
+				mayRemove.push(domStyle);
+			}
+			if(newList) {
+				var newStyles = listToStyles(newList);
+				addStylesToDom(newStyles, options);
+			}
+			for(var i = 0; i < mayRemove.length; i++) {
+				var domStyle = mayRemove[i];
+				if(domStyle.refs === 0) {
+					for(var j = 0; j < domStyle.parts.length; j++)
+						domStyle.parts[j]();
+					delete stylesInDom[domStyle.id];
+				}
+			}
+		};
+	}
+
+	function addStylesToDom(styles, options) {
+		for(var i = 0; i < styles.length; i++) {
+			var item = styles[i];
+			var domStyle = stylesInDom[item.id];
+			if(domStyle) {
+				domStyle.refs++;
+				for(var j = 0; j < domStyle.parts.length; j++) {
+					domStyle.parts[j](item.parts[j]);
+				}
+				for(; j < item.parts.length; j++) {
+					domStyle.parts.push(addStyle(item.parts[j], options));
+				}
+			} else {
+				var parts = [];
+				for(var j = 0; j < item.parts.length; j++) {
+					parts.push(addStyle(item.parts[j], options));
+				}
+				stylesInDom[item.id] = {id: item.id, refs: 1, parts: parts};
+			}
+		}
+	}
+
+	function listToStyles(list) {
+		var styles = [];
+		var newStyles = {};
+		for(var i = 0; i < list.length; i++) {
+			var item = list[i];
+			var id = item[0];
+			var css = item[1];
+			var media = item[2];
+			var sourceMap = item[3];
+			var part = {css: css, media: media, sourceMap: sourceMap};
+			if(!newStyles[id])
+				styles.push(newStyles[id] = {id: id, parts: [part]});
+			else
+				newStyles[id].parts.push(part);
+		}
+		return styles;
+	}
+
+	function createStyleElement() {
+		var styleElement = document.createElement("style");
+		var head = getHeadElement();
+		styleElement.type = "text/css";
+		head.appendChild(styleElement);
+		return styleElement;
+	}
+
+	function createLinkElement() {
+		var linkElement = document.createElement("link");
+		var head = getHeadElement();
+		linkElement.rel = "stylesheet";
+		head.appendChild(linkElement);
+		return linkElement;
+	}
+
+	function addStyle(obj, options) {
+		var styleElement, update, remove;
+
+		if (options.singleton) {
+			var styleIndex = singletonCounter++;
+			styleElement = singletonElement || (singletonElement = createStyleElement());
+			update = applyToSingletonTag.bind(null, styleElement, styleIndex, false);
+			remove = applyToSingletonTag.bind(null, styleElement, styleIndex, true);
+		} else if(obj.sourceMap &&
+			typeof URL === "function" &&
+			typeof URL.createObjectURL === "function" &&
+			typeof URL.revokeObjectURL === "function" &&
+			typeof Blob === "function" &&
+			typeof btoa === "function") {
+			styleElement = createLinkElement();
+			update = updateLink.bind(null, styleElement);
+			remove = function() {
+				styleElement.parentNode.removeChild(styleElement);
+				if(styleElement.href)
+					URL.revokeObjectURL(styleElement.href);
+			};
+		} else {
+			styleElement = createStyleElement();
+			update = applyToTag.bind(null, styleElement);
+			remove = function() {
+				styleElement.parentNode.removeChild(styleElement);
+			};
+		}
+
+		update(obj);
+
+		return function updateStyle(newObj) {
+			if(newObj) {
+				if(newObj.css === obj.css && newObj.media === obj.media && newObj.sourceMap === obj.sourceMap)
+					return;
+				update(obj = newObj);
+			} else {
+				remove();
+			}
+		};
+	}
+
+	var replaceText = (function () {
+		var textStore = [];
+
+		return function (index, replacement) {
+			textStore[index] = replacement;
+			return textStore.filter(Boolean).join('\n');
+		};
+	})();
+
+	function applyToSingletonTag(styleElement, index, remove, obj) {
+		var css = remove ? "" : obj.css;
+
+		if (styleElement.styleSheet) {
+			styleElement.styleSheet.cssText = replaceText(index, css);
+		} else {
+			var cssNode = document.createTextNode(css);
+			var childNodes = styleElement.childNodes;
+			if (childNodes[index]) styleElement.removeChild(childNodes[index]);
+			if (childNodes.length) {
+				styleElement.insertBefore(cssNode, childNodes[index]);
+			} else {
+				styleElement.appendChild(cssNode);
+			}
+		}
+	}
+
+	function applyToTag(styleElement, obj) {
+		var css = obj.css;
+		var media = obj.media;
+		var sourceMap = obj.sourceMap;
+
+		if(media) {
+			styleElement.setAttribute("media", media)
+		}
+
+		if(styleElement.styleSheet) {
+			styleElement.styleSheet.cssText = css;
+		} else {
+			while(styleElement.firstChild) {
+				styleElement.removeChild(styleElement.firstChild);
+			}
+			styleElement.appendChild(document.createTextNode(css));
+		}
+	}
+
+	function updateLink(linkElement, obj) {
+		var css = obj.css;
+		var media = obj.media;
+		var sourceMap = obj.sourceMap;
+
+		if(sourceMap) {
+			// http://stackoverflow.com/a/26603875
+			css += "\n/*# sourceMappingURL=data:application/json;base64," + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + " */";
+		}
+
+		var blob = new Blob([css], { type: "text/css" });
+
+		var oldSrc = linkElement.href;
+
+		linkElement.href = URL.createObjectURL(blob);
+
+		if(oldSrc)
+			URL.revokeObjectURL(oldSrc);
+	}
+
+
+/***/ },
+/* 346 */
+/***/ function(module, exports, __webpack_require__) {
+
 	'use strict';
 
-	var isReactClassish = __webpack_require__(343),
-	    isReactElementish = __webpack_require__(344);
+	var isReactClassish = __webpack_require__(347),
+	    isReactElementish = __webpack_require__(348);
 
 	function makeExportsHot(m, React) {
 	  if (isReactElementish(m.exports, React)) {
@@ -39842,7 +40169,7 @@
 
 
 /***/ },
-/* 343 */
+/* 347 */
 /***/ function(module, exports) {
 
 	function hasRender(Class) {
@@ -39892,10 +40219,10 @@
 	module.exports = isReactClassish;
 
 /***/ },
-/* 344 */
+/* 348 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var isReactClassish = __webpack_require__(343);
+	var isReactClassish = __webpack_require__(347);
 
 	function isReactElementish(obj, React) {
 	  if (!obj) {

@@ -11,6 +11,7 @@ import * as MenusActions from '../actions/menus'
 import * as ItemsActions from '../actions/items'
 import Items from '../components/Items/Items'
 import Menus from '../components/Menus/Menus'
+import '../../css/styles.css'
 
 class App extends Component {
   constructor(props) {
@@ -69,7 +70,7 @@ function mapStateToProps(state) {
   return {
     items: state.items,
     menus: state.menus,
-    keys: state.keys
+    keys: state.keys  //todo 新增menus下的key，用来创建新增菜单下functions,感觉就用在这个地方有点浪费性能，待优化  2016.12.20
   }
 }
 

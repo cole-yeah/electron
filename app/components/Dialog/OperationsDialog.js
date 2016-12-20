@@ -42,7 +42,7 @@ export default class OperationsDialog extends Component {
   }
 
   render() {
-    const { content, key, edit, itemsActions } = this.props
+    const { content, key, edit, itemsActions, keys } = this.props
 
     let element = (
       edit?
@@ -55,6 +55,7 @@ export default class OperationsDialog extends Component {
         <ForwardTable
           forward={false}
           items={content.webApis}
+          keys={keys}
           _handleChecked={itemsActions.webApisSelected}
           _handleEdit={this.handleEdit}
           _handleAdd={this.handleAdd}
@@ -77,7 +78,7 @@ export default class OperationsDialog extends Component {
           {
             <EditTextField 
               menus={this.state.nextContent}
-              Key={this.state.nextKey}
+              Key={this.state.nextKey} //nextKey 的值其实就是从forwardTable通过handleAdd函数setState然后传过来的，这个值用于去生成新增的functions、operations、webApis下的key
               _MenusSubmit={this.state.addItems?itemsActions.addWebApisSubmit:itemsActions.webApisSubmit}
               array={['serviceMethod', 'serviceUrl']}
             />

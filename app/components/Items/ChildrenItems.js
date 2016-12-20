@@ -46,13 +46,13 @@ export default class ChildrenItems extends Component {
 
   render() {
     const { items, keys, itemsActions } = this.props
-/**wwwwww */ //2.key的值可以正常获取
+    /**debug2 */ //2.key的值可以正常获取
     return (
       <div>
         <ForwardTable
           forward={true}
           items={items}
-          keys={keys}
+          keys={keys}  //functions的新增需要从menus传keys过来
           _handleChecked={itemsActions.handleSelected}
           _handleEdit={this.handleEdit}
           _handleAdd={this.handleAdd}
@@ -70,13 +70,13 @@ export default class ChildrenItems extends Component {
             this.state.addItems?
               <EditTextField   //有点问题，一开始点增加里面为空，因为这个this.state.operations还没有赋值进去  2016.12.14
                 menus={this.state.nextContent}
-                Key={this.state.nextKey}
+                Key={this.state.nextKey} //nextKey 的值其实就是从forwardTable通过handleAdd函数setState然后传过来的，这个值用于去生成新增的functions、operations、webApis下的key
                 _MenusSubmit={itemsActions.addFunctionsSubmit}
                 array={['functionId', 'functionName']}
               />:
               <FunctionsDialog
                 edit={this.state.edit}
-                keys={keys}
+                keys={items.key}  //operations的新增需要从functions传keys过来  //todo 这里的items为什么不用items[0],因为只有一个数组吗？可能以后这个会改动 2016.12.20
                 itemsActions={itemsActions}
                 content={this.state.nextContent}
                 Key={this.state.nextKey}

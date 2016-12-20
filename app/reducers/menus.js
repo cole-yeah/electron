@@ -88,7 +88,10 @@ export function menus(state=[], action) {
 /**
  * 选择该二级菜单
  */
-    case SELECTED_MENUS:
+  // case GET_KEY:
+  //   return state.map(menu => menu.preKey = action.key)
+
+    // case SELECTED_MENUS:
       // state.map(menu => menu.children.map(child => child.selected = false))
       // return state.map(menu => Object.assign({}, menu, {
       //   children: menu.children.map(child => child.menuId === action.menuId?

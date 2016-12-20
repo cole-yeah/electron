@@ -29,7 +29,7 @@ class App extends Component {
   }//item.key不能combine的原因是key不一样，如一个为0-0，另一个为0-0-0，所以不相等 2016.12.15
 
   render() {
-    const {items, menusActions, itemsActions, menus} = this.props
+    const {items, keys, menusActions, itemsActions, menus} = this.props
     return(    
       <div>
         <AppBar
@@ -53,6 +53,7 @@ class App extends Component {
             <Items
               itemsActions={itemsActions}
               menusActions={menusActions}
+              keys={keys}
               menus={menus}
               items={items}/>
           </div>
@@ -67,7 +68,8 @@ function mapStateToProps(state) {
   // menu = Object.assign({}, menu, {functions: item}) //想把items上改变合并到menus上用这个方法行不通,因为item和menu是平级
   return {
     items: state.items,
-    menus: state.menus
+    menus: state.menus,
+    keys: state.keys
   }
 }
 

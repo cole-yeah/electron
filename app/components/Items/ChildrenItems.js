@@ -24,7 +24,7 @@ export default class ChildrenItems extends Component {
       edit: false,
       addItems: false,
       nextContent: '',
-      nextKey: '',
+      nextKey: '0-0-0-0-0',
     }
   }
 
@@ -45,13 +45,14 @@ export default class ChildrenItems extends Component {
   }
 
   render() {
-    const { items, itemsActions } = this.props
+    const { items, keys, itemsActions } = this.props
 /**wwwwww */ //2.key的值可以正常获取
     return (
       <div>
         <ForwardTable
           forward={true}
           items={items}
+          keys={keys}
           _handleChecked={itemsActions.handleSelected}
           _handleEdit={this.handleEdit}
           _handleAdd={this.handleAdd}
@@ -75,6 +76,7 @@ export default class ChildrenItems extends Component {
               />:
               <FunctionsDialog
                 edit={this.state.edit}
+                keys={keys}
                 itemsActions={itemsActions}
                 content={this.state.nextContent}
                 Key={this.state.nextKey}

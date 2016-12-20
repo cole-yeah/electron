@@ -22,7 +22,7 @@ export default class OperationsDialog extends Component {
       open: false,
       addItems: false,
       nextContent: '',
-      nextKey:''
+      nextKey: '0-0-0-0-0'
     }
   }
   handleOpen(content) {

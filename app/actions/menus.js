@@ -12,6 +12,7 @@ export const SECOND_MENUS_SUBMIT = 'SECOND_MENUS_SUBMIT'
 export const FIRST_MENUS_SUBMIT = 'FIRST_MENUS_SUBMIT'
 export const ADD_FIRST_MENUS = 'ADD_FIRST_MENUS'
 export const ADD_SECOND_MENUS = 'ADD_SECOND_MENUS'
+export const GET_KEY = 'GET_KEY'
 
 export function openMenus(key) {
   return {
@@ -40,6 +41,20 @@ export function receiveItems(key, menus) {
     type: RECEIVE_ITEMS,
     items: menus,
     key,
+  }
+}
+
+export function getKey(key) {
+  return {
+    type: GET_KEY,
+    key
+  }
+}
+
+export function dispatchActions(key, menus) {
+  return dispatch => {
+    dispatch(receiveItems(key, menus))
+    dispatch(getKey(key))
   }
 }
 
@@ -114,7 +129,7 @@ export function addSecondMenus(nextKey, key, menuId, menuCode, menuSort, name, m
 //读取本地json文件获取列表,根据参数first,second 索引出点击菜单下的数组
 // export function readItemsFile() {
 //   return dispatch => {
-//     return (fs.readFile('./test.json', 'utf-8', (err, data) => {
+//     return (fs.readFile(__dirname + '/test.json', 'utf-8', (err, data) => {
 //       data = JSON.parse(data)
 //       dispatch(receiveMenus(data))
 //     }))

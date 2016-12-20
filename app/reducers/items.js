@@ -16,7 +16,10 @@ import {
 export function items(state=[], action) {
   switch (action.type) {
     case RECEIVE_ITEMS:
-      return action.items
+      return action.items.map(item => {
+        item.preKey = action.key
+        return item
+      })
 
 /**
  * 点击勾选与否functions  

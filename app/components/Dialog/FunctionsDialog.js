@@ -24,7 +24,7 @@ export default class FunctionsDialog extends Component {
       addItems: false,
       edit:false,
       nextContent: '',
-      nextKey: '',
+      nextKey: '0-0-0-0-0',
     }
   }
   handleOpen(content) {
@@ -44,7 +44,7 @@ export default class FunctionsDialog extends Component {
   }
 
   render() {
-    const { content, key, edit, itemsActions } = this.props
+    const { content, key, edit, itemsActions, keys } = this.props
 
     let element = (
       edit?
@@ -57,6 +57,7 @@ export default class FunctionsDialog extends Component {
         <ForwardTable
           forward={true}//不同点  控制是否有下一级，true为有，false反之
           items={content.operations}//不同点   下一级为operations,若webApis则为webApis
+          keys={keys}
           _handleChecked={itemsActions.operationsSelected}//不同点
           _handleEdit={this.handleEdit}
           _handleAdd={this.handleAdd}

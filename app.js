@@ -63,7 +63,7 @@
 /******/ 	}
 
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "5611460670bb5f0bdd46"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "5c7de6e8e6dd87955353"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 
@@ -606,11 +606,11 @@
 
 	var _storeConfigureStore2 = _interopRequireDefault(_storeConfigureStore);
 
-	var _reactTapEventPlugin = __webpack_require__(217);
+	var _reactTapEventPlugin = __webpack_require__(218);
 
 	var _reactTapEventPlugin2 = _interopRequireDefault(_reactTapEventPlugin);
 
-	var _containersApp = __webpack_require__(222);
+	var _containersApp = __webpack_require__(223);
 
 	var _containersApp2 = _interopRequireDefault(_containersApp);
 
@@ -624,7 +624,7 @@
 	  _react2['default'].createElement(_containersApp2['default'], null)
 	), document.getElementById('app'));
 
-	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(341); if (makeExportsHot(module, __webpack_require__(66))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "index.jsx" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
+	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(342); if (makeExportsHot(module, __webpack_require__(66))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "index.jsx" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)(module)))
 
 /***/ },
@@ -22454,15 +22454,15 @@
 
 	var _reducersIndex2 = _interopRequireDefault(_reducersIndex);
 
-	var _reduxThunk = __webpack_require__(207);
+	var _reduxThunk = __webpack_require__(208);
 
 	var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
 
-	var _reduxLogger = __webpack_require__(208);
+	var _reduxLogger = __webpack_require__(209);
 
 	var _reduxLogger2 = _interopRequireDefault(_reduxLogger);
 
-	var _reduxDevtools = __webpack_require__(214);
+	var _reduxDevtools = __webpack_require__(215);
 
 	var canUseDOM = !!(typeof window !== 'undefined' && window.document && window.document.createElement);
 
@@ -22505,11 +22505,14 @@
 
 	var _menus = __webpack_require__(206);
 
+	var _keys = __webpack_require__(207);
+
 	// const menus = Object.assign({}, menus, {functions: items})
 
 	var rootReducer = (0, _redux.combineReducers)({
 	  items: _items.items,
-	  menus: _menus.menus
+	  menus: _menus.menus,
+	  keys: _keys.keys
 	});
 	exports['default'] = rootReducer;
 	module.exports = exports['default'];
@@ -22538,7 +22541,10 @@
 
 	  switch (action.type) {
 	    case _actionsMenus.RECEIVE_ITEMS:
-	      return action.items;
+	      return action.items.map(function (item) {
+	        item.preKey = action.key;
+	        return item;
+	      });
 
 	    /**
 	     * 点击勾选与否functions  
@@ -22685,2779 +22691,20 @@
 /* 204 */
 /***/ function(module, exports) {
 
-	'use strict';Object.defineProperty(exports,'__esModule',{value:true});exports.openMenus = openMenus;exports.checkedAll = checkedAll;exports.checkedMenus = checkedMenus;exports.receiveItems = receiveItems;exports.selectedMenus = selectedMenus;exports.combineItems = combineItems;exports.firstMenusSubmit = firstMenusSubmit;exports.secondMenusSubmit = secondMenusSubmit;exports.addFirstMenus = addFirstMenus;exports.addSecondMenus = addSecondMenus;exports.readItemsFile = readItemsFile;exports.receiveMenus = receiveMenus;var remote=window.require('electron').remote;var fs=remote.require('fs');var RECEIVE_MENUS='RECEIVE_MENUS';exports.RECEIVE_MENUS = RECEIVE_MENUS;var OPEN_MENUS='OPEN_MENUS';exports.OPEN_MENUS = OPEN_MENUS;var CHECKED_ALL='CHECKED_ALL';exports.CHECKED_ALL = CHECKED_ALL;var CHECKED_MENUS='CHECKED_MENUS';exports.CHECKED_MENUS = CHECKED_MENUS;var SELECTED_MENUS='SELECTED_MENUS';exports.SELECTED_MENUS = SELECTED_MENUS;var RECEIVE_ITEMS='RECEIVE_ITEMS';exports.RECEIVE_ITEMS = RECEIVE_ITEMS;var COMBINE_ITEMS='COMBINE_ITEMS';exports.COMBINE_ITEMS = COMBINE_ITEMS;var SECOND_MENUS_SUBMIT='SECOND_MENUS_SUBMIT';exports.SECOND_MENUS_SUBMIT = SECOND_MENUS_SUBMIT;var FIRST_MENUS_SUBMIT='FIRST_MENUS_SUBMIT';exports.FIRST_MENUS_SUBMIT = FIRST_MENUS_SUBMIT;var ADD_FIRST_MENUS='ADD_FIRST_MENUS';exports.ADD_FIRST_MENUS = ADD_FIRST_MENUS;var ADD_SECOND_MENUS='ADD_SECOND_MENUS';exports.ADD_SECOND_MENUS = ADD_SECOND_MENUS;function openMenus(key){return {type:OPEN_MENUS,key:key};}function checkedAll(menuId,key){return {type:CHECKED_ALL,menuId:menuId,key:key};}function checkedMenus(key){return {type:CHECKED_MENUS,key:key};}function receiveItems(key,menus){return {type:RECEIVE_ITEMS,items:menus,key:key};}function selectedMenus(menuId){return {type:SELECTED_MENUS,menuId:menuId};}function combineItems(key,items){return {type:COMBINE_ITEMS,items:items,key:key};}function firstMenusSubmit(nextKey,key,menuId,menuCode,menuSort,name){return {type:FIRST_MENUS_SUBMIT,nextKey:nextKey,key:key,menuId:menuId,menuCode:menuCode,menuSort:menuSort,name:name};}function secondMenusSubmit(nextKey,key,menuId,menuCode,menuSort,name,menuParentId,anchor){return {type:SECOND_MENUS_SUBMIT,nextKey:nextKey,key:key,menuId:menuId,menuCode:menuCode,menuSort:menuSort,name:name,menuParentId:menuParentId,anchor:anchor};}function addFirstMenus(nextKey,key,menuId,menuCode,menuSort,name,icon){return {type:ADD_FIRST_MENUS,nextKey:nextKey,key:key,menuId:menuId,menuCode:menuCode,menuSort:menuSort,name:name,icon:icon};}function addSecondMenus(nextKey,key,menuId,menuCode,menuSort,name,menuParentId,anchor){return {type:ADD_SECOND_MENUS,nextKey:nextKey,key:key,menuId:menuId,menuCode:menuCode,menuSort:menuSort,name:name,menuParentId:menuParentId,anchor:anchor};} //读取本地json文件获取列表,根据参数first,second 索引出点击菜单下的数组
-	function readItemsFile(){return function(dispatch){return fs.readFile('./test.json','utf-8',function(err,data){data = JSON.parse(data); // const items = (data)
-	dispatch(receiveMenus(data));});};} //获取列表成功action
-	function receiveMenus(data){console.log('获取data数据'); // console.log(typeof(data))
-	return {type:RECEIVE_MENUS,menus:data //     [
-	//     {
-	//         "systemName": "收货系统",
-	//         "menuId": "10001",
-	//         "menuCode": "10001",
-	//         "menuParentId": "-1",
-	//         "icon": "fa-database",
-	//         "menuSort": 1,
-	//         "name": "基础数据管理",
-	//         "level": 1,
-	//         "anchor": null,
-	//         "functions": null,
-	//         "children": [
-	//             {
-	//                 "systemName": "收货系统",
-	//                 "menuId": "10001-001",
-	//                 "menuCode": "10001-001",
-	//                 "menuParentId": "10001",
-	//                 "icon": null,
-	//                 "menuSort": 1,
-	//                 "name": "字典数据管理",
-	//                 "level": 2,
-	//                 "anchor": "#basics/ydsWorkbooks",
-	//                 "functions": [
-	//                     {
-	//                         "functionId": "F0001",
-	//                         "functionName": "字典数据管理",
-	//                         "operations": [
-	//                             {
-	//                                 "opId": "P0001",
-	//                                 "opName": "字典数据管理查看",
-	//                                 "opSort": "P0001",
-	//                                 "elementClass": "acl_view_ydsWorkBook",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsWorkBooks",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsWorkBooks/{workbookId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsWorkBooks",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsWorkBooks",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsWorkBooks/count",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0002",
-	//                                 "opName": "字典数据管理新增",
-	//                                 "opSort": "P0002",
-	//                                 "elementClass": "acl_add_ydsWorkBook",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsWorkBooks",
-	//                                         "serviceMethod": "POST"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsWorkBooks",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsWorkBooks/{workbookId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsWorkBooks",
-	//                                         "serviceMethod": "POST"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsWorkBooks/count",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0003",
-	//                                 "opName": "字典数据管理编辑",
-	//                                 "opSort": "P0003",
-	//                                 "elementClass": "acl_edit_ydsWorkBook",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsWorkBooks/{workbookId}",
-	//                                         "serviceMethod": "PUT"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsWorkBooks",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsWorkBooks/{workbookId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsWorkBooks/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsWorkBooks/{workbookId}",
-	//                                         "serviceMethod": "PUT"
-	//                                     }
-	//                                 ]
-	//                             }
-	//                         ]
-	//                     },
-	//                     {
-	//                         "functionId": "F0020",
-	//                         "functionName": "科室收货确认",
-	//                         "operations": [
-	//                             {
-	//                                 "opId": "P0116",
-	//                                 "opName": "科室收货确认查看",
-	//                                 "opSort": "P0116",
-	//                                 "elementClass": "acl_view_spdReceiveAbteilung",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdTasks/{taskId}/checkState/reviewed",
-	//                                         "serviceMethod": "PUT"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdSellerSends/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdReceiveItems/receiveCode,{receiveCode}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdReceives/byAbteilungCode/code,{code}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdReceives/byAbteilungChecked",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdReceives/byAbteilungChecked/count",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0117",
-	//                                 "opName": "科室收货确认保存",
-	//                                 "opSort": "P0117",
-	//                                 "elementClass": "acl_update_spdReceiveAbteilung",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdReceives/{receiveId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdReceiveItems/{receiveItemId}",
-	//                                         "serviceMethod": "PUT"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdSellerSends/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdReceiveItems/receiveCode,{receiveCode}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdReceives/byAbteilungChecked",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdReceives/byAbteilungChecked/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdReceiveItems/{receiveItemId}",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0114",
-	//                                 "opName": "科室收货确认确认收货",
-	//                                 "opSort": "P0114",
-	//                                 "elementClass": "acl_confirm_spdReceiveAbteilung",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdSellerSends/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdReceives/{receiveId}/checkState/reviewed",
-	//                                         "serviceMethod": "PUT"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdReceiveItems/receiveCode,{receiveCode}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdReceives/{receiveId}/checkState/reviewed",
-	//                                         "serviceMethod": "PUT"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdReceives/byAbteilungChecked/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdReceives/byAbteilungChecked",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0656",
-	//                                 "opName": "科室收货确认收货入库",
-	//                                 "opSort": "P0656",
-	//                                 "elementClass": "acl_inStorage_spdReceiveAbteilung",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdReceives/{receiveId}/checkState/byQuick/reviewed",
-	//                                         "serviceMethod": "PUT"
-	//                                     }
-	//                                 ]
-	//                             }
-	//                         ]
-	//                     }
-	//                 ],
-	//                 "children": [],
-	//                 "topMenu": false
-	//             },
-	//             {
-	//                 "systemName": "收货系统",
-	//                 "menuId": "10001-002",
-	//                 "menuCode": "10001-002",
-	//                 "menuParentId": "10001",
-	//                 "icon": null,
-	//                 "menuSort": 2,
-	//                 "name": "标准产品管理",
-	//                 "level": 2,
-	//                 "anchor": "#basics/standardProducts",
-	//                 "functions": [
-	//                     {
-	//                         "functionId": "F0002",
-	//                         "functionName": "标准产品管理",
-	//                         "operations": [
-	//                             {
-	//                                 "opId": "P0008",
-	//                                 "opName": "标准产品管理查看",
-	//                                 "opSort": "P0008",
-	//                                 "elementClass": "acl_view_ydsGood",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsWorkBooks",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods/{goodsId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsWorkBooks/byUse",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0009",
-	//                                 "opName": "标准产品管理新增",
-	//                                 "opSort": "P0009",
-	//                                 "elementClass": "acl_add_ydsGood",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods",
-	//                                         "serviceMethod": "POST"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods",
-	//                                         "serviceMethod": "POST"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods/{goodsId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods/count",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0010",
-	//                                 "opName": "标准产品管理编辑",
-	//                                 "opSort": "P0010",
-	//                                 "elementClass": "acl_edit_ydsGood",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods/{goodsId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods/{goodsId}",
-	//                                         "serviceMethod": "PUT"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0012",
-	//                                 "opName": "标准产品管理提交",
-	//                                 "opSort": "P0012",
-	//                                 "elementClass": "acl_commitEntity_ydsGood",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods/{goodsId}/checkState/commited",
-	//                                         "serviceMethod": "PUT"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods/{goodsId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods/{goodsId}/checkState/commited",
-	//                                         "serviceMethod": "PUT"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0015",
-	//                                 "opName": "标准产品管理导出",
-	//                                 "opSort": "P0015",
-	//                                 "elementClass": "acl_export_ydsGood",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods/{goodsId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods/ydsgoodsExcel",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0276",
-	//                                 "opName": "标准产品管理撤回",
-	//                                 "opSort": "P0276",
-	//                                 "elementClass": "acl_cancelCommit_ydsGood",
-	//                                 "webApis": []
-	//                             },
-	//                             {
-	//                                 "opId": "P0279",
-	//                                 "opName": "标准产品批量提交",
-	//                                 "opSort": "P0279",
-	//                                 "elementClass": "acl_commitEntities_ydsGood",
-	//                                 "webApis": []
-	//                             },
-	//                             {
-	//                                 "opId": "P0013",
-	//                                 "opName": "标准产品管理同步",
-	//                                 "opSort": "P0013",
-	//                                 "elementClass": "acl_view_ydsGood,acl_sync_ysdGood",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods/{goodsId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods/{goodsId}/checkState/reviewed",
-	//                                         "serviceMethod": "PUT"
-	//                                     }
-	//                                 ]
-	//                             }
-	//                         ]
-	//                     }
-	//                 ],
-	//                 "children": [],
-	//                 "topMenu": false
-	//             },
-	//             {
-	//                 "systemName": "收货系统",
-	//                 "menuId": "10001-003",
-	//                 "menuCode": "10001-003",
-	//                 "menuParentId": "10001",
-	//                 "icon": null,
-	//                 "menuSort": 3,
-	//                 "name": "标准产品批次",
-	//                 "level": 2,
-	//                 "anchor": "#spd/ydsGoodsLots",
-	//                 "functions": [
-	//                     {
-	//                         "functionId": "F0016",
-	//                         "functionName": "标准产品批次",
-	//                         "operations": [
-	//                             {
-	//                                 "opId": "P0105",
-	//                                 "opName": "标准产品批次查看",
-	//                                 "opSort": "P0105",
-	//                                 "elementClass": "acl_view_ydsGoodsLot",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoodsLots/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoodsLots",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoodsLots",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0107",
-	//                                 "opName": "标准产品批次新增",
-	//                                 "opSort": "P0107",
-	//                                 "elementClass": "acl_add_ydsGoodsLot",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoodsLots",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoodsLots",
-	//                                         "serviceMethod": "POST"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoodsLots",
-	//                                         "serviceMethod": "POST"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoodsLots/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoodsLots",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0106",
-	//                                 "opName": "标准产品批次编辑",
-	//                                 "opSort": "P0106",
-	//                                 "elementClass": "acl_edit_ydsGoodsLot",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoodsLots/{goodsLotId}",
-	//                                         "serviceMethod": "PUT"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoodsLots",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             }
-	//                         ]
-	//                     }
-	//                 ],
-	//                 "children": [],
-	//                 "topMenu": false
-	//             },
-	//             {
-	//                 "systemName": "收货系统",
-	//                 "menuId": "10001-004",
-	//                 "menuCode": "10001-004",
-	//                 "menuParentId": "10001",
-	//                 "icon": null,
-	//                 "menuSort": 4,
-	//                 "name": "企业产品管理",
-	//                 "level": 2,
-	//                 "anchor": "#basics/ydsEdsGoods",
-	//                 "functions": [
-	//                     {
-	//                         "functionId": "F0003",
-	//                         "functionName": "企业产品管理",
-	//                         "operations": [
-	//                             {
-	//                                 "opId": "P0016",
-	//                                 "opName": "企业产品管理查看",
-	//                                 "opSort": "P0016",
-	//                                 "elementClass": "acl_view_ydsEdsGoods",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoods",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoods/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoods/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoods",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoods/{goodsId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsWorkBooks/byUse",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsWorkBooks/byUse",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0018",
-	//                                 "opName": "企业产品管理新增",
-	//                                 "opSort": "P0018",
-	//                                 "elementClass": "acl_add_ydsEdsGoods",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoods",
-	//                                         "serviceMethod": "POST"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsWorkBooks",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods/byUse",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoods",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoods/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoods/{goodsId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoods",
-	//                                         "serviceMethod": "POST"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsWorkBooks/byUse",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoods",
-	//                                         "serviceMethod": "POST"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods/byUse/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0020",
-	//                                 "opName": "企业产品管理提交",
-	//                                 "opSort": "P0020",
-	//                                 "elementClass": "acl_commitEntity_ydsEdsGoods",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoods/{ydsEdsGoodsId}/checkState/commited",
-	//                                         "serviceMethod": "PUT"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoods",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoods/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoods/{goodsId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoods/{goodsId}/checkState/commited",
-	//                                         "serviceMethod": "PUT"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsWorkBooks/byUse",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0023",
-	//                                 "opName": "企业产品管理导出",
-	//                                 "opSort": "P0023",
-	//                                 "elementClass": "acl_export_ydsEdsGoods,acl_view_ydsEdsGoods",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoods",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoods/Excel",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoods/count",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0284",
-	//                                 "opName": "企业产品管理撤回",
-	//                                 "opSort": "P0284",
-	//                                 "elementClass": "acl_cancelCommit_ydsEdsGoods",
-	//                                 "webApis": []
-	//                             },
-	//                             {
-	//                                 "opId": "P0280",
-	//                                 "opName": "企业产品批量提交",
-	//                                 "opSort": "P0280",
-	//                                 "elementClass": "acl_commitEntities_ydsEdsGoods",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoods/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoods",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoods/{ydsEdsGoodsId}/checkState/commited",
-	//                                         "serviceMethod": "PUT"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoods/{edsGoodsId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsWorkBooks/byUse",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0017",
-	//                                 "opName": "企业产品管理编辑",
-	//                                 "opSort": "P0017",
-	//                                 "elementClass": "acl_edit_ydsEdsGoods",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoods/{goodsId}",
-	//                                         "serviceMethod": "PUT"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoods",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoods/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoods/{goodsId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsWorkBooks/byUse",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods/byUse/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods/byUse",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoods/{edsGoodsId}",
-	//                                         "serviceMethod": "PUT"
-	//                                     }
-	//                                 ]
-	//                             }
-	//                         ]
-	//                     }
-	//                 ],
-	//                 "children": [],
-	//                 "topMenu": false
-	//             },
-	//             {
-	//                 "systemName": "收货系统",
-	//                 "menuId": "10001-005",
-	//                 "menuCode": "10001-005",
-	//                 "menuParentId": "10001",
-	//                 "icon": null,
-	//                 "menuSort": 5,
-	//                 "name": "企业产品批次",
-	//                 "level": 2,
-	//                 "anchor": "#spd/ydsEdsGoodsLots",
-	//                 "functions": [
-	//                     {
-	//                         "functionId": "F0015",
-	//                         "functionName": "企业产品批次",
-	//                         "operations": [
-	//                             {
-	//                                 "opId": "P0102",
-	//                                 "opName": "企业产品批次查看",
-	//                                 "opSort": "P0102",
-	//                                 "elementClass": "acl_view_ydsEdsGoodsLot",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdReceives/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdReceives",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoodsLots/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoodsLots",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoods/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0103",
-	//                                 "opName": "企业产品批次编辑",
-	//                                 "opSort": "P0103",
-	//                                 "elementClass": "acl_edit_ydsEdsGoodsLot",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoodsLots/{edsGoodsLotId}",
-	//                                         "serviceMethod": "PUT"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoods/{edsGoodsId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoodsLots",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoodsLots/count",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0104",
-	//                                 "opName": "企业产品批次新增",
-	//                                 "opSort": "P0104",
-	//                                 "elementClass": "acl_add_ydsEdsGoodsLot",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoodsLots",
-	//                                         "serviceMethod": "POST"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoodsLots/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoodsLots",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsEdsGoodsLots",
-	//                                         "serviceMethod": "POST"
-	//                                     }
-	//                                 ]
-	//                             }
-	//                         ]
-	//                     }
-	//                 ],
-	//                 "children": [],
-	//                 "topMenu": false
-	//             }
-	//         ],
-	//         "topMenu": true
-	//     },
-	//     {
-	//         "systemName": "收货系统",
-	//         "menuId": "10002",
-	//         "menuCode": "10003",
-	//         "menuParentId": "-1",
-	//         "icon": "fa-map-signs",
-	//         "menuSort": 2,
-	//         "name": "规则配置管理",
-	//         "level": 1,
-	//         "anchor": null,
-	//         "functions": null,
-	//         "children": [
-	//             {
-	//                 "systemName": "收货系统",
-	//                 "menuId": "10002-001",
-	//                 "menuCode": "10002-001",
-	//                 "menuParentId": "10002",
-	//                 "icon": null,
-	//                 "menuSort": 1,
-	//                 "name": "请领流向策略",
-	//                 "level": 2,
-	//                 "anchor": "#basics/spdDepotRoutes",
-	//                 "functions": [
-	//                     {
-	//                         "functionId": "F0036",
-	//                         "functionName": "请领流向策略",
-	//                         "operations": [
-	//                             {
-	//                                 "opId": "P0238",
-	//                                 "opName": "请领流向策略查看",
-	//                                 "opSort": "P0238",
-	//                                 "elementClass": "acl_view_spdDepotRoute",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotRoutes/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotRoutes",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotRoutes",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0241",
-	//                                 "opName": "请领流向策略删除",
-	//                                 "opSort": "P0241",
-	//                                 "elementClass": "acl_delete_spdDepotRoute",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotRoutes/{routeId}",
-	//                                         "serviceMethod": "DELETE"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotRoutes",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotRoutes/count",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0240",
-	//                                 "opName": "请领流向策略编辑",
-	//                                 "opSort": "P0240",
-	//                                 "elementClass": "acl_edit_spdDepotRoute",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotRoutes/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotRoutes",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0239",
-	//                                 "opName": "请领流向策略新增",
-	//                                 "opSort": "P0239",
-	//                                 "elementClass": "acl_add_spdDepotRoute",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotRoutes",
-	//                                         "serviceMethod": "POST"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotRoutes",
-	//                                         "serviceMethod": "POST"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotRoutes/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotRoutes",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/pcsDepots/byUse",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/pcsDepots/byUse/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/pcsDepots/byTakePoint/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/pcsDepots/byTakePoint",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             }
-	//                         ]
-	//                     }
-	//                 ],
-	//                 "children": [],
-	//                 "topMenu": false
-	//             },
-	//             {
-	//                 "systemName": "收货系统",
-	//                 "menuId": "10002-002",
-	//                 "menuCode": "10002-002",
-	//                 "menuParentId": "10002",
-	//                 "icon": null,
-	//                 "menuSort": 2,
-	//                 "name": "使用类型管理",
-	//                 "level": 2,
-	//                 "anchor": "#spd/spdUsedTypes",
-	//                 "functions": [
-	//                     {
-	//                         "functionId": "F0074",
-	//                         "functionName": "使用类型管理",
-	//                         "operations": [
-	//                             {
-	//                                 "opId": "P0644",
-	//                                 "opName": "使用类型管理查看",
-	//                                 "opSort": "P0644",
-	//                                 "elementClass": "acl_view_spdUsedType",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/pcsDepotViews/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdUsedTypes",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdUsedTypes/count",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0645",
-	//                                 "opName": "使用类型管理增加",
-	//                                 "opSort": "P0645",
-	//                                 "elementClass": "acl_add_spdUsedType",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/pcsDepotViews/byUsedDepot",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdUsedTypes",
-	//                                         "serviceMethod": "POST"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/pcsDepts/orgId,{orgId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/pcsDepotViews/byUsedDepot",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/pcsDepotViews/byUsedDepot/count",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0646",
-	//                                 "opName": "使用类型管理编辑",
-	//                                 "opSort": "P0646",
-	//                                 "elementClass": "acl_edit_spdUsedType",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdUsedTypes/{usedType}",
-	//                                         "serviceMethod": "PUT"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0647",
-	//                                 "opName": "使用类型管理删除",
-	//                                 "opSort": "P0647",
-	//                                 "elementClass": "acl_delete_spdUsedType",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdUsedTypes/{usedType}",
-	//                                         "serviceMethod": "DELETE"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0648",
-	//                                 "opName": "使用类型管理提交",
-	//                                 "opSort": "P0648",
-	//                                 "elementClass": "acl_commitEntity_spdUsedType",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdUsedTypes/{usedType}/checkState/commited",
-	//                                         "serviceMethod": "PUT"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdUsedTypes/{usedType}",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0649",
-	//                                 "opName": "使用类型管理撤回",
-	//                                 "opSort": "P0649",
-	//                                 "elementClass": "acl_cancelCommit_spdUsedType",
-	//                                 "webApis": []
-	//                             }
-	//                         ]
-	//                     }
-	//                 ],
-	//                 "children": [],
-	//                 "topMenu": false
-	//             },
-	//             {
-	//                 "systemName": "收货系统",
-	//                 "menuId": "10002-003",
-	//                 "menuCode": "10002-003",
-	//                 "menuParentId": "10002",
-	//                 "icon": null,
-	//                 "menuSort": 3,
-	//                 "name": "仓库帐页管理",
-	//                 "level": 2,
-	//                 "anchor": "#spd/spdDepotCards",
-	//                 "functions": [
-	//                     {
-	//                         "functionId": "F0017",
-	//                         "functionName": "仓库帐页管理",
-	//                         "operations": [
-	//                             {
-	//                                 "opId": "P0108",
-	//                                 "opName": "仓库帐页管理查看",
-	//                                 "opSort": "P0108",
-	//                                 "elementClass": "acl_view_spdDepotCard",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/depotShelfs/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotCards/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotCards",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/SpdDepotCardByStockTotalViews/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0109",
-	//                                 "opName": "仓库帐页管理编辑",
-	//                                 "opSort": "P0109",
-	//                                 "elementClass": "acl_edit_spdDepotCard",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotCards",
-	//                                         "serviceMethod": "PUT"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/depotShelfs/byLoseSheft,{depotId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/depotShelfs/byLoseSheft,{depotId}/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/depotShelfs/{shelfId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/depotShelfs/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/SpdDepotCardByStockTotalViews/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/depotShelfs/byWMGDepotShelf,{depotId}/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/depotShelfs/byWMGDepotShelf,{depotId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/depotShelfs/WMGDepotShelf",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/depotShelfs/WMGDepotShelf/count",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0110",
-	//                                 "opName": "仓库帐页管理新增",
-	//                                 "opSort": "P0110",
-	//                                 "elementClass": "acl_add_spdDepotCard",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/depotShelfs/WMGDepotShelf/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/depotShelfs/WMGDepotShelf",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotCards",
-	//                                         "serviceMethod": "POST"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotCards",
-	//                                         "serviceMethod": "POST"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotCards",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/depotShelfs/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/SpdDepotCardByStockTotalViews/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/pcsDepotAreas/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/depotShelfs/byLoseSheft,{depotId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/depotShelfs/byLoseSheft,{depotId}/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/depotShelfs/byWMGDepotShelf,{depotId}/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/depotShelfs/byWMGDepotShelf,{depotId}",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0111",
-	//                                 "opName": "仓库帐页管理删除",
-	//                                 "opSort": "P0111",
-	//                                 "elementClass": "acl_delete_spdDepotCard",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotCards/{cardId}",
-	//                                         "serviceMethod": "DELETE"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/SpdDepotCardByStockTotalViews/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/depotShelfs/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotCards/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotCards",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0307",
-	//                                 "opName": "仓库帐页管理撤回",
-	//                                 "opSort": "P0307",
-	//                                 "elementClass": "acl_cancelCommit_spdDepotCard",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotCards",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/depotShelfs/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/SpdDepotCardByStockTotalViews/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotCards/{cardId}/checkState/completed",
-	//                                         "serviceMethod": "PUT"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0277",
-	//                                 "opName": "仓库帐页管理提交",
-	//                                 "opSort": "P0277",
-	//                                 "elementClass": "acl_commitEntity_spdDepotCard",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotCards/{cardId}/checkState/commited",
-	//                                         "serviceMethod": "PUT"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotCards",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/depotShelfs/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/SpdDepotCardByStockTotalViews/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotCards/{cardId}",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             }
-	//                         ]
-	//                     }
-	//                 ],
-	//                 "children": [],
-	//                 "topMenu": false
-	//             },
-	//             {
-	//                 "systemName": "收货系统",
-	//                 "menuId": "10002-004",
-	//                 "menuCode": "10002-004",
-	//                 "menuParentId": "10002",
-	//                 "icon": null,
-	//                 "menuSort": 4,
-	//                 "name": "定数配置管理",
-	//                 "level": 2,
-	//                 "anchor": "#spd/spdFixeds",
-	//                 "functions": [
-	//                     {
-	//                         "functionId": "F0056",
-	//                         "functionName": "定数帐页管理",
-	//                         "operations": [
-	//                             {
-	//                                 "opId": "P0453",
-	//                                 "opName": "定数帐页管理编辑",
-	//                                 "opSort": "P0453",
-	//                                 "elementClass": "acl_edit_spdDepotFixedCard",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdFixeds/{fixedId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotFixedCards",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotFixedCards/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdFixeds/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotFixedCards",
-	//                                         "serviceMethod": "PUT"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0454",
-	//                                 "opName": "定数帐页管理新增",
-	//                                 "opSort": "P0454",
-	//                                 "elementClass": "acl_add_spdDepotFixedCard",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotCards/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotCards/byGoodsCard,{goodsId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotFixedCards",
-	//                                         "serviceMethod": "POST"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotFixedCards",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotFixedCards/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdFixeds/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotFixedCards",
-	//                                         "serviceMethod": "POST"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdFixeds/byUsed",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdFixeds/byUsed/count",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0455",
-	//                                 "opName": "定数帐页管理删除",
-	//                                 "opSort": "P0455",
-	//                                 "elementClass": "acl_delete_spdDepotFixedCard",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotFixedCards",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotFixedCards/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdFixeds/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotCards/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotCards/{cardId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdFixeds/{fixedId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotFixedCards/{cardFixedId}",
-	//                                         "serviceMethod": "DELETE"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0456",
-	//                                 "opName": "定数帐页管理提交",
-	//                                 "opSort": "P0456",
-	//                                 "elementClass": "acl_commitEntity_spdDepotFixedCard",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotFixedCards",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotFixedCards/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotFixedCards/{cardFixedId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotFixedCards/{cardFixedId}/checkState/commited",
-	//                                         "serviceMethod": "PUT"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotFixedCards/{cardFixedId}/checkState/commited",
-	//                                         "serviceMethod": "PUT"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0457",
-	//                                 "opName": "定数帐页管理撤回",
-	//                                 "opSort": "P0457",
-	//                                 "elementClass": "acl_cancelCommit_spdDepotFixedCard",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotFixedCards",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotFixedCards/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotFixedCards/{cardFixedId}",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0446",
-	//                                 "opName": "定数帐页管理查看",
-	//                                 "opSort": "P0446",
-	//                                 "elementClass": "acl_view_spdDepotFixedCard",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotFixedCards",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotFixedCards/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdFixeds/{fixedId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotCards/byGoodsCard,{goodsId}/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotCards/byGoodsCard,{goodsId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotFixedCards/{cardFixedId}",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             }
-	//                         ]
-	//                     }
-	//                 ],
-	//                 "children": [],
-	//                 "topMenu": false
-	//             },
-	//             {
-	//                 "systemName": "收货系统",
-	//                 "menuId": "10002-005",
-	//                 "menuCode": "10002-005",
-	//                 "menuParentId": "10002",
-	//                 "icon": null,
-	//                 "menuSort": 5,
-	//                 "name": "定数帐页管理",
-	//                 "level": 2,
-	//                 "anchor": "#spd/spdDepotFixedCards",
-	//                 "functions": [
-	//                     {
-	//                         "functionId": "F0055",
-	//                         "functionName": "定数配置管理",
-	//                         "operations": [
-	//                             {
-	//                                 "opId": "P0448",
-	//                                 "opName": "定数配置管理编辑",
-	//                                 "opSort": "P0448",
-	//                                 "elementClass": "acl_edit_spdFixed",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdFixeds/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdFixeds",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdFixeds",
-	//                                         "serviceMethod": "PUT"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0449",
-	//                                 "opName": "定数配置管理新增",
-	//                                 "opSort": "P0449",
-	//                                 "elementClass": "acl_add_spdFixed",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdFixeds",
-	//                                         "serviceMethod": "POST"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdFixeds",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdFixeds/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdFixeds",
-	//                                         "serviceMethod": "POST"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0450",
-	//                                 "opName": "定数配置管理删除",
-	//                                 "opSort": "P0450",
-	//                                 "elementClass": "acl_delete_spdFixed",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdFixeds",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdFixeds/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdFixeds/{fixedId}",
-	//                                         "serviceMethod": "DELETE"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0451",
-	//                                 "opName": "定数配置管理提交",
-	//                                 "opSort": "P0451",
-	//                                 "elementClass": "acl_commitEntity_spdFixed",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdFixeds",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdFixeds/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdFixeds/{fixedId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdFixeds/{fixedId}/checkState/commited",
-	//                                         "serviceMethod": "PUT"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0452",
-	//                                 "opName": "定数配置管理撤回",
-	//                                 "opSort": "P0452",
-	//                                 "elementClass": "acl_cancelCommit_spdFixed",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdFixeds",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdFixeds/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdFixeds/{fixedId}",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0445",
-	//                                 "opName": "定数配置管理查看",
-	//                                 "opSort": "P0445",
-	//                                 "elementClass": "acl_view_spdFixed",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdFixeds/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdFixeds",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             }
-	//                         ]
-	//                     }
-	//                 ],
-	//                 "children": [],
-	//                 "topMenu": false
-	//             }
-	//         ],
-	//         "topMenu": true
-	//     },
-	//     {
-	//         "systemName": "收货系统",
-	//         "menuId": "10003",
-	//         "menuCode": "10003",
-	//         "menuParentId": "-1",
-	//         "icon": "fa-cart-arrow-down",
-	//         "menuSort": 3,
-	//         "name": "采购业务管理",
-	//         "level": 1,
-	//         "anchor": null,
-	//         "functions": null,
-	//         "children": [
-	//             {
-	//                 "systemName": "收货系统",
-	//                 "menuId": "10003-001",
-	//                 "menuCode": "10003-001",
-	//                 "menuParentId": "10003",
-	//                 "icon": null,
-	//                 "menuSort": 1,
-	//                 "name": "物资价格维护",
-	//                 "level": 2,
-	//                 "anchor": "#spd/ydsGoodsInfos",
-	//                 "functions": [
-	//                     {
-	//                         "functionId": "F0011",
-	//                         "functionName": "物资价格维护",
-	//                         "operations": [
-	//                             {
-	//                                 "opId": "P0077",
-	//                                 "opName": "物资价格维护新增",
-	//                                 "opSort": "P0077",
-	//                                 "elementClass": "acl_add_ydsGoodsInfo",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoodsInfos",
-	//                                         "serviceMethod": "POST"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoodsInfos",
-	//                                         "serviceMethod": "POST"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoodsInfos/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoodsInfos",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0078",
-	//                                 "opName": "物资价格维护删除",
-	//                                 "opSort": "P0078",
-	//                                 "elementClass": "acl_delete_ydsGoodsInfo",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoodsInfos/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoodsInfos",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoodsInfos/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoodsInfos",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoodsInfos/{goodsId}",
-	//                                         "serviceMethod": "DELETE"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0079",
-	//                                 "opName": "物资价格维护编辑",
-	//                                 "opSort": "P0079",
-	//                                 "elementClass": "acl_edit_ydsGoodsInfo",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoodsInfos/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoodsInfos",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoodsInfos/{goodsId}",
-	//                                         "serviceMethod": "PUT"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0080",
-	//                                 "opName": "物资价格维护查看",
-	//                                 "opSort": "P0080",
-	//                                 "elementClass": "acl_view_ydsGoodsInfo",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoodsInfos/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoodsInfos",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoodsInfos/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoodsInfos",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             }
-	//                         ]
-	//                     }
-	//                 ],
-	//                 "children": [],
-	//                 "topMenu": false
-	//             },
-	//             {
-	//                 "systemName": "收货系统",
-	//                 "menuId": "10003-002",
-	//                 "menuCode": "10003-002",
-	//                 "menuParentId": "10003",
-	//                 "icon": null,
-	//                 "menuSort": 2,
-	//                 "name": "采购合同管理",
-	//                 "level": 2,
-	//                 "anchor": "#spd/spdPoContracts",
-	//                 "functions": [
-	//                     {
-	//                         "functionId": "F0012",
-	//                         "functionName": "采购合同管理",
-	//                         "operations": [
-	//                             {
-	//                                 "opId": "P0083",
-	//                                 "opName": "采购合同管理编辑",
-	//                                 "opSort": "P0083",
-	//                                 "elementClass": "acl_edit_spdPoContract,acl_edit_spdPoContractItem,acl_delete_spdPoContractItem,acl_add_spdPoContractItem,acl_view_spdPoContractItem",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractItems",
-	//                                         "serviceMethod": "POST"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContracts/{conId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractItems/conId,{conId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContracts/{conId}",
-	//                                         "serviceMethod": "PUT"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractItems/conId,{conId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractItems/{conItemId}",
-	//                                         "serviceMethod": "PUT"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/PcsDepts/byProcurementDept",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0084",
-	//                                 "opName": "采购合同管理新增",
-	//                                 "opSort": "P0084",
-	//                                 "elementClass": "acl_add_spdPoContract,acl_add_spdPoContractItem,acl_view_spdPoContractItem,acl_edit_spdPoContractItem,acl_delete_spdPoContractItem",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractItems",
-	//                                         "serviceMethod": "POST"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/PcsDepts/byProcurementType",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContracts/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContracts",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContracts",
-	//                                         "serviceMethod": "POST"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/PcsDepts/byUse",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/PcsDepts/byProcurementDept",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0085",
-	//                                 "opName": "采购合同管理删除",
-	//                                 "opSort": "P0085",
-	//                                 "elementClass": "acl_delete_spdPoContract,acl_delete_spdPoContractItem",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContracts/{conId}",
-	//                                         "serviceMethod": "DELETE"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContracts/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractItems/conId,{conId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractItems/{conItemId}",
-	//                                         "serviceMethod": "DELETE"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContracts",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0086",
-	//                                 "opName": "采购合同管理提交",
-	//                                 "opSort": "P0086",
-	//                                 "elementClass": "acl_commitEntity_spdPoContract",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContracts/{conId}/checkState/commited",
-	//                                         "serviceMethod": "PUT"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContracts/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContracts",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContracts/{conId}",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0087",
-	//                                 "opName": "采购合同管理审核",
-	//                                 "opSort": "P0087",
-	//                                 "elementClass": "acl_reviewEntity_spdPoContract",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContracts/{conId}",
-	//                                         "serviceMethod": "PUT"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0088",
-	//                                 "opName": "采购合同管理撤回",
-	//                                 "opSort": "P0088",
-	//                                 "elementClass": "acl_cancelCommit_spdPoContract",
-	//                                 "webApis": []
-	//                             },
-	//                             {
-	//                                 "opId": "P0082",
-	//                                 "opName": "采购合同管理查看",
-	//                                 "opSort": "P0082",
-	//                                 "elementClass": "acl_view_spdPoContract,acl_view_spdPoContractItem",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContracts/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContracts",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/PcsDepts/byProcurementType",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractItems/conId,{conId}",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             }
-	//                         ]
-	//                     }
-	//                 ],
-	//                 "children": [],
-	//                 "topMenu": false
-	//             },
-	//             {
-	//                 "systemName": "收货系统",
-	//                 "menuId": "10003-003",
-	//                 "menuCode": "10003-003",
-	//                 "menuParentId": "10003",
-	//                 "icon": null,
-	//                 "menuSort": 3,
-	//                 "name": "配额调节管理",
-	//                 "level": 2,
-	//                 "anchor": "#spd/spdPoContractItems",
-	//                 "functions": [
-	//                     {
-	//                         "functionId": "F0040",
-	//                         "functionName": "配额调节管理",
-	//                         "operations": [
-	//                             {
-	//                                 "opId": "P0478",
-	//                                 "opName": "配额调节管理编辑",
-	//                                 "opSort": "P0478",
-	//                                 "elementClass": "acl_edit_spdPoContractItemAdjust,acl_edit_spdPoContractAdjust",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractItems/byAdjust/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractItems/byAdjust",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContracts/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractAdjusts/conItemId,{conItemId}/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractAdjusts/conItemId,{conItemId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractAdjusts/{adjustId}",
-	//                                         "serviceMethod": "PUT"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0480",
-	//                                 "opName": "配额调节管理删除",
-	//                                 "opSort": "P0480",
-	//                                 "elementClass": "acl_edit_spdPoContractItemAdjust,acl_delete_spdPoContractAdjust",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractAdjusts/{adjustId}",
-	//                                         "serviceMethod": "DELETE"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractItems/byAdjust/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractItems/byAdjust",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractAdjusts/conItemId,{conItemId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractAdjusts/conItemId,{conItemId}/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContracts/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0479",
-	//                                 "opName": "配额调节管理新增",
-	//                                 "opSort": "P0479",
-	//                                 "elementClass": "acl_edit_spdPoContractItemAdjust,acl_add_spdPoContractAdjust",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractAdjusts",
-	//                                         "serviceMethod": "POST"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractItems/byAdjust/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractItems/byAdjust",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContracts/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractAdjusts/conItemId,{conItemId}/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractAdjusts/conItemId,{conItemId}",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0481",
-	//                                 "opName": "配额调节管理提交",
-	//                                 "opSort": "P0481",
-	//                                 "elementClass": "acl_edit_spdPoContractItemAdjust,acl_commitEntity_spdPoContractAdjust",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractItems/byAdjust/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractItems/byAdjust",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContracts/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractAdjusts/conItemId,{conItemId}/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractAdjusts/conItemId,{conItemId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractAdjusts/{adjustId}/checkState/commited",
-	//                                         "serviceMethod": "PUT"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractAdjusts/{adjustId}",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0482",
-	//                                 "opName": "配额调节管理审核",
-	//                                 "opSort": "P0482",
-	//                                 "elementClass": "acl_edit_spdPoContractItemAdjust,acl_reviewEntity_spdPoContractAdjust",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractAdjusts/{adjustId}/checkState/reviewed",
-	//                                         "serviceMethod": "PUT"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractItems/byAdjust/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractItems/byAdjust",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContracts/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractAdjusts/conItemId,{conItemId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractAdjusts/conItemId,{conItemId}/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractAdjusts/{adjustId}",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0098",
-	//                                 "opName": "配额调节管理查看",
-	//                                 "opSort": "P0098",
-	//                                 "elementClass": "acl_view_spdPoContractItemAdjust,acl_view_spdPoContractAdjust",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContracts/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractItems/byAdjust/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractItems/byAdjust",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractAdjusts/conItemId,{conItemId}/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContractAdjusts/conItemId,{conItemId}",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             }
-	//                         ]
-	//                     }
-	//                 ],
-	//                 "children": [],
-	//                 "topMenu": false
-	//             },
-	//             {
-	//                 "systemName": "收货系统",
-	//                 "menuId": "10003-004",
-	//                 "menuCode": "10003-004",
-	//                 "menuParentId": "10003",
-	//                 "icon": null,
-	//                 "menuSort": 4,
-	//                 "name": "采购订单管理",
-	//                 "level": 2,
-	//                 "anchor": "#spd/spdPurchPos",
-	//                 "functions": [
-	//                     {
-	//                         "functionId": "F0013",
-	//                         "functionName": "采购订单管理",
-	//                         "operations": [
-	//                             {
-	//                                 "opId": "P0089",
-	//                                 "opName": "采购订单管理查看",
-	//                                 "opSort": "P0089",
-	//                                 "elementClass": "acl_view_spdPurch,acl_view_spdPurchItem",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchItems/detail/poId,{poId}/pdf",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotCards/{cardId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchs/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchs",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContracts/{poId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchs/{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchItems",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0090",
-	//                                 "opName": "采购订单管理编辑",
-	//                                 "opSort": "P0090",
-	//                                 "elementClass": "acl_edit_spdPurch,acl_edit_spdPurchItem,acl_view_spdPurchItem,acl_add_spdPurchItem,acl_delete_spdPurchItem",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchItems/poId,{poId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchs/byPurchase/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchs/byPurchase",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotCards/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotCards",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContracts/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPoContracts",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchItems",
-	//                                         "serviceMethod": "POST"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchs/{poId}",
-	//                                         "serviceMethod": "PUT"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchItems/{poItemId}",
-	//                                         "serviceMethod": "PUT"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotCards/{cardId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdGoodsContractViews/{depotId},{supplierOrg}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdGoodsContractViews/{depotId},{supplierOrg}/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchItems/poId,{poId}/count",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0091",
-	//                                 "opName": "采购订单管理增加",
-	//                                 "opSort": "P0091",
-	//                                 "elementClass": "acl_add_spdPurch,acl_add_spdPurchItem,acl_view_spdPurchItem,acl_edit_spdPurchItem,acl_delete_spdPurchItem",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchs",
-	//                                         "serviceMethod": "POST"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchs/byPurchase",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchs/byPurchase/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/pcsDepots/byReceivePoint,{ownerOrgId}/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/pcsDepots/byOwnerHospital,{ownerOrgId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotCards/byOwnerDepot,{depotId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotCards/byOwnerDepot,{depotId}/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchs",
-	//                                         "serviceMethod": "POST"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdGoodsContractViews/{depotId},{supplierOrg}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdGoodsContractViews/{depotId},{supplierOrg}/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchItems/poId,{poId}/count",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0092",
-	//                                 "opName": "采购订单管理删除",
-	//                                 "opSort": "P0092",
-	//                                 "elementClass": "acl_delete_spdPurch,acl_delete_spdPurchItem",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchs/{poId}",
-	//                                         "serviceMethod": "DELETE"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchItems/{poItemId}",
-	//                                         "serviceMethod": "DELETE"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchItems/poId,{poId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchs/byPurchase/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchs/byPurchase",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0094",
-	//                                 "opName": "采购订单管理审核",
-	//                                 "opSort": "P0094",
-	//                                 "elementClass": "acl_reviewEntity_spdPurch",
-	//                                 "webApis": []
-	//                             },
-	//                             {
-	//                                 "opId": "P0306",
-	//                                 "opName": "采购订单管理打印",
-	//                                 "opSort": "P0306",
-	//                                 "elementClass": "acl_export_PurchItem",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchItems/detail/poId,{poId}/pdf",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchItems/detail/poId,{poId}/pdf",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             }
-	//                         ]
-	//                     }
-	//                 ],
-	//                 "children": [],
-	//                 "topMenu": false
-	//             },
-	//             {
-	//                 "systemName": "收货系统",
-	//                 "menuId": "10003-005",
-	//                 "menuCode": "10003-005",
-	//                 "menuParentId": "10003",
-	//                 "icon": null,
-	//                 "menuSort": 5,
-	//                 "name": "备货业务管理",
-	//                 "level": 2,
-	//                 "anchor": "#spd/spdPurchRes",
-	//                 "functions": [
-	//                     {
-	//                         "functionId": "F0038",
-	//                         "functionName": "备货业务管理",
-	//                         "operations": [
-	//                             {
-	//                                 "opId": "P0258",
-	//                                 "opName": "备货业务管理增加",
-	//                                 "opSort": "P0258",
-	//                                 "elementClass": "acl_add_spdPurchRe,acl_add_spdPurchItemRe,acl_view_spdPurchRe,acl_view_spdPurchItemRe,acl_edit_spdPurchItemRe,acl_delete_spdPurchItemRe",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchs",
-	//                                         "serviceMethod": "POST"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchs/byStocking",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchs/byStocking/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/pcsDepots/byOwnerSupplier,{ownerOrgId}/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/pcs/pcsDepots/byOwnerSupplier,{ownerOrgId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchItems/{poItemId}",
-	//                                         "serviceMethod": "PUT"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0259",
-	//                                 "opName": "备货业务管理编辑",
-	//                                 "opSort": "P0259",
-	//                                 "elementClass": "acl_edit_spdPurchRe,acl_edit_spdPurchItemRe,acl_view_spdPurchItemRe,acl_add_spdPurchItemRe,acl_delete_spdPurchItemRe",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchs/byStocking",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchs/byStocking/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchItems/poId,{poId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchs/{poId}",
-	//                                         "serviceMethod": "PUT"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0260",
-	//                                 "opName": "备货业务管理查看",
-	//                                 "opSort": "P0260",
-	//                                 "elementClass": "acl_view_spdPurchRe,acl_view_spdPurchItemRe",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchItems/poId,{poId}",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0261",
-	//                                 "opName": "备货业务管理审核",
-	//                                 "opSort": "P0261",
-	//                                 "elementClass": "acl_reviewEntity_spdPurchRe",
-	//                                 "webApis": []
-	//                             },
-	//                             {
-	//                                 "opId": "P0262",
-	//                                 "opName": "备货业务管理提交",
-	//                                 "opSort": "P0262",
-	//                                 "elementClass": "acl_commitEntity_spdPurchRe",
-	//                                 "webApis": []
-	//                             },
-	//                             {
-	//                                 "opId": "P0264",
-	//                                 "opName": "备货业务管理删除",
-	//                                 "opSort": "P0264",
-	//                                 "elementClass": "acl_delete_spdPurchRe,acl_delete_spdPurchItemRe",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchs/byStocking",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdPurchs/byStocking/count",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             }
-	//                         ]
-	//                     }
-	//                 ],
-	//                 "children": [],
-	//                 "topMenu": false
-	//             },
-	//             {
-	//                 "systemName": "收货系统",
-	//                 "menuId": "10003-006",
-	//                 "menuCode": "10003-006",
-	//                 "menuParentId": "10003",
-	//                 "icon": null,
-	//                 "menuSort": 6,
-	//                 "name": "业务模版管理",
-	//                 "level": 2,
-	//                 "anchor": "#spd/spdBizExamples",
-	//                 "functions": [
-	//                     {
-	//                         "functionId": "F0063",
-	//                         "functionName": "业务模版管理",
-	//                         "operations": [
-	//                             {
-	//                                 "opId": "P0493",
-	//                                 "opName": "业务模版管理查看",
-	//                                 "opSort": "P0493",
-	//                                 "elementClass": "acl_view_spdBizExample,acl_view_spdBizExampleItem",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdBizExampleItems/exampleId,{exampleId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdBizExampleItems/exampleId,{exampleId}/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdBizExamples/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdBizExamples",
-	//                                         "serviceMethod": "GET"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0494",
-	//                                 "opName": "业务模版管理新增",
-	//                                 "opSort": "P0494",
-	//                                 "elementClass": "acl_add_spdBizExample,acl_add_spdBizExampleItem,acl_view_spdBizExampleItem,acl_edit_spdBizExampleItem,acl_delete _spdBizExampleItem",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdBizExamples/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdBizExamples",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdBizExamples",
-	//                                         "serviceMethod": "POST"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdBizExampleItems/exampleId,{exampleId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdBizExampleItems/exampleId,{exampleId}/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotCards/byUse/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotCards/byUse",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods/{goodsId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdBizExampleItems",
-	//                                         "serviceMethod": "POST"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0495",
-	//                                 "opName": "业务模版管理编辑",
-	//                                 "opSort": "P0495",
-	//                                 "elementClass": "acl_edit_spdBizExample,acl_edit_spdBizExampleItem,acl_view_spdBizExampleItem,acl_add_spdBizExampleItem,acl_delete _spdBizExampleItem",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdBizExampleItems/exampleId,{exampleId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdBizExampleItems/exampleId,{exampleId}/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdBizExamples/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdBizExamples",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods/ids,{ids}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdDepotFixedCards/{cardFixedId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdBizExamples/{exampleId}",
-	//                                         "serviceMethod": "PUT"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/ydsGoods/{goodsId}",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdBizExampleItems/{exampleItemId}",
-	//                                         "serviceMethod": "PUT"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0496",
-	//                                 "opName": "业务模版管理删除",
-	//                                 "opSort": "P0496",
-	//                                 "elementClass": "acl_delete_spdBizExample,acl_delete_spdBizExampleItem",
-	//                                 "webApis": [
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdBizExamples/count",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdBizExamples",
-	//                                         "serviceMethod": "GET"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdBizExamples/{exampleId}",
-	//                                         "serviceMethod": "DELETE"
-	//                                     },
-	//                                     {
-	//                                         "serviceUrl": "/yard/spd/spdBizExampleItems/{exampleItemId}",
-	//                                         "serviceMethod": "DELETE"
-	//                                     }
-	//                                 ]
-	//                             },
-	//                             {
-	//                                 "opId": "P0497",
-	//                                 "opName": "业务模版管理提交",
-	//                                 "opSort": "P0497",
-	//                                 "elementClass": null,
-	//                                 "webApis": []
-	//                             }
-	//                         ]
-	//                     }
-	//                 ],
-	//                 "children": [],
-	//                 "topMenu": false
-	//             }
-	//         ],
-	//         "topMenu": true
-	//     },
-	// ],
-	};}
+	// const remote = window.require('electron').remote
+	// const fs = remote.require('fs')
+	'use strict';Object.defineProperty(exports,'__esModule',{value:true});exports.openMenus = openMenus;exports.checkedAll = checkedAll;exports.checkedMenus = checkedMenus;exports.receiveItems = receiveItems;exports.getKey = getKey;exports.dispatchActions = dispatchActions;exports.selectedMenus = selectedMenus;exports.combineItems = combineItems;exports.firstMenusSubmit = firstMenusSubmit;exports.secondMenusSubmit = secondMenusSubmit;exports.addFirstMenus = addFirstMenus;exports.addSecondMenus = addSecondMenus;exports.receiveMenus = receiveMenus;var RECEIVE_MENUS='RECEIVE_MENUS';exports.RECEIVE_MENUS = RECEIVE_MENUS;var OPEN_MENUS='OPEN_MENUS';exports.OPEN_MENUS = OPEN_MENUS;var CHECKED_ALL='CHECKED_ALL';exports.CHECKED_ALL = CHECKED_ALL;var CHECKED_MENUS='CHECKED_MENUS';exports.CHECKED_MENUS = CHECKED_MENUS;var SELECTED_MENUS='SELECTED_MENUS';exports.SELECTED_MENUS = SELECTED_MENUS;var RECEIVE_ITEMS='RECEIVE_ITEMS';exports.RECEIVE_ITEMS = RECEIVE_ITEMS;var COMBINE_ITEMS='COMBINE_ITEMS';exports.COMBINE_ITEMS = COMBINE_ITEMS;var SECOND_MENUS_SUBMIT='SECOND_MENUS_SUBMIT';exports.SECOND_MENUS_SUBMIT = SECOND_MENUS_SUBMIT;var FIRST_MENUS_SUBMIT='FIRST_MENUS_SUBMIT';exports.FIRST_MENUS_SUBMIT = FIRST_MENUS_SUBMIT;var ADD_FIRST_MENUS='ADD_FIRST_MENUS';exports.ADD_FIRST_MENUS = ADD_FIRST_MENUS;var ADD_SECOND_MENUS='ADD_SECOND_MENUS';exports.ADD_SECOND_MENUS = ADD_SECOND_MENUS;var GET_KEY='GET_KEY';exports.GET_KEY = GET_KEY;function openMenus(key){return {type:OPEN_MENUS,key:key};}function checkedAll(menuId,key){return {type:CHECKED_ALL,menuId:menuId,key:key};}function checkedMenus(key){return {type:CHECKED_MENUS,key:key};}function receiveItems(key,menus){return {type:RECEIVE_ITEMS,items:menus,key:key};}function getKey(key){return {type:GET_KEY,key:key};}function dispatchActions(key,menus){return function(dispatch){dispatch(receiveItems(key,menus));dispatch(getKey(key));};}function selectedMenus(menuId){return {type:SELECTED_MENUS,menuId:menuId};}function combineItems(key,items){return {type:COMBINE_ITEMS,items:items,key:key};}function firstMenusSubmit(nextKey,key,menuId,menuCode,menuSort,name){return {type:FIRST_MENUS_SUBMIT,nextKey:nextKey,key:key,menuId:menuId,menuCode:menuCode,menuSort:menuSort,name:name};}function secondMenusSubmit(nextKey,key,menuId,menuCode,menuSort,name,menuParentId,anchor){return {type:SECOND_MENUS_SUBMIT,nextKey:nextKey,key:key,menuId:menuId,menuCode:menuCode,menuSort:menuSort,name:name,menuParentId:menuParentId,anchor:anchor};}function addFirstMenus(nextKey,key,menuId,menuCode,menuSort,name,icon){return {type:ADD_FIRST_MENUS,nextKey:nextKey,key:key,menuId:menuId,menuCode:menuCode,menuSort:menuSort,name:name,icon:icon};}function addSecondMenus(nextKey,key,menuId,menuCode,menuSort,name,menuParentId,anchor){return {type:ADD_SECOND_MENUS,nextKey:nextKey,key:key,menuId:menuId,menuCode:menuCode,menuSort:menuSort,name:name,menuParentId:menuParentId,anchor:anchor};} //读取本地json文件获取列表,根据参数first,second 索引出点击菜单下的数组
+	// export function readItemsFile() {
+	//   return dispatch => {
+	//     return (fs.readFile(__dirname + '/test.json', 'utf-8', (err, data) => {
+	//       data = JSON.parse(data)
+	//       dispatch(receiveMenus(data))
+	//     }))
+	//   }
+	// }
+	//获取列表成功action
+	function receiveMenus(){return {type:RECEIVE_MENUS, // menus:data
+	menus:[{"systemName":"收货系统","menuId":"10001","menuCode":"10001","menuParentId":"-1","icon":"fa-database","menuSort":1,"name":"基础数据管理","level":1,"anchor":null,"functions":null,"children":[{"systemName":"收货系统","menuId":"10001-001","menuCode":"10001-001","menuParentId":"10001","icon":null,"menuSort":1,"name":"字典数据管理","level":2,"anchor":"#basics/ydsWorkbooks","functions":[{"functionId":"F0001","functionName":"字典数据管理","operations":[{"opId":"P0001","opName":"字典数据管理查看","opSort":"P0001","elementClass":"acl_view_ydsWorkBook","webApis":[{"serviceUrl":"/yard/spd/ydsWorkBooks","serviceMethod":"GET","checked":false,"key":"0-0-0-0-0"},{"serviceUrl":"/yard/spd/ydsWorkBooks/{workbookId}","serviceMethod":"GET","checked":false,"key":"0-0-0-0-1"},{"serviceUrl":"/yard/spd/ydsWorkBooks","serviceMethod":"GET","checked":false,"key":"0-0-0-0-2"},{"serviceUrl":"/yard/spd/ydsWorkBooks","serviceMethod":"GET","checked":false,"key":"0-0-0-0-3"},{"serviceUrl":"/yard/spd/ydsWorkBooks/count","serviceMethod":"GET","checked":false,"key":"0-0-0-0-4"}],"checked":false,"key":"0-0-0-0-0","id":"P0001"},{"opId":"P0002","opName":"字典数据管理新增","opSort":"P0002","elementClass":"acl_add_ydsWorkBook","webApis":[{"serviceUrl":"/yard/spd/ydsWorkBooks","serviceMethod":"POST","checked":false,"key":"0-0-0-1-0"},{"serviceUrl":"/yard/spd/ydsWorkBooks","serviceMethod":"GET","checked":false,"key":"0-0-0-1-1"},{"serviceUrl":"/yard/spd/ydsWorkBooks/{workbookId}","serviceMethod":"GET","checked":false,"key":"0-0-0-1-2"},{"serviceUrl":"/yard/spd/ydsWorkBooks","serviceMethod":"POST","checked":false,"key":"0-0-0-1-3"},{"serviceUrl":"/yard/spd/ydsWorkBooks/count","serviceMethod":"GET","checked":false,"key":"0-0-0-1-4"}],"checked":false,"key":"0-0-0-1-0","id":"P0002"},{"opId":"P0003","opName":"字典数据管理编辑","opSort":"P0003","elementClass":"acl_edit_ydsWorkBook","webApis":[{"serviceUrl":"/yard/spd/ydsWorkBooks/{workbookId}","serviceMethod":"PUT","checked":false,"key":"0-0-0-2-0"},{"serviceUrl":"/yard/spd/ydsWorkBooks","serviceMethod":"GET","checked":false,"key":"0-0-0-2-1"},{"serviceUrl":"/yard/spd/ydsWorkBooks/{workbookId}","serviceMethod":"GET","checked":false,"key":"0-0-0-2-2"},{"serviceUrl":"/yard/spd/ydsWorkBooks/count","serviceMethod":"GET","checked":false,"key":"0-0-0-2-3"},{"serviceUrl":"/yard/spd/ydsWorkBooks/{workbookId}","serviceMethod":"PUT","checked":false,"key":"0-0-0-2-4"}],"checked":false,"key":"0-0-0-2-0","id":"P0003"}],"checked":false,"key":"0-0-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"0-0-0-0-0"},{"systemName":"收货系统","menuId":"10001-002","menuCode":"10001-002","menuParentId":"10001","icon":null,"menuSort":2,"name":"标准产品管理","level":2,"anchor":"#basics/standardProducts","functions":[{"functionId":"F0002","functionName":"标准产品管理","operations":[{"opId":"P0008","opName":"标准产品管理查看","opSort":"P0008","elementClass":"acl_view_ydsGood","webApis":[{"serviceUrl":"/yard/spd/ydsGoods/count","serviceMethod":"GET","checked":false,"key":"0-1-0-0-0"},{"serviceUrl":"/yard/spd/ydsGoods","serviceMethod":"GET","checked":false,"key":"0-1-0-0-1"},{"serviceUrl":"/yard/spd/ydsWorkBooks","serviceMethod":"GET","checked":false,"key":"0-1-0-0-2"},{"serviceUrl":"/yard/spd/ydsGoods","serviceMethod":"GET","checked":false,"key":"0-1-0-0-3"},{"serviceUrl":"/yard/spd/ydsGoods/{goodsId}","serviceMethod":"GET","checked":false,"key":"0-1-0-0-4"},{"serviceUrl":"/yard/spd/ydsGoods/count","serviceMethod":"GET","checked":false,"key":"0-1-0-0-5"},{"serviceUrl":"/yard/spd/ydsWorkBooks/byUse","serviceMethod":"GET","checked":false,"key":"0-1-0-0-6"}],"checked":false,"key":"0-1-0-0-0","id":"P0008"},{"opId":"P0009","opName":"标准产品管理新增","opSort":"P0009","elementClass":"acl_add_ydsGood","webApis":[{"serviceUrl":"/yard/spd/ydsGoods","serviceMethod":"POST","checked":false,"key":"0-1-0-1-0"},{"serviceUrl":"/yard/spd/ydsGoods","serviceMethod":"POST","checked":false,"key":"0-1-0-1-1"},{"serviceUrl":"/yard/spd/ydsGoods","serviceMethod":"GET","checked":false,"key":"0-1-0-1-2"},{"serviceUrl":"/yard/spd/ydsGoods/{goodsId}","serviceMethod":"GET","checked":false,"key":"0-1-0-1-3"},{"serviceUrl":"/yard/spd/ydsGoods/count","serviceMethod":"GET","checked":false,"key":"0-1-0-1-4"}],"checked":false,"key":"0-1-0-1-0","id":"P0009"},{"opId":"P0010","opName":"标准产品管理编辑","opSort":"P0010","elementClass":"acl_edit_ydsGood","webApis":[{"serviceUrl":"/yard/spd/ydsGoods","serviceMethod":"GET","checked":false,"key":"0-1-0-2-0"},{"serviceUrl":"/yard/spd/ydsGoods/{goodsId}","serviceMethod":"GET","checked":false,"key":"0-1-0-2-1"},{"serviceUrl":"/yard/spd/ydsGoods/count","serviceMethod":"GET","checked":false,"key":"0-1-0-2-2"},{"serviceUrl":"/yard/spd/ydsGoods/{goodsId}","serviceMethod":"PUT","checked":false,"key":"0-1-0-2-3"}],"checked":false,"key":"0-1-0-2-0","id":"P0010"},{"opId":"P0012","opName":"标准产品管理提交","opSort":"P0012","elementClass":"acl_commitEntity_ydsGood","webApis":[{"serviceUrl":"/yard/spd/ydsGoods/{goodsId}/checkState/commited","serviceMethod":"PUT","checked":false,"key":"0-1-0-3-0"},{"serviceUrl":"/yard/spd/ydsGoods/{goodsId}","serviceMethod":"GET","checked":false,"key":"0-1-0-3-1"},{"serviceUrl":"/yard/spd/ydsGoods/count","serviceMethod":"GET","checked":false,"key":"0-1-0-3-2"},{"serviceUrl":"/yard/spd/ydsGoods/{goodsId}/checkState/commited","serviceMethod":"PUT","checked":false,"key":"0-1-0-3-3"},{"serviceUrl":"/yard/spd/ydsGoods","serviceMethod":"GET","checked":false,"key":"0-1-0-3-4"}],"checked":false,"key":"0-1-0-3-0","id":"P0012"},{"opId":"P0015","opName":"标准产品管理导出","opSort":"P0015","elementClass":"acl_export_ydsGood","webApis":[{"serviceUrl":"/yard/spd/ydsGoods","serviceMethod":"GET","checked":false,"key":"0-1-0-4-0"},{"serviceUrl":"/yard/spd/ydsGoods/count","serviceMethod":"GET","checked":false,"key":"0-1-0-4-1"},{"serviceUrl":"/yard/spd/ydsGoods/{goodsId}","serviceMethod":"GET","checked":false,"key":"0-1-0-4-2"},{"serviceUrl":"/yard/spd/ydsGoods/ydsgoodsExcel","serviceMethod":"GET","checked":false,"key":"0-1-0-4-3"}],"checked":false,"key":"0-1-0-4-0","id":"P0015"},{"opId":"P0276","opName":"标准产品管理撤回","opSort":"P0276","elementClass":"acl_cancelCommit_ydsGood","webApis":[],"checked":false,"key":"0-1-0-5-0","id":"P0276"},{"opId":"P0279","opName":"标准产品批量提交","opSort":"P0279","elementClass":"acl_commitEntities_ydsGood","webApis":[],"checked":false,"key":"0-1-0-6-0","id":"P0279"},{"opId":"P0013","opName":"标准产品管理同步","opSort":"P0013","elementClass":"acl_view_ydsGood,acl_sync_ysdGood","webApis":[{"serviceUrl":"/yard/spd/ydsGoods","serviceMethod":"GET","checked":false,"key":"0-1-0-7-0"},{"serviceUrl":"/yard/spd/ydsGoods/count","serviceMethod":"GET","checked":false,"key":"0-1-0-7-1"},{"serviceUrl":"/yard/spd/ydsGoods/{goodsId}","serviceMethod":"GET","checked":false,"key":"0-1-0-7-2"},{"serviceUrl":"/yard/spd/ydsGoods/{goodsId}/checkState/reviewed","serviceMethod":"PUT","checked":false,"key":"0-1-0-7-3"}],"checked":false,"key":"0-1-0-7-0","id":"P0013"}],"checked":false,"key":"0-1-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"0-1-0-0-0"},{"systemName":"收货系统","menuId":"10001-003","menuCode":"10001-003","menuParentId":"10001","icon":null,"menuSort":3,"name":"标准产品批次","level":2,"anchor":"#spd/ydsGoodsLots","functions":[{"functionId":"F0016","functionName":"标准产品批次","operations":[{"opId":"P0105","opName":"标准产品批次查看","opSort":"P0105","elementClass":"acl_view_ydsGoodsLot","webApis":[{"serviceUrl":"/yard/spd/ydsGoodsLots/count","serviceMethod":"GET","checked":false,"key":"0-2-0-0-0"},{"serviceUrl":"/yard/spd/ydsGoodsLots","serviceMethod":"GET","checked":false,"key":"0-2-0-0-1"},{"serviceUrl":"/yard/spd/ydsGoodsLots","serviceMethod":"GET","checked":false,"key":"0-2-0-0-2"}],"checked":false,"key":"0-2-0-0-0","id":"P0105"},{"opId":"P0107","opName":"标准产品批次新增","opSort":"P0107","elementClass":"acl_add_ydsGoodsLot","webApis":[{"serviceUrl":"/yard/spd/ydsGoodsLots","serviceMethod":"GET","checked":false,"key":"0-2-0-1-0"},{"serviceUrl":"/yard/spd/ydsGoodsLots","serviceMethod":"POST","checked":false,"key":"0-2-0-1-1"},{"serviceUrl":"/yard/spd/ydsGoodsLots","serviceMethod":"POST","checked":false,"key":"0-2-0-1-2"},{"serviceUrl":"/yard/spd/ydsGoodsLots/count","serviceMethod":"GET","checked":false,"key":"0-2-0-1-3"},{"serviceUrl":"/yard/spd/ydsGoodsLots","serviceMethod":"GET","checked":false,"key":"0-2-0-1-4"}],"checked":false,"key":"0-2-0-1-0","id":"P0107"},{"opId":"P0106","opName":"标准产品批次编辑","opSort":"P0106","elementClass":"acl_edit_ydsGoodsLot","webApis":[{"serviceUrl":"/yard/spd/ydsGoodsLots/{goodsLotId}","serviceMethod":"PUT","checked":false,"key":"0-2-0-2-0"},{"serviceUrl":"/yard/spd/ydsGoodsLots","serviceMethod":"GET","checked":false,"key":"0-2-0-2-1"}],"checked":false,"key":"0-2-0-2-0","id":"P0106"}],"checked":false,"key":"0-2-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"0-2-0-0-0"},{"systemName":"收货系统","menuId":"10001-004","menuCode":"10001-004","menuParentId":"10001","icon":null,"menuSort":4,"name":"企业产品管理","level":2,"anchor":"#basics/ydsEdsGoods","functions":[{"functionId":"F0003","functionName":"企业产品管理","operations":[{"opId":"P0016","opName":"企业产品管理查看","opSort":"P0016","elementClass":"acl_view_ydsEdsGoods","webApis":[{"serviceUrl":"/yard/spd/ydsEdsGoods","serviceMethod":"GET","checked":false,"key":"0-3-0-0-0"},{"serviceUrl":"/yard/spd/ydsEdsGoods/count","serviceMethod":"GET","checked":false,"key":"0-3-0-0-1"},{"serviceUrl":"/yard/spd/ydsEdsGoods/count","serviceMethod":"GET","checked":false,"key":"0-3-0-0-2"},{"serviceUrl":"/yard/spd/ydsEdsGoods","serviceMethod":"GET","checked":false,"key":"0-3-0-0-3"},{"serviceUrl":"/yard/spd/ydsEdsGoods/{goodsId}","serviceMethod":"GET","checked":false,"key":"0-3-0-0-4"},{"serviceUrl":"/yard/spd/ydsWorkBooks/byUse","serviceMethod":"GET","checked":false,"key":"0-3-0-0-5"},{"serviceUrl":"/yard/spd/ydsWorkBooks/byUse","serviceMethod":"GET","checked":false,"key":"0-3-0-0-6"}],"checked":false,"key":"0-3-0-0-0","id":"P0016"},{"opId":"P0018","opName":"企业产品管理新增","opSort":"P0018","elementClass":"acl_add_ydsEdsGoods","webApis":[{"serviceUrl":"/yard/spd/ydsEdsGoods","serviceMethod":"POST","checked":false,"key":"0-3-0-1-0"},{"serviceUrl":"/yard/spd/ydsWorkBooks","serviceMethod":"GET","checked":false,"key":"0-3-0-1-1"},{"serviceUrl":"/yard/spd/ydsGoods/byUse","serviceMethod":"GET","checked":false,"key":"0-3-0-1-2"},{"serviceUrl":"/yard/spd/ydsEdsGoods","serviceMethod":"GET","checked":false,"key":"0-3-0-1-3"},{"serviceUrl":"/yard/spd/ydsEdsGoods/count","serviceMethod":"GET","checked":false,"key":"0-3-0-1-4"},{"serviceUrl":"/yard/spd/ydsEdsGoods/{goodsId}","serviceMethod":"GET","checked":false,"key":"0-3-0-1-5"},{"serviceUrl":"/yard/spd/ydsEdsGoods","serviceMethod":"POST","checked":false,"key":"0-3-0-1-6"},{"serviceUrl":"/yard/spd/ydsWorkBooks/byUse","serviceMethod":"GET","checked":false,"key":"0-3-0-1-7"},{"serviceUrl":"/yard/spd/ydsEdsGoods","serviceMethod":"POST","checked":false,"key":"0-3-0-1-8"},{"serviceUrl":"/yard/spd/ydsGoods/ids,{ids}","serviceMethod":"GET","checked":false,"key":"0-3-0-1-9"},{"serviceUrl":"/yard/spd/ydsGoods/byUse/count","serviceMethod":"GET","checked":false,"key":"0-3-0-1-10"},{"serviceUrl":"/yard/spd/ydsGoods/count","serviceMethod":"GET","checked":false,"key":"0-3-0-1-11"},{"serviceUrl":"/yard/spd/ydsGoods","serviceMethod":"GET","checked":false,"key":"0-3-0-1-12"}],"checked":false,"key":"0-3-0-1-0","id":"P0018"},{"opId":"P0020","opName":"企业产品管理提交","opSort":"P0020","elementClass":"acl_commitEntity_ydsEdsGoods","webApis":[{"serviceUrl":"/yard/spd/ydsEdsGoods/{ydsEdsGoodsId}/checkState/commited","serviceMethod":"PUT","checked":false,"key":"0-3-0-2-0"},{"serviceUrl":"/yard/spd/ydsGoods/ids,{ids}","serviceMethod":"GET","checked":false,"key":"0-3-0-2-1"},{"serviceUrl":"/yard/spd/ydsEdsGoods","serviceMethod":"GET","checked":false,"key":"0-3-0-2-2"},{"serviceUrl":"/yard/spd/ydsEdsGoods/count","serviceMethod":"GET","checked":false,"key":"0-3-0-2-3"},{"serviceUrl":"/yard/spd/ydsEdsGoods/{goodsId}","serviceMethod":"GET","checked":false,"key":"0-3-0-2-4"},{"serviceUrl":"/yard/spd/ydsEdsGoods/{goodsId}/checkState/commited","serviceMethod":"PUT","checked":false,"key":"0-3-0-2-5"},{"serviceUrl":"/yard/spd/ydsWorkBooks/byUse","serviceMethod":"GET","checked":false,"key":"0-3-0-2-6"}],"checked":false,"key":"0-3-0-2-0","id":"P0020"},{"opId":"P0023","opName":"企业产品管理导出","opSort":"P0023","elementClass":"acl_export_ydsEdsGoods,acl_view_ydsEdsGoods","webApis":[{"serviceUrl":"/yard/spd/ydsEdsGoods","serviceMethod":"GET","checked":false,"key":"0-3-0-3-0"},{"serviceUrl":"/yard/spd/ydsEdsGoods/Excel","serviceMethod":"GET","checked":false,"key":"0-3-0-3-1"},{"serviceUrl":"/yard/spd/ydsEdsGoods/count","serviceMethod":"GET","checked":false,"key":"0-3-0-3-2"}],"checked":false,"key":"0-3-0-3-0","id":"P0023"},{"opId":"P0284","opName":"企业产品管理撤回","opSort":"P0284","elementClass":"acl_cancelCommit_ydsEdsGoods","webApis":[],"checked":false,"key":"0-3-0-4-0","id":"P0284"},{"opId":"P0280","opName":"企业产品批量提交","opSort":"P0280","elementClass":"acl_commitEntities_ydsEdsGoods","webApis":[{"serviceUrl":"/yard/spd/ydsEdsGoods/count","serviceMethod":"GET","checked":false,"key":"0-3-0-5-0"},{"serviceUrl":"/yard/spd/ydsEdsGoods","serviceMethod":"GET","checked":false,"key":"0-3-0-5-1"},{"serviceUrl":"/yard/spd/ydsGoods/ids,{ids}","serviceMethod":"GET","checked":false,"key":"0-3-0-5-2"},{"serviceUrl":"/yard/spd/ydsEdsGoods/{ydsEdsGoodsId}/checkState/commited","serviceMethod":"PUT","checked":false,"key":"0-3-0-5-3"},{"serviceUrl":"/yard/spd/ydsEdsGoods/{edsGoodsId}","serviceMethod":"GET","checked":false,"key":"0-3-0-5-4"},{"serviceUrl":"/yard/spd/ydsWorkBooks/byUse","serviceMethod":"GET","checked":false,"key":"0-3-0-5-5"}],"checked":false,"key":"0-3-0-5-0","id":"P0280"},{"opId":"P0017","opName":"企业产品管理编辑","opSort":"P0017","elementClass":"acl_edit_ydsEdsGoods","webApis":[{"serviceUrl":"/yard/spd/ydsEdsGoods/{goodsId}","serviceMethod":"PUT","checked":false,"key":"0-3-0-6-0"},{"serviceUrl":"/yard/spd/ydsEdsGoods","serviceMethod":"GET","checked":false,"key":"0-3-0-6-1"},{"serviceUrl":"/yard/spd/ydsEdsGoods/count","serviceMethod":"GET","checked":false,"key":"0-3-0-6-2"},{"serviceUrl":"/yard/spd/ydsEdsGoods/{goodsId}","serviceMethod":"GET","checked":false,"key":"0-3-0-6-3"},{"serviceUrl":"/yard/spd/ydsWorkBooks/byUse","serviceMethod":"GET","checked":false,"key":"0-3-0-6-4"},{"serviceUrl":"/yard/spd/ydsGoods/ids,{ids}","serviceMethod":"GET","checked":false,"key":"0-3-0-6-5"},{"serviceUrl":"/yard/spd/ydsGoods/byUse/count","serviceMethod":"GET","checked":false,"key":"0-3-0-6-6"},{"serviceUrl":"/yard/spd/ydsGoods/byUse","serviceMethod":"GET","checked":false,"key":"0-3-0-6-7"},{"serviceUrl":"/yard/spd/ydsEdsGoods/{edsGoodsId}","serviceMethod":"PUT","checked":false,"key":"0-3-0-6-8"}],"checked":false,"key":"0-3-0-6-0","id":"P0017"}],"checked":false,"key":"0-3-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"0-3-0-0-0"},{"systemName":"收货系统","menuId":"10001-005","menuCode":"10001-005","menuParentId":"10001","icon":null,"menuSort":5,"name":"企业产品批次","level":2,"anchor":"#spd/ydsEdsGoodsLots","functions":[{"functionId":"F0015","functionName":"企业产品批次","operations":[{"opId":"P0102","opName":"企业产品批次查看","opSort":"P0102","elementClass":"acl_view_ydsEdsGoodsLot","webApis":[{"serviceUrl":"/yard/spd/spdReceives/count","serviceMethod":"GET","checked":false,"key":"0-4-0-0-0"},{"serviceUrl":"/yard/spd/spdReceives","serviceMethod":"GET","checked":false,"key":"0-4-0-0-1"},{"serviceUrl":"/yard/spd/ydsEdsGoodsLots/count","serviceMethod":"GET","checked":false,"key":"0-4-0-0-2"},{"serviceUrl":"/yard/spd/ydsEdsGoodsLots","serviceMethod":"GET","checked":false,"key":"0-4-0-0-3"},{"serviceUrl":"/yard/spd/ydsEdsGoods/ids,{ids}","serviceMethod":"GET","checked":false,"key":"0-4-0-0-4"}],"checked":false,"key":"0-4-0-0-0","id":"P0102"},{"opId":"P0103","opName":"企业产品批次编辑","opSort":"P0103","elementClass":"acl_edit_ydsEdsGoodsLot","webApis":[{"serviceUrl":"/yard/spd/ydsEdsGoodsLots/{edsGoodsLotId}","serviceMethod":"PUT","checked":false,"key":"0-4-0-1-0"},{"serviceUrl":"/yard/spd/ydsEdsGoods/{edsGoodsId}","serviceMethod":"GET","checked":false,"key":"0-4-0-1-1"},{"serviceUrl":"/yard/spd/ydsEdsGoodsLots","serviceMethod":"GET","checked":false,"key":"0-4-0-1-2"},{"serviceUrl":"/yard/spd/ydsEdsGoodsLots/count","serviceMethod":"GET","checked":false,"key":"0-4-0-1-3"}],"checked":false,"key":"0-4-0-1-0","id":"P0103"},{"opId":"P0104","opName":"企业产品批次新增","opSort":"P0104","elementClass":"acl_add_ydsEdsGoodsLot","webApis":[{"serviceUrl":"/yard/spd/ydsEdsGoodsLots","serviceMethod":"POST","checked":false,"key":"0-4-0-2-0"},{"serviceUrl":"/yard/spd/ydsEdsGoodsLots/count","serviceMethod":"GET","checked":false,"key":"0-4-0-2-1"},{"serviceUrl":"/yard/spd/ydsEdsGoodsLots","serviceMethod":"GET","checked":false,"key":"0-4-0-2-2"},{"serviceUrl":"/yard/spd/ydsEdsGoodsLots","serviceMethod":"POST","checked":false,"key":"0-4-0-2-3"}],"checked":false,"key":"0-4-0-2-0","id":"P0104"}],"checked":false,"key":"0-4-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"0-4-0-0-0"}],"topMenu":true,"open":false,"checked":false,"key":"0-0-0-0-0"},{"systemName":"收货系统","menuId":"10002","menuCode":"10003","menuParentId":"-1","icon":"fa-map-signs","menuSort":2,"name":"规则配置管理","level":1,"anchor":null,"functions":null,"children":[{"systemName":"收货系统","menuId":"10002-001","menuCode":"10002-001","menuParentId":"10002","icon":null,"menuSort":1,"name":"请领流向策略","level":2,"anchor":"#basics/spdDepotRoutes","functions":[{"functionId":"F0036","functionName":"请领流向策略","operations":[{"opId":"P0238","opName":"请领流向策略查看","opSort":"P0238","elementClass":"acl_view_spdDepotRoute","webApis":[{"serviceUrl":"/yard/spd/spdDepotRoutes/count","serviceMethod":"GET","checked":false,"key":"1-0-0-0-0"},{"serviceUrl":"/yard/spd/spdDepotRoutes","serviceMethod":"GET","checked":false,"key":"1-0-0-0-1"},{"serviceUrl":"/yard/spd/spdDepotRoutes","serviceMethod":"GET","checked":false,"key":"1-0-0-0-2"}],"checked":false,"key":"1-0-0-0-0","id":"P0238"},{"opId":"P0241","opName":"请领流向策略删除","opSort":"P0241","elementClass":"acl_delete_spdDepotRoute","webApis":[{"serviceUrl":"/yard/spd/spdDepotRoutes/{routeId}","serviceMethod":"DELETE","checked":false,"key":"1-0-0-1-0"},{"serviceUrl":"/yard/spd/spdDepotRoutes","serviceMethod":"GET","checked":false,"key":"1-0-0-1-1"},{"serviceUrl":"/yard/spd/spdDepotRoutes/count","serviceMethod":"GET","checked":false,"key":"1-0-0-1-2"}],"checked":false,"key":"1-0-0-1-0","id":"P0241"},{"opId":"P0240","opName":"请领流向策略编辑","opSort":"P0240","elementClass":"acl_edit_spdDepotRoute","webApis":[{"serviceUrl":"/yard/spd/spdDepotRoutes/count","serviceMethod":"GET","checked":false,"key":"1-0-0-2-0"},{"serviceUrl":"/yard/spd/spdDepotRoutes","serviceMethod":"GET","checked":false,"key":"1-0-0-2-1"}],"checked":false,"key":"1-0-0-2-0","id":"P0240"},{"opId":"P0239","opName":"请领流向策略新增","opSort":"P0239","elementClass":"acl_add_spdDepotRoute","webApis":[{"serviceUrl":"/yard/spd/spdDepotRoutes","serviceMethod":"POST","checked":false,"key":"1-0-0-3-0"},{"serviceUrl":"/yard/spd/spdDepotRoutes","serviceMethod":"POST","checked":false,"key":"1-0-0-3-1"},{"serviceUrl":"/yard/spd/spdDepotRoutes/count","serviceMethod":"GET","checked":false,"key":"1-0-0-3-2"},{"serviceUrl":"/yard/spd/spdDepotRoutes","serviceMethod":"GET","checked":false,"key":"1-0-0-3-3"},{"serviceUrl":"/yard/pcs/pcsDepots/byUse","serviceMethod":"GET","checked":false,"key":"1-0-0-3-4"},{"serviceUrl":"/yard/pcs/pcsDepots/byUse/count","serviceMethod":"GET","checked":false,"key":"1-0-0-3-5"},{"serviceUrl":"/yard/pcs/pcsDepots/byTakePoint/count","serviceMethod":"GET","checked":false,"key":"1-0-0-3-6"},{"serviceUrl":"/yard/pcs/pcsDepots/byTakePoint","serviceMethod":"GET","checked":false,"key":"1-0-0-3-7"}],"checked":false,"key":"1-0-0-3-0","id":"P0239"}],"checked":false,"key":"1-0-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"1-0-0-0-0"},{"systemName":"收货系统","menuId":"10002-002","menuCode":"10002-002","menuParentId":"10002","icon":null,"menuSort":2,"name":"使用类型管理","level":2,"anchor":"#spd/spdUsedTypes","functions":[{"functionId":"F0074","functionName":"使用类型管理","operations":[{"opId":"P0644","opName":"使用类型管理查看","opSort":"P0644","elementClass":"acl_view_spdUsedType","webApis":[{"serviceUrl":"/yard/pcs/pcsDepotViews/ids,{ids}","serviceMethod":"GET","checked":false,"key":"1-1-0-0-0"},{"serviceUrl":"/yard/spd/spdUsedTypes","serviceMethod":"GET","checked":false,"key":"1-1-0-0-1"},{"serviceUrl":"/yard/spd/spdUsedTypes/count","serviceMethod":"GET","checked":false,"key":"1-1-0-0-2"}],"checked":false,"key":"1-1-0-0-0","id":"P0644"},{"opId":"P0645","opName":"使用类型管理增加","opSort":"P0645","elementClass":"acl_add_spdUsedType","webApis":[{"serviceUrl":"/yard/pcs/pcsDepotViews/byUsedDepot","serviceMethod":"GET","checked":false,"key":"1-1-0-1-0"},{"serviceUrl":"/yard/spd/spdUsedTypes","serviceMethod":"POST","checked":false,"key":"1-1-0-1-1"},{"serviceUrl":"/yard/pcs/pcsDepts/orgId,{orgId}","serviceMethod":"GET","checked":false,"key":"1-1-0-1-2"},{"serviceUrl":"/yard/pcs/pcsDepotViews/byUsedDepot","serviceMethod":"GET","checked":false,"key":"1-1-0-1-3"},{"serviceUrl":"/yard/pcs/pcsDepotViews/byUsedDepot/count","serviceMethod":"GET","checked":false,"key":"1-1-0-1-4"}],"checked":false,"key":"1-1-0-1-0","id":"P0645"},{"opId":"P0646","opName":"使用类型管理编辑","opSort":"P0646","elementClass":"acl_edit_spdUsedType","webApis":[{"serviceUrl":"/yard/spd/spdUsedTypes/{usedType}","serviceMethod":"PUT","checked":false,"key":"1-1-0-2-0"}],"checked":false,"key":"1-1-0-2-0","id":"P0646"},{"opId":"P0647","opName":"使用类型管理删除","opSort":"P0647","elementClass":"acl_delete_spdUsedType","webApis":[{"serviceUrl":"/yard/spd/spdUsedTypes/{usedType}","serviceMethod":"DELETE","checked":false,"key":"1-1-0-3-0"}],"checked":false,"key":"1-1-0-3-0","id":"P0647"},{"opId":"P0648","opName":"使用类型管理提交","opSort":"P0648","elementClass":"acl_commitEntity_spdUsedType","webApis":[{"serviceUrl":"/yard/spd/spdUsedTypes/{usedType}/checkState/commited","serviceMethod":"PUT","checked":false,"key":"1-1-0-4-0"},{"serviceUrl":"/yard/spd/spdUsedTypes/{usedType}","serviceMethod":"GET","checked":false,"key":"1-1-0-4-1"}],"checked":false,"key":"1-1-0-4-0","id":"P0648"},{"opId":"P0649","opName":"使用类型管理撤回","opSort":"P0649","elementClass":"acl_cancelCommit_spdUsedType","webApis":[],"checked":false,"key":"1-1-0-5-0","id":"P0649"}],"checked":false,"key":"1-1-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"1-1-0-0-0"},{"systemName":"收货系统","menuId":"10002-003","menuCode":"10002-003","menuParentId":"10002","icon":null,"menuSort":3,"name":"仓库帐页管理","level":2,"anchor":"#spd/spdDepotCards","functions":[{"functionId":"F0017","functionName":"仓库帐页管理","operations":[{"opId":"P0108","opName":"仓库帐页管理查看","opSort":"P0108","elementClass":"acl_view_spdDepotCard","webApis":[{"serviceUrl":"/yard/pcs/depotShelfs/ids,{ids}","serviceMethod":"GET","checked":false,"key":"1-2-0-0-0"},{"serviceUrl":"/yard/spd/spdDepotCards/count","serviceMethod":"GET","checked":false,"key":"1-2-0-0-1"},{"serviceUrl":"/yard/spd/spdDepotCards","serviceMethod":"GET","checked":false,"key":"1-2-0-0-2"},{"serviceUrl":"/yard/spd/SpdDepotCardByStockTotalViews/ids,{ids}","serviceMethod":"GET","checked":false,"key":"1-2-0-0-3"}],"checked":false,"key":"1-2-0-0-0","id":"P0108"},{"opId":"P0109","opName":"仓库帐页管理编辑","opSort":"P0109","elementClass":"acl_edit_spdDepotCard","webApis":[{"serviceUrl":"/yard/spd/spdDepotCards","serviceMethod":"PUT","checked":false,"key":"1-2-0-1-0"},{"serviceUrl":"/yard/pcs/depotShelfs/byLoseSheft,{depotId}","serviceMethod":"GET","checked":false,"key":"1-2-0-1-1"},{"serviceUrl":"/yard/pcs/depotShelfs/byLoseSheft,{depotId}/count","serviceMethod":"GET","checked":false,"key":"1-2-0-1-2"},{"serviceUrl":"/yard/pcs/depotShelfs/{shelfId}","serviceMethod":"GET","checked":false,"key":"1-2-0-1-3"},{"serviceUrl":"/yard/pcs/depotShelfs/ids,{ids}","serviceMethod":"GET","checked":false,"key":"1-2-0-1-4"},{"serviceUrl":"/yard/spd/SpdDepotCardByStockTotalViews/ids,{ids}","serviceMethod":"GET","checked":false,"key":"1-2-0-1-5"},{"serviceUrl":"/yard/pcs/depotShelfs/byWMGDepotShelf,{depotId}/count","serviceMethod":"GET","checked":false,"key":"1-2-0-1-6"},{"serviceUrl":"/yard/pcs/depotShelfs/byWMGDepotShelf,{depotId}","serviceMethod":"GET","checked":false,"key":"1-2-0-1-7"},{"serviceUrl":"/yard/pcs/depotShelfs/WMGDepotShelf","serviceMethod":"GET","checked":false,"key":"1-2-0-1-8"},{"serviceUrl":"/yard/pcs/depotShelfs/WMGDepotShelf/count","serviceMethod":"GET","checked":false,"key":"1-2-0-1-9"}],"checked":false,"key":"1-2-0-1-0","id":"P0109"},{"opId":"P0110","opName":"仓库帐页管理新增","opSort":"P0110","elementClass":"acl_add_spdDepotCard","webApis":[{"serviceUrl":"/yard/pcs/depotShelfs/WMGDepotShelf/count","serviceMethod":"GET","checked":false,"key":"1-2-0-2-0"},{"serviceUrl":"/yard/pcs/depotShelfs/WMGDepotShelf","serviceMethod":"GET","checked":false,"key":"1-2-0-2-1"},{"serviceUrl":"/yard/spd/spdDepotCards","serviceMethod":"POST","checked":false,"key":"1-2-0-2-2"},{"serviceUrl":"/yard/spd/spdDepotCards","serviceMethod":"POST","checked":false,"key":"1-2-0-2-3"},{"serviceUrl":"/yard/spd/spdDepotCards","serviceMethod":"GET","checked":false,"key":"1-2-0-2-4"},{"serviceUrl":"/yard/pcs/depotShelfs/ids,{ids}","serviceMethod":"GET","checked":false,"key":"1-2-0-2-5"},{"serviceUrl":"/yard/spd/SpdDepotCardByStockTotalViews/ids,{ids}","serviceMethod":"GET","checked":false,"key":"1-2-0-2-6"},{"serviceUrl":"/yard/pcs/pcsDepotAreas/ids,{ids}","serviceMethod":"GET","checked":false,"key":"1-2-0-2-7"},{"serviceUrl":"/yard/pcs/depotShelfs/byLoseSheft,{depotId}","serviceMethod":"GET","checked":false,"key":"1-2-0-2-8"},{"serviceUrl":"/yard/pcs/depotShelfs/byLoseSheft,{depotId}/count","serviceMethod":"GET","checked":false,"key":"1-2-0-2-9"},{"serviceUrl":"/yard/pcs/depotShelfs/byWMGDepotShelf,{depotId}/count","serviceMethod":"GET","checked":false,"key":"1-2-0-2-10"},{"serviceUrl":"/yard/pcs/depotShelfs/byWMGDepotShelf,{depotId}","serviceMethod":"GET","checked":false,"key":"1-2-0-2-11"}],"checked":false,"key":"1-2-0-2-0","id":"P0110"},{"opId":"P0111","opName":"仓库帐页管理删除","opSort":"P0111","elementClass":"acl_delete_spdDepotCard","webApis":[{"serviceUrl":"/yard/spd/spdDepotCards/{cardId}","serviceMethod":"DELETE","checked":false,"key":"1-2-0-3-0"},{"serviceUrl":"/yard/spd/SpdDepotCardByStockTotalViews/ids,{ids}","serviceMethod":"GET","checked":false,"key":"1-2-0-3-1"},{"serviceUrl":"/yard/pcs/depotShelfs/ids,{ids}","serviceMethod":"GET","checked":false,"key":"1-2-0-3-2"},{"serviceUrl":"/yard/spd/spdDepotCards/count","serviceMethod":"GET","checked":false,"key":"1-2-0-3-3"},{"serviceUrl":"/yard/spd/spdDepotCards","serviceMethod":"GET","checked":false,"key":"1-2-0-3-4"}],"checked":false,"key":"1-2-0-3-0","id":"P0111"},{"opId":"P0307","opName":"仓库帐页管理撤回","opSort":"P0307","elementClass":"acl_cancelCommit_spdDepotCard","webApis":[{"serviceUrl":"/yard/spd/spdDepotCards","serviceMethod":"GET","checked":false,"key":"1-2-0-4-0"},{"serviceUrl":"/yard/pcs/depotShelfs/ids,{ids}","serviceMethod":"GET","checked":false,"key":"1-2-0-4-1"},{"serviceUrl":"/yard/spd/SpdDepotCardByStockTotalViews/ids,{ids}","serviceMethod":"GET","checked":false,"key":"1-2-0-4-2"},{"serviceUrl":"/yard/spd/spdDepotCards/{cardId}/checkState/completed","serviceMethod":"PUT","checked":false,"key":"1-2-0-4-3"}],"checked":false,"key":"1-2-0-4-0","id":"P0307"},{"opId":"P0277","opName":"仓库帐页管理提交","opSort":"P0277","elementClass":"acl_commitEntity_spdDepotCard","webApis":[{"serviceUrl":"/yard/spd/spdDepotCards/{cardId}/checkState/commited","serviceMethod":"PUT","checked":false,"key":"1-2-0-5-0"},{"serviceUrl":"/yard/spd/spdDepotCards","serviceMethod":"GET","checked":false,"key":"1-2-0-5-1"},{"serviceUrl":"/yard/pcs/depotShelfs/ids,{ids}","serviceMethod":"GET","checked":false,"key":"1-2-0-5-2"},{"serviceUrl":"/yard/spd/SpdDepotCardByStockTotalViews/ids,{ids}","serviceMethod":"GET","checked":false,"key":"1-2-0-5-3"},{"serviceUrl":"/yard/spd/spdDepotCards/{cardId}","serviceMethod":"GET","checked":false,"key":"1-2-0-5-4"}],"checked":false,"key":"1-2-0-5-0","id":"P0277"}],"checked":false,"key":"1-2-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"1-2-0-0-0"},{"systemName":"收货系统","menuId":"10002-004","menuCode":"10002-004","menuParentId":"10002","icon":null,"menuSort":4,"name":"定数配置管理","level":2,"anchor":"#spd/spdFixeds","functions":[{"functionId":"F0056","functionName":"定数帐页管理","operations":[{"opId":"P0453","opName":"定数帐页管理编辑","opSort":"P0453","elementClass":"acl_edit_spdDepotFixedCard","webApis":[{"serviceUrl":"/yard/spd/spdFixeds/{fixedId}","serviceMethod":"GET","checked":false,"key":"1-3-0-0-0"},{"serviceUrl":"/yard/spd/spdDepotFixedCards","serviceMethod":"GET","checked":false,"key":"1-3-0-0-1"},{"serviceUrl":"/yard/spd/spdDepotFixedCards/count","serviceMethod":"GET","checked":false,"key":"1-3-0-0-2"},{"serviceUrl":"/yard/spd/spdFixeds/ids,{ids}","serviceMethod":"GET","checked":false,"key":"1-3-0-0-3"},{"serviceUrl":"/yard/spd/spdDepotFixedCards","serviceMethod":"PUT","checked":false,"key":"1-3-0-0-4"}],"checked":false,"key":"1-3-0-0-0","id":"P0453"},{"opId":"P0454","opName":"定数帐页管理新增","opSort":"P0454","elementClass":"acl_add_spdDepotFixedCard","webApis":[{"serviceUrl":"/yard/spd/spdDepotCards/ids,{ids}","serviceMethod":"GET","checked":false,"key":"1-3-0-1-0"},{"serviceUrl":"/yard/spd/spdDepotCards/byGoodsCard,{goodsId}","serviceMethod":"GET","checked":false,"key":"1-3-0-1-1"},{"serviceUrl":"/yard/spd/spdDepotFixedCards","serviceMethod":"POST","checked":false,"key":"1-3-0-1-2"},{"serviceUrl":"/yard/spd/spdDepotFixedCards","serviceMethod":"GET","checked":false,"key":"1-3-0-1-3"},{"serviceUrl":"/yard/spd/spdDepotFixedCards/count","serviceMethod":"GET","checked":false,"key":"1-3-0-1-4"},{"serviceUrl":"/yard/spd/spdFixeds/ids,{ids}","serviceMethod":"GET","checked":false,"key":"1-3-0-1-5"},{"serviceUrl":"/yard/spd/spdDepotFixedCards","serviceMethod":"POST","checked":false,"key":"1-3-0-1-6"},{"serviceUrl":"/yard/spd/spdFixeds/byUsed","serviceMethod":"GET","checked":false,"key":"1-3-0-1-7"},{"serviceUrl":"/yard/spd/spdFixeds/byUsed/count","serviceMethod":"GET","checked":false,"key":"1-3-0-1-8"}],"checked":false,"key":"1-3-0-1-0","id":"P0454"},{"opId":"P0455","opName":"定数帐页管理删除","opSort":"P0455","elementClass":"acl_delete_spdDepotFixedCard","webApis":[{"serviceUrl":"/yard/spd/spdDepotFixedCards","serviceMethod":"GET","checked":false,"key":"1-3-0-2-0"},{"serviceUrl":"/yard/spd/spdDepotFixedCards/count","serviceMethod":"GET","checked":false,"key":"1-3-0-2-1"},{"serviceUrl":"/yard/spd/spdFixeds/ids,{ids}","serviceMethod":"GET","checked":false,"key":"1-3-0-2-2"},{"serviceUrl":"/yard/spd/spdDepotCards/ids,{ids}","serviceMethod":"GET","checked":false,"key":"1-3-0-2-3"},{"serviceUrl":"/yard/spd/spdDepotCards/{cardId}","serviceMethod":"GET","checked":false,"key":"1-3-0-2-4"},{"serviceUrl":"/yard/spd/spdFixeds/{fixedId}","serviceMethod":"GET","checked":false,"key":"1-3-0-2-5"},{"serviceUrl":"/yard/spd/spdDepotFixedCards/{cardFixedId}","serviceMethod":"DELETE","checked":false,"key":"1-3-0-2-6"}],"checked":false,"key":"1-3-0-2-0","id":"P0455"},{"opId":"P0456","opName":"定数帐页管理提交","opSort":"P0456","elementClass":"acl_commitEntity_spdDepotFixedCard","webApis":[{"serviceUrl":"/yard/spd/spdDepotFixedCards","serviceMethod":"GET","checked":false,"key":"1-3-0-3-0"},{"serviceUrl":"/yard/spd/spdDepotFixedCards/count","serviceMethod":"GET","checked":false,"key":"1-3-0-3-1"},{"serviceUrl":"/yard/spd/spdDepotFixedCards/{cardFixedId}","serviceMethod":"GET","checked":false,"key":"1-3-0-3-2"},{"serviceUrl":"/yard/spd/spdDepotFixedCards/{cardFixedId}/checkState/commited","serviceMethod":"PUT","checked":false,"key":"1-3-0-3-3"},{"serviceUrl":"/yard/spd/spdDepotFixedCards/{cardFixedId}/checkState/commited","serviceMethod":"PUT","checked":false,"key":"1-3-0-3-4"}],"checked":false,"key":"1-3-0-3-0","id":"P0456"},{"opId":"P0457","opName":"定数帐页管理撤回","opSort":"P0457","elementClass":"acl_cancelCommit_spdDepotFixedCard","webApis":[{"serviceUrl":"/yard/spd/spdDepotFixedCards","serviceMethod":"GET","checked":false,"key":"1-3-0-4-0"},{"serviceUrl":"/yard/spd/spdDepotFixedCards/count","serviceMethod":"GET","checked":false,"key":"1-3-0-4-1"},{"serviceUrl":"/yard/spd/spdDepotFixedCards/{cardFixedId}","serviceMethod":"GET","checked":false,"key":"1-3-0-4-2"}],"checked":false,"key":"1-3-0-4-0","id":"P0457"},{"opId":"P0446","opName":"定数帐页管理查看","opSort":"P0446","elementClass":"acl_view_spdDepotFixedCard","webApis":[{"serviceUrl":"/yard/spd/spdDepotFixedCards","serviceMethod":"GET","checked":false,"key":"1-3-0-5-0"},{"serviceUrl":"/yard/spd/spdDepotFixedCards/count","serviceMethod":"GET","checked":false,"key":"1-3-0-5-1"},{"serviceUrl":"/yard/spd/spdFixeds/{fixedId}","serviceMethod":"GET","checked":false,"key":"1-3-0-5-2"},{"serviceUrl":"/yard/spd/spdDepotCards/byGoodsCard,{goodsId}/count","serviceMethod":"GET","checked":false,"key":"1-3-0-5-3"},{"serviceUrl":"/yard/spd/spdDepotCards/byGoodsCard,{goodsId}","serviceMethod":"GET","checked":false,"key":"1-3-0-5-4"},{"serviceUrl":"/yard/spd/spdDepotFixedCards/{cardFixedId}","serviceMethod":"GET","checked":false,"key":"1-3-0-5-5"}],"checked":false,"key":"1-3-0-5-0","id":"P0446"}],"checked":false,"key":"1-3-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"1-3-0-0-0"},{"systemName":"收货系统","menuId":"10002-005","menuCode":"10002-005","menuParentId":"10002","icon":null,"menuSort":5,"name":"定数帐页管理","level":2,"anchor":"#spd/spdDepotFixedCards","functions":[{"functionId":"F0055","functionName":"定数配置管理","operations":[{"opId":"P0448","opName":"定数配置管理编辑","opSort":"P0448","elementClass":"acl_edit_spdFixed","webApis":[{"serviceUrl":"/yard/spd/spdFixeds/count","serviceMethod":"GET","checked":false,"key":"1-4-0-0-0"},{"serviceUrl":"/yard/spd/spdFixeds","serviceMethod":"GET","checked":false,"key":"1-4-0-0-1"},{"serviceUrl":"/yard/spd/spdFixeds","serviceMethod":"PUT","checked":false,"key":"1-4-0-0-2"}],"checked":false,"key":"1-4-0-0-0","id":"P0448"},{"opId":"P0449","opName":"定数配置管理新增","opSort":"P0449","elementClass":"acl_add_spdFixed","webApis":[{"serviceUrl":"/yard/spd/spdFixeds","serviceMethod":"POST","checked":false,"key":"1-4-0-1-0"},{"serviceUrl":"/yard/spd/spdFixeds","serviceMethod":"GET","checked":false,"key":"1-4-0-1-1"},{"serviceUrl":"/yard/spd/spdFixeds/count","serviceMethod":"GET","checked":false,"key":"1-4-0-1-2"},{"serviceUrl":"/yard/spd/spdFixeds","serviceMethod":"POST","checked":false,"key":"1-4-0-1-3"}],"checked":false,"key":"1-4-0-1-0","id":"P0449"},{"opId":"P0450","opName":"定数配置管理删除","opSort":"P0450","elementClass":"acl_delete_spdFixed","webApis":[{"serviceUrl":"/yard/spd/spdFixeds","serviceMethod":"GET","checked":false,"key":"1-4-0-2-0"},{"serviceUrl":"/yard/spd/spdFixeds/count","serviceMethod":"GET","checked":false,"key":"1-4-0-2-1"},{"serviceUrl":"/yard/spd/spdFixeds/{fixedId}","serviceMethod":"DELETE","checked":false,"key":"1-4-0-2-2"}],"checked":false,"key":"1-4-0-2-0","id":"P0450"},{"opId":"P0451","opName":"定数配置管理提交","opSort":"P0451","elementClass":"acl_commitEntity_spdFixed","webApis":[{"serviceUrl":"/yard/spd/spdFixeds","serviceMethod":"GET","checked":false,"key":"1-4-0-3-0"},{"serviceUrl":"/yard/spd/spdFixeds/count","serviceMethod":"GET","checked":false,"key":"1-4-0-3-1"},{"serviceUrl":"/yard/spd/spdFixeds/{fixedId}","serviceMethod":"GET","checked":false,"key":"1-4-0-3-2"},{"serviceUrl":"/yard/spd/spdFixeds/{fixedId}/checkState/commited","serviceMethod":"PUT","checked":false,"key":"1-4-0-3-3"}],"checked":false,"key":"1-4-0-3-0","id":"P0451"},{"opId":"P0452","opName":"定数配置管理撤回","opSort":"P0452","elementClass":"acl_cancelCommit_spdFixed","webApis":[{"serviceUrl":"/yard/spd/spdFixeds","serviceMethod":"GET","checked":false,"key":"1-4-0-4-0"},{"serviceUrl":"/yard/spd/spdFixeds/count","serviceMethod":"GET","checked":false,"key":"1-4-0-4-1"},{"serviceUrl":"/yard/spd/spdFixeds/{fixedId}","serviceMethod":"GET","checked":false,"key":"1-4-0-4-2"}],"checked":false,"key":"1-4-0-4-0","id":"P0452"},{"opId":"P0445","opName":"定数配置管理查看","opSort":"P0445","elementClass":"acl_view_spdFixed","webApis":[{"serviceUrl":"/yard/spd/spdFixeds/count","serviceMethod":"GET","checked":false,"key":"1-4-0-5-0"},{"serviceUrl":"/yard/spd/spdFixeds","serviceMethod":"GET","checked":false,"key":"1-4-0-5-1"}],"checked":false,"key":"1-4-0-5-0","id":"P0445"}],"checked":false,"key":"1-4-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"1-4-0-0-0"}],"topMenu":true,"open":false,"checked":false,"key":"1-0-0-0-0"},{"systemName":"收货系统","menuId":"10003","menuCode":"10003","menuParentId":"-1","icon":"fa-cart-arrow-down","menuSort":3,"name":"英雄联盟","level":1,"anchor":null,"functions":null,"children":[{"systemName":"收货系统","menuId":"10003-001","menuCode":"10003-001","menuParentId":"10003","icon":null,"menuSort":1,"name":"物资价格维护","level":2,"anchor":"#spd/ydsGoodsInfos","functions":[{"functionId":"F0011","functionName":"物资价格维护","operations":[{"opId":"P0077","opName":"物资价格维护新增","opSort":"P0077","elementClass":"acl_add_ydsGoodsInfo","webApis":[{"serviceUrl":"/yard/spd/ydsGoodsInfos","serviceMethod":"POST","checked":false,"key":"2-0-0-0-0"},{"serviceUrl":"/yard/spd/ydsGoodsInfos","serviceMethod":"POST","checked":false,"key":"2-0-0-0-1"},{"serviceUrl":"/yard/spd/ydsGoodsInfos/count","serviceMethod":"GET","checked":false,"key":"2-0-0-0-2"},{"serviceUrl":"/yard/spd/ydsGoodsInfos","serviceMethod":"GET","checked":false,"key":"2-0-0-0-3"}],"checked":false,"key":"2-0-0-0-0","id":"P0077"},{"opId":"P0078","opName":"物资价格维护删除","opSort":"P0078","elementClass":"acl_delete_ydsGoodsInfo","webApis":[{"serviceUrl":"/yard/spd/ydsGoodsInfos/count","serviceMethod":"GET","checked":false,"key":"2-0-0-1-0"},{"serviceUrl":"/yard/spd/ydsGoodsInfos","serviceMethod":"GET","checked":false,"key":"2-0-0-1-1"},{"serviceUrl":"/yard/spd/ydsGoodsInfos/count","serviceMethod":"GET","checked":false,"key":"2-0-0-1-2"},{"serviceUrl":"/yard/spd/ydsGoodsInfos","serviceMethod":"GET","checked":false,"key":"2-0-0-1-3"},{"serviceUrl":"/yard/spd/ydsGoodsInfos/{goodsId}","serviceMethod":"DELETE","checked":false,"key":"2-0-0-1-4"}],"checked":false,"key":"2-0-0-1-0","id":"P0078"},{"opId":"P0079","opName":"物资价格维护编辑","opSort":"P0079","elementClass":"acl_edit_ydsGoodsInfo","webApis":[{"serviceUrl":"/yard/spd/ydsGoodsInfos/count","serviceMethod":"GET","checked":false,"key":"2-0-0-2-0"},{"serviceUrl":"/yard/spd/ydsGoodsInfos","serviceMethod":"GET","checked":false,"key":"2-0-0-2-1"},{"serviceUrl":"/yard/spd/ydsGoodsInfos/{goodsId}","serviceMethod":"PUT","checked":false,"key":"2-0-0-2-2"}],"checked":false,"key":"2-0-0-2-0","id":"P0079"},{"opId":"P0080","opName":"物资价格维护查看","opSort":"P0080","elementClass":"acl_view_ydsGoodsInfo","webApis":[{"serviceUrl":"/yard/spd/ydsGoodsInfos/count","serviceMethod":"GET","checked":false,"key":"2-0-0-3-0"},{"serviceUrl":"/yard/spd/ydsGoodsInfos","serviceMethod":"GET","checked":false,"key":"2-0-0-3-1"},{"serviceUrl":"/yard/spd/ydsGoodsInfos/count","serviceMethod":"GET","checked":false,"key":"2-0-0-3-2"},{"serviceUrl":"/yard/spd/ydsGoodsInfos","serviceMethod":"GET","checked":false,"key":"2-0-0-3-3"}],"checked":false,"key":"2-0-0-3-0","id":"P0080"}],"checked":false,"key":"2-0-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"2-0-0-0-0"},{"systemName":"收货系统","menuId":"10003-002","menuCode":"10003-002","menuParentId":"10003","icon":null,"menuSort":2,"name":"采购合同管理","level":2,"anchor":"#spd/spdPoContracts","functions":[{"functionId":"F0012","functionName":"采购合同管理","operations":[{"opId":"P0083","opName":"采购合同管理编辑","opSort":"P0083","elementClass":"acl_edit_spdPoContract,acl_edit_spdPoContractItem,acl_delete_spdPoContractItem,acl_add_spdPoContractItem,acl_view_spdPoContractItem","webApis":[{"serviceUrl":"/yard/spd/spdPoContractItems","serviceMethod":"POST","checked":false,"key":"2-1-0-0-0"},{"serviceUrl":"/yard/spd/spdPoContracts/{conId}","serviceMethod":"GET","checked":false,"key":"2-1-0-0-1"},{"serviceUrl":"/yard/spd/spdPoContractItems/conId,{conId}","serviceMethod":"GET","checked":false,"key":"2-1-0-0-2"},{"serviceUrl":"/yard/spd/spdPoContracts/{conId}","serviceMethod":"PUT","checked":false,"key":"2-1-0-0-3"},{"serviceUrl":"/yard/spd/spdPoContractItems/conId,{conId}","serviceMethod":"GET","checked":false,"key":"2-1-0-0-4"},{"serviceUrl":"/yard/spd/spdPoContractItems/{conItemId}","serviceMethod":"PUT","checked":false,"key":"2-1-0-0-5"},{"serviceUrl":"/yard/pcs/PcsDepts/byProcurementDept","serviceMethod":"GET","checked":false,"key":"2-1-0-0-6"}],"checked":false,"key":"2-1-0-0-0","id":"P0083"},{"opId":"P0084","opName":"采购合同管理新增","opSort":"P0084","elementClass":"acl_add_spdPoContract,acl_add_spdPoContractItem,acl_view_spdPoContractItem,acl_edit_spdPoContractItem,acl_delete_spdPoContractItem","webApis":[{"serviceUrl":"/yard/spd/spdPoContractItems","serviceMethod":"POST","checked":false,"key":"2-1-0-1-0"},{"serviceUrl":"/yard/pcs/PcsDepts/byProcurementType","serviceMethod":"GET","checked":false,"key":"2-1-0-1-1"},{"serviceUrl":"/yard/spd/spdPoContracts/count","serviceMethod":"GET","checked":false,"key":"2-1-0-1-2"},{"serviceUrl":"/yard/spd/spdPoContracts","serviceMethod":"GET","checked":false,"key":"2-1-0-1-3"},{"serviceUrl":"/yard/spd/spdPoContracts","serviceMethod":"POST","checked":false,"key":"2-1-0-1-4"},{"serviceUrl":"/yard/pcs/PcsDepts/byUse","serviceMethod":"GET","checked":false,"key":"2-1-0-1-5"},{"serviceUrl":"/yard/pcs/PcsDepts/byProcurementDept","serviceMethod":"GET","checked":false,"key":"2-1-0-1-6"}],"checked":false,"key":"2-1-0-1-0","id":"P0084"},{"opId":"P0085","opName":"采购合同管理删除","opSort":"P0085","elementClass":"acl_delete_spdPoContract,acl_delete_spdPoContractItem","webApis":[{"serviceUrl":"/yard/spd/spdPoContracts/{conId}","serviceMethod":"DELETE","checked":false,"key":"2-1-0-2-0"},{"serviceUrl":"/yard/spd/spdPoContracts/count","serviceMethod":"GET","checked":false,"key":"2-1-0-2-1"},{"serviceUrl":"/yard/spd/spdPoContractItems/conId,{conId}","serviceMethod":"GET","checked":false,"key":"2-1-0-2-2"},{"serviceUrl":"/yard/spd/spdPoContractItems/{conItemId}","serviceMethod":"DELETE","checked":false,"key":"2-1-0-2-3"},{"serviceUrl":"/yard/spd/spdPoContracts","serviceMethod":"GET","checked":false,"key":"2-1-0-2-4"}],"checked":false,"key":"2-1-0-2-0","id":"P0085"},{"opId":"P0086","opName":"采购合同管理提交","opSort":"P0086","elementClass":"acl_commitEntity_spdPoContract","webApis":[{"serviceUrl":"/yard/spd/spdPoContracts/{conId}/checkState/commited","serviceMethod":"PUT","checked":false,"key":"2-1-0-3-0"},{"serviceUrl":"/yard/spd/spdPoContracts/count","serviceMethod":"GET","checked":false,"key":"2-1-0-3-1"},{"serviceUrl":"/yard/spd/spdPoContracts","serviceMethod":"GET","checked":false,"key":"2-1-0-3-2"},{"serviceUrl":"/yard/spd/spdPoContracts/{conId}","serviceMethod":"GET","checked":false,"key":"2-1-0-3-3"}],"checked":false,"key":"2-1-0-3-0","id":"P0086"},{"opId":"P0087","opName":"采购合同管理审核","opSort":"P0087","elementClass":"acl_reviewEntity_spdPoContract","webApis":[{"serviceUrl":"/yard/spd/spdPoContracts/{conId}","serviceMethod":"PUT","checked":false,"key":"2-1-0-4-0"}],"checked":false,"key":"2-1-0-4-0","id":"P0087"},{"opId":"P0088","opName":"采购合同管理撤回","opSort":"P0088","elementClass":"acl_cancelCommit_spdPoContract","webApis":[],"checked":false,"key":"2-1-0-5-0","id":"P0088"},{"opId":"P0082","opName":"采购合同管理查看","opSort":"P0082","elementClass":"acl_view_spdPoContract,acl_view_spdPoContractItem","webApis":[{"serviceUrl":"/yard/spd/spdPoContracts/count","serviceMethod":"GET","checked":false,"key":"2-1-0-6-0"},{"serviceUrl":"/yard/spd/spdPoContracts","serviceMethod":"GET","checked":false,"key":"2-1-0-6-1"},{"serviceUrl":"/yard/pcs/PcsDepts/byProcurementType","serviceMethod":"GET","checked":false,"key":"2-1-0-6-2"},{"serviceUrl":"/yard/spd/spdPoContractItems/conId,{conId}","serviceMethod":"GET","checked":false,"key":"2-1-0-6-3"}],"checked":false,"key":"2-1-0-6-0","id":"P0082"}],"checked":false,"key":"2-1-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"2-1-0-0-0"},{"systemName":"收货系统","menuId":"10003-003","menuCode":"10003-003","menuParentId":"10003","icon":null,"menuSort":3,"name":"配额调节管理","level":2,"anchor":"#spd/spdPoContractItems","functions":[{"functionId":"F0040","functionName":"配额调节管理","operations":[{"opId":"P0478","opName":"配额调节管理编辑","opSort":"P0478","elementClass":"acl_edit_spdPoContractItemAdjust,acl_edit_spdPoContractAdjust","webApis":[{"serviceUrl":"/yard/spd/spdPoContractItems/byAdjust/count","serviceMethod":"GET","checked":false,"key":"2-2-0-0-0"},{"serviceUrl":"/yard/spd/spdPoContractItems/byAdjust","serviceMethod":"GET","checked":false,"key":"2-2-0-0-1"},{"serviceUrl":"/yard/spd/spdPoContracts/ids,{ids}","serviceMethod":"GET","checked":false,"key":"2-2-0-0-2"},{"serviceUrl":"/yard/spd/spdPoContractAdjusts/conItemId,{conItemId}/count","serviceMethod":"GET","checked":false,"key":"2-2-0-0-3"},{"serviceUrl":"/yard/spd/spdPoContractAdjusts/conItemId,{conItemId}","serviceMethod":"GET","checked":false,"key":"2-2-0-0-4"},{"serviceUrl":"/yard/spd/spdPoContractAdjusts/{adjustId}","serviceMethod":"PUT","checked":false,"key":"2-2-0-0-5"}],"checked":false,"key":"2-2-0-0-0","id":"P0478"},{"opId":"P0480","opName":"配额调节管理删除","opSort":"P0480","elementClass":"acl_edit_spdPoContractItemAdjust,acl_delete_spdPoContractAdjust","webApis":[{"serviceUrl":"/yard/spd/spdPoContractAdjusts/{adjustId}","serviceMethod":"DELETE","checked":false,"key":"2-2-0-1-0"},{"serviceUrl":"/yard/spd/spdPoContractItems/byAdjust/count","serviceMethod":"GET","checked":false,"key":"2-2-0-1-1"},{"serviceUrl":"/yard/spd/spdPoContractItems/byAdjust","serviceMethod":"GET","checked":false,"key":"2-2-0-1-2"},{"serviceUrl":"/yard/spd/spdPoContractAdjusts/conItemId,{conItemId}","serviceMethod":"GET","checked":false,"key":"2-2-0-1-3"},{"serviceUrl":"/yard/spd/spdPoContractAdjusts/conItemId,{conItemId}/count","serviceMethod":"GET","checked":false,"key":"2-2-0-1-4"},{"serviceUrl":"/yard/spd/spdPoContracts/ids,{ids}","serviceMethod":"GET","checked":false,"key":"2-2-0-1-5"}],"checked":false,"key":"2-2-0-1-0","id":"P0480"},{"opId":"P0479","opName":"配额调节管理新增","opSort":"P0479","elementClass":"acl_edit_spdPoContractItemAdjust,acl_add_spdPoContractAdjust","webApis":[{"serviceUrl":"/yard/spd/spdPoContractAdjusts","serviceMethod":"POST","checked":false,"key":"2-2-0-2-0"},{"serviceUrl":"/yard/spd/spdPoContractItems/byAdjust/count","serviceMethod":"GET","checked":false,"key":"2-2-0-2-1"},{"serviceUrl":"/yard/spd/spdPoContractItems/byAdjust","serviceMethod":"GET","checked":false,"key":"2-2-0-2-2"},{"serviceUrl":"/yard/spd/spdPoContracts/ids,{ids}","serviceMethod":"GET","checked":false,"key":"2-2-0-2-3"},{"serviceUrl":"/yard/spd/spdPoContractAdjusts/conItemId,{conItemId}/count","serviceMethod":"GET","checked":false,"key":"2-2-0-2-4"},{"serviceUrl":"/yard/spd/spdPoContractAdjusts/conItemId,{conItemId}","serviceMethod":"GET","checked":false,"key":"2-2-0-2-5"}],"checked":false,"key":"2-2-0-2-0","id":"P0479"},{"opId":"P0481","opName":"配额调节管理提交","opSort":"P0481","elementClass":"acl_edit_spdPoContractItemAdjust,acl_commitEntity_spdPoContractAdjust","webApis":[{"serviceUrl":"/yard/spd/spdPoContractItems/byAdjust/count","serviceMethod":"GET","checked":false,"key":"2-2-0-3-0"},{"serviceUrl":"/yard/spd/spdPoContractItems/byAdjust","serviceMethod":"GET","checked":false,"key":"2-2-0-3-1"},{"serviceUrl":"/yard/spd/spdPoContracts/ids,{ids}","serviceMethod":"GET","checked":false,"key":"2-2-0-3-2"},{"serviceUrl":"/yard/spd/spdPoContractAdjusts/conItemId,{conItemId}/count","serviceMethod":"GET","checked":false,"key":"2-2-0-3-3"},{"serviceUrl":"/yard/spd/spdPoContractAdjusts/conItemId,{conItemId}","serviceMethod":"GET","checked":false,"key":"2-2-0-3-4"},{"serviceUrl":"/yard/spd/spdPoContractAdjusts/{adjustId}/checkState/commited","serviceMethod":"PUT","checked":false,"key":"2-2-0-3-5"},{"serviceUrl":"/yard/spd/spdPoContractAdjusts/{adjustId}","serviceMethod":"GET","checked":false,"key":"2-2-0-3-6"}],"checked":false,"key":"2-2-0-3-0","id":"P0481"},{"opId":"P0482","opName":"配额调节管理审核","opSort":"P0482","elementClass":"acl_edit_spdPoContractItemAdjust,acl_reviewEntity_spdPoContractAdjust","webApis":[{"serviceUrl":"/yard/spd/spdPoContractAdjusts/{adjustId}/checkState/reviewed","serviceMethod":"PUT","checked":false,"key":"2-2-0-4-0"},{"serviceUrl":"/yard/spd/spdPoContractItems/byAdjust/count","serviceMethod":"GET","checked":false,"key":"2-2-0-4-1"},{"serviceUrl":"/yard/spd/spdPoContractItems/byAdjust","serviceMethod":"GET","checked":false,"key":"2-2-0-4-2"},{"serviceUrl":"/yard/spd/spdPoContracts/ids,{ids}","serviceMethod":"GET","checked":false,"key":"2-2-0-4-3"},{"serviceUrl":"/yard/spd/spdPoContractAdjusts/conItemId,{conItemId}","serviceMethod":"GET","checked":false,"key":"2-2-0-4-4"},{"serviceUrl":"/yard/spd/spdPoContractAdjusts/conItemId,{conItemId}/count","serviceMethod":"GET","checked":false,"key":"2-2-0-4-5"},{"serviceUrl":"/yard/spd/spdPoContractAdjusts/{adjustId}","serviceMethod":"GET","checked":false,"key":"2-2-0-4-6"}],"checked":false,"key":"2-2-0-4-0","id":"P0482"},{"opId":"P0098","opName":"配额调节管理查看","opSort":"P0098","elementClass":"acl_view_spdPoContractItemAdjust,acl_view_spdPoContractAdjust","webApis":[{"serviceUrl":"/yard/spd/spdPoContracts/ids,{ids}","serviceMethod":"GET","checked":false,"key":"2-2-0-5-0"},{"serviceUrl":"/yard/spd/spdPoContractItems/byAdjust/count","serviceMethod":"GET","checked":false,"key":"2-2-0-5-1"},{"serviceUrl":"/yard/spd/spdPoContractItems/byAdjust","serviceMethod":"GET","checked":false,"key":"2-2-0-5-2"},{"serviceUrl":"/yard/spd/spdPoContractAdjusts/conItemId,{conItemId}/count","serviceMethod":"GET","checked":false,"key":"2-2-0-5-3"},{"serviceUrl":"/yard/spd/spdPoContractAdjusts/conItemId,{conItemId}","serviceMethod":"GET","checked":false,"key":"2-2-0-5-4"}],"checked":false,"key":"2-2-0-5-0","id":"P0098"}],"checked":false,"key":"2-2-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"2-2-0-0-0"},{"systemName":"收货系统","menuId":"10003-004","menuCode":"10003-004","menuParentId":"10003","icon":null,"menuSort":4,"name":"采购订单管理","level":2,"anchor":"#spd/spdPurchPos","functions":[{"functionId":"F0013","functionName":"采购订单管理","operations":[{"opId":"P0089","opName":"采购订单管理查看","opSort":"P0089","elementClass":"acl_view_spdPurch,acl_view_spdPurchItem","webApis":[{"serviceUrl":"/yard/spd/spdPurchItems/detail/poId,{poId}/pdf","serviceMethod":"GET","checked":false,"key":"2-3-0-0-0"},{"serviceUrl":"/yard/spd/spdDepotCards/{cardId}","serviceMethod":"GET","checked":false,"key":"2-3-0-0-1"},{"serviceUrl":"/yard/spd/spdPurchs/count","serviceMethod":"GET","checked":false,"key":"2-3-0-0-2"},{"serviceUrl":"/yard/spd/spdPurchs","serviceMethod":"GET","checked":false,"key":"2-3-0-0-3"},{"serviceUrl":"/yard/spd/spdPoContracts/{poId}","serviceMethod":"GET","checked":false,"key":"2-3-0-0-4"},{"serviceUrl":"/yard/spd/spdPurchs/{ids}","serviceMethod":"GET","checked":false,"key":"2-3-0-0-5"},{"serviceUrl":"/yard/spd/spdPurchItems","serviceMethod":"GET","checked":false,"key":"2-3-0-0-6"}],"checked":false,"key":"2-3-0-0-0","id":"P0089"},{"opId":"P0090","opName":"采购订单管理编辑","opSort":"P0090","elementClass":"acl_edit_spdPurch,acl_edit_spdPurchItem,acl_view_spdPurchItem,acl_add_spdPurchItem,acl_delete_spdPurchItem","webApis":[{"serviceUrl":"/yard/spd/spdPurchItems/poId,{poId}","serviceMethod":"GET","checked":false,"key":"2-3-0-1-0"},{"serviceUrl":"/yard/spd/spdPurchs/byPurchase/count","serviceMethod":"GET","checked":false,"key":"2-3-0-1-1"},{"serviceUrl":"/yard/spd/spdPurchs/byPurchase","serviceMethod":"GET","checked":false,"key":"2-3-0-1-2"},{"serviceUrl":"/yard/spd/spdDepotCards/count","serviceMethod":"GET","checked":false,"key":"2-3-0-1-3"},{"serviceUrl":"/yard/spd/spdDepotCards","serviceMethod":"GET","checked":false,"key":"2-3-0-1-4"},{"serviceUrl":"/yard/spd/spdPoContracts/count","serviceMethod":"GET","checked":false,"key":"2-3-0-1-5"},{"serviceUrl":"/yard/spd/spdPoContracts","serviceMethod":"GET","checked":false,"key":"2-3-0-1-6"},{"serviceUrl":"/yard/spd/spdPurchItems","serviceMethod":"POST","checked":false,"key":"2-3-0-1-7"},{"serviceUrl":"/yard/spd/spdPurchs/{poId}","serviceMethod":"PUT","checked":false,"key":"2-3-0-1-8"},{"serviceUrl":"/yard/spd/spdPurchItems/{poItemId}","serviceMethod":"PUT","checked":false,"key":"2-3-0-1-9"},{"serviceUrl":"/yard/spd/spdDepotCards/{cardId}","serviceMethod":"GET","checked":false,"key":"2-3-0-1-10"},{"serviceUrl":"/yard/spd/spdGoodsContractViews/{depotId},{supplierOrg}","serviceMethod":"GET","checked":false,"key":"2-3-0-1-11"},{"serviceUrl":"/yard/spd/spdGoodsContractViews/{depotId},{supplierOrg}/count","serviceMethod":"GET","checked":false,"key":"2-3-0-1-12"},{"serviceUrl":"/yard/spd/spdPurchItems/poId,{poId}/count","serviceMethod":"GET","checked":false,"key":"2-3-0-1-13"}],"checked":false,"key":"2-3-0-1-0","id":"P0090"},{"opId":"P0091","opName":"采购订单管理增加","opSort":"P0091","elementClass":"acl_add_spdPurch,acl_add_spdPurchItem,acl_view_spdPurchItem,acl_edit_spdPurchItem,acl_delete_spdPurchItem","webApis":[{"serviceUrl":"/yard/spd/spdPurchs","serviceMethod":"POST","checked":false,"key":"2-3-0-2-0"},{"serviceUrl":"/yard/spd/spdPurchs/byPurchase","serviceMethod":"GET","checked":false,"key":"2-3-0-2-1"},{"serviceUrl":"/yard/spd/spdPurchs/byPurchase/count","serviceMethod":"GET","checked":false,"key":"2-3-0-2-2"},{"serviceUrl":"/yard/pcs/pcsDepots/byReceivePoint,{ownerOrgId}/count","serviceMethod":"GET","checked":false,"key":"2-3-0-2-3"},{"serviceUrl":"/yard/pcs/pcsDepots/byOwnerHospital,{ownerOrgId}","serviceMethod":"GET","checked":false,"key":"2-3-0-2-4"},{"serviceUrl":"/yard/spd/spdDepotCards/byOwnerDepot,{depotId}","serviceMethod":"GET","checked":false,"key":"2-3-0-2-5"},{"serviceUrl":"/yard/spd/spdDepotCards/byOwnerDepot,{depotId}/count","serviceMethod":"GET","checked":false,"key":"2-3-0-2-6"},{"serviceUrl":"/yard/spd/spdPurchs","serviceMethod":"POST","checked":false,"key":"2-3-0-2-7"},{"serviceUrl":"/yard/spd/spdGoodsContractViews/{depotId},{supplierOrg}","serviceMethod":"GET","checked":false,"key":"2-3-0-2-8"},{"serviceUrl":"/yard/spd/spdGoodsContractViews/{depotId},{supplierOrg}/count","serviceMethod":"GET","checked":false,"key":"2-3-0-2-9"},{"serviceUrl":"/yard/spd/spdPurchItems/poId,{poId}/count","serviceMethod":"GET","checked":false,"key":"2-3-0-2-10"}],"checked":false,"key":"2-3-0-2-0","id":"P0091"},{"opId":"P0092","opName":"采购订单管理删除","opSort":"P0092","elementClass":"acl_delete_spdPurch,acl_delete_spdPurchItem","webApis":[{"serviceUrl":"/yard/spd/spdPurchs/{poId}","serviceMethod":"DELETE","checked":false,"key":"2-3-0-3-0"},{"serviceUrl":"/yard/spd/spdPurchItems/{poItemId}","serviceMethod":"DELETE","checked":false,"key":"2-3-0-3-1"},{"serviceUrl":"/yard/spd/spdPurchItems/poId,{poId}","serviceMethod":"GET","checked":false,"key":"2-3-0-3-2"},{"serviceUrl":"/yard/spd/spdPurchs/byPurchase/count","serviceMethod":"GET","checked":false,"key":"2-3-0-3-3"},{"serviceUrl":"/yard/spd/spdPurchs/byPurchase","serviceMethod":"GET","checked":false,"key":"2-3-0-3-4"}],"checked":false,"key":"2-3-0-3-0","id":"P0092"},{"opId":"P0094","opName":"采购订单管理审核","opSort":"P0094","elementClass":"acl_reviewEntity_spdPurch","webApis":[],"checked":false,"key":"2-3-0-4-0","id":"P0094"},{"opId":"P0306","opName":"采购订单管理打印","opSort":"P0306","elementClass":"acl_export_PurchItem","webApis":[{"serviceUrl":"/yard/spd/spdPurchItems/detail/poId,{poId}/pdf","serviceMethod":"GET","checked":false,"key":"2-3-0-5-0"},{"serviceUrl":"/yard/spd/spdPurchItems/detail/poId,{poId}/pdf","serviceMethod":"GET","checked":false,"key":"2-3-0-5-1"}],"checked":false,"key":"2-3-0-5-0","id":"P0306"}],"checked":false,"key":"2-3-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"2-3-0-0-0"},{"systemName":"收货系统","menuId":"10003-005","menuCode":"10003-005","menuParentId":"10003","icon":null,"menuSort":5,"name":"备货业务管理","level":2,"anchor":"#spd/spdPurchRes","functions":[{"functionId":"F0038","functionName":"备货业务管理","operations":[{"opId":"P0258","opName":"备货业务管理增加","opSort":"P0258","elementClass":"acl_add_spdPurchRe,acl_add_spdPurchItemRe,acl_view_spdPurchRe,acl_view_spdPurchItemRe,acl_edit_spdPurchItemRe,acl_delete_spdPurchItemRe","webApis":[{"serviceUrl":"/yard/spd/spdPurchs","serviceMethod":"POST","checked":false,"key":"2-4-0-0-0"},{"serviceUrl":"/yard/spd/spdPurchs/byStocking","serviceMethod":"GET","checked":false,"key":"2-4-0-0-1"},{"serviceUrl":"/yard/spd/spdPurchs/byStocking/count","serviceMethod":"GET","checked":false,"key":"2-4-0-0-2"},{"serviceUrl":"/yard/pcs/pcsDepots/byOwnerSupplier,{ownerOrgId}/count","serviceMethod":"GET","checked":false,"key":"2-4-0-0-3"},{"serviceUrl":"/yard/pcs/pcsDepots/byOwnerSupplier,{ownerOrgId}","serviceMethod":"GET","checked":false,"key":"2-4-0-0-4"},{"serviceUrl":"/yard/spd/spdPurchItems/{poItemId}","serviceMethod":"PUT","checked":false,"key":"2-4-0-0-5"}],"checked":false,"key":"2-4-0-0-0","id":"P0258"},{"opId":"P0259","opName":"备货业务管理编辑","opSort":"P0259","elementClass":"acl_edit_spdPurchRe,acl_edit_spdPurchItemRe,acl_view_spdPurchItemRe,acl_add_spdPurchItemRe,acl_delete_spdPurchItemRe","webApis":[{"serviceUrl":"/yard/spd/spdPurchs/byStocking","serviceMethod":"GET","checked":false,"key":"2-4-0-1-0"},{"serviceUrl":"/yard/spd/spdPurchs/byStocking/count","serviceMethod":"GET","checked":false,"key":"2-4-0-1-1"},{"serviceUrl":"/yard/spd/spdPurchItems/poId,{poId}","serviceMethod":"GET","checked":false,"key":"2-4-0-1-2"},{"serviceUrl":"/yard/spd/spdPurchs/{poId}","serviceMethod":"PUT","checked":false,"key":"2-4-0-1-3"}],"checked":false,"key":"2-4-0-1-0","id":"P0259"},{"opId":"P0260","opName":"备货业务管理查看","opSort":"P0260","elementClass":"acl_view_spdPurchRe,acl_view_spdPurchItemRe","webApis":[{"serviceUrl":"/yard/spd/spdPurchItems/poId,{poId}","serviceMethod":"GET","checked":false,"key":"2-4-0-2-0"}],"checked":false,"key":"2-4-0-2-0","id":"P0260"},{"opId":"P0261","opName":"备货业务管理审核","opSort":"P0261","elementClass":"acl_reviewEntity_spdPurchRe","webApis":[],"checked":false,"key":"2-4-0-3-0","id":"P0261"},{"opId":"P0262","opName":"备货业务管理提交","opSort":"P0262","elementClass":"acl_commitEntity_spdPurchRe","webApis":[],"checked":false,"key":"2-4-0-4-0","id":"P0262"},{"opId":"P0264","opName":"备货业务管理删除","opSort":"P0264","elementClass":"acl_delete_spdPurchRe,acl_delete_spdPurchItemRe","webApis":[{"serviceUrl":"/yard/spd/spdPurchs/byStocking","serviceMethod":"GET","checked":false,"key":"2-4-0-5-0"},{"serviceUrl":"/yard/spd/spdPurchs/byStocking/count","serviceMethod":"GET","checked":false,"key":"2-4-0-5-1"}],"checked":false,"key":"2-4-0-5-0","id":"P0264"}],"checked":false,"key":"2-4-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"2-4-0-0-0"},{"systemName":"收货系统","menuId":"10003-006","menuCode":"10003-006","menuParentId":"10003","icon":null,"menuSort":6,"name":"业务模版管理","level":2,"anchor":"#spd/spdBizExamples","functions":[{"functionId":"F0063","functionName":"业务模版管理","operations":[{"opId":"P0493","opName":"业务模版管理查看","opSort":"P0493","elementClass":"acl_view_spdBizExample,acl_view_spdBizExampleItem","webApis":[{"serviceUrl":"/yard/spd/spdBizExampleItems/exampleId,{exampleId}","serviceMethod":"GET","checked":false,"key":"2-5-0-0-0"},{"serviceUrl":"/yard/spd/spdBizExampleItems/exampleId,{exampleId}/count","serviceMethod":"GET","checked":false,"key":"2-5-0-0-1"},{"serviceUrl":"/yard/spd/spdBizExamples/count","serviceMethod":"GET","checked":false,"key":"2-5-0-0-2"},{"serviceUrl":"/yard/spd/spdBizExamples","serviceMethod":"GET","checked":false,"key":"2-5-0-0-3"}],"checked":false,"key":"2-5-0-0-0","id":"P0493"},{"opId":"P0494","opName":"业务模版管理新增","opSort":"P0494","elementClass":"acl_add_spdBizExample,acl_add_spdBizExampleItem,acl_view_spdBizExampleItem,acl_edit_spdBizExampleItem,acl_delete _spdBizExampleItem","webApis":[{"serviceUrl":"/yard/spd/spdBizExamples/count","serviceMethod":"GET","checked":false,"key":"2-5-0-1-0"},{"serviceUrl":"/yard/spd/spdBizExamples","serviceMethod":"GET","checked":false,"key":"2-5-0-1-1"},{"serviceUrl":"/yard/spd/spdBizExamples","serviceMethod":"POST","checked":false,"key":"2-5-0-1-2"},{"serviceUrl":"/yard/spd/spdBizExampleItems/exampleId,{exampleId}","serviceMethod":"GET","checked":false,"key":"2-5-0-1-3"},{"serviceUrl":"/yard/spd/spdBizExampleItems/exampleId,{exampleId}/count","serviceMethod":"GET","checked":false,"key":"2-5-0-1-4"},{"serviceUrl":"/yard/spd/spdDepotCards/byUse/count","serviceMethod":"GET","checked":false,"key":"2-5-0-1-5"},{"serviceUrl":"/yard/spd/spdDepotCards/byUse","serviceMethod":"GET","checked":false,"key":"2-5-0-1-6"},{"serviceUrl":"/yard/spd/ydsGoods/ids,{ids}","serviceMethod":"GET","checked":false,"key":"2-5-0-1-7"},{"serviceUrl":"/yard/spd/ydsGoods/{goodsId}","serviceMethod":"GET","checked":false,"key":"2-5-0-1-8"},{"serviceUrl":"/yard/spd/spdBizExampleItems","serviceMethod":"POST","checked":false,"key":"2-5-0-1-9"}],"checked":false,"key":"2-5-0-1-0","id":"P0494"},{"opId":"P0495","opName":"业务模版管理编辑","opSort":"P0495","elementClass":"acl_edit_spdBizExample,acl_edit_spdBizExampleItem,acl_view_spdBizExampleItem,acl_add_spdBizExampleItem,acl_delete _spdBizExampleItem","webApis":[{"serviceUrl":"/yard/spd/spdBizExampleItems/exampleId,{exampleId}","serviceMethod":"GET","checked":false,"key":"2-5-0-2-0"},{"serviceUrl":"/yard/spd/spdBizExampleItems/exampleId,{exampleId}/count","serviceMethod":"GET","checked":false,"key":"2-5-0-2-1"},{"serviceUrl":"/yard/spd/spdBizExamples/count","serviceMethod":"GET","checked":false,"key":"2-5-0-2-2"},{"serviceUrl":"/yard/spd/spdBizExamples","serviceMethod":"GET","checked":false,"key":"2-5-0-2-3"},{"serviceUrl":"/yard/spd/ydsGoods/ids,{ids}","serviceMethod":"GET","checked":false,"key":"2-5-0-2-4"},{"serviceUrl":"/yard/spd/spdDepotFixedCards/{cardFixedId}","serviceMethod":"GET","checked":false,"key":"2-5-0-2-5"},{"serviceUrl":"/yard/spd/spdBizExamples/{exampleId}","serviceMethod":"PUT","checked":false,"key":"2-5-0-2-6"},{"serviceUrl":"/yard/spd/ydsGoods/{goodsId}","serviceMethod":"GET","checked":false,"key":"2-5-0-2-7"},{"serviceUrl":"/yard/spd/spdBizExampleItems/{exampleItemId}","serviceMethod":"PUT","checked":false,"key":"2-5-0-2-8"}],"checked":false,"key":"2-5-0-2-0","id":"P0495"},{"opId":"P0496","opName":"业务模版管理删除","opSort":"P0496","elementClass":"acl_delete_spdBizExample,acl_delete_spdBizExampleItem","webApis":[{"serviceUrl":"/yard/spd/spdBizExamples/count","serviceMethod":"GET","checked":false,"key":"2-5-0-3-0"},{"serviceUrl":"/yard/spd/spdBizExamples","serviceMethod":"GET","checked":false,"key":"2-5-0-3-1"},{"serviceUrl":"/yard/spd/spdBizExamples/{exampleId}","serviceMethod":"DELETE","checked":false,"key":"2-5-0-3-2"},{"serviceUrl":"/yard/spd/spdBizExampleItems/{exampleItemId}","serviceMethod":"DELETE","checked":false,"key":"2-5-0-3-3"}],"checked":false,"key":"2-5-0-3-0","id":"P0496"},{"opId":"P0497","opName":"业务模版管理提交","opSort":"P0497","elementClass":null,"webApis":[],"checked":false,"key":"2-5-0-4-0","id":"P0497"}],"checked":false,"key":"2-5-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"2-5-0-0-0"}],"topMenu":true,"open":false,"checked":false,"key":"2-0-0-0-0"},{"systemName":"收货系统","menuId":"10004","menuCode":"10004","menuParentId":"-1","icon":"fa-ambulance","menuSort":4,"name":"供应配货管理","level":1,"anchor":null,"functions":null,"children":[{"systemName":"收货系统","menuId":"10004-001","menuCode":"10004-001","menuParentId":"10004","icon":null,"menuSort":1,"name":"供应信息录入","level":2,"anchor":"#spd/spdSellerSends","functions":[{"functionId":"F0004","functionName":"供应信息录入","operations":[{"opId":"P0024","opName":"供应信息录入查看","opSort":"P0024","elementClass":"acl_view_spdSellerSend,acl_view_spdSellerSendItem","webApis":[{"serviceUrl":"/yard/spd/spdSellerSends","serviceMethod":"GET","checked":false,"key":"3-0-0-0-0"},{"serviceUrl":"/yard/pcs/pcsDepots/ids,{ids}","serviceMethod":"GET","checked":false,"key":"3-0-0-0-1"},{"serviceUrl":"/yard/spd/spdSellerSends","serviceMethod":"GET","checked":false,"key":"3-0-0-0-2"},{"serviceUrl":"/yard/spd/spdSellerSends/count","serviceMethod":"GET","checked":false,"key":"3-0-0-0-3"},{"serviceUrl":"/yard/spd/spdSellerSends/{sendId}","serviceMethod":"GET","checked":false,"key":"3-0-0-0-4"},{"serviceUrl":"/yard/spd/spdSellerSendItems","serviceMethod":"GET","checked":false,"key":"3-0-0-0-5"},{"serviceUrl":"/yard/spd/spdSellerSendItems/count","serviceMethod":"GET","checked":false,"key":"3-0-0-0-6"},{"serviceUrl":"/yard/spd/spdSellerSendItems/{sendItemId}","serviceMethod":"GET","checked":false,"key":"3-0-0-0-7"},{"serviceUrl":"/yard/spd/ydsEdsGoodsLots/{edsGoodsLotId}","serviceMethod":"GET","checked":false,"key":"3-0-0-0-8"},{"serviceUrl":"/yard/spd/ydsEdsGoodsLots/depotId,{depotId}","serviceMethod":"GET","checked":false,"key":"3-0-0-0-9"}],"checked":false,"key":"3-0-0-0-0","id":"P0024"},{"opId":"P0668","opName":"导入送货单","opSort":"P0668","elementClass":"","webApis":[{"serviceUrl":"/yard/spd/batchCreateDeliverySheetTasks","serviceMethod":"POST","checked":false,"key":"3-0-0-1-0"}],"checked":false,"key":"3-0-0-1-0","id":"P0668"},{"opId":"P0026","opName":"供应信息录入编辑","opSort":"P0026","elementClass":"acl_edit_spdSellerSend,acl_edit_spdSellerSendItem,acl_view_spdSellerSendItem,acl_add_spdSellerSendItem,acl_delete_spdSellerSendItem","webApis":[{"serviceUrl":"/yard/pcs/pcsDepots/depotId","serviceMethod":"GET","checked":false,"key":"3-0-0-2-0"},{"serviceUrl":"/yard/spd/ydsEdsGoods","serviceMethod":"GET","checked":false,"key":"3-0-0-2-1"},{"serviceUrl":"/yard/spd/ydsEdsGoods/count","serviceMethod":"GET","checked":false,"key":"3-0-0-2-2"},{"serviceUrl":"/yard/spd/ydsEdsGoodsLots","serviceMethod":"GET","checked":false,"key":"3-0-0-2-3"},{"serviceUrl":"/yard/spd/ydsEdsGoodsLots/count","serviceMethod":"GET","checked":false,"key":"3-0-0-2-4"},{"serviceUrl":"/yard/spd/spdSellerSends/{sendId},sendId","serviceMethod":"GET","checked":false,"key":"3-0-0-2-5"},{"serviceUrl":"/yard/spd/spdSellerSends/{sendId}","serviceMethod":"PUT","checked":false,"key":"3-0-0-2-6"},{"serviceUrl":"/yard/spd/spdSellerSendItems/sendId,{sendId}/count","serviceMethod":"GET","checked":false,"key":"3-0-0-2-7"},{"serviceUrl":"/yard/spd/spdSellerSends/{sendId}","serviceMethod":"GET","checked":false,"key":"3-0-0-2-8"},{"serviceUrl":"/yard/spd/spdSellerSends","serviceMethod":"GET","checked":false,"key":"3-0-0-2-9"},{"serviceUrl":"/yard/spd/spdSellerSends/count","serviceMethod":"GET","checked":false,"key":"3-0-0-2-10"},{"serviceUrl":"/yard/spd/spdSellerSendItems/count","serviceMethod":"GET","checked":false,"key":"3-0-0-2-11"},{"serviceUrl":"/yard/spd/spdSellerSendItems/{sendItemId}","serviceMethod":"GET","checked":false,"key":"3-0-0-2-12"},{"serviceUrl":"/yard/spd/spdSellerSendItems/{sendItemId}","serviceMethod":"PUT","checked":false,"key":"3-0-0-2-13"},{"serviceUrl":"/yard/spd/spdSellerSends/{sendId}","serviceMethod":"PUT","checked":false,"key":"3-0-0-2-14"},{"serviceUrl":"/yard/spd/ydsEdsGoodsLots/{edsGoodsLotId}","serviceMethod":"GET","checked":false,"key":"3-0-0-2-15"},{"serviceUrl":"/yard/spd/spdSellerSendItems","serviceMethod":"GET","checked":false,"key":"3-0-0-2-16"}],"checked":false,"key":"3-0-0-2-0","id":"P0026"},{"opId":"P0029","opName":"供应信息录入审核","opSort":"P0029","elementClass":"acl_reviewEntity_spdSellerSend","webApis":[{"serviceUrl":"/yard/spd/ydsEdsGoods/ids,{ids}","serviceMethod":"GET","checked":false,"key":"3-0-0-3-0"},{"serviceUrl":"/yard/spd/spdSellerSends","serviceMethod":"GET","checked":false,"key":"3-0-0-3-1"},{"serviceUrl":"/yard/spd/spdSellerSends/count","serviceMethod":"GET","checked":false,"key":"3-0-0-3-2"},{"serviceUrl":"/yard/spd/spdSellerSends/{sendId}","serviceMethod":"GET","checked":false,"key":"3-0-0-3-3"},{"serviceUrl":"/yard/spd/spdSellerSendItems","serviceMethod":"GET","checked":false,"key":"3-0-0-3-4"},{"serviceUrl":"/yard/spd/spdSellerSendItems/count","serviceMethod":"GET","checked":false,"key":"3-0-0-3-5"},{"serviceUrl":"/yard/spd/spdSellerSendItems/{sendItemId}","serviceMethod":"GET","checked":false,"key":"3-0-0-3-6"},{"serviceUrl":"/yard/spd/spdSellerSendItems/{sendItemId}/checkState/reviewed","serviceMethod":"PUT","checked":false,"key":"3-0-0-3-7"},{"serviceUrl":"/yard/spd/spdSellerSend/{sendItemId}/checkState/reviewed","serviceMethod":"PUT","checked":false,"key":"3-0-0-3-8"},{"serviceUrl":"/yard/spd/ydsEdsGoodsLots/ids,{ids}","serviceMethod":"GET","checked":false,"key":"3-0-0-3-9"}],"checked":false,"key":"3-0-0-3-0","id":"P0029"},{"opId":"P0031","opName":"供应信息录入打印","opSort":"P0031","elementClass":"acl_view_spdSellerSend,acl_view_spdSellerSendItem,acl_exportDetail,acl_exportBoxNo,acl_exportLabel","webApis":[{"serviceUrl":"/yard/spd/spdSellerSends","serviceMethod":"GET","checked":false,"key":"3-0-0-4-0"},{"serviceUrl":"/yard/spd/spdSellerSends","serviceMethod":"GET","checked":false,"key":"3-0-0-4-1"},{"serviceUrl":"/yard/spd/spdSellerSends/count","serviceMethod":"GET","checked":false,"key":"3-0-0-4-2"},{"serviceUrl":"/yard/spd/spdSellerSends/{sendId}","serviceMethod":"GET","checked":false,"key":"3-0-0-4-3"},{"serviceUrl":"/yard/spd/spdSellerSendItems","serviceMethod":"GET","checked":false,"key":"3-0-0-4-4"},{"serviceUrl":"/yard/spd/spdSellerSendItems/count","serviceMethod":"GET","checked":false,"key":"3-0-0-4-5"},{"serviceUrl":"/yard/spd/spdSellerSendItems/{sendItemId}","serviceMethod":"GET","checked":false,"key":"3-0-0-4-6"},{"serviceUrl":"/yard/spd/spdSellerSendItems/sendId,{sendId}/pdf","serviceMethod":"GET","checked":false,"key":"3-0-0-4-7"},{"serviceUrl":"/yard/spd/spdSellerSend/sendId,{sendId}/pdf","serviceMethod":"GET","checked":false,"key":"3-0-0-4-8"}],"checked":false,"key":"3-0-0-4-0","id":"P0031"},{"opId":"P0025","opName":"供应信息录入新增","opSort":"P0025","elementClass":"acl_add_spdSellerSend,acl_add_spdSellerSendItem,acl_view_spdSellerSendItem,acl_edit_spdSellerSendItem,acl_delete_spdSellerSendItem","webApis":[{"serviceUrl":"/yard/spd/ydsEdsGoodsLots","serviceMethod":"POST","checked":false,"key":"3-0-0-5-0"},{"serviceUrl":"/yard/spd/spdSellerSends","serviceMethod":"POST","checked":false,"key":"3-0-0-5-1"},{"serviceUrl":"/yard/spd/spdSellerSends","serviceMethod":"GET","checked":false,"key":"3-0-0-5-2"},{"serviceUrl":"/yard/spd/spdSellerSends/count","serviceMethod":"GET","checked":false,"key":"3-0-0-5-3"},{"serviceUrl":"/yard/spd/spdSellerSends","serviceMethod":"GET","checked":false,"key":"3-0-0-5-4"},{"serviceUrl":"/yard/spd/ydsEdsGoods/byDepotCard,{depotId}","serviceMethod":"GET","checked":false,"key":"3-0-0-5-5"},{"serviceUrl":"/yard/spd/ydsEdsGoods/byDepotCard,{depotId}/count","serviceMethod":"GET","checked":false,"key":"3-0-0-5-6"},{"serviceUrl":"/yard/spd/ydsEdsGoods/ids,{ids}","serviceMethod":"GET","checked":false,"key":"3-0-0-5-7"},{"serviceUrl":"/yard/spd/ydsEdsGoods/{edsGoodsId}","serviceMethod":"GET","checked":false,"key":"3-0-0-5-8"},{"serviceUrl":"/yard/spd/ydsEdsGoodsLots/edsGoodsId,{edsGoodsId}","serviceMethod":"GET","checked":false,"key":"3-0-0-5-9"},{"serviceUrl":"/yard/spd/ydsEdsGoodsLots/ids,{ids}","serviceMethod":"GET","checked":false,"key":"3-0-0-5-10"},{"serviceUrl":"/yard/spd/spdSellerSends/{sendId}","serviceMethod":"GET","checked":false,"key":"3-0-0-5-11"},{"serviceUrl":"/yard/spd/spdSellerSendItems","serviceMethod":"GET","checked":false,"key":"3-0-0-5-12"},{"serviceUrl":"/yard/spd/spdSellerSendItems/count","serviceMethod":"GET","checked":false,"key":"3-0-0-5-13"},{"serviceUrl":"/yard/spd/spdSellerSendItems/{sendItemId}","serviceMethod":"GET","checked":false,"key":"3-0-0-5-14"},{"serviceUrl":"/yard/spd/spdSellerSendItems","serviceMethod":"POST","checked":false,"key":"3-0-0-5-15"},{"serviceUrl":"/yard/pcs/pcsDepots/byReceivePoint,{ownerOrgId}","serviceMethod":"GET","checked":false,"key":"3-0-0-5-16"},{"serviceUrl":"/yard/pcs/pcsDepots/byReceivePoint,{ownerOrgId}/count","serviceMethod":"GET","checked":false,"key":"3-0-0-5-17"},{"serviceUrl":"/yard/pcs/pcsDepots/byReceivePointOffer,{manageOrgId}","serviceMethod":"GET","checked":false,"key":"3-0-0-5-18"},{"serviceUrl":"/yard/pcs/pcsDepots/byReceivePointOffer,{manageOrgId}/count","serviceMethod":"GET","checked":false,"key":"3-0-0-5-19"}],"checked":false,"key":"3-0-0-5-0","id":"P0025"},{"opId":"P0027","opName":"供应信息录入删除","opSort":"P0027","elementClass":"acl_delete_spdSellerSend,acl_delete_spdSellerSendItem","webApis":[{"serviceUrl":"/yard/spd/spdSellerSends","serviceMethod":"GET","checked":false,"key":"3-0-0-6-0"},{"serviceUrl":"/yard/spd/spdSellerSends/count","serviceMethod":"GET","checked":false,"key":"3-0-0-6-1"},{"serviceUrl":"/yard/spd/spdSellerSends/{sendId}","serviceMethod":"GET","checked":false,"key":"3-0-0-6-2"},{"serviceUrl":"/yard/spd/spdSellerSendItems","serviceMethod":"GET","checked":false,"key":"3-0-0-6-3"},{"serviceUrl":"/yard/spd/spdSellerSendItems/count","serviceMethod":"GET","checked":false,"key":"3-0-0-6-4"},{"serviceUrl":"/yard/spd/spdSellerSendItems/{sendItemId}","serviceMethod":"GET","checked":false,"key":"3-0-0-6-5"},{"serviceUrl":"/yard/spd/spdSellerSends/{sendId}","serviceMethod":"DELETE","checked":false,"key":"3-0-0-6-6"},{"serviceUrl":"/yard/spd/spdSellerSendItems/{sendItemId}","serviceMethod":"DELETE","checked":false,"key":"3-0-0-6-7"}],"checked":false,"key":"3-0-0-6-0","id":"P0027"}],"checked":false,"key":"3-0-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"3-0-0-0-0"},{"systemName":"收货系统","menuId":"10004-002","menuCode":"10004-002","menuParentId":"10004","icon":null,"menuSort":2,"name":"送货信息录入","level":2,"anchor":"#spd/spdSellerSendSupplys","functions":[{"functionId":"F0034","functionName":"送货信息录入","operations":[{"opId":"P0226","opName":"送货信息录入新增","opSort":"P0226","elementClass":"acl_add_spdSellerSendSupply,acl_add_spdSellerSendItemSupply,acl_view_spdSellerSendItemSupply","webApis":[{"serviceUrl":"/yard/spd/ydsEdsGoodsLots","serviceMethod":"POST","checked":false,"key":"3-1-0-0-0"},{"serviceUrl":"/yard/spd/spdSellerSends","serviceMethod":"POST","checked":false,"key":"3-1-0-0-1"},{"serviceUrl":"/yard/spd/spdSellerSends/byOrder","serviceMethod":"GET","checked":false,"key":"3-1-0-0-2"},{"serviceUrl":"/yard/spd/spdSellerSends/byOrder/count","serviceMethod":"GET","checked":false,"key":"3-1-0-0-3"},{"serviceUrl":"/yard/spd/ydsEdsGoods/ids,{ids}","serviceMethod":"GET","checked":false,"key":"3-1-0-0-4"},{"serviceUrl":"/yard/spd/ydsEdsGoods/{edsGoodsId}","serviceMethod":"GET","checked":false,"key":"3-1-0-0-5"},{"serviceUrl":"/yard/spd/ydsEdsGoodsLots/edsGoodsId,{edsGoodsId}","serviceMethod":"GET","checked":false,"key":"3-1-0-0-6"},{"serviceUrl":"/yard/spd/ydsEdsGoodsLots/ids,{ids}","serviceMethod":"GET","checked":false,"key":"3-1-0-0-7"},{"serviceUrl":"/yard/spd/spdSellerSends/{sendId}","serviceMethod":"GET","checked":false,"key":"3-1-0-0-8"},{"serviceUrl":"/yard/spd/spdSellerSendItems","serviceMethod":"GET","checked":false,"key":"3-1-0-0-9"},{"serviceUrl":"/yard/spd/spdSellerSendItems/count","serviceMethod":"GET","checked":false,"key":"3-1-0-0-10"},{"serviceUrl":"/yard/spd/spdSellerSendItems/{sendItemId}","serviceMethod":"GET","checked":false,"key":"3-1-0-0-11"},{"serviceUrl":"/yard/spd/spdSellerSendItems","serviceMethod":"POST","checked":false,"key":"3-1-0-0-12"},{"serviceUrl":"/yard/pcs/pcsDepots/byReceivePoint,{ownerOrgId}","serviceMethod":"GET","checked":false,"key":"3-1-0-0-13"},{"serviceUrl":"/yard/pcs/pcsDepots/byReceivePoint,{ownerOrgId}/count","serviceMethod":"GET","checked":false,"key":"3-1-0-0-14"},{"serviceUrl":"/yard/spd/spdGoodsPurchItemViews","serviceMethod":"GET","checked":false,"key":"3-1-0-0-15"},{"serviceUrl":"/yard/spd/spdGoodsPurchItemViews/count","serviceMethod":"GET","checked":false,"key":"3-1-0-0-16"},{"serviceUrl":"/yard/spd/spdPurchs/ids,{ids}","serviceMethod":"GET","checked":false,"key":"3-1-0-0-17"},{"serviceUrl":"/yard/spd/spdGoodsPurchItemViews/{rid}","serviceMethod":"GET","checked":false,"key":"3-1-0-0-18"}],"checked":false,"key":"3-1-0-0-0","id":"P0226"},{"opId":"P0225","opName":"送货信息录入编辑","opSort":"P0225","elementClass":"acl_edit_spdSellerSendSupply,acl_edit_spdSellerSendItemSupply,acl_view_spdSellerSendItemSupply,acl_delete_spdSellerSendItemSupply,acl_add_spdSellerSendItemSupply","webApis":[{"serviceUrl":"/yard/spd/spdSellerSends/byOrder","serviceMethod":"GET","checked":false,"key":"3-1-0-1-0"},{"serviceUrl":"/yard/spd/spdSellerSends/byOrder/count","serviceMethod":"GET","checked":false,"key":"3-1-0-1-1"},{"serviceUrl":"/yard/spd/ydsEdsGoods/ids,{ids}","serviceMethod":"GET","checked":false,"key":"3-1-0-1-2"},{"serviceUrl":"/yard/spd/ydsEdsGoods/{edsGoodsId}","serviceMethod":"GET","checked":false,"key":"3-1-0-1-3"},{"serviceUrl":"/yard/spd/ydsEdsGoodsLots/edsGoodsId,{edsGoodsId}","serviceMethod":"GET","checked":false,"key":"3-1-0-1-4"},{"serviceUrl":"/yard/spd/ydsEdsGoodsLots/ids,{ids}","serviceMethod":"GET","checked":false,"key":"3-1-0-1-5"},{"serviceUrl":"/yard/spd/spdSellerSends/{sendId}","serviceMethod":"GET","checked":false,"key":"3-1-0-1-6"},{"serviceUrl":"/yard/spd/spdSellerSendItems","serviceMethod":"GET","checked":false,"key":"3-1-0-1-7"},{"serviceUrl":"/yard/spd/spdSellerSendItems/count","serviceMethod":"GET","checked":false,"key":"3-1-0-1-8"},{"serviceUrl":"/yard/spd/spdSellerSendItems/{sendItemId}","serviceMethod":"GET","checked":false,"key":"3-1-0-1-9"},{"serviceUrl":"/yard/spd/spdSellerSendItems","serviceMethod":"POST","checked":false,"key":"3-1-0-1-10"},{"serviceUrl":"/yard/spd/spdGoodsPurchItemViews","serviceMethod":"GET","checked":false,"key":"3-1-0-1-11"},{"serviceUrl":"/yard/spd/spdGoodsPurchItemViews/count","serviceMethod":"GET","checked":false,"key":"3-1-0-1-12"},{"serviceUrl":"/yard/spd/spdPurchs/ids,{ids}","serviceMethod":"GET","checked":false,"key":"3-1-0-1-13"},{"serviceUrl":"/yard/spd/spdGoodsPurchItemViews/{rid}","serviceMethod":"GET","checked":false,"key":"3-1-0-1-14"}],"checked":false,"key":"3-1-0-1-0","id":"P0225"},{"opId":"P0224","opName":"送货信息录入查看","opSort":"P0224","elementClass":"acl_view_spdSellerSendSupply,acl_view_spdSellerSendItemSupply","webApis":[],"checked":false,"key":"3-1-0-2-0","id":"P0224"},{"opId":"P0229","opName":"送货信息录入打印","opSort":"P0229","elementClass":"acl_export_spdSellerSendItemSupply,acl_view_spdSellerSendSupply,acl_view_spdSellerSendItemSupply","webApis":[{"serviceUrl":"/yard/spd/ydsEdsGoodsLots","serviceMethod":"POST","checked":false,"key":"3-1-0-3-0"},{"serviceUrl":"/yard/spd/spdSellerSends","serviceMethod":"POST","checked":false,"key":"3-1-0-3-1"},{"serviceUrl":"/yard/spd/spdSellerSends/byOrder","serviceMethod":"GET","checked":false,"key":"3-1-0-3-2"},{"serviceUrl":"/yard/spd/spdSellerSends/byOrder/count","serviceMethod":"GET","checked":false,"key":"3-1-0-3-3"},{"serviceUrl":"/yard/spd/ydsEdsGoods/ids,{ids}","serviceMethod":"GET","checked":false,"key":"3-1-0-3-4"},{"serviceUrl":"/yard/spd/ydsEdsGoods/{edsGoodsId}","serviceMethod":"GET","checked":false,"key":"3-1-0-3-5"},{"serviceUrl":"/yard/spd/ydsEdsGoodsLots/edsGoodsId,{edsGoodsId}","serviceMethod":"GET","checked":false,"key":"3-1-0-3-6"},{"serviceUrl":"/yard/spd/ydsEdsGoodsLots/ids,{ids}","serviceMethod":"GET","checked":false,"key":"3-1-0-3-7"},{"serviceUrl":"/yard/spd/spdSellerSends/{sendId}","serviceMethod":"GET","checked":false,"key":"3-1-0-3-8"},{"serviceUrl":"/yard/spd/spdSellerSendItems","serviceMethod":"GET","checked":false,"key":"3-1-0-3-9"},{"serviceUrl":"/yard/spd/spdSellerSendItems/count","serviceMethod":"GET","checked":false,"key":"3-1-0-3-10"},{"serviceUrl":"/yard/spd/spdSellerSendItems/{sendItemId}","serviceMethod":"GET","checked":false,"key":"3-1-0-3-11"},{"serviceUrl":"/yard/spd/spdSellerSendItems","serviceMethod":"POST","checked":false,"key":"3-1-0-3-12"},{"serviceUrl":"/yard/pcs/pcsDepots/byReceivePoint,{ownerOrgId}","serviceMethod":"GET","checked":false,"key":"3-1-0-3-13"},{"serviceUrl":"/yard/pcs/pcsDepots/byReceivePoint,{ownerOrgId}/count","serviceMethod":"GET","checked":false,"key":"3-1-0-3-14"},{"serviceUrl":"/yard/spd/spdGoodsPurchItemViews","serviceMethod":"GET","checked":false,"key":"3-1-0-3-15"},{"serviceUrl":"/yard/spd/spdGoodsPurchItemViews/count","serviceMethod":"GET","checked":false,"key":"3-1-0-3-16"},{"serviceUrl":"/yard/spd/spdPurchs/ids,{ids}","serviceMethod":"GET","checked":false,"key":"3-1-0-3-17"},{"serviceUrl":"/yard/spd/spdGoodsPurchItemViews/{rid}","serviceMethod":"GET","checked":false,"key":"3-1-0-3-18"}],"checked":false,"key":"3-1-0-3-0","id":"P0229"},{"opId":"P0225","opName":"送货信息录入编辑","opSort":"P0225","elementClass":"acl_edit_spdSellerSendSupply,acl_edit_spdSellerSendItemSupply,acl_view_spdSellerSendItemSupply,acl_delete_spdSellerSendItemSupply,acl_add_spdSellerSendItemSupply","webApis":[{"serviceUrl":"/yard/spd/spdSellerSends/byOrder","serviceMethod":"GET","checked":false,"key":"3-1-0-4-0"},{"serviceUrl":"/yard/spd/spdSellerSends/byOrder/count","serviceMethod":"GET","checked":false,"key":"3-1-0-4-1"},{"serviceUrl":"/yard/spd/ydsEdsGoods/ids,{ids}","serviceMethod":"GET","checked":false,"key":"3-1-0-4-2"},{"serviceUrl":"/yard/spd/ydsEdsGoods/{edsGoodsId}","serviceMethod":"GET","checked":false,"key":"3-1-0-4-3"},{"serviceUrl":"/yard/spd/ydsEdsGoodsLots/edsGoodsId,{edsGoodsId}","serviceMethod":"GET","checked":false,"key":"3-1-0-4-4"},{"serviceUrl":"/yard/spd/ydsEdsGoodsLots/ids,{ids}","serviceMethod":"GET","checked":false,"key":"3-1-0-4-5"},{"serviceUrl":"/yard/spd/spdSellerSends/{sendId}","serviceMethod":"GET","checked":false,"key":"3-1-0-4-6"},{"serviceUrl":"/yard/spd/spdSellerSendItems","serviceMethod":"GET","checked":false,"key":"3-1-0-4-7"},{"serviceUrl":"/yard/spd/spdSellerSendItems/count","serviceMethod":"GET","checked":false,"key":"3-1-0-4-8"},{"serviceUrl":"/yard/spd/spdSellerSendItems/{sendItemId}","serviceMethod":"GET","checked":false,"key":"3-1-0-4-9"},{"serviceUrl":"/yard/spd/spdGoodsPurchItemViews/{rid}","serviceMethod":"GET","checked":false,"key":"3-1-0-4-10"}],"checked":false,"key":"3-1-0-4-0","id":"P0225"},{"opId":"P0228","opName":"送货信息录入审核","opSort":"P0228","elementClass":"acl_reviewEntity_spdSellerSendSupply","webApis":[{"serviceUrl":"/yard/spd/ydsEdsGoods/ids,{ids}","serviceMethod":"GET","checked":false,"key":"3-1-0-5-0"},{"serviceUrl":"/yard/spd/spdSellerSends/byOrder","serviceMethod":"GET","checked":false,"key":"3-1-0-5-1"},{"serviceUrl":"/yard/spd/spdSellerSends/byOrder/count","serviceMethod":"GET","checked":false,"key":"3-1-0-5-2"},{"serviceUrl":"/yard/spd/spdSellerSends/{sendId}","serviceMethod":"GET","checked":false,"key":"3-1-0-5-3"},{"serviceUrl":"/yard/spd/spdSellerSendItems","serviceMethod":"GET","checked":false,"key":"3-1-0-5-4"},{"serviceUrl":"/yard/spd/spdSellerSendItems/count","serviceMethod":"GET","checked":false,"key":"3-1-0-5-5"},{"serviceUrl":"/yard/spd/spdSellerSendItems/{sendItemId}","serviceMethod":"GET","checked":false,"key":"3-1-0-5-6"},{"serviceUrl":"/yard/spd/spdSellerSendItems/{sendItemId}/checkState/reviewed","serviceMethod":"PUT","checked":false,"key":"3-1-0-5-7"},{"serviceUrl":"/yard/spd/spdSellerSend/{sendItemId}/checkState/reviewed","serviceMethod":"PUT","checked":false,"key":"3-1-0-5-8"},{"serviceUrl":"/yard/spd/ydsEdsGoodsLots/ids,{ids}","serviceMethod":"GET","checked":false,"key":"3-1-0-5-9"}],"checked":false,"key":"3-1-0-5-0","id":"P0228"},{"opId":"P0227","opName":"送货信息录入删除","opSort":"P0227","elementClass":"acl_delete_spdSellerSendSupply,acl_view_spdSellerSendItemSupply,acl_delete_spdSellerSendItemSupply","webApis":[{"serviceUrl":"/yard/spd/spdSellerSends","serviceMethod":"GET","checked":false,"key":"3-1-0-6-0"},{"serviceUrl":"/yard/spd/spdSellerSends/count","serviceMethod":"GET","checked":false,"key":"3-1-0-6-1"},{"serviceUrl":"/yard/spd/spdSellerSends/{sendId}","serviceMethod":"GET","checked":false,"key":"3-1-0-6-2"},{"serviceUrl":"/yard/spd/spdSellerSendItems","serviceMethod":"GET","checked":false,"key":"3-1-0-6-3"},{"serviceUrl":"/yard/spd/spdSellerSendItems/count","serviceMethod":"GET","checked":false,"key":"3-1-0-6-4"},{"serviceUrl":"/yard/spd/spdSellerSendItems/{sendItemId}","serviceMethod":"GET","checked":false,"key":"3-1-0-6-5"},{"serviceUrl":"/yard/spd/spdSellerSends/{sendId}","serviceMethod":"DELETE","checked":false,"key":"3-1-0-6-6"},{"serviceUrl":"/yard/spd/spdSellerSendItems/{sendItemId}","serviceMethod":"DELETE","checked":false,"key":"3-1-0-6-7"}],"checked":false,"key":"3-1-0-6-0","id":"P0227"}],"checked":false,"key":"3-1-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"3-1-0-0-0"},{"systemName":"收货系统","menuId":"10004-003","menuCode":"10004-003","menuParentId":"10004","icon":null,"menuSort":3,"name":"销售发票管理","level":2,"anchor":"#spd/spdSellerSendTaxs","functions":[{"functionId":"F0039","functionName":"销售发票管理","operations":[{"opId":"P0265","opName":"销售发票管理新增","opSort":"P0265","elementClass":"acl_add_spdSellerSendTax,acl_add_spdSellerSendTaxItem,acl_view_spdSellerSendTaxItem,acl_delete_spdSellerSendTaxItem,acl_edit_spdSellerSendTaxItem","webApis":[{"serviceUrl":"/yard/spd/spdSellerSendTaxs","serviceMethod":"POST","checked":false,"key":"3-2-0-0-0"},{"serviceUrl":"/yard/spd/spdSellerSendTaxs","serviceMethod":"POST","checked":false,"key":"3-2-0-0-1"},{"serviceUrl":"/yard/spd/spdSellerSendTaxs/bySellerSendTaxsOrg/count","serviceMethod":"GET","checked":false,"key":"3-2-0-0-2"},{"serviceUrl":"/yard/spd/spdSellerSendTaxs/bySellerSendTaxsOrg","serviceMethod":"GET","checked":false,"key":"3-2-0-0-3"},{"serviceUrl":"/yard/spd/spdSellerSendTaxItems/count","serviceMethod":"GET","checked":false,"key":"3-2-0-0-4"},{"serviceUrl":"/yard/spd/spdSellerSendTaxItems/taxId,{taxId}","serviceMethod":"GET","checked":false,"key":"3-2-0-0-5"},{"serviceUrl":"/yard/spd/ydsWorkBooks","serviceMethod":"GET","checked":false,"key":"3-2-0-0-6"},{"serviceUrl":"/yard/spd/spdSellerSendItems/sellerOrg","serviceMethod":"GET","checked":false,"key":"3-2-0-0-7"},{"serviceUrl":"/yard/spd/spdSellerSends/ids,{ids}","serviceMethod":"GET","checked":false,"key":"3-2-0-0-8"},{"serviceUrl":"/yard/spd/spdSellerSendTaxItems","serviceMethod":"POST","checked":false,"key":"3-2-0-0-9"}],"checked":false,"key":"3-2-0-0-0","id":"P0265"},{"opId":"P0266","opName":"销售发票管理查看","opSort":"P0266","elementClass":"acl_view_spdSellerSendTax,acl_view_spdSellerSendTaxItem","webApis":[{"serviceUrl":"/yard/spd/spdSellerSendTaxs","serviceMethod":"GET","checked":false,"key":"3-2-0-1-0"},{"serviceUrl":"/yard/spd/spdSellerSendTaxs/count","serviceMethod":"GET","checked":false,"key":"3-2-0-1-1"},{"serviceUrl":"/yard/pcs/pcsUsers/ids,625","serviceMethod":"GET","checked":false,"key":"3-2-0-1-2"},{"serviceUrl":"/yard/spd/spdSellerSendTaxItems","serviceMethod":"GET","checked":false,"key":"3-2-0-1-3"},{"serviceUrl":"/yard/spd/spdSellerSendTaxItems/count","serviceMethod":"GET","checked":false,"key":"3-2-0-1-4"},{"serviceUrl":"/yard/pcs/pcsUsers/ids","serviceMethod":"GET","checked":false,"key":"3-2-0-1-5"},{"serviceUrl":"/yard/spd/spdSellerSendTaxs/bySellerSendTaxsOrg/count","serviceMethod":"GET","checked":false,"key":"3-2-0-1-6"},{"serviceUrl":"/yard/spd/spdSellerSendTaxs/bySellerSendTaxsOrg","serviceMethod":"GET","checked":false,"key":"3-2-0-1-7"},{"serviceUrl":"/yard/spd/spdSellerSendItems/{sellerOrgId}","serviceMethod":"GET","checked":false,"key":"3-2-0-1-8"}],"checked":false,"key":"3-2-0-1-0","id":"P0266"},{"opId":"P0267","opName":"销售发票管理编辑","opSort":"P0267","elementClass":"acl_edit_spdSellerSendTax,acl_edit_spdSellerSendTaxItem,acl_view_spdSellerSendTaxItem,acl_add_spdSellerSendTaxItem,acl_delete_spdSellerSendTaxItem","webApis":[{"serviceUrl":"/yard/spd/spdSellerSendTaxs/ids,{ids}","serviceMethod":"PUT","checked":false,"key":"3-2-0-2-0"},{"serviceUrl":"/yard/spd/spdSellerSendTaxs/{taxId}","serviceMethod":"PUT","checked":false,"key":"3-2-0-2-1"},{"serviceUrl":"/yard/spd/spdSellerSendTaxs/{taxId}","serviceMethod":"GET","checked":false,"key":"3-2-0-2-2"},{"serviceUrl":"/yard/spd/spdSellerSendItems/ids,{ids}","serviceMethod":"GET","checked":false,"key":"3-2-0-2-3"},{"serviceUrl":"/yard/spd/ydsWorkBooks","serviceMethod":"GET","checked":false,"key":"3-2-0-2-4"},{"serviceUrl":"/yard/spd/spdSellerSendTaxItems/{taxItemId}","serviceMethod":"GET","checked":false,"key":"3-2-0-2-5"},{"serviceUrl":"/yard/spd/spdSellerSendTaxItems/{taxItemId}","serviceMethod":"PUT","checked":false,"key":"3-2-0-2-6"}],"checked":false,"key":"3-2-0-2-0","id":"P0267"},{"opId":"P0268","opName":"销售发票管理删除","opSort":"P0268","elementClass":"acl_delete_spdSellerSendTax,acl_delete_spdSellerSendTaxItem","webApis":[{"serviceUrl":"/yard/spd/spdSellerSendTaxs/{taxId}","serviceMethod":"DELETE","checked":false,"key":"3-2-0-3-0"},{"serviceUrl":"/yard/spd/spdSellerSendTaxs/{taxId}","serviceMethod":"DELETE","checked":false,"key":"3-2-0-3-1"},{"serviceUrl":"/yard/spd/spdSellerSendTaxs/{taxId}","serviceMethod":"GET","checked":false,"key":"3-2-0-3-2"},{"serviceUrl":"/yard/spd/spdSellerSendTaxItems/{taxItemId}","serviceMethod":"DELETE","checked":false,"key":"3-2-0-3-3"}],"checked":false,"key":"3-2-0-3-0","id":"P0268"},{"opId":"P0269","opName":"销售发票管理审核","opSort":"P0269","elementClass":"acl_reviewEntity_spdSellerSendTax","webApis":[],"checked":false,"key":"3-2-0-4-0","id":"P0269"}],"checked":false,"key":"3-2-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"3-2-0-0-0"}],"topMenu":true,"open":false,"checked":false,"key":"3-0-0-0-0"},{"systemName":"收货系统","menuId":"10005","menuCode":"10005","menuParentId":"-1","icon":"fa-university ","menuSort":5,"name":"库房库存管理","level":1,"anchor":null,"functions":null,"children":[{"systemName":"收货系统","menuId":"10005-001","menuCode":"10005-001","menuParentId":"10005","icon":null,"menuSort":1,"name":"库房收货确认","level":2,"anchor":"#spd/spdReceives","functions":[{"functionId":"F0005","functionName":"库房收货确认","operations":[{"opId":"P0032","opName":"库房收货确认查看","opSort":"P0032","elementClass":"acl_view_spdReceive","webApis":[{"serviceUrl":"/yard/spd/spdReceiveItems/receiveCode,{receiveCode}","serviceMethod":"GET","checked":false,"key":"4-0-0-0-0"},{"serviceUrl":"/yard/spd/spdReceives/code,{code}","serviceMethod":"GET","checked":false,"key":"4-0-0-0-1"},{"serviceUrl":"/yard/spd/spdSellerSends/ids,{ids}","serviceMethod":"GET","checked":false,"key":"4-0-0-0-2"},{"serviceUrl":"/yard/spd/spdReceives/byChecked/count","serviceMethod":"GET","checked":false,"key":"4-0-0-0-3"},{"serviceUrl":"/yard/spd/spdReceives/byChecked","serviceMethod":"GET","checked":false,"key":"4-0-0-0-4"},{"serviceUrl":"/yard/spd/spdReceives/byChecked","serviceMethod":"GET","checked":false,"key":"4-0-0-0-5"},{"serviceUrl":"/yard/spd/spdReceives/byChecked/count","serviceMethod":"GET","checked":false,"key":"4-0-0-0-6"},{"serviceUrl":"/yard/spd/spdSellerSends","serviceMethod":"GET","checked":false,"key":"4-0-0-0-7"},{"serviceUrl":"/yard/spd/spdSellerSends/count","serviceMethod":"GET","checked":false,"key":"4-0-0-0-8"},{"serviceUrl":"/yard/spd/spdReceives","serviceMethod":"GET","checked":false,"key":"4-0-0-0-9"},{"serviceUrl":"/yard/spd/spdReceives/count","serviceMethod":"GET","checked":false,"key":"4-0-0-0-10"},{"serviceUrl":"/yard/spd/ydsGoods/ids,{ids}","serviceMethod":"GET","checked":false,"key":"4-0-0-0-11"},{"serviceUrl":"/yard/pcs/pcsDepots/{depotId}","serviceMethod":"GET","checked":false,"key":"4-0-0-0-12"}],"checked":false,"key":"4-0-0-0-0","id":"P0032"},{"opId":"P0282","opName":"库房收货确认保存","opSort":"P0282","elementClass":"acl_update_spdReceive","webApis":[{"serviceUrl":"/yard/spd/spdSellerSendItems/{sendItemId}","serviceMethod":"PUT","checked":false,"key":"4-0-0-1-0"},{"serviceUrl":"/yard/spd/spdReceiveItems/{receiveItemId}","serviceMethod":"PUT","checked":false,"key":"4-0-0-1-1"},{"serviceUrl":"/yard/spd/spdReceiveItems/{receiveItemId}","serviceMethod":"PUT","checked":false,"key":"4-0-0-1-2"},{"serviceUrl":"/yard/spd/spdReceives/code,{code}","serviceMethod":"GET","checked":false,"key":"4-0-0-1-3"},{"serviceUrl":"/yard/pcs/pcsDepots/{depotId}","serviceMethod":"GET","checked":false,"key":"4-0-0-1-4"},{"serviceUrl":"/yard/spd/spdSellerSends/ids,{ids}","serviceMethod":"GET","checked":false,"key":"4-0-0-1-5"},{"serviceUrl":"/yard/spd/spdReceiveItems/receiveCode,{receiveCode}","serviceMethod":"GET","checked":false,"key":"4-0-0-1-6"},{"serviceUrl":"/yard/spd/ydsGoods/ids,{ids}","serviceMethod":"GET","checked":false,"key":"4-0-0-1-7"},{"serviceUrl":"/yard/spd/spdReceives/{receiveId}","serviceMethod":"GET","checked":false,"key":"4-0-0-1-8"}],"checked":false,"key":"4-0-0-1-0","id":"P0282"},{"opId":"P0281","opName":"库房收货确认收货","opSort":"P0281","elementClass":"acl_confirm_spdReceive","webApis":[{"serviceUrl":"/yard/spd/spdReceives/{receiveId}/checkState/reviewed","serviceMethod":"PUT","checked":false,"key":"4-0-0-2-0"}],"checked":false,"key":"4-0-0-2-0","id":"P0281"},{"opId":"P0655","opName":"库房收货确认收货入库","opSort":"P0655","elementClass":"acl_inStorage_spdReceive","webApis":[{"serviceUrl":"/yard/spd/spdReceives/{receiveId}/checkState/byQuick/reviewed","serviceMethod":"PUT","checked":false,"key":"4-0-0-3-0"}],"checked":false,"key":"4-0-0-3-0","id":"P0655"}],"checked":false,"key":"4-0-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"4-0-0-0-0"},{"systemName":"收货系统","menuId":"10005-002","menuCode":"10005-002","menuParentId":"10005","icon":null,"menuSort":2,"name":"库房收货记录","level":2,"anchor":"#spd/spdReceivesHis","functions":[{"functionId":"F0014","functionName":"库房收货记录","operations":[{"opId":"P0100","opName":"库房收货记录查看","opSort":"P0100","elementClass":"acl_view_spdReceive,acl_view_spdReceiveItem","webApis":[{"serviceUrl":"/yard/spd/spdReceives","serviceMethod":"GET","checked":false,"key":"4-1-0-0-0"},{"serviceUrl":"/yard/spd/spdSellerSends/ids,{ids}","serviceMethod":"GET","checked":false,"key":"4-1-0-0-1"},{"serviceUrl":"/yard/spd/ydsGoods/ids,{ids}","serviceMethod":"GET","checked":false,"key":"4-1-0-0-2"},{"serviceUrl":"/yard/spd/spdReceives/byHis/count","serviceMethod":"GET","checked":false,"key":"4-1-0-0-3"},{"serviceUrl":"/yard/spd/spdReceiveItems/receiveId,{receiveId}","serviceMethod":"GET","checked":false,"key":"4-1-0-0-4"},{"serviceUrl":"/yard/spd/spdReceives/byHis","serviceMethod":"GET","checked":false,"key":"4-1-0-0-5"}],"checked":false,"key":"4-1-0-0-0","id":"P0100"},{"opId":"P0237","opName":"库房收货记录同步","opSort":"P0237","elementClass":"acl_exportReceiveToHis","webApis":[],"checked":false,"key":"4-1-0-1-0","id":"P0237"},{"opId":"P0101","opName":"库房收货记录打印","opSort":"P0101","elementClass":"acl_exportReceive","webApis":[{"serviceUrl":"/yard/spd/spdReceiveItems/receiveId,{receiveId}/pdf","serviceMethod":"GET","checked":false,"key":"4-1-0-2-0"}],"checked":false,"key":"4-1-0-2-0","id":"P0101"}],"checked":false,"key":"4-1-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"4-1-0-0-0"},{"systemName":"收货系统","menuId":"10005-003","menuCode":"10005-003","menuParentId":"10005","icon":null,"menuSort":3,"name":"库房入库调度","level":2,"anchor":"#spd/spdDispatchers","functions":[{"functionId":"F0022","functionName":"库房入库调度","operations":[{"opId":"P0231","opName":"库房入库调度查看","opSort":"P0231","elementClass":"acl_view_spdDispatcher","webApis":[{"serviceUrl":"/yard/pcs/pcsDepotAreas/ids,{ids}","serviceMethod":"GET","checked":false,"key":"4-2-0-0-0"},{"serviceUrl":"/yard/spd/spdDispatchers/byReceipt/count","serviceMethod":"GET","checked":false,"key":"4-2-0-0-1"},{"serviceUrl":"/yard/spd/spdReceives/byYetDispatchedSpdReceives,{dispatcherId}/count","serviceMethod":"GET","checked":true,"key":"4-2-0-0-2"},{"serviceUrl":"/yard/spd/spdReceives/byYetDispatchedSpdReceives,{dispatcherId}","serviceMethod":"GET","checked":false,"key":"4-2-0-0-3"},{"serviceUrl":"/yard/spd/spdReceives/byNotDispatchedSpdReceives,{dispatcherId}/count","serviceMethod":"GET","checked":false,"key":"4-2-0-0-4"},{"serviceUrl":"/yard/spd/spdReceives/byNotDispatchedSpdReceives,{dispatcherId}","serviceMethod":"GET","checked":false,"key":"4-2-0-0-5"},{"serviceUrl":"/yard/spd/spdDispatchers/byReceipt","serviceMethod":"GET","checked":false,"key":"4-2-0-0-6"},{"serviceUrl":"/yard/spd/spdReceiveItems/receiveIds,{receiveIds}","serviceMethod":"GET","checked":false,"key":"4-2-0-0-7"},{"serviceUrl":"/yard/spd/spdDispatcherRefs/dispatcherId,{dispatcherId}","serviceMethod":"GET","checked":false,"key":"4-2-0-0-8"},{"serviceUrl":"/yard/spd/spdDispatcherRefs","serviceMethod":"GET","checked":false,"key":"4-2-0-0-9"},{"serviceUrl":"/yard/spd/spdReceives/yetDispatchedSpdReceives/count","serviceMethod":"GET","checked":false,"key":"4-2-0-0-10"},{"serviceUrl":"/yard/spd/spdReceives/yetDispatchedSpdReceives","serviceMethod":"GET","checked":false,"key":"4-2-0-0-11"}],"checked":false,"key":"4-2-0-0-0","id":"P0231"},{"opId":"P0232","opName":"库房入库调度新增","opSort":"P0232","elementClass":"acl_add_spdDispatcher","webApis":[{"serviceUrl":"/yard/spd/spdDispatchers","serviceMethod":"POST","checked":false,"key":"4-2-0-1-0"},{"serviceUrl":"/yard/spd/spdDispatchers/byReceipt","serviceMethod":"GET","checked":false,"key":"4-2-0-1-1"},{"serviceUrl":"/yard/spd/spdDispatcherRefs/dispatcherId,{dispatcherId}","serviceMethod":"GET","checked":false,"key":"4-2-0-1-2"},{"serviceUrl":"/yard/spd/spdReceives/byYetDispatchedSpdReceives,{dispatcherId}","serviceMethod":"GET","checked":false,"key":"4-2-0-1-3"},{"serviceUrl":"/yard/spd/spdReceives/byYetDispatchedSpdReceives,{dispatcherId}/count","serviceMethod":"GET","checked":false,"key":"4-2-0-1-4"},{"serviceUrl":"/yard/spd/spdReceives/byNotDispatchedSpdReceives,{dispatcherId}","serviceMethod":"GET","checked":false,"key":"4-2-0-1-5"},{"serviceUrl":"/yard/spd/spdReceives/byNotDispatchedSpdReceives,{dispatcherId}/count","serviceMethod":"GET","checked":false,"key":"4-2-0-1-6"},{"serviceUrl":"/yard/spd/spdReceiveItems/receiveIds,{receiveIds}","serviceMethod":"GET","checked":false,"key":"4-2-0-1-7"},{"serviceUrl":"/yard/pcs/pcsDepots/ownerOrgId,{ownerOrgId}","serviceMethod":"GET","checked":false,"key":"4-2-0-1-8"},{"serviceUrl":"/yard/pcs/pcsDepots/ownerOrgId,{ownerOrgId}/count","serviceMethod":"GET","checked":false,"key":"4-2-0-1-9"},{"serviceUrl":"/yard/spd/spdDispatchers","serviceMethod":"POST","checked":false,"key":"4-2-0-1-10"},{"serviceUrl":"/yard/pcs/pcsDepots/byReceivePointDept/{manageOrgId}","serviceMethod":"GET","checked":false,"key":"4-2-0-1-11"},{"serviceUrl":"//yard/pcs/pcsDepots/byReceivePointDept/{manageOrgId}/count","serviceMethod":"GET","checked":false,"key":"4-2-0-1-12"}],"checked":false,"key":"4-2-0-1-0","id":"P0232"},{"opId":"P0233","opName":"库房入库调度编辑","opSort":"P0233","elementClass":"acl_edit_spdDispatcher","webApis":[{"serviceUrl":"/yard/spd/spdDispatchers/{dispatcherId}","serviceMethod":"GET","checked":false,"key":"4-2-0-2-0"},{"serviceUrl":"/yard/spd/spdDispatcherRefs/{dispatcherRefId}","serviceMethod":"PUT","checked":false,"key":"4-2-0-2-1"},{"serviceUrl":"/yard/spd/spdReceiveItems/receiveIds,{receiveIds}","serviceMethod":"GET","checked":false,"key":"4-2-0-2-2"},{"serviceUrl":"/yard/spd/spdDispatcherRefs/dispatcherId,{dispatcherId}","serviceMethod":"GET","checked":false,"key":"4-2-0-2-3"},{"serviceUrl":"/yard/spd/spdReceives/byNotDispatchedSpdReceives,{dispatcherId}","serviceMethod":"GET","checked":false,"key":"4-2-0-2-4"},{"serviceUrl":"/yard/spd/spdReceives/byNotDispatchedSpdReceives,{dispatcherId}/count","serviceMethod":"GET","checked":false,"key":"4-2-0-2-5"},{"serviceUrl":"/yard/spd/spdReceives/byYetDispatchedSpdReceives,{dispatcherId}","serviceMethod":"GET","checked":false,"key":"4-2-0-2-6"},{"serviceUrl":"/yard/spd/spdReceives/byYetDispatchedSpdReceives,{dispatcherId}/count","serviceMethod":"GET","checked":false,"key":"4-2-0-2-7"},{"serviceUrl":"/yard/spd/spdReceives/notDispatchedSpdReceives","serviceMethod":"GET","checked":false,"key":"4-2-0-2-8"},{"serviceUrl":"/yard/spd/spdReceives/notDispatchedSpdReceives/count","serviceMethod":"GET","checked":false,"key":"4-2-0-2-9"},{"serviceUrl":"/yard/spd/spdDispatcherRefs","serviceMethod":"POST","checked":false,"key":"4-2-0-2-10"},{"serviceUrl":"/yard/spd/spdReceiveItems","serviceMethod":"GET","checked":false,"key":"4-2-0-2-11"},{"serviceUrl":"/yard/spd/spdDispatcherRefs/{dispatcherRefId}","serviceMethod":"DELETE","checked":false,"key":"4-2-0-2-12"},{"serviceUrl":"/yard/spd/spdDepotRoutes/{routeId}","serviceMethod":"PUT","checked":false,"key":"4-2-0-2-13"}],"checked":false,"key":"4-2-0-2-0","id":"P0233"},{"opId":"P0234","opName":"库房入库调度删除","opSort":"P0234","elementClass":"acl_delete_spdDispatcher","webApis":[{"serviceUrl":"/yard/spd/spdDispatchers/{dispatcherId}","serviceMethod":"DELETE","checked":false,"key":"4-2-0-3-0"},{"serviceUrl":"/yard/spd/spdDispatcherRefs/dispatcherId,{dispatcherId}","serviceMethod":"GET","checked":false,"key":"4-2-0-3-1"},{"serviceUrl":"/yard/spd/spdReceives/byYetDispatchedSpdReceives,{dispatcherId}/count","serviceMethod":"GET","checked":false,"key":"4-2-0-3-2"},{"serviceUrl":"/yard/spd/spdDispatchers/byReceipt","serviceMethod":"GET","checked":false,"key":"4-2-0-3-3"},{"serviceUrl":"/yard/spd/spdReceives/byYetDispatchedSpdReceives,{dispatcherId}","serviceMethod":"GET","checked":false,"key":"4-2-0-3-4"}],"checked":false,"key":"4-2-0-3-0","id":"P0234"},{"opId":"P0287","opName":"库房入库调度调度","opSort":"P0297","elementClass":"acl_confirmSpdDispatcher","webApis":[{"serviceUrl":"/yard/spd/spdDispatchers/{routeId}/reviewed","serviceMethod":"PUT","checked":false,"key":"4-2-0-4-0"}],"checked":false,"key":"4-2-0-4-0","id":"P0287"},{"opId":"P0236","opName":"库房入库调度审核","opSort":"P0236","elementClass":"acl_reviewEntity_spdDispatcher","webApis":[{"serviceUrl":"/yard/spd/spdDispatchers/{routeId}/reviewed","serviceMethod":"PUT","checked":false,"key":"4-2-0-5-0"}],"checked":false,"key":"4-2-0-5-0","id":"P0236"}],"checked":false,"key":"4-2-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"4-2-0-0-0"},{"systemName":"收货系统","menuId":"10005-004","menuCode":"10005-004","menuParentId":"10005","icon":null,"menuSort":4,"name":"库房出库调度","level":2,"anchor":"#spd/spdApplyDispatchers","functions":[{"functionId":"F0035","functionName":"库房出库调度","operations":[{"opId":"P0245","opName":"库房出库调度查看","opSort":"P0245","elementClass":"acl_view_spdApplyDispatcher","webApis":[{"serviceUrl":"/yard/spd/spdApplyItems/applyIds,{applyIds}","serviceMethod":"GET","checked":false,"key":"4-3-0-0-0"},{"serviceUrl":"/yard/spd/spdDispatchers/byPicking","serviceMethod":"GET","checked":false,"key":"4-3-0-0-1"},{"serviceUrl":"/yard/spd/spdApplys/byNotDispatchedSpdApply,{dispatcherId}/count","serviceMethod":"GET","checked":false,"key":"4-3-0-0-2"},{"serviceUrl":"/yard/spd/spdApplys/byNotDispatchedSpdApply,{dispatcherId}","serviceMethod":"GET","checked":false,"key":"4-3-0-0-3"},{"serviceUrl":"/yard/spd/spdApplys/byYetDisaptchedSpdApply,{dispatcherId}","serviceMethod":"GET","checked":false,"key":"4-3-0-0-4"},{"serviceUrl":"/yard/spd/spdApplys/byYetDisaptchedSpdApply,{dispatcherId}/count","serviceMethod":"GET","checked":false,"key":"4-3-0-0-5"},{"serviceUrl":"/yard/spd/spdDispatchers","serviceMethod":"GET","checked":false,"key":"4-3-0-0-6"},{"serviceUrl":"/yard/pcs/pcsDepots/ids,{ids}","serviceMethod":"GET","checked":false,"key":"4-3-0-0-7"},{"serviceUrl":"/yard/pcs/pcsUsers/ids,{ids}","serviceMethod":"GET","checked":false,"key":"4-3-0-0-8"}],"checked":false,"key":"4-3-0-0-0","id":"P0245"},{"opId":"P0246","opName":"库房出库调度新增","opSort":"P0246","elementClass":"acl_add_spdApplyDispatcher","webApis":[{"serviceUrl":"/yard/spd/spdApplyItems/applyIds,{applyIds}","serviceMethod":"GET","checked":false,"key":"4-3-0-1-0"},{"serviceUrl":"/yard/spd/spdDispatchers","serviceMethod":"POST","checked":false,"key":"4-3-0-1-1"},{"serviceUrl":"/yard/spd/spdDispatchers/byPicking","serviceMethod":"GET","checked":false,"key":"4-3-0-1-2"},{"serviceUrl":"/yard/spd/spdApplys/byYetDisaptchedSpdApply,{dispatcherId}/count","serviceMethod":"GET","checked":false,"key":"4-3-0-1-3"},{"serviceUrl":"/yard/spd/spdApplys/byYetDisaptchedSpdApply,{dispatcherId}","serviceMethod":"GET","checked":false,"key":"4-3-0-1-4"},{"serviceUrl":"/yard/spd/spdApplys/byNotDispatchedSpdApply,{dispatcherId}/count","serviceMethod":"GET","checked":false,"key":"4-3-0-1-5"},{"serviceUrl":"/yard/spd/spdApplys/byNotDispatchedSpdApply,{dispatcherId}","serviceMethod":"GET","checked":false,"key":"4-3-0-1-6"},{"serviceUrl":"/yard/pcs/pcsDepots/byReceivePointDept/{manageOrgId}","serviceMethod":"GET","checked":false,"key":"4-3-0-1-7"},{"serviceUrl":"//yard/pcs/pcsDepots/byReceivePointDept/{manageOrgId}/count","serviceMethod":"GET","checked":false,"key":"4-3-0-1-8"}],"checked":false,"key":"4-3-0-1-0","id":"P0246"},{"opId":"P0247","opName":"库房出库调度编辑","opSort":"P0247","elementClass":"acl_edit_spdApplyDispatcher","webApis":[{"serviceUrl":"/yard/spd/spdDispatchers/{dispatcherId}","serviceMethod":"PUT","checked":false,"key":"4-3-0-2-0"},{"serviceUrl":"/yard/spd/spdApplyItems/applyIds,{applyIds}","serviceMethod":"GET","checked":false,"key":"4-3-0-2-1"},{"serviceUrl":"/yard/spd/spdApplys/byYetDisaptchedSpdApply,{dispatcherId}/count","serviceMethod":"GET","checked":false,"key":"4-3-0-2-2"},{"serviceUrl":"/yard/spd/spdApplys/byYetDisaptchedSpdApply,{dispatcherId}","serviceMethod":"GET","checked":false,"key":"4-3-0-2-3"},{"serviceUrl":"/yard/spd/spdApplys/byNotDispatchedSpdApply,{dispatcherId}","serviceMethod":"GET","checked":false,"key":"4-3-0-2-4"},{"serviceUrl":"/yard/spd/spdApplys/byNotDispatchedSpdApply,{dispatcherId}/count","serviceMethod":"GET","checked":false,"key":"4-3-0-2-5"},{"serviceUrl":"/yard/spd/spdApplys/notDispatchedSpdApply","serviceMethod":"GET","checked":false,"key":"4-3-0-2-6"},{"serviceUrl":"/yard/spd/spdApplys/notDispatchedSpdApply/count","serviceMethod":"GET","checked":false,"key":"4-3-0-2-7"},{"serviceUrl":"/yard/spd/spdApplyItems","serviceMethod":"GET","checked":false,"key":"4-3-0-2-8"}],"checked":false,"key":"4-3-0-2-0","id":"P0247"},{"opId":"P0248","opName":"库房出库调度删除","opSort":"P0248","elementClass":"acl_delete_spdApplyDispatcher","webApis":[{"serviceUrl":"/yard/spd/spdDispatchers/byPicking","serviceMethod":"GET","checked":false,"key":"4-3-0-3-0"},{"serviceUrl":"/yard/spd/spdApplys/byYetDisaptchedSpdApply,{dispatcherId}/count","serviceMethod":"GET","checked":false,"key":"4-3-0-3-1"},{"serviceUrl":"/yard/spd/spdApplys/byYetDisaptchedSpdApply,{dispatcherId}","serviceMethod":"GET","checked":false,"key":"4-3-0-3-2"}],"checked":false,"key":"4-3-0-3-0","id":"P0248"},{"opId":"P0250","opName":"库房出库调度审核","opSort":"P0236","elementClass":"acl_reviewEntity_spdApplyDispatcher","webApis":[{"serviceUrl":"/yard/spd/spdDispatchers/{routeId}/reviewed","serviceMethod":"PUT","checked":false,"key":"4-3-0-4-0"}],"checked":false,"key":"4-3-0-4-0","id":"P0250"},{"opId":"P0198","opName":"库房出库调度调度","opSort":"P0198","elementClass":"acl_confirmSpdApplyDispatcher","webApis":[{"serviceUrl":"/yard/spd/spdDispatchers/{routeId}/reviewed","serviceMethod":"PUT","checked":false,"key":"4-3-0-5-0"}],"checked":false,"key":"4-3-0-5-0","id":"P0198"}],"checked":false,"key":"4-3-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"4-3-0-0-0"},{"systemName":"收货系统","menuId":"10005-005","menuCode":"10005-005","menuParentId":"10005","icon":null,"menuSort":5,"name":"库房补货计划","level":2,"anchor":"#spd/spdApplyReqReplenishments","functions":[{"functionId":"F0058","functionName":"库房补货计划","operations":[{"opId":"P0460","opName":"库房补货计划查看","opSort":"P0460","elementClass":"acl_view_spdApplyReqReplenishment","webApis":[{"serviceUrl":"/yard/spd/SpdApplyReqReplenishments/count","serviceMethod":"GET","checked":false,"key":"4-4-0-0-0"},{"serviceUrl":"/yard/spd/SpdApplyReqReplenishments","serviceMethod":"GET","checked":false,"key":"4-4-0-0-1"},{"serviceUrl":"/yard/spd/spdApplyReqReplenishmentViews/ids,{ids}","serviceMethod":"GET","checked":false,"key":"4-4-0-0-2"}],"checked":false,"key":"4-4-0-0-0","id":"P0460"},{"opId":"P0499","opName":"库房补货计划新增","opSort":"P0499","elementClass":"acl_add_spdApplyReqReplenishment","webApis":[{"serviceUrl":"/yard/spd/spdApplyReqReplenishmentViews","serviceMethod":"GET","checked":false,"key":"4-4-0-1-0"},{"serviceUrl":"/yard/spd/spdApplyReqReplenishmentViews/count","serviceMethod":"GET","checked":false,"key":"4-4-0-1-1"},{"serviceUrl":"/yard/spd/spdApplyReqReplenishmentViews/ids,{ids}","serviceMethod":"GET","checked":false,"key":"4-4-0-1-2"},{"serviceUrl":"/yard/spd/spdApplyReqs/{applyReqId}","serviceMethod":"DELETE","checked":false,"key":"4-4-0-1-3"},{"serviceUrl":"/yard/spd/spdApplyReqs","serviceMethod":"GET","checked":false,"key":"4-4-0-1-4"},{"serviceUrl":"/yard/spd/spdApplyReqs/count","serviceMethod":"GET","checked":false,"key":"4-4-0-1-5"},{"serviceUrl":"/yard/spd/spdApplyReqs","serviceMethod":"POST","checked":false,"key":"4-4-0-1-6"}],"checked":false,"key":"4-4-0-1-0","id":"P0499"},{"opId":"P0502","opName":"库房补货计划提交","opSort":"P0502","elementClass":"acl_batchCommited_spdApplyReqReplenishment","webApis":[{"serviceUrl":"/yard/spd/spdApplyReqs/{applyReqId}/checkState/commited","serviceMethod":"PUT","checked":false,"key":"4-4-0-2-0"}],"checked":false,"key":"4-4-0-2-0","id":"P0502"},{"opId":"P0501","opName":"库房补货计划删除","opSort":"P0501","elementClass":"acl_batchDelete_spdApplyReqReplenishment","webApis":[{"serviceUrl":"/yard/spd/spdApplyReqs/{applyReqId}","serviceMethod":"DELETE","checked":false,"key":"4-4-0-3-0"}],"checked":false,"key":"4-4-0-3-0","id":"P0501"},{"opId":"P0500","opName":"库房补货计划保存","opSort":"P0500","elementClass":"acl_update_spdApplyReqReplenishment","webApis":[{"serviceUrl":"/yard/spd/spdApplyReqs/{applyReqId}","serviceMethod":"PUT","checked":false,"key":"4-4-0-4-0"}],"checked":false,"key":"4-4-0-4-0","id":"P0500"},{"opId":"P0503","opName":"库房补货计划审核","opSort":"P0503","elementClass":"acl_batchReview_spdApplyReqReplenishment","webApis":[{"serviceUrl":"/yard/spd/spdApplyReqs/{applyReqId}/checkState/reviewed","serviceMethod":"PUT","checked":false,"key":"4-4-0-5-0"}],"checked":false,"key":"4-4-0-5-0","id":"P0503"}],"checked":false,"key":"4-4-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"4-4-0-0-0"},{"systemName":"收货系统","menuId":"10005-006","menuCode":"10005-006","menuParentId":"10005","icon":null,"menuSort":6,"name":"申领审核管理","level":2,"anchor":"#spd/spdApplys","functions":[{"functionId":"F0023","functionName":"申领审核管理","operations":[{"opId":"P0147","opName":"申领审核管理查看","opSort":"P0147","elementClass":"acl_view_spdApply,acl_view_spdApplyItem","webApis":[{"serviceUrl":"/yard/spd/spdApplys/count","serviceMethod":"GET","checked":false,"key":"4-5-0-0-0"},{"serviceUrl":"/yard/spd/spdApplys","serviceMethod":"GET","checked":false,"key":"4-5-0-0-1"},{"serviceUrl":"/yard/spd/ydsEdsGoodsLots/ids,{ids}","serviceMethod":"GET","checked":false,"key":"4-5-0-0-2"},{"serviceUrl":"/yard/spd/ydsEdsGoodsLots/{edsGoodsLotId}","serviceMethod":"GET","checked":false,"key":"4-5-0-0-3"},{"serviceUrl":"/yard/spd/ydsGoodsLots/ids,{ids}","serviceMethod":"GET","checked":false,"key":"4-5-0-0-4"},{"serviceUrl":"/yard/spd/spdDepotCards","serviceMethod":"GET","checked":false,"key":"4-5-0-0-5"},{"serviceUrl":"/yard/pcs/pcsDepots","serviceMethod":"GET","checked":false,"key":"4-5-0-0-6"},{"serviceUrl":"/yard/spd/spdDepotRoutes","serviceMethod":"GET","checked":false,"key":"4-5-0-0-7"},{"serviceUrl":"/yard/spd/spdApplyItems/applyId,{applyId}","serviceMethod":"GET","checked":false,"key":"4-5-0-0-8"},{"serviceUrl":"/yard/spd/spdApplyItems","serviceMethod":"GET","checked":false,"key":"4-5-0-0-9"},{"serviceUrl":"/yard/spd/spdDepotRoutes/{routeId}","serviceMethod":"GET","checked":false,"key":"4-5-0-0-10"}],"checked":false,"key":"4-5-0-0-0","id":"P0147"},{"opId":"P0459","opName":"申领审核管理批量审核","opSort":"P0459","elementClass":"acl_reviewEntities_spdApply","webApis":[],"checked":false,"key":"4-5-0-1-0","id":"P0459"},{"opId":"P0148","opName":"申领审核管理编辑","opSort":"P0148","elementClass":"acl_edit_spdApply,acl_edit_spdApplyItem,acl_view_spdApplyItem,acl_add_spdApplyItem,acl_delete_spdApplyItem,acl_update_spdApplyItem","webApis":[{"serviceUrl":"/yard/spd/spdApplyItems","serviceMethod":"GET","checked":false,"key":"4-5-0-2-0"},{"serviceUrl":"/yard/spd/ydsGoodsLots/ids,{ids}","serviceMethod":"GET","checked":false,"key":"4-5-0-2-1"},{"serviceUrl":"/yard/spd/ydsGoodsLots/{goodsLotId}","serviceMethod":"GET","checked":false,"key":"4-5-0-2-2"},{"serviceUrl":"/yard/spd/spdApplyItems/{applyItemId}","serviceMethod":"PUT","checked":false,"key":"4-5-0-2-3"},{"serviceUrl":"/yard/spd/spdApplys","serviceMethod":"GET","checked":false,"key":"4-5-0-2-4"},{"serviceUrl":"/yard/spd/spdApplys/count","serviceMethod":"GET","checked":false,"key":"4-5-0-2-5"},{"serviceUrl":"/yard/spd/spdApplyItems/applyId,{applyId}","serviceMethod":"GET","checked":false,"key":"4-5-0-2-6"},{"serviceUrl":"/yard/spd/spdApplys/{applyId}","serviceMethod":"PUT","checked":false,"key":"4-5-0-2-7"}],"checked":false,"key":"4-5-0-2-0","id":"P0148"},{"opId":"P0149","opName":"申领审核管理新增","opSort":"P0149","elementClass":"acl_add_spdApply,acl_add_spdApplyItem,acl_view_spdApplyItem,acl_edit_spdApplyItem,acl_delete_spdApplyItem","webApis":[{"serviceUrl":"/yard/spd/spdApplys","serviceMethod":"POST","checked":false,"key":"4-5-0-3-0"},{"serviceUrl":"/yard/spd/spdApplyItems","serviceMethod":"GET","checked":false,"key":"4-5-0-3-1"},{"serviceUrl":"/yard/spd/ydsGoodsLots/ids,{ids}","serviceMethod":"GET","checked":false,"key":"4-5-0-3-2"},{"serviceUrl":"/yard/spd/spdApplys/count","serviceMethod":"GET","checked":false,"key":"4-5-0-3-3"},{"serviceUrl":"/yard/spd/spdApplys","serviceMethod":"GET","checked":false,"key":"4-5-0-3-4"},{"serviceUrl":"/yard/spd/spdApplyItems/applyId,{applyId}","serviceMethod":"GET","checked":false,"key":"4-5-0-3-5"},{"serviceUrl":"/yard/spd/spdDepotCards/byUse","serviceMethod":"GET","checked":false,"key":"4-5-0-3-6"},{"serviceUrl":"/yard/spd/spdDepotCards/byUse/count","serviceMethod":"GET","checked":false,"key":"4-5-0-3-7"},{"serviceUrl":"/yard/spd/spdDepotCards/count","serviceMethod":"GET","checked":false,"key":"4-5-0-3-8"},{"serviceUrl":"/yard/spd/ydsGoodsLots","serviceMethod":"GET","checked":false,"key":"4-5-0-3-9"},{"serviceUrl":"/yard/spd/spdApplyItems","serviceMethod":"POST","checked":false,"key":"4-5-0-3-10"}],"checked":false,"key":"4-5-0-3-0","id":"P0149"},{"opId":"P0150","opName":"申领审核管理删除","opSort":"P0150","elementClass":"acl_delete_spdApply,acl_delete_spdApplyItem,acl_view_spdApplyItem","webApis":[{"serviceUrl":"/yard/spd/spdApplyItems/{applyItemId}","serviceMethod":"DELETE","checked":false,"key":"4-5-0-4-0"},{"serviceUrl":"/yard/spd/spdApplys/{applyId}","serviceMethod":"DELETE","checked":false,"key":"4-5-0-4-1"}],"checked":false,"key":"4-5-0-4-0","id":"P0150"},{"opId":"P0152","opName":"申领审核管理审核","opSort":"P0152","elementClass":"acl_reviewEntity_spdApply,acl_confirm_spdApply","webApis":[{"serviceUrl":"/yard/spd/spdApplys/{applyId}/checkState/reviewed","serviceMethod":"PUT","checked":false,"key":"4-5-0-5-0"}],"checked":false,"key":"4-5-0-5-0","id":"P0152"},{"opId":"P0153","opName":"申领审核管理撤回","opSort":"P0153","elementClass":"acl_cancelCommit_spdApply","webApis":[],"checked":false,"key":"4-5-0-6-0","id":"P0153"},{"opId":"P0657","opName":"申领审核管理一键完成","opSort":"P0657","elementClass":"acl_inStorage_spdApply","webApis":[{"serviceUrl":"/yard/spd/spdApplys/{applyId}/checkState/byQuick/reviewed","serviceMethod":"PUT","checked":false,"key":"4-5-0-7-0"}],"checked":false,"key":"4-5-0-7-0","id":"P0657"}],"checked":false,"key":"4-5-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"4-5-0-0-0"},{"systemName":"收货系统","menuId":"10005-007","menuCode":"10005-007","menuParentId":"10005","icon":null,"menuSort":7,"name":"申领出库确认","level":2,"anchor":"#spd/spdApplyOutStockNotarizes","functions":[{"functionId":"F0052","functionName":"申领出库确认","operations":[{"opId":"P0417","opName":"申领出库确认查看","opSort":"P0417","elementClass":"acl_view_spdApplyOutStockNotarize","webApis":[{"serviceUrl":"/yard/spd/spdApplys/byOutStockOperation","serviceMethod":"GET","checked":false,"key":"4-6-0-0-0"},{"serviceUrl":"/yard/spd/spdApplys/byOutStockOperation/count","serviceMethod":"GET","checked":false,"key":"4-6-0-0-1"},{"serviceUrl":"/yard/spd/spdApplyItems/applyId,{applyId}","serviceMethod":"GET","checked":false,"key":"4-6-0-0-2"},{"serviceUrl":"/yard/spd/spdApplyItems/applyId,{applyId}/count","serviceMethod":"GET","checked":false,"key":"4-6-0-0-3"}],"checked":false,"key":"4-6-0-0-0","id":"P0417"},{"opId":"P0475","opName":"申领出库确认编辑","opSort":"P0475","elementClass":"acl_edit_spdApplyOutStockNotarize","webApis":[],"checked":false,"key":"4-6-0-1-0","id":"P0475"},{"opId":"P0509","opName":"申领出库确认打印","opSort":"P0509","elementClass":"acl_print_spdApplyOutStockNotarize","webApis":[{"serviceUrl":"/yard/spd/spdApplyItems/applyId,{applyId}/pdf","serviceMethod":"GET","checked":false,"key":"4-6-0-2-0"}],"checked":false,"key":"4-6-0-2-0","id":"P0509"},{"opId":"P0508","opName":"申领出库确认审核","opSort":"P0508","elementClass":"acl_confirm_spdApplyOutStock","webApis":[{"serviceUrl":"/yard/spd/spdApplys/byOutStockOperation/{applyId}","serviceMethod":"PUT","checked":false,"key":"4-6-0-3-0"}],"checked":false,"key":"4-6-0-3-0","id":"P0508"}],"checked":false,"key":"4-6-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"4-6-0-0-0"},{"systemName":"收货系统","menuId":"10005-008","menuCode":"10005-008","menuParentId":"10005","icon":null,"menuSort":8,"name":"库房申领记录","level":2,"anchor":"#spd/spdApplyStoreroomHiss","functions":[{"functionId":"F0062","functionName":"库房申领记录","operations":[{"opId":"P0476","opName":"库房申领记录查看","opSort":"P0476","elementClass":"acl_view_spdApplyOutStockNotarize","webApis":[{"serviceUrl":"/yard/spd/spdApplys/byStoreroomHis","serviceMethod":"GET","checked":false,"key":"4-7-0-0-0"},{"serviceUrl":"/yard/spd/spdApplys/byStoreroomHis/count","serviceMethod":"GET","checked":false,"key":"4-7-0-0-1"},{"serviceUrl":"/yard/spd/spdApplyItems/applyId,{applyId}","serviceMethod":"GET","checked":false,"key":"4-7-0-0-2"},{"serviceUrl":"/yard/spd/spdApplyItems/applyId,{applyId}/count","serviceMethod":"GET","checked":false,"key":"4-7-0-0-3"}],"checked":false,"key":"4-7-0-0-0","id":"P0476"}],"checked":false,"key":"4-7-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"4-7-0-0-0"},{"systemName":"收货系统","menuId":"10005-009","menuCode":"10005-009","menuParentId":"10005","icon":null,"menuSort":9,"name":"定数打包管理","level":2,"anchor":"#spd/spdFixedMakePackings","functions":[{"functionId":"F0021","functionName":"定数打包管理","operations":[{"opId":"P0135","opName":"定数打包管理新增","opSort":"P0135","elementClass":"acl_add_spdFixedMake,acl_add_spdFixedMakeItem","webApis":[{"serviceUrl":"/yard/spd/spdFixedMakes","serviceMethod":"POST","checked":false,"key":"4-8-0-0-0"},{"serviceUrl":"/yard/spd/spdFixedMakeItems","serviceMethod":"POST","checked":false,"key":"4-8-0-0-1"},{"serviceUrl":"/yard/spd/spdFixedMakes","serviceMethod":"GET","checked":false,"key":"4-8-0-0-2"},{"serviceUrl":"/yard/spd/spdFixedMakes/count","serviceMethod":"GET","checked":false,"key":"4-8-0-0-3"},{"serviceUrl":"/yard/pcs/pcsDepots/byUMdepot/count","serviceMethod":"GET","checked":false,"key":"4-8-0-0-4"},{"serviceUrl":"/yard/pcs/pcsDepots/byUMdepot","serviceMethod":"GET","checked":false,"key":"4-8-0-0-5"},{"serviceUrl":"/yard/spd/spdGoodsMakeFixedSelViews/byStockQty/{depotId}","serviceMethod":"GET","checked":false,"key":"4-8-0-0-6"},{"serviceUrl":"/yard/spd/spdGoodsMakeFixedSelViews/byStockQty/{depotId}/count","serviceMethod":"GET","checked":false,"key":"4-8-0-0-7"}],"checked":false,"key":"4-8-0-0-0","id":"P0135"},{"opId":"P0137","opName":"定数打包管理提交","opSort":"P0137","elementClass":"acl_commitEntity_spdFixedMake","webApis":[{"serviceUrl":"/yard/spd/spdFixedMakes/{makeId}/checkState/commited","serviceMethod":"PUT","checked":false,"key":"4-8-0-1-0"},{"serviceUrl":"/yard/spd/spdFixedMakes/{makeId}","serviceMethod":"GET","checked":false,"key":"4-8-0-1-1"}],"checked":false,"key":"4-8-0-1-0","id":"P0137"},{"opId":"P0133","opName":"定数打包管理查看","opSort":"P0133","elementClass":"acl_view_spdFixedMake,acl_view_spdFixedMakeItem","webApis":[{"serviceUrl":"/yard/spd/spdFixedMakeItems/makeId,{makeId}/count","serviceMethod":"GET","checked":false,"key":"4-8-0-2-0"},{"serviceUrl":"/yard/spd/spdFixedMakeItems/makeId,{makeId}","serviceMethod":"GET","checked":false,"key":"4-8-0-2-1"},{"serviceUrl":"/yard/pcs/depotShelfs/ids,{ids}","serviceMethod":"GET","checked":false,"key":"4-8-0-2-2"},{"serviceUrl":"/yard/spd/ydsGoodsLots/ids,{ids}","serviceMethod":"GET","checked":false,"key":"4-8-0-2-3"},{"serviceUrl":"/yard/spd/spdFixeds/ids,{ids}","serviceMethod":"GET","checked":false,"key":"4-8-0-2-4"},{"serviceUrl":"/yard/spd/ydsGoods/ids,{ids}","serviceMethod":"GET","checked":false,"key":"4-8-0-2-5"},{"serviceUrl":"/yard/pcs/pcsDepots/{depotId}","serviceMethod":"GET","checked":false,"key":"4-8-0-2-6"},{"serviceUrl":"/yard/spd/spdFixedMakes","serviceMethod":"GET","checked":false,"key":"4-8-0-2-7"}],"checked":false,"key":"4-8-0-2-0","id":"P0133"},{"opId":"P0136","opName":"定数打包管理删除","opSort":"P0136","elementClass":"acl_delete_spdFixedMake,,acl_delete_spdFixedMakeItem","webApis":[{"serviceUrl":"/yard/spd/spdFixedMakes/{makeId}","serviceMethod":"DELETE","checked":false,"key":"4-8-0-3-0"},{"serviceUrl":"/yard/pcs/pcsDepots/{depotId}","serviceMethod":"GET","checked":false,"key":"4-8-0-3-1"},{"serviceUrl":"/yard/pcs/pcsDepots/{depotId}","serviceMethod":"GET","checked":false,"key":"4-8-0-3-2"},{"serviceUrl":"/yard/spd/spdFixedMakes","serviceMethod":"GET","checked":false,"key":"4-8-0-3-3"},{"serviceUrl":"/yard/spd/ydsGoods/ids,{ids}","serviceMethod":"GET","checked":false,"key":"4-8-0-3-4"},{"serviceUrl":"/yard/spd/ydsGoodsLots/ids,{ids}","serviceMethod":"GET","checked":false,"key":"4-8-0-3-5"},{"serviceUrl":"/yard/spd/spdFixedMakeItems/makeId,{makeId}/count","serviceMethod":"GET","checked":false,"key":"4-8-0-3-6"},{"serviceUrl":"/yard/spd/spdFixedMakeItems/makeId,{makeId}","serviceMethod":"GET","checked":false,"key":"4-8-0-3-7"},{"serviceUrl":"/yard/pcs/depotShelfs/ids,{ids}","serviceMethod":"GET","checked":false,"key":"4-8-0-3-8"}],"checked":false,"key":"4-8-0-3-0","id":"P0136"},{"opId":"P0138","opName":"定数打包管理审核","opSort":"P0138","elementClass":"acl_reviewEntity_spdFixedMake","webApis":[{"serviceUrl":"/yard/spd/spdFixedMakes/{makeId}/checkState/reviewed","serviceMethod":"PUT","checked":false,"key":"4-8-0-4-0"},{"serviceUrl":"/yard/spd/spdFixedMakes/{makeId}","serviceMethod":"GET","checked":false,"key":"4-8-0-4-1"}],"checked":false,"key":"4-8-0-4-0","id":"P0138"},{"opId":"P0139","opName":"定数打包管理撤回","opSort":"P0139","elementClass":"acl_cancelCommit_spdFixedMake","webApis":[],"checked":false,"key":"4-8-0-5-0","id":"P0139"},{"opId":"P0134","opName":"定数打包管理编辑","opSort":"P0134","elementClass":"acl_edit_spdFixedMake,acl_add_spdFixedMakeItem,acl_edit_spdFixedMakeItem","webApis":[{"serviceUrl":"/yard/spd/spdDepotStocks/byDepot/{depotId}","serviceMethod":"GET","checked":false,"key":"4-8-0-6-0"},{"serviceUrl":"/yard/spd/spdDepotStocks/byDepot/{depotId}/count","serviceMethod":"GET","checked":false,"key":"4-8-0-6-1"},{"serviceUrl":"/yard/spd/spdFixedMakeItems","serviceMethod":"POST","checked":false,"key":"4-8-0-6-2"},{"serviceUrl":"/yard/spd/spdFixedMakeItems/makeId,{makeId}/count","serviceMethod":"GET","checked":false,"key":"4-8-0-6-3"},{"serviceUrl":"/yard/spd/spdFixedMakeItems/makeId,{makeId}","serviceMethod":"GET","checked":false,"key":"4-8-0-6-4"},{"serviceUrl":"/yard/spd/spdFixedMakes","serviceMethod":"GET","checked":false,"key":"4-8-0-6-5"},{"serviceUrl":"/yard/spd/ydsGoods/ids,{ids}","serviceMethod":"GET","checked":false,"key":"4-8-0-6-6"},{"serviceUrl":"/yard/spd/ydsGoodsLots/ids,{ids}","serviceMethod":"GET","checked":false,"key":"4-8-0-6-7"},{"serviceUrl":"/yard/spd/spdFixeds/ids,{ids}","serviceMethod":"GET","checked":false,"key":"4-8-0-6-8"},{"serviceUrl":"/yard/spd/ydsGoods/ids,{ids}","serviceMethod":"GET","checked":false,"key":"4-8-0-6-9"},{"serviceUrl":"/yard/pcs/depotShelfs/ids,{ids}","serviceMethod":"GET","checked":false,"key":"4-8-0-6-10"},{"serviceUrl":"/yard/spd/spdFixedMakes","serviceMethod":"PUT","checked":false,"key":"4-8-0-6-11"},{"serviceUrl":"/yard/spd/spdFixedMakeItems","serviceMethod":"PUT","checked":false,"key":"4-8-0-6-12"},{"serviceUrl":"/yard/spd/spdFixedMakeItems/{makeItemId}","serviceMethod":"DELETE","checked":false,"key":"4-8-0-6-13"},{"serviceUrl":"/yard/pcs/pcsDepots/{depotId}","serviceMethod":"GET","checked":false,"key":"4-8-0-6-14"},{"serviceUrl":"/yard/spd/spdGoodsMakeFixedSelViews/byStockQty/{depotId}","serviceMethod":"GET","checked":false,"key":"4-8-0-6-15"},{"serviceUrl":"/yard/spd/spdGoodsMakeFixedSelViews/byStockQty/{depotId}/count","serviceMethod":"GET","checked":false,"key":"4-8-0-6-16"}],"checked":false,"key":"4-8-0-6-0","id":"P0134"},{"opId":"P0653","opName":"定数打包管理打印","opSort":"P0653","elementClass":"acl_export_spdFixedMakeItem","webApis":[{"serviceUrl":"/yard/spd/spd/spdFixedMakeItems/makeId,{makeId}/pdf","serviceMethod":"GET","checked":false,"key":"4-8-0-7-0"}],"checked":false,"key":"4-8-0-7-0","id":"P0653"}],"checked":false,"key":"4-8-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"4-8-0-0-0"}],"topMenu":true,"open":false,"checked":false,"key":"4-0-0-0-0"},{"systemName":"收货系统","menuId":"10006","menuCode":"10006","menuParentId":"-1","icon":"fa fa-bed","menuSort":6,"name":"科室库存管理","level":1,"anchor":null,"functions":null,"children":[{"systemName":"收货系统","menuId":"10006-001","menuCode":"10006-001","menuParentId":"10006","icon":null,"menuSort":1,"name":"科室收货确认","level":2,"anchor":"#spd/spdReceiveAbteilungs","functions":[{"functionId":"F0020","functionName":"科室收货确认","operations":[{"opId":"P0116","opName":"科室收货确认查看","opSort":"P0116","elementClass":"acl_view_spdReceiveAbteilung","webApis":[{"serviceUrl":"/yard/spd/spdTasks/{taskId}/checkState/reviewed","serviceMethod":"PUT","checked":true,"key":"5-0-0-0-0"},{"serviceUrl":"/yard/spd/spdSellerSends/ids,{ids}","serviceMethod":"GET","checked":false,"key":"5-0-0-0-1"},{"serviceUrl":"/yard/spd/spdReceiveItems/receiveCode,{receiveCode}","serviceMethod":"GET","checked":false,"key":"5-0-0-0-2"},{"serviceUrl":"/yard/spd/spdReceives/byAbteilungCode/code,{code}","serviceMethod":"GET","checked":false,"key":"5-0-0-0-3"},{"serviceUrl":"/yard/spd/ydsGoods/ids,{ids}","serviceMethod":"GET","checked":false,"key":"5-0-0-0-4"},{"serviceUrl":"/yard/spd/spdReceives/byAbteilungChecked","serviceMethod":"GET","checked":false,"key":"5-0-0-0-5"},{"serviceUrl":"/yard/spd/spdReceives/byAbteilungChecked/count","serviceMethod":"GET","checked":false,"key":"5-0-0-0-6"}],"checked":true,"key":"5-0-0-0-0","id":"P0116"},{"opId":"P0117","opName":"科室收货确认保存","opSort":"P0117","elementClass":"acl_update_spdReceiveAbteilung","webApis":[{"serviceUrl":"/yard/spd/spdReceives/{receiveId}","serviceMethod":"GET","checked":false,"key":"5-0-0-1-0"},{"serviceUrl":"/yard/spd/spdReceiveItems/{receiveItemId}","serviceMethod":"PUT","checked":false,"key":"5-0-0-1-1"},{"serviceUrl":"/yard/spd/spdSellerSends/ids,{ids}","serviceMethod":"GET","checked":false,"key":"5-0-0-1-2"},{"serviceUrl":"/yard/spd/spdReceiveItems/receiveCode,{receiveCode}","serviceMethod":"GET","checked":false,"key":"5-0-0-1-3"},{"serviceUrl":"/yard/spd/ydsGoods/ids,{ids}","serviceMethod":"GET","checked":false,"key":"5-0-0-1-4"},{"serviceUrl":"/yard/spd/spdReceives/byAbteilungChecked","serviceMethod":"GET","checked":false,"key":"5-0-0-1-5"},{"serviceUrl":"/yard/spd/spdReceives/byAbteilungChecked/count","serviceMethod":"GET","checked":false,"key":"5-0-0-1-6"},{"serviceUrl":"/yard/spd/spdReceiveItems/{receiveItemId}","serviceMethod":"GET","checked":false,"key":"5-0-0-1-7"}],"checked":true,"key":"5-0-0-1-0","id":"P0117"},{"opId":"P0114","opName":"科室收货确认确认收货","opSort":"P0114","elementClass":"acl_confirm_spdReceiveAbteilung","webApis":[{"serviceUrl":"/yard/spd/spdSellerSends/ids,{ids}","serviceMethod":"GET","checked":false,"key":"5-0-0-2-0"},{"serviceUrl":"/yard/spd/spdReceives/{receiveId}/checkState/reviewed","serviceMethod":"PUT","checked":false,"key":"5-0-0-2-1"},{"serviceUrl":"/yard/spd/spdReceiveItems/receiveCode,{receiveCode}","serviceMethod":"GET","checked":false,"key":"5-0-0-2-2"},{"serviceUrl":"/yard/spd/ydsGoods/ids,{ids}","serviceMethod":"GET","checked":false,"key":"5-0-0-2-3"},{"serviceUrl":"/yard/spd/spdReceives/{receiveId}/checkState/reviewed","serviceMethod":"PUT","checked":false,"key":"5-0-0-2-4"},{"serviceUrl":"/yard/spd/spdReceives/byAbteilungChecked/count","serviceMethod":"GET","checked":false,"key":"5-0-0-2-5"},{"serviceUrl":"/yard/spd/spdReceives/byAbteilungChecked","serviceMethod":"GET","checked":false,"key":"5-0-0-2-6"}],"checked":true,"key":"5-0-0-2-0","id":"P0114"},{"opId":"P0656","opName":"科室收货确认收货入库","opSort":"P0656","elementClass":"acl_inStorage_spdReceiveAbteilung","webApis":[{"serviceUrl":"/yard/spd/spdReceives/{receiveId}/checkState/byQuick/reviewed","serviceMethod":"PUT","checked":false,"key":"5-0-0-3-0"}],"checked":true,"key":"5-0-0-3-0","id":"P0656"}],"checked":true,"key":"5-0-0-0-0"}],"children":[],"topMenu":false,"checked":true,"key":"5-0-0-0-0"},{"systemName":"收货系统","menuId":"10006-002","menuCode":"10006-002","menuParentId":"10006","icon":null,"menuSort":2,"name":"科室收货记录","level":2,"anchor":"#spd/spdReceiveAbteilungHiss","functions":[{"functionId":"F0043","functionName":"科室收货记录","operations":[{"opId":"P0315","opName":"科室收货确认打印","opSort":"P0315","elementClass":"acl_export_Receive","webApis":[],"checked":true,"key":"5-1-0-0-0","id":"P0315"},{"opId":"P0316","opName":"科室收货记录同步","opSort":"P0316","elementClass":"acl_syn_ReceiveToHis","webApis":[],"checked":true,"key":"5-1-0-1-0","id":"P0316"},{"opId":"P0115","opName":"科室收货记录查看","opSort":"P0115","elementClass":"acl_view_spdReceiveAbteilungs,acl_view_spdReceiveItemAbteilung","webApis":[{"serviceUrl":"/yard/spd/spdReceiveItems/receiveId,{receiveId}","serviceMethod":"GET","checked":false,"key":"5-1-0-2-0"},{"serviceUrl":"/yard/spd/spdReceiveItems/receiveId,{receiveId}","serviceMethod":"GET","checked":false,"key":"5-1-0-2-1"},{"serviceUrl":"/yard/spd/spdReceives/byAbteilungHis/count","serviceMethod":"GET","checked":false,"key":"5-1-0-2-2"},{"serviceUrl":"/yard/spd/spdReceives/byAbteilungHis","serviceMethod":"GET","checked":false,"key":"5-1-0-2-3"},{"serviceUrl":"/yard/spd/spdSellerSends/ids,{ids}","serviceMethod":"GET","checked":false,"key":"5-1-0-2-4"},{"serviceUrl":"/yard/spd/ydsGoods/ids,{ids}","serviceMethod":"GET","checked":false,"key":"5-1-0-2-5"}],"checked":true,"key":"5-1-0-2-0","id":"P0115"}],"checked":true,"key":"5-1-0-0-0"}],"children":[],"topMenu":false,"checked":true,"key":"5-1-0-0-0"},{"systemName":"收货系统","menuId":"10006-003","menuCode":"10006-003","menuParentId":"10006","icon":null,"menuSort":3,"name":"科室请领计划","level":2,"anchor":"#spd/spdApplyReqs","functions":[{"functionId":"F0057","functionName":"科室请领计划","operations":[{"opId":"P0458","opName":"科室请领计划查看","opSort":"P0458","elementClass":"acl_view_spdApplyReq","webApis":[{"serviceUrl":"/yard/spd/spdApplyReqs/count","serviceMethod":"GET","checked":false,"key":"5-2-0-0-0"},{"serviceUrl":"/yard/spd/spdApplyReqs","serviceMethod":"GET","checked":false,"key":"5-2-0-0-1"},{"serviceUrl":"/yard/spd/spdDepotCards/ids,{ids}","serviceMethod":"GET","checked":false,"key":"5-2-0-0-2"},{"serviceUrl":"/yard/spd/ydsGoodsByStockSelectViews/count","serviceMethod":"GET","checked":false,"key":"5-2-0-0-3"},{"serviceUrl":"/yard/spd/ydsGoodsByStockSelectViews","serviceMethod":"GET","checked":false,"key":"5-2-0-0-4"},{"serviceUrl":"/yard/spd/spdApplyReqs/byManual/count","serviceMethod":"GET","checked":false,"key":"5-2-0-0-5"},{"serviceUrl":"/yard/spd/spdApplyReqs/byManual","serviceMethod":"GET","checked":false,"key":"5-2-0-0-6"}],"checked":true,"key":"5-2-0-0-0","id":"P0458"},{"opId":"P0506","opName":"科室请领计划删除","opSort":"P0506","elementClass":"acl_batchDelete_spdApplyReqRep","webApis":[{"serviceUrl":"/yard/spd/spdApplyReqs/{applyReqId}","serviceMethod":"DELETE","checked":false,"key":"5-2-0-1-0"}],"checked":true,"key":"5-2-0-1-0","id":"P0506"},{"opId":"P0505","opName":"科室请领计划保存","opSort":"P0505","elementClass":"acl_update_spdApplyReq","webApis":[{"serviceUrl":"/yard/spd/spdApplyReqs/{applyReqId}","serviceMethod":"PUT","checked":false,"key":"5-2-0-2-0"}],"checked":true,"key":"5-2-0-2-0","id":"P0505"},{"opId":"P0504","opName":"科室请领计划增加","opSort":"P0504","elementClass":"acl_add_spdApplyReq","webApis":[{"serviceUrl":"/yard/spd/spdApplyReqAbteilungViews","serviceMethod":"GET","checked":false,"key":"5-2-0-3-0"},{"serviceUrl":"/yard/spd/spdApplyReqAbteilungViews/count","serviceMethod":"GET","checked":false,"key":"5-2-0-3-1"},{"serviceUrl":"/yard/spd/spdApplyReqAbteilungViews/ids,{ids}","serviceMethod":"GET","checked":false,"key":"5-2-0-3-2"},{"serviceUrl":"/yard/spd/spdApplyReqs","serviceMethod":"POST","checked":false,"key":"5-2-0-3-3"},{"serviceUrl":"/yard/spd/spdApplyReqs/{applyReqId}","serviceMethod":"DELETE","checked":false,"key":"5-2-0-3-4"}],"checked":true,"key":"5-2-0-3-0","id":"P0504"},{"opId":"P0507","opName":"科室请领计划提交","opSort":"P0507","elementClass":"acl_batchCommited_spdApplyReq","webApis":[{"serviceUrl":"/yard/spd/spdApplyReqs/{applyReqId}/checkState/commited","serviceMethod":"PUT","checked":false,"key":"5-2-0-4-0"}],"checked":true,"key":"5-2-0-4-0","id":"P0507"}],"checked":true,"key":"5-2-0-0-0"}],"children":[],"topMenu":false,"checked":true,"key":"5-2-0-0-0"},{"systemName":"收货系统","menuId":"10006-004","menuCode":"10006-004","menuParentId":"10006","icon":null,"menuSort":4,"name":"申领入库确认","level":2,"anchor":"#spd/spdApplyChecks","functions":[{"functionId":"F0024","functionName":"申领入库确认","operations":[{"opId":"P0154","opName":"申领入库确认查看","opSort":"P0154","elementClass":"acl_view_spdApplyCheck","webApis":[{"serviceUrl":"/yard/spd/spdApplyItems/applyId,{applyId}","serviceMethod":"GET","checked":false,"key":"5-3-0-0-0"},{"serviceUrl":"/yard/pcs/pcsDepots","serviceMethod":"GET","checked":false,"key":"5-3-0-0-1"},{"serviceUrl":"/yard/spd/spdApplyChecks/byCommited/count","serviceMethod":"GET","checked":false,"key":"5-3-0-0-2"},{"serviceUrl":"/yard/spd/spdApplyChecks/byCommited","serviceMethod":"GET","checked":false,"key":"5-3-0-0-3"},{"serviceUrl":"/yard/spd/spdApplyChecks/count","serviceMethod":"GET","checked":false,"key":"5-3-0-0-4"},{"serviceUrl":"/yard/spd/spdApplyChecks","serviceMethod":"GET","checked":false,"key":"5-3-0-0-5"}],"checked":true,"key":"5-3-0-0-0","id":"P0154"},{"opId":"P0155","opName":"申领入库确认编辑","opSort":"P0155","elementClass":null,"webApis":[{"serviceUrl":"/yard/spd/spdApplyChecks/byCommited/count","serviceMethod":"GET","checked":false,"key":"5-3-0-1-0"},{"serviceUrl":"/yard/spd/spdApplyChecks/byCommited","serviceMethod":"GET","checked":false,"key":"5-3-0-1-1"}],"checked":true,"key":"5-3-0-1-0","id":"P0155"},{"opId":"P0159","opName":"申领入库确认审核","opSort":"P0159","elementClass":"acl_confirm_spdApplyCheck","webApis":[{"serviceUrl":"/yard/spd/spdApplyChecks/{applyId}/checkState/reviewed","serviceMethod":"PUT","checked":false,"key":"5-3-0-2-0"}],"checked":true,"key":"5-3-0-2-0","id":"P0159"},{"opId":"P0510","opName":"申领入库确认打印","opSort":"P0510","elementClass":"acl_print_spdApplyCheck","webApis":[{"serviceUrl":"/yard/spd/spdApplyItems/applyId,{applyId}/pdf","serviceMethod":"GET","checked":false,"key":"5-3-0-3-0"}],"checked":true,"key":"5-3-0-3-0","id":"P0510"}],"checked":true,"key":"5-3-0-0-0"}],"children":[],"topMenu":false,"checked":true,"key":"5-3-0-0-0"},{"systemName":"收货系统","menuId":"10006-005","menuCode":"10006-005","menuParentId":"10006","icon":null,"menuSort":5,"name":"科室申领记录","level":2,"anchor":"#spd/spdApplyAbteilungHiss","functions":[{"functionId":"F0062","functionName":"科室申领记录","operations":[{"opId":"P0477","opName":"科室申领记录查看","opSort":"P0477","elementClass":null,"webApis":[{"serviceUrl":"/yard/spd/spdApplyItems/applyId,{applyId}","serviceMethod":"GET","checked":false,"key":"5-4-0-0-0"},{"serviceUrl":"/yard/pcs/pcsDepots","serviceMethod":"GET","checked":false,"key":"5-4-0-0-1"},{"serviceUrl":"/yard/spd/spdApplyChecks/byAbteilungHis","serviceMethod":"GET","checked":false,"key":"5-4-0-0-2"},{"serviceUrl":"/yard/spd/spdApplyChecks/byAbteilungHis/count","serviceMethod":"GET","checked":false,"key":"5-4-0-0-3"}],"checked":true,"key":"5-4-0-0-0","id":"P0477"},{"opId":"P0512","opName":"科室申领记录打印","opSort":"P0512","elementClass":"acl_export_spdApplyItem","webApis":[{"serviceUrl":"/yard/spd/spdApplyItems/applyId,{applyId}/pdf","serviceMethod":"GET","checked":false,"key":"5-4-0-1-0"}],"checked":true,"key":"5-4-0-1-0","id":"P0512"}],"checked":true,"key":"5-4-0-0-0"}],"children":[],"topMenu":false,"checked":true,"key":"5-4-0-0-0"}],"topMenu":true,"open":true,"checked":true,"key":"5-0-0-0-0"},{"systemName":"收货系统","menuId":"10007","menuCode":"10007","menuParentId":"-1","icon":"fa-cube","menuSort":7,"name":"仓库业务管理","level":1,"anchor":null,"functions":null,"children":[{"systemName":"收货系统","menuId":"10007-001","menuCode":"10007-001","menuParentId":"10007","icon":null,"menuSort":1,"name":"仓库帐页查询","level":2,"anchor":"#spd/spdDepotCardAbteilungs","functions":[{"functionId":"F0051","functionName":"仓库帐页查询","operations":[{"opId":"P0408","opName":"仓库帐页查询查看","opSort":"P0408","elementClass":"acl_view_spdDepotCardAbteilung","webApis":[{"serviceUrl":"/yard/spd/SpdDepotCardByStockTotalViews/ids,{ids}","serviceMethod":"GET","checked":false,"key":"6-0-0-0-0"},{"serviceUrl":"/yard/spd/spdDepotCards/byAbteilung/count","serviceMethod":"GET","checked":false,"key":"6-0-0-0-1"},{"serviceUrl":"/yard/spd/spdDepotCards/byAbteilung","serviceMethod":"GET","checked":false,"key":"6-0-0-0-2"}],"checked":false,"key":"6-0-0-0-0","id":"P0408"}],"checked":false,"key":"6-0-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"6-0-0-0-0"},{"systemName":"收货系统","menuId":"10007-002","menuCode":"10007-002","menuParentId":"10007","icon":null,"menuSort":2,"name":"仓库库存查询","level":2,"anchor":"#spd/spdMyDepotStocks","functions":[{"functionId":"F0030","functionName":"仓库库存查询","operations":[{"opId":"P0196","opName":"仓库库存查询查看","opSort":"P0196","elementClass":"acl_view_spdMyDepotStocks","webApis":[{"serviceUrl":"/yard/spd/spdDepotStocks/byMyStock/count","serviceMethod":"GEt","checked":false,"key":"6-1-0-0-0"},{"serviceUrl":"/yard/spd/spdDepotStocks/byMyStock","serviceMethod":"GET","checked":false,"key":"6-1-0-0-1"},{"serviceUrl":"/yard/pcs/depotShelfs/ids,{ids}","serviceMethod":"GET","checked":false,"key":"6-1-0-0-2"}],"checked":false,"key":"6-1-0-0-0","id":"P0196"}],"checked":false,"key":"6-1-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"6-1-0-0-0"},{"systemName":"收货系统","menuId":"10007-003","menuCode":"10007-003","menuParentId":"10007","icon":null,"menuSort":3,"name":"仓库退货管理","level":2,"anchor":"#spd/spdApplyRefunds","functions":[{"functionId":"F0071","functionName":"仓库退货管理","operations":[{"opId":"P0632","opName":"仓库退货管理查看","opSort":"P0632","elementClass":"acl_view_spdApplyRefund,acl_view_spdApplyRefundItem","webApis":[{"serviceUrl":"/yard/spd/spdApplys/byRefund/count","serviceMethod":"GET","checked":false,"key":"6-2-0-0-0"},{"serviceUrl":"/yard/spd/spdApplys/byRefund","serviceMethod":"GET","checked":false,"key":"6-2-0-0-1"},{"serviceUrl":"/yard/spd/spdApplyItems/applyId,{applyId}/count","serviceMethod":"GET","checked":false,"key":"6-2-0-0-2"},{"serviceUrl":"/yard/spd/spdApplyItems/applyId,{applyId}","serviceMethod":"GET","checked":false,"key":"6-2-0-0-3"},{"serviceUrl":"/yard/spd/spdApplyItems/{applyItemId}","serviceMethod":"GET","checked":false,"key":"6-2-0-0-4"},{"serviceUrl":"/yard/spd/spdApplys/{applyId}","serviceMethod":"GET","checked":false,"key":"6-2-0-0-5"}],"checked":false,"key":"6-2-0-0-0","id":"P0632"},{"opId":"P0633","opName":"仓库退货管理编辑","opSort":"P0633","elementClass":"acl_edit_spdApplyRefund,acl_edit_spdApplyRefundItem,acl_view_spdApplyRefundItem","webApis":[{"serviceUrl":"/yard/spd/spdApplys/byRefund/count","serviceMethod":"GET","checked":false,"key":"6-2-0-1-0"},{"serviceUrl":"/yard/spd/spdApplys/byRefund","serviceMethod":"GET","checked":false,"key":"6-2-0-1-1"},{"serviceUrl":"/yard/spd/spdApplyItems/applyId,{applyId}/count","serviceMethod":"GET","checked":false,"key":"6-2-0-1-2"},{"serviceUrl":"/yard/spd/spdApplyItems/applyId,{applyId}","serviceMethod":"GET","checked":false,"key":"6-2-0-1-3"},{"serviceUrl":"/yard/spd/spdApplyItems/{applyItemId}","serviceMethod":"GET","checked":false,"key":"6-2-0-1-4"},{"serviceUrl":"/yard/spd/spdApplyItems/{applyItemId}","serviceMethod":"PUT","checked":false,"key":"6-2-0-1-5"},{"serviceUrl":"/yard/spd/spdApplys/{applyId}","serviceMethod":"PUT","checked":false,"key":"6-2-0-1-6"},{"serviceUrl":"/yard/spd/spdApplyItems","serviceMethod":"POST","checked":false,"key":"6-2-0-1-7"},{"serviceUrl":"/yard/spd/spdApplyItems/{applyItemId}","serviceMethod":"DELETE","checked":false,"key":"6-2-0-1-8"}],"checked":false,"key":"6-2-0-1-0","id":"P0633"},{"opId":"P0634","opName":"仓库退货管理审核","opSort":"P0634","elementClass":"acl_reviewEntity_spdApplyRefund,acl_view_spdApplyRefund,acl_view_spdApplyRefundItem","webApis":[{"serviceUrl":"/yard/spd/spdApplys/byRefund/count","serviceMethod":"GET","checked":false,"key":"6-2-0-2-0"},{"serviceUrl":"/yard/spd/spdApplys/byRefund","serviceMethod":"GET","checked":false,"key":"6-2-0-2-1"},{"serviceUrl":"/yard/spd/spdApplys/{applyId}/checkState/reviewed","serviceMethod":"PUT","checked":false,"key":"6-2-0-2-2"}],"checked":false,"key":"6-2-0-2-0","id":"P0634"},{"opId":"P0635","opName":"仓库退货管理增加","opSort":"P0635","elementClass":"acl_add_spdApplyRefund,acl_add_spdApplyRefundItem,acl_view_spdApplyRefundItem,acl_edit_spdApplyRefundItem","webApis":[{"serviceUrl":"/yard/spd/spdApplys","serviceMethod":"POST","checked":false,"key":"6-2-0-3-0"},{"serviceUrl":"/yard/spd/spdApplyItems","serviceMethod":"POST","checked":false,"key":"6-2-0-3-1"},{"serviceUrl":"/yard/spd/spdApplyItems/{applyItemId}","serviceMethod":"DELETE","checked":false,"key":"6-2-0-3-2"},{"serviceUrl":"/yard/spd/spdApplyItems/{applyItemId}","serviceMethod":"PUT","checked":false,"key":"6-2-0-3-3"},{"serviceUrl":"/yard/spd/spdGoodsLotStockViews/byAllot/{applyId}","serviceMethod":"GET","checked":false,"key":"6-2-0-3-4"},{"serviceUrl":"/yard/spd/spdGoodsLotStockViews/byAllot/{applyId}/count","serviceMethod":"GET","checked":false,"key":"6-2-0-3-5"},{"serviceUrl":"/yard/pcs/pcsDepots/byUse","serviceMethod":"GET","checked":false,"key":"6-2-0-3-6"},{"serviceUrl":"/yard/spd/spdDepotRoutes/byUse","serviceMethod":"GET","checked":false,"key":"6-2-0-3-7"},{"serviceUrl":"/yard/spd/spdApplyItems/applyId,{applyId}","serviceMethod":"GET","checked":false,"key":"6-2-0-3-8"},{"serviceUrl":"/yard/spd/spdApplyItems/applyId,{applyId}/count","serviceMethod":"GET","checked":false,"key":"6-2-0-3-9"},{"serviceUrl":"/yard/spd/ydsGoodsLots/ids,{ids}","serviceMethod":"GET","checked":false,"key":"6-2-0-3-10"},{"serviceUrl":"/yard/spd/ydsGoods/ids,{ids}","serviceMethod":"GET","checked":false,"key":"6-2-0-3-11"},{"serviceUrl":" /yard/spd/spdGoodsLotStockViews/{id}","serviceMethod":"GET","checked":false,"key":"6-2-0-3-12"}],"checked":false,"key":"6-2-0-3-0","id":"P0635"},{"opId":"P0636","opName":"仓库退货管理删除","opSort":"P0636","elementClass":"acl_delete_spdApplyRefund","webApis":[{"serviceUrl":"/yard/spd/spdApplys/{applyId}","serviceMethod":"DELETE","checked":false,"key":"6-2-0-4-0"},{"serviceUrl":"/yard/spd/spdApplyItems/{applyItemId}","serviceMethod":"DELETE","checked":false,"key":"6-2-0-4-1"}],"checked":false,"key":"6-2-0-4-0","id":"P0636"},{"opId":"P0637","opName":"仓库退货管理批量审核","opSort":"P0637","elementClass":"acl_reviewEntities_spdApplyRefund","webApis":[{"serviceUrl":"/yard/spd/spdApplys/{applyId}/checkState/reviewed","serviceMethod":"PUT","checked":false,"key":"6-2-0-5-0"}],"checked":false,"key":"6-2-0-5-0","id":"P0637"}],"checked":false,"key":"6-2-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"6-2-0-0-0"},{"systemName":"收货系统","menuId":"10007-004","menuCode":"10007-004","menuParentId":"10007","icon":null,"menuSort":4,"name":"退货入库确认","level":2,"anchor":"#spd/spdApplyRefundInStockNotarizes","functions":[{"functionId":"F0072","functionName":"退货入库确认","operations":[{"opId":"P0638","opName":"退货入库确认确认","opSort":"P0638","elementClass":"acl_confirm_spdApplyRefundInStock","webApis":[{"serviceUrl":"/yard/spd/spdApplyChecks/{applyId}/checkState/reviewed","serviceMethod":"PUT","checked":false,"key":"6-3-0-0-0"}],"checked":false,"key":"6-3-0-0-0","id":"P0638"},{"opId":"P0639","opName":"退货入库确认查看","opSort":"P0639","elementClass":"acl_view_spdApplyRefundInStock","webApis":[{"serviceUrl":"/yard/spd/spdApplyChecks/byRefund","serviceMethod":"GET","checked":false,"key":"6-3-0-1-0"},{"serviceUrl":"/yard/spd/spdApplyChecks/byRefund/count","serviceMethod":"GET","checked":false,"key":"6-3-0-1-1"}],"checked":false,"key":"6-3-0-1-0","id":"P0639"}],"checked":false,"key":"6-3-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"6-3-0-0-0"},{"systemName":"收货系统","menuId":"10007-005","menuCode":"10007-005","menuParentId":"10007","icon":null,"menuSort":5,"name":"仓库退货记录","level":2,"anchor":"#spd/spdApplyRefundHiss","functions":[{"functionId":"F0073","functionName":"仓库退货记录","operations":[{"opId":"P0640","opName":"仓库退货记录查看","opSort":"P0640","elementClass":"acl_view_spdApplyRefundInStockNotarize","webApis":[{"serviceUrl":"/yard/spd/spdApplyChecks/byRefundHis","serviceMethod":"GET","checked":false,"key":"6-4-0-0-0"},{"serviceUrl":"/yard/spd/spdApplyChecks/byRefundHis/count","serviceMethod":"GET","checked":false,"key":"6-4-0-0-1"},{"serviceUrl":"/yard/spd/spdApplyItems/applyId,{applyId}","serviceMethod":"GET","checked":false,"key":"6-4-0-0-2"},{"serviceUrl":"/yard/spd/spdApplyItems/applyId,{applyId}/count","serviceMethod":"GET","checked":false,"key":"6-4-0-0-3"},{"serviceUrl":"/yard/spd/spdGoodsLotStockViews/{id}","serviceMethod":"GET","checked":false,"key":"6-4-0-0-4"}],"checked":false,"key":"6-4-0-0-0","id":"P0640"}],"checked":false,"key":"6-4-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"6-4-0-0-0"},{"systemName":"收货系统","menuId":"10007-006","menuCode":"10007-006","menuParentId":"10007","icon":null,"menuSort":6,"name":"仓库调拨管理","level":2,"anchor":"#spd/spdApplyAllots","functions":[{"functionId":"F0037","functionName":"仓库调拨管理","operations":[{"opId":"P0096","opName":"仓库调拨管理查看","opSort":"P0096","elementClass":"acl_view_spdApplyAllot,acl_view_spdApplyAllotItem","webApis":[{"serviceUrl":"/yard/spd/spdApplys/byAllot","serviceMethod":"GET","checked":false,"key":"6-5-0-0-0"},{"serviceUrl":"/yard/spd/spdApplys/byAllot/count","serviceMethod":"GET","checked":false,"key":"6-5-0-0-1"},{"serviceUrl":"/yard/pcs/pcsDepots/byUse","serviceMethod":"GET","checked":false,"key":"6-5-0-0-2"},{"serviceUrl":"/yard/spd/spdDepotRoutes/byUse","serviceMethod":"GET","checked":false,"key":"6-5-0-0-3"},{"serviceUrl":"/yard/spd/spdApplyItems/applyId,{applyId}","serviceMethod":"GET","checked":false,"key":"6-5-0-0-4"},{"serviceUrl":"/yard/spd/spdApplyItems/applyId,{applyId}/count","serviceMethod":"GET","checked":false,"key":"6-5-0-0-5"},{"serviceUrl":"/yard/spd/ydsGoodsLots/ids,{ids}","serviceMethod":"GET","checked":false,"key":"6-5-0-0-6"},{"serviceUrl":"/yard/spd/ydsGoods/ids,{ids}","serviceMethod":"GET","checked":false,"key":"6-5-0-0-7"},{"serviceUrl":" /yard/spd/spdGoodsLotStockViews/{id}","serviceMethod":"GET","checked":false,"key":"6-5-0-0-8"}],"checked":false,"key":"6-5-0-0-0","id":"P0096"},{"opId":"P0484","opName":"仓库调拨管理审核","opSort":"P0484","elementClass":"acl_reviewEntity_spdApplyAllot","webApis":[{"serviceUrl":" /yard/spd/spdApplys/{applyId}/checkState/reviewed","serviceMethod":"PUT","checked":false,"key":"6-5-0-1-0"},{"serviceUrl":"/yard/spd/spdApplys/{applyId}","serviceMethod":"GET","checked":false,"key":"6-5-0-1-1"}],"checked":false,"key":"6-5-0-1-0","id":"P0484"},{"opId":"P0483","opName":"仓库调拨管理增加","opSort":"P0483","elementClass":"acl_add_spdApplyAllot,acl_add_spdApplyAllotItem,acl_view_spdApplyAllotItem","webApis":[{"serviceUrl":"/yard/spd/spdApplys","serviceMethod":"POST","checked":false,"key":"6-5-0-2-0"},{"serviceUrl":"/yard/spd/spdApplyItems","serviceMethod":"POST","checked":false,"key":"6-5-0-2-1"},{"serviceUrl":"/yard/spd/spdApplys/byAllot/count","serviceMethod":"GET","checked":false,"key":"6-5-0-2-2"},{"serviceUrl":"/yard/spd/spdApplyItems/{applyItemId}","serviceMethod":"DELETE","checked":false,"key":"6-5-0-2-3"},{"serviceUrl":"/yard/spd/spdApplyItems/{applyItemId}","serviceMethod":"PUT","checked":false,"key":"6-5-0-2-4"},{"serviceUrl":"/yard/spd/spdGoodsLotStockViews/byAllot/{applyId}","serviceMethod":"GET","checked":false,"key":"6-5-0-2-5"},{"serviceUrl":"/yard/spd/spdGoodsLotStockViews/byAllot/{applyId}/count","serviceMethod":"GET","checked":false,"key":"6-5-0-2-6"},{"serviceUrl":"/yard/pcs/pcsDepots/byUse","serviceMethod":"GET","checked":false,"key":"6-5-0-2-7"},{"serviceUrl":"/yard/spd/spdDepotRoutes/byUse","serviceMethod":"GET","checked":false,"key":"6-5-0-2-8"},{"serviceUrl":"/yard/spd/spdApplyItems/applyId,{applyId}","serviceMethod":"GET","checked":false,"key":"6-5-0-2-9"},{"serviceUrl":"/yard/spd/spdApplyItems/applyId,{applyId}/count","serviceMethod":"GET","checked":false,"key":"6-5-0-2-10"},{"serviceUrl":"/yard/spd/ydsGoodsLots/ids,{ids}","serviceMethod":"GET","checked":false,"key":"6-5-0-2-11"},{"serviceUrl":"/yard/spd/ydsGoods/ids,{ids}","serviceMethod":"GET","checked":false,"key":"6-5-0-2-12"},{"serviceUrl":" /yard/spd/spdGoodsLotStockViews/{id}","serviceMethod":"GET","checked":false,"key":"6-5-0-2-13"}],"checked":false,"key":"6-5-0-2-0","id":"P0483"},{"opId":"P0485","opName":"仓库调拨管理批量审核","opSort":"P0485","elementClass":"acl_reviewEntities_spdApplyAllot","webApis":[{"serviceUrl":" /yard/spd/spdApplys/{applyId}/checkState/reviewed","serviceMethod":"PUT","checked":false,"key":"6-5-0-3-0"},{"serviceUrl":"/yard/spd/spdApplys/{applyId}","serviceMethod":"GET","checked":false,"key":"6-5-0-3-1"}],"checked":false,"key":"6-5-0-3-0","id":"P0485"},{"opId":"P0486","opName":"仓库调拨管理删除","opSort":"P0486","elementClass":"acl_delete_spdApplyAllot,acl_delete_spdApplyAllotItem","webApis":[{"serviceUrl":"/yard/spd/spdApplys/{applyId}","serviceMethod":"DELETE","checked":false,"key":"6-5-0-4-0"},{"serviceUrl":"/yard/spd/spdApplyItems/{applyItemId}","serviceMethod":"DELETE","checked":false,"key":"6-5-0-4-1"}],"checked":false,"key":"6-5-0-4-0","id":"P0486"},{"opId":"P0487","opName":"仓库调拨管理批量提交","opSort":"P0487","elementClass":"acl_commitEntities_spdApplyAllot,acl_view_spdApplyAllot,acl_view_spdApplyAllotItem","webApis":[],"checked":false,"key":"6-5-0-5-0","id":"P0487"},{"opId":"P0488","opName":"仓库调拨管理编辑","opSort":"P0488","elementClass":"acl_edit_spdApplyAllot,acl_add_spdApplyAllotItem,acl_edit_spdApplyAllotItem,acl_view_spdApplyAllotItem,,acl_delete_spdApplyAllotItem","webApis":[{"serviceUrl":"/yard/spd/spdApplys/{applyId}","serviceMethod":"PUT","checked":false,"key":"6-5-0-6-0"},{"serviceUrl":"/yard/spd/spdApplyItems","serviceMethod":"POST","checked":false,"key":"6-5-0-6-1"},{"serviceUrl":"/yard/spd/spdApplys/byAllot/count","serviceMethod":"GET","checked":false,"key":"6-5-0-6-2"},{"serviceUrl":"/yard/spd/spdApplyItems/{applyItemId}","serviceMethod":"DELETE","checked":false,"key":"6-5-0-6-3"},{"serviceUrl":"/yard/spd/spdApplyItems/{applyItemId}","serviceMethod":"PUT","checked":false,"key":"6-5-0-6-4"},{"serviceUrl":"/yard/spd/spdGoodsLotStockViews/byAllot/{applyId}","serviceMethod":"GET","checked":false,"key":"6-5-0-6-5"},{"serviceUrl":"/yard/spd/spdGoodsLotStockViews/byAllot/{applyId}/count","serviceMethod":"GET","checked":false,"key":"6-5-0-6-6"},{"serviceUrl":"/yard/pcs/pcsDepots/byUse","serviceMethod":"GET","checked":false,"key":"6-5-0-6-7"},{"serviceUrl":"/yard/spd/spdDepotRoutes/byUse","serviceMethod":"GET","checked":false,"key":"6-5-0-6-8"},{"serviceUrl":"/yard/spd/spdApplyItems/applyId,{applyId}","serviceMethod":"GET","checked":false,"key":"6-5-0-6-9"},{"serviceUrl":"/yard/spd/spdApplyItems/applyId,{applyId}/count","serviceMethod":"GET","checked":false,"key":"6-5-0-6-10"},{"serviceUrl":"/yard/spd/ydsGoodsLots/ids,{ids}","serviceMethod":"GET","checked":false,"key":"6-5-0-6-11"},{"serviceUrl":"/yard/spd/ydsGoods/ids,{ids}","serviceMethod":"GET","checked":false,"key":"6-5-0-6-12"},{"serviceUrl":" /yard/spd/spdGoodsLotStockViews/{id}","serviceMethod":"GET","checked":false,"key":"6-5-0-6-13"}],"checked":false,"key":"6-5-0-6-0","id":"P0488"},{"opId":"P0015","opName":"His仓库调拨导入","opSort":"P0489","elementClass":"acl_import_ifHisAllot","webApis":[{"serviceUrl":"/yard/spd/ifHisAllot/import","serviceMethod":"GET","checked":false,"key":"6-5-0-7-0"}],"checked":false,"key":"6-5-0-7-0","id":"P0015"}],"checked":false,"key":"6-5-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"6-5-0-0-0"},{"systemName":"收货系统","menuId":"10007-007","menuCode":"10007-007","menuParentId":"10007","icon":null,"menuSort":7,"name":"调拨入库确认","level":2,"anchor":"#spd/spdApplyAllotInStockNotarizes","functions":[{"functionId":"F0046","functionName":"调拨入库确认","operations":[{"opId":"P0112","opName":"调拨入库确认查看","opSort":"P0112","elementClass":"acl_view_spdApplyAllotInStock","webApis":[{"serviceUrl":"/yard/spd/spdTasks","serviceMethod":"GET","checked":false,"key":"6-6-0-0-0"},{"serviceUrl":"/yard/spd/spdTaskItems","serviceMethod":"GET","checked":false,"key":"6-6-0-0-1"},{"serviceUrl":"/yard/spd/ydsEdsGoodsLots/ids,{ids}","serviceMethod":"GET","checked":false,"key":"6-6-0-0-2"},{"serviceUrl":"/yard/spd/spdApplyChecks/byAllot","serviceMethod":"GET","checked":false,"key":"6-6-0-0-3"},{"serviceUrl":"/yard/spd/spdApplyChecks/byAllot/count","serviceMethod":"GET","checked":false,"key":"6-6-0-0-4"}],"checked":false,"key":"6-6-0-0-0","id":"P0112"},{"opId":"P0113","opName":"调拨入库确认确认","opSort":"P0113","elementClass":"acl_confirm_spdApplyAllotInStock","webApis":[{"serviceUrl":"/yard/spd/spdApplyChecks/{applyId}/checkState/reviewed","serviceMethod":"PUT","checked":false,"key":"6-6-0-1-0"}],"checked":false,"key":"6-6-0-1-0","id":"P0113"}],"checked":false,"key":"6-6-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"6-6-0-0-0"},{"systemName":"收货系统","menuId":"10007-008","menuCode":"10007-008","menuParentId":"10007","icon":null,"menuSort":8,"name":"仓库调拨记录","level":2,"anchor":"#spd/spdApplyAllotHiss","functions":[{"functionId":"F0064","functionName":"仓库调拨记录","operations":[{"opId":"P0511","opName":"仓库调拨记录查看","opSort":"P0511","elementClass":"acl_view_spdApplyAllotHis","webApis":[{"serviceUrl":"/yard/spd/spdApplyChecks/byApplyAllotHis","serviceMethod":"GET","checked":false,"key":"6-7-0-0-0"},{"serviceUrl":"/yard/spd/spdApplyChecks/byApplyAllotHis/count","serviceMethod":"GET","checked":false,"key":"6-7-0-0-1"},{"serviceUrl":"/yard/spd/spdApplyItems/applyId,{applyId}","serviceMethod":"GET","checked":false,"key":"6-7-0-0-2"},{"serviceUrl":"/yard/spd/spdApplyItems/applyId,{applyId}/count","serviceMethod":"GET","checked":false,"key":"6-7-0-0-3"},{"serviceUrl":"/yard/spd/spdGoodsLotStockViews/{id}","serviceMethod":"GET","checked":false,"key":"6-7-0-0-4"}],"checked":false,"key":"6-7-0-0-0","id":"P0511"}],"checked":false,"key":"6-7-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"6-7-0-0-0"},{"systemName":"收货系统","menuId":"10007-009","menuCode":"10007-009","menuParentId":"10007","icon":null,"menuSort":9,"name":"使用消耗管理","level":2,"anchor":"#spd/spdUseds","functions":[{"functionId":"F0025","functionName":"使用消耗管理","operations":[{"opId":"P0161","opName":"使用消耗管理查看","opSort":"P0161","elementClass":"acl_view_spdUsed,acl_view_spdUsedItem","webApis":[{"serviceUrl":"/yard/spd/spdUseds","serviceMethod":"GET","checked":false,"key":"6-8-0-0-0"},{"serviceUrl":"/yard/spd/spdUseds/count","serviceMethod":"GET","checked":false,"key":"6-8-0-0-1"},{"serviceUrl":"/yard/spd/spdUsedItems/usedId,{usedId}/count","serviceMethod":"GET","checked":false,"key":"6-8-0-0-2"},{"serviceUrl":"/yard/spd/spdUsedItems/usedId,{usedId}","serviceMethod":"GET","checked":false,"key":"6-8-0-0-3"},{"serviceUrl":"/yard/spd/spdUsedTypes/{usedType}","serviceMethod":"GET","checked":false,"key":"6-8-0-0-4"},{"serviceUrl":"/yard/spd/spdGoodsLotStockViews/byDepot/{depotId}","serviceMethod":"GET","checked":false,"key":"6-8-0-0-5"},{"serviceUrl":"/yard/spd/spdGoodsLotStockViews/byDepot/{depotId}/count","serviceMethod":"GET","checked":false,"key":"6-8-0-0-6"}],"checked":false,"key":"6-8-0-0-0","id":"P0161"},{"opId":"P0162","opName":"使用消耗管理编辑","opSort":"P0162","elementClass":"acl_edit_spdUsed,acl_delete_spdUsedItem,acl_edit_spdUsedItem,acl_view_spdUsedItem,acl_add_spdUsedItem","webApis":[{"serviceUrl":"/yard/spd/spdUsedItems/usedId,{usedId}/count","serviceMethod":"GET","checked":false,"key":"6-8-0-1-0"},{"serviceUrl":"/yard/spd/spdUsedItems/usedId,{usedId}","serviceMethod":"GET","checked":false,"key":"6-8-0-1-1"},{"serviceUrl":"/yard/spd/spdUseds/count","serviceMethod":"GET","checked":false,"key":"6-8-0-1-2"},{"serviceUrl":"/yard/spd/spdUseds","serviceMethod":"GET","checked":false,"key":"6-8-0-1-3"},{"serviceUrl":"/yard/pcs/pcsDepots/{depotId}","serviceMethod":"GET","checked":false,"key":"6-8-0-1-4"},{"serviceUrl":"/yard/spd/spdUseds/{usedId}","serviceMethod":"PUT","checked":false,"key":"6-8-0-1-5"},{"serviceUrl":"/yard/spd/spdUsedItems/{usedItemId}","serviceMethod":"PUT","checked":false,"key":"6-8-0-1-6"},{"serviceUrl":"/yard/spd/spdUsedItems/{usedItemId}","serviceMethod":"DELETE","checked":false,"key":"6-8-0-1-7"},{"serviceUrl":"/yard/spd/spdUsedItems","serviceMethod":"POST","checked":false,"key":"6-8-0-1-8"},{"serviceUrl":"/yard/spd/{usedId}/ifHisUseds","serviceMethod":"GET","checked":false,"key":"6-8-0-1-9"},{"serviceUrl":"/yard/spd/{usedId}/ifHisUseds/count","serviceMethod":"GET","checked":false,"key":"6-8-0-1-10"},{"serviceUrl":"/yard/spd/spdUsedTypes/{usedType}","serviceMethod":"GET","checked":false,"key":"6-8-0-1-11"},{"serviceUrl":"/yard/spd/spdGoodsLotStockViews/byDepot/{depotId}","serviceMethod":"GET","checked":false,"key":"6-8-0-1-12"},{"serviceUrl":"/yard/spd/spdGoodsLotStockViews/byDepot/{depotId}/count","serviceMethod":"GET","checked":false,"key":"6-8-0-1-13"},{"serviceUrl":"/yard/spd/spdGoodsLotStockViews/{id}","serviceMethod":"GET","checked":false,"key":"6-8-0-1-14"}],"checked":false,"key":"6-8-0-1-0","id":"P0162"},{"opId":"P0163","opName":"使用消耗管理增加","opSort":"P0163","elementClass":"acl_add_spdUsed,acl_add_spdUsedItem,acl_view_spdUsedItem,acl_edit_spdUsedItem,acl_delete_spdUsedItem","webApis":[{"serviceUrl":"/yard/pcs/PcsDepts/byUse","serviceMethod":"GET","checked":false,"key":"6-8-0-2-0"},{"serviceUrl":"/yard/pcs/pcsDepots/byUse/count","serviceMethod":"GET","checked":false,"key":"6-8-0-2-1"},{"serviceUrl":"/yard/pcs/pcsDepots/byUse","serviceMethod":"GET","checked":false,"key":"6-8-0-2-2"},{"serviceUrl":"/yard/spd/spdUseds","serviceMethod":"POST","checked":false,"key":"6-8-0-2-3"},{"serviceUrl":"/yard/spd/spdUsedItems","serviceMethod":"POST","checked":false,"key":"6-8-0-2-4"},{"serviceUrl":"/yard/spd/spdUsedItems/{usedItemId}","serviceMethod":"PUT","checked":false,"key":"6-8-0-2-5"},{"serviceUrl":"/yard/spd/spdUsedItems/{usedItemId}","serviceMethod":"DELETE","checked":false,"key":"6-8-0-2-6"},{"serviceUrl":"/yard/pcs/pcsDepots/{depotId}","serviceMethod":"GET","checked":false,"key":"6-8-0-2-7"},{"serviceUrl":"/yard/spd/spdUseds","serviceMethod":"GET","checked":false,"key":"6-8-0-2-8"},{"serviceUrl":"/yard/spd/spdUseds/count","serviceMethod":"GET","checked":false,"key":"6-8-0-2-9"},{"serviceUrl":"/yard/spd/spdUsedItems/usedId,{usedId}/count","serviceMethod":"GET","checked":false,"key":"6-8-0-2-10"},{"serviceUrl":"/yard/spd/spdUsedItems/usedId,{usedId}","serviceMethod":"GET","checked":false,"key":"6-8-0-2-11"},{"serviceUrl":"/yard/spd/spdDepotCards/byUse/count","serviceMethod":"GET","checked":false,"key":"6-8-0-2-12"},{"serviceUrl":"/yard/spd/spdDepotCards/byUse","serviceMethod":"GET","checked":false,"key":"6-8-0-2-13"},{"serviceUrl":"/yard/pcs/depotShelfs/ids,{ids}","serviceMethod":"GET","checked":false,"key":"6-8-0-2-14"},{"serviceUrl":"/yard/spd/ydsGoods/ids,{ids}","serviceMethod":"GET","checked":false,"key":"6-8-0-2-15"},{"serviceUrl":"/yard/spd/ydsGoodsLots/byUse","serviceMethod":"GET","checked":false,"key":"6-8-0-2-16"},{"serviceUrl":"/yard/spd/ydsGoodsLots/byUse","serviceMethod":"GET","checked":false,"key":"6-8-0-2-17"},{"serviceUrl":"/yard/spd/ydsGoodsLots/byUse/count","serviceMethod":"GET","checked":false,"key":"6-8-0-2-18"},{"serviceUrl":"/yard/spd/spdGoodsLotStockViews/byDepot/{depotId}","serviceMethod":"GET","checked":false,"key":"6-8-0-2-19"},{"serviceUrl":"/yard/spd/spdGoodsLotStockViews/byDepot/{depotId}/count","serviceMethod":"GET","checked":false,"key":"6-8-0-2-20"},{"serviceUrl":"/yard/spd/spdGoodsLotStockViews/{id}","serviceMethod":"GET","checked":false,"key":"6-8-0-2-21"}],"checked":false,"key":"6-8-0-2-0","id":"P0163"},{"opId":"P0164","opName":"使用消耗管理删除","opSort":"P0164","elementClass":"acl_delete_spdUsed,acl_delete_spdUsedItem,acl_view_spdUsedItem","webApis":[{"serviceUrl":"/yard/spd/spdUseds/{usedId}","serviceMethod":"DELETE","checked":false,"key":"6-8-0-3-0"},{"serviceUrl":"/yard/spd/spdUsedItems/{usedItemId}","serviceMethod":"DELETE","checked":false,"key":"6-8-0-3-1"}],"checked":false,"key":"6-8-0-3-0","id":"P0164"},{"opId":"P0165","opName":"使用消耗管理提交","opSort":"P0165","elementClass":"acl_commitEntity_spdUsed","webApis":[],"checked":false,"key":"6-8-0-4-0","id":"P0165"}],"checked":false,"key":"6-8-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"6-8-0-0-0"},{"systemName":"收货系统","menuId":"10007-010","menuCode":"10007-010","menuParentId":"10007","icon":null,"menuSort":10,"name":"使用消耗确认","level":2,"anchor":"#spd/spdUsedChecks","functions":[{"functionId":"F0027","functionName":"使用消耗确认","operations":[{"opId":"P0175","opName":"使用消耗确认查看","opSort":"P0175","elementClass":"acl_view_spdUsed","webApis":[{"serviceUrl":"/yard/spd/spdUseds/byCheck","serviceMethod":"GET","checked":false,"key":"6-9-0-0-0"},{"serviceUrl":"/yard/spd/spdUseds/byCheck/count","serviceMethod":"GET","checked":false,"key":"6-9-0-0-1"},{"serviceUrl":"/yard/spd/spdUsedItems/usedId,{usedId}/count","serviceMethod":"GET","checked":false,"key":"6-9-0-0-2"},{"serviceUrl":"/yard/spd/spdUsedItems/usedId,{usedId}","serviceMethod":"GET","checked":false,"key":"6-9-0-0-3"},{"serviceUrl":"/yard/spd/spdUsedTypes/{usedType}","serviceMethod":"GET","checked":false,"key":"6-9-0-0-4"},{"serviceUrl":"/yard/spd/spdGoodsLotStockViews/byDepot/{depotId}","serviceMethod":"GET","checked":false,"key":"6-9-0-0-5"},{"serviceUrl":"/yard/spd/spdGoodsLotStockViews/byDepot/{depotId}/count","serviceMethod":"GET","checked":false,"key":"6-9-0-0-6"}],"checked":false,"key":"6-9-0-0-0","id":"P0175"},{"opId":"P0176","opName":"使用消耗确认编辑","opSort":"P0176","elementClass":"acl_edit_spdUsed","webApis":[],"checked":false,"key":"6-9-0-1-0","id":"P0176"},{"opId":"P0180","opName":"使用消耗确认审核","opSort":"P0180","elementClass":"acl_reviewEntity_spdUsedCheck","webApis":[{"serviceUrl":" /yard/spd/spdUseds/{usedId}/checkState/reviewed","serviceMethod":"PUT","checked":false,"key":"6-9-0-2-0"},{"serviceUrl":"/yard/spd/spdUseds/{usedId}","serviceMethod":"GET","checked":false,"key":"6-9-0-2-1"}],"checked":false,"key":"6-9-0-2-0","id":"P0180"}],"checked":false,"key":"6-9-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"6-9-0-0-0"},{"systemName":"收货系统","menuId":"10007-011","menuCode":"10007-011","menuParentId":"10007","icon":null,"menuSort":11,"name":"使用消耗记录","level":2,"anchor":"#spd/spdUsedHiss","functions":[{"functionId":"F0026","functionName":"使用消耗记录","operations":[{"opId":"P0168","opName":"使用消耗记录查看","opSort":"P0168","elementClass":"acl_view_spdUsedCheck,acl_view_spdUsedHisItem","webApis":[{"serviceUrl":"/yard/spd/spdUseds/byHis","serviceMethod":"GET","checked":false,"key":"6-10-0-0-0"},{"serviceUrl":"/yard/spd/spdUseds/byHis/count","serviceMethod":"GET","checked":false,"key":"6-10-0-0-1"},{"serviceUrl":"/yard/spd/spdUsedItems/usedId,{usedId}/count","serviceMethod":"GET","checked":false,"key":"6-10-0-0-2"},{"serviceUrl":"/yard/spd/spdUsedItems/usedId,{usedId}","serviceMethod":"GET","checked":false,"key":"6-10-0-0-3"},{"serviceUrl":"/yard/spd/spdUsedTypes/{usedType}","serviceMethod":"GET","checked":false,"key":"6-10-0-0-4"},{"serviceUrl":"/yard/spd/spdGoodsLotStockViews/byDepot/{depotId}","serviceMethod":"GET","checked":false,"key":"6-10-0-0-5"},{"serviceUrl":"/yard/spd/spdGoodsLotStockViews/byDepot/{depotId}/count","serviceMethod":"GET","checked":false,"key":"6-10-0-0-6"}],"checked":false,"key":"6-10-0-0-0","id":"P0168"}],"checked":false,"key":"6-10-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"6-10-0-0-0"},{"systemName":"收货系统","menuId":"10007-012","menuCode":"10007-012","menuParentId":"10007","icon":null,"menuSort":12,"name":"收货信息录入","level":2,"anchor":"#spd/spdReceiveEnterIngs","functions":[{"functionId":"F0026","functionName":"收货信息录入","operations":[{"opId":"P0665","opName":"收货信息录入查看","opSort":"P0665","elementClass":"acl_view_spdReceiveEnterIng,acl_view_spdReceiveEnterIngItem","webApis":[],"checked":false,"key":"6-11-0-0-0","id":"P0665"},{"opId":"P0665","opName":"收货信息录入新增","opSort":"P0665","elementClass":"acl_add_spdReceiveEnterIng,acl_add_spdReceiveEnterIngItem,acl_view_spdReceiveEnterIngItem","webApis":[{"serviceUrl":"/yard/spd/spdReceives","serviceMethod":"POST","checked":false,"key":"6-11-0-1-0"}],"checked":false,"key":"6-11-0-1-0","id":"P0665"},{"opId":"P0665","opName":"收货信息录入编辑","opSort":"P0665","elementClass":"acl_edit_spdReceiveEnterIng,acl_view_spdReceiveEnterIngItem,acl_add_spdReceiveEnterIngItem,acl_delete_spdReceiveEnterIngItem","webApis":[{"serviceUrl":"/yard/spd/spdReceives/{receiveId}","serviceMethod":"PUT","checked":false,"key":"6-11-0-2-0"},{"serviceUrl":"/yard/spd/spdReceiveItems","serviceMethod":"POST","checked":false,"key":"6-11-0-2-1"},{"serviceUrl":"/yard/spd/spdReceiveItems/{receiveItemId}","serviceMethod":"PUT","checked":false,"key":"6-11-0-2-2"},{"serviceUrl":"/yard/spd/spdReceiveItems/{receiveItemId}","serviceMethod":"DELETE","checked":false,"key":"6-11-0-2-3"}],"checked":false,"key":"6-11-0-2-0","id":"P0665"},{"opId":"P0665","opName":"收货信息录入删除","opSort":"P0665","elementClass":"acl_delete_spdReceiveEnterIng","webApis":[{"serviceUrl":"/yard/spd/spdReceives/{receiveId}","serviceMethod":"DELETE","checked":false,"key":"6-11-0-3-0"}],"checked":false,"key":"6-11-0-3-0","id":"P0665"},{"opId":"P0665","opName":"收货信息录入提交","opSort":"P0665","elementClass":"acl_commitEntity_spdReceiveEnterIng","webApis":[],"checked":false,"key":"6-11-0-4-0","id":"P0665"},{"opId":"P0665","opName":"收货信息录入撤回","opSort":"P0665","elementClass":"acl_cancelCommit_spdReceiveEnterIng","webApis":[],"checked":false,"key":"6-11-0-5-0","id":"P0665"},{"opId":"P0665","opName":"收货信息录入审核","opSort":"P0665","elementClass":"acl_reviewEntity_spdReceiveEnterIng","webApis":[{"serviceUrl":"/yard/spd/spdReceives/{receiveId}/checkState/byQuick/reviewed","serviceMethod":"PUT","checked":false,"key":"6-11-0-6-0"}],"checked":false,"key":"6-11-0-6-0","id":"P0665"}],"checked":false,"key":"6-11-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"6-11-0-0-0"}],"topMenu":true,"open":false,"checked":false,"key":"6-0-0-0-0"},{"systemName":"收货系统","menuId":"10008","menuCode":"10008","menuParentId":"-1","icon":"fa-cubes","menuSort":8,"name":"仓库作业管理","level":1,"anchor":null,"functions":null,"children":[{"systemName":"收货系统","menuId":"10008-001","menuCode":"10008-001","menuParentId":"10008","icon":null,"menuSort":1,"name":"收货上架作业","level":2,"anchor":"#spd/spdTasks","functions":[{"functionId":"F0041","functionName":"收货上架作业","operations":[{"opId":"P0298","opName":"收货上架作业查看","opSort":"P0298","elementClass":null,"webApis":[{"serviceUrl":"/yard/spd/ydsEdsGoodsLots/ids,{ids}","serviceMethod":"GET","checked":false,"key":"7-0-0-0-0"},{"serviceUrl":"/yard/spd/ydsGoodsLots/ids,{ids}","serviceMethod":"GET","checked":false,"key":"7-0-0-0-1"},{"serviceUrl":"/yard/spd/spdTasks/byPutaway","serviceMethod":"GET","checked":false,"key":"7-0-0-0-2"},{"serviceUrl":"/yard/spd/spdTasks/byPutaway/count","serviceMethod":"GET","checked":false,"key":"7-0-0-0-3"},{"serviceUrl":"/yard/spd/spdTaskItems/taskId,{taskId}","serviceMethod":"GET","checked":false,"key":"7-0-0-0-4"},{"serviceUrl":"/yard/spd/spdTasks","serviceMethod":"GET","checked":false,"key":"7-0-0-0-5"},{"serviceUrl":"/yard/spd/ydsEdsGoodsLots/ids,{ids}","serviceMethod":"GET","checked":false,"key":"7-0-0-0-6"},{"serviceUrl":"/yard/spd/spdTaskItems","serviceMethod":"GET","checked":false,"key":"7-0-0-0-7"}],"checked":false,"key":"7-0-0-0-0","id":"P0298"},{"opId":"P0299","opName":"收货上架作业确认","opSort":"P0299","elementClass":"acl_confirm_spdTask","webApis":[{"serviceUrl":"/yard/spd/spdTasks/{taskId}/checkState/reviewed","serviceMethod":"PUT","checked":false,"key":"7-0-0-1-0"}],"checked":false,"key":"7-0-0-1-0","id":"P0299"},{"opId":"P0300","opName":"收货上架作业保存","opSort":"P0300","elementClass":"acl_update_spdTask","webApis":[{"serviceUrl":"/yard/spd/spdTaskItems/{taskItemId}","serviceMethod":"PUT","checked":false,"key":"7-0-0-2-0"}],"checked":false,"key":"7-0-0-2-0","id":"P0300"}],"checked":false,"key":"7-0-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"7-0-0-0-0"},{"systemName":"收货系统","menuId":"10008-002","menuCode":"10008-002","menuParentId":"10008","icon":null,"menuSort":2,"name":"拣货下架作业","level":2,"anchor":"#spd/spdTaskOuts","functions":[{"functionId":"F0042","functionName":"拣货下架作业","operations":[{"opId":"P0301","opName":"拣货下架作业查看","opSort":"P0301","elementClass":null,"webApis":[{"serviceUrl":"/yard/spd/spdTasks/byOffShelf","serviceMethod":"GET","checked":false,"key":"7-1-0-0-0"},{"serviceUrl":"/yard/spd/spdTasks/byOffShelf/count","serviceMethod":"GET","checked":false,"key":"7-1-0-0-1"},{"serviceUrl":"/yard/spd/spdTasks","serviceMethod":"GET","checked":false,"key":"7-1-0-0-2"},{"serviceUrl":"/yard/spd/spdTaskItems","serviceMethod":"GET","checked":false,"key":"7-1-0-0-3"}],"checked":false,"key":"7-1-0-0-0","id":"P0301"},{"opId":"P0302","opName":"拣货下架作业确认","opSort":"P0302","elementClass":"acl_confirm_spdTaskOut","webApis":[{"serviceUrl":"/yard/spd/spdTasks/{taskId}/checkState/reviewed","serviceMethod":"PUT","checked":false,"key":"7-1-0-1-0"}],"checked":false,"key":"7-1-0-1-0","id":"P0302"},{"opId":"P0303","opName":"拣货下架作业保存","opSort":"P0303","elementClass":"acl_update_spdTaskOut","webApis":[],"checked":false,"key":"7-1-0-2-0","id":"P0303"}],"checked":false,"key":"7-1-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"7-1-0-0-0"},{"systemName":"收货系统","menuId":"10008-003","menuCode":"10008-003","menuParentId":"10008","icon":null,"menuSort":3,"name":"仓库作业记录","level":2,"anchor":"#spd/spdTaskHiss","functions":[{"functionId":"F0053","functionName":"仓库作业记录","operations":[{"opId":"P0308","opName":"仓库作业记录查看","opSort":"P0308","elementClass":null,"webApis":[{"serviceUrl":"/yard/spd/spdTasks/byHis","serviceMethod":"GET","checked":false,"key":"7-2-0-0-0"},{"serviceUrl":"/yard/spd/spdTasks/byHis/count","serviceMethod":"GET","checked":false,"key":"7-2-0-0-1"},{"serviceUrl":"/yard/pcs/pcsDepotAreas/ids,{ids}","serviceMethod":"GET","checked":false,"key":"7-2-0-0-2"},{"serviceUrl":"/yard/pcs/pcsDepts/ids,{ids}","serviceMethod":"GET","checked":false,"key":"7-2-0-0-3"},{"serviceUrl":"/yard/spd/spdTaskItems/taskId,{taskId}","serviceMethod":"GET","checked":false,"key":"7-2-0-0-4"},{"serviceUrl":"/yard/pcs/depotShelfs/ids,{ids}","serviceMethod":"GET","checked":false,"key":"7-2-0-0-5"},{"serviceUrl":"/yard/spd/ydsGoodsLots/ids,{ids}","serviceMethod":"GET","checked":false,"key":"7-2-0-0-6"},{"serviceUrl":"/yard/spd/ydsGoods/ids,{ids}","serviceMethod":"GET","checked":false,"key":"7-2-0-0-7"}],"checked":false,"key":"7-2-0-0-0","id":"P0308"},{"opId":"P0498","opName":"仓库作业记录打印","opSort":"P0498","elementClass":"acl_exportPdf_spdTaskHis","webApis":[{"serviceUrl":"/yard/spd/spdTaskItems/taskId,{taskId}/pdf","serviceMethod":"GET","checked":false,"key":"7-2-0-1-0"}],"checked":false,"key":"7-2-0-1-0","id":"P0498"}],"checked":false,"key":"7-2-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"7-2-0-0-0"},{"systemName":"收货系统","menuId":"10008-004","menuCode":"10008-004","menuParentId":"10008","icon":null,"menuSort":4,"name":"库存盘点管理","level":2,"anchor":"#spd/spdInventory","functions":[{"functionId":"F0047","functionName":"库存盘点管理","operations":[{"opId":"P0403","opName":"库存盘点管理删除","opSort":"P0403","elementClass":"acl_delete_spdInventory","webApis":[{"serviceUrl":"/yard/spd/spdInventorys/{inventoryId}","serviceMethod":"DELETE","checked":false,"key":"7-3-0-0-0"}],"checked":false,"key":"7-3-0-0-0","id":"P0403"},{"opId":"P0447","opName":"库存盘点管理撤回","opSort":"P0447","elementClass":"acl_cancelCommit_spdInventory","webApis":[{"serviceUrl":"/yard/pcs/pcsDepotAreas/ids,{ids}","serviceMethod":"GET","checked":false,"key":"7-3-0-1-0"},{"serviceUrl":"/yard/spd/spdInventorys/{inventoryId}","serviceMethod":"GET","checked":false,"key":"7-3-0-1-1"}],"checked":false,"key":"7-3-0-1-0","id":"P0447"},{"opId":"P0416","opName":"库存盘点管理打印","opSort":"P0416","elementClass":"acl_print_Inventory,acl_view_spdInventory","webApis":[{"serviceUrl":"/yard/spd/spdInventoryItems/inventoryId,{inventoryId}/pdf","serviceMethod":"GET","checked":false,"key":"7-3-0-2-0"}],"checked":false,"key":"7-3-0-2-0","id":"P0416"},{"opId":"P0413","opName":"库存盘点管理提交","opSort":"P0413","elementClass":"acl_commitEntity_spdInventory","webApis":[{"serviceUrl":"/yard/pcs/pcsDepotAreas/ids,{ids}","serviceMethod":"GET","checked":false,"key":"7-3-0-3-0"},{"serviceUrl":"/yard/spd/spdInventorys/{inventoryId}/checkState/commited","serviceMethod":"PUT","checked":false,"key":"7-3-0-3-1"},{"serviceUrl":"/yard/spd/spdInventorys/{inventoryId}","serviceMethod":"GET","checked":false,"key":"7-3-0-3-2"}],"checked":false,"key":"7-3-0-3-0","id":"P0413"},{"opId":"P0414","opName":"库存盘点管理审核","opSort":"P0414","elementClass":"acl_reviewEntity_spdInventory","webApis":[{"serviceUrl":"/yard/spd/spdInventorys/{inventoryId}/checkState/reviewed","serviceMethod":"PUT","checked":false,"key":"7-3-0-4-0"}],"checked":false,"key":"7-3-0-4-0","id":"P0414"},{"opId":"P0400","opName":"库存盘点管理查看","opSort":"P0400","elementClass":"acl_view_spdInventory,acl_view_spdInventoryItem","webApis":[{"serviceUrl":"/yard/pcs/pcsDepotAreas/ids,{ids}","serviceMethod":"GET","checked":false,"key":"7-3-0-5-0"},{"serviceUrl":"/yard/pcs/pcsUsers","serviceMethod":"GET","checked":false,"key":"7-3-0-5-1"},{"serviceUrl":"/yard/spd/ydsGoods/ids,{ids}","serviceMethod":"GET","checked":false,"key":"7-3-0-5-2"},{"serviceUrl":"/yard/pcs/depotShelfs/ids,{ids}","serviceMethod":"GET","checked":false,"key":"7-3-0-5-3"},{"serviceUrl":"/yard/spd/ydsGoodsLots/ids,{ids}","serviceMethod":"GET","checked":false,"key":"7-3-0-5-4"},{"serviceUrl":"/yard/spd/spdInventoryItems/inventoryId,{inventoryId}","serviceMethod":"GET","checked":false,"key":"7-3-0-5-5"},{"serviceUrl":"/yard/spd/spdInventorys/byUser/count","serviceMethod":"GET","checked":false,"key":"7-3-0-5-6"},{"serviceUrl":"/yard/spd/spdInventorys/byUser","serviceMethod":"GET","checked":false,"key":"7-3-0-5-7"},{"serviceUrl":"/yard/pcs/pcsDepotAreas/depotId,{depotId}","serviceMethod":"GET","checked":false,"key":"7-3-0-5-8"}],"checked":false,"key":"7-3-0-5-0","id":"P0400"},{"opId":"P0401","opName":"库存盘点管理增加","opSort":"P0401","elementClass":"acl_add_spdInventory,acl_add_spdInventoryItem,acl_edit_spdInventoryItem,acl_view_spdInventoryItem,acl_delete_spdInventoryItem","webApis":[{"serviceUrl":"/yard/spd/spdInventorys/byUser/count","serviceMethod":"GET","checked":false,"key":"7-3-0-6-0"},{"serviceUrl":"/yard/spd/spdInventorys/byUser","serviceMethod":"GET","checked":false,"key":"7-3-0-6-1"},{"serviceUrl":"/yard/spd/spdInventoryItems/inventoryId,{inventoryId}","serviceMethod":"GET","checked":false,"key":"7-3-0-6-2"},{"serviceUrl":"/yard/pcs/pcsDepots/byUMdepot/count","serviceMethod":"GET","checked":false,"key":"7-3-0-6-3"},{"serviceUrl":"/yard/pcs/pcsDepots/byUMdepot","serviceMethod":"GET","checked":false,"key":"7-3-0-6-4"},{"serviceUrl":"/yard/pcs/pcsDepotAreas/depotId,{depotId}","serviceMethod":"GET","checked":false,"key":"7-3-0-6-5"},{"serviceUrl":"/yard/spd/spdDepotInventorys","serviceMethod":"POST","checked":false,"key":"7-3-0-6-6"},{"serviceUrl":"/yard/spd/spdInventorys","serviceMethod":"GET","checked":false,"key":"7-3-0-6-7"},{"serviceUrl":"/yard/spd/spdInventorys","serviceMethod":"POST","checked":false,"key":"7-3-0-6-8"},{"serviceUrl":"/yard/pcs/pcsUsers","serviceMethod":"GET","checked":false,"key":"7-3-0-6-9"}],"checked":false,"key":"7-3-0-6-0","id":"P0401"},{"opId":"P0402","opName":"库存盘点管理编辑","opSort":"P0402","elementClass":"acl_edit_spdInventory,acl_view_spdInventory,acl_view_spdInventoryItem,acl_save_Inventory","webApis":[{"serviceUrl":"/yard/spd/spdInventorys/byUser/count","serviceMethod":"GET","checked":false,"key":"7-3-0-7-0"},{"serviceUrl":"/yard/pcs/pcsDepotAreas/ids,{ids}","serviceMethod":"GET","checked":false,"key":"7-3-0-7-1"},{"serviceUrl":"/yard/spd/spdDepotInventorys/byUser","serviceMethod":"GET","checked":false,"key":"7-3-0-7-2"},{"serviceUrl":"/yard/pcs/pcsUsers","serviceMethod":"GET","checked":false,"key":"7-3-0-7-3"},{"serviceUrl":"/yard/spd/spdInventoryItems/inventoryId,{inventoryId}","serviceMethod":"GET","checked":false,"key":"7-3-0-7-4"},{"serviceUrl":"/yard/spd/spdInventoryItems/{inventoryItemId}","serviceMethod":"PUT","checked":false,"key":"7-3-0-7-5"}],"checked":false,"key":"7-3-0-7-0","id":"P0402"},{"opId":"P0660","opName":"库存盘点管理保存","opSort":"P0660","elementClass":"acl_save_Inventory","webApis":[],"checked":false,"key":"7-3-0-8-0","id":"P0660"}],"checked":false,"key":"7-3-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"7-3-0-0-0"},{"systemName":"收货系统","menuId":"10008-005","menuCode":"10008-005","menuParentId":"10008","icon":null,"menuSort":5,"name":"报损报溢申请","level":2,"anchor":"#spd/spdPlApplys","functions":[{"functionId":"F0020","functionName":"报损报溢申请","operations":[{"opId":"P0312","opName":"报损报溢申请提交","opSort":"P0312","elementClass":"acl_commitEntity_spdPlApply","webApis":[],"checked":false,"key":"7-4-0-0-0","id":"P0312"},{"opId":"P0314","opName":"报损报溢申请查看","opSort":"P0314","elementClass":"acl_view_spdPlApply,acl_view_spdPlItemApply","webApis":[{"serviceUrl":"/yard/spd/spdPlApplys","serviceMethod":"GET","checked":false,"key":"7-4-0-1-0"},{"serviceUrl":"/yard/spd/spdPlApplys/count","serviceMethod":"GET","checked":false,"key":"7-4-0-1-1"}],"checked":false,"key":"7-4-0-1-0","id":"P0314"},{"opId":"P0309","opName":"报损报溢申请新增","opSort":"P0309","elementClass":"acl_add_spdPlApply,acl_add_spdPlItemApply,acl_view_spdPlApply,acl_view_spdPlItemApply","webApis":[{"serviceUrl":"/yard/spd/spdPlApplys/count","serviceMethod":"GET","checked":false,"key":"7-4-0-2-0"},{"serviceUrl":"/yard/spd/spdPlApplys","serviceMethod":"GET","checked":false,"key":"7-4-0-2-1"},{"serviceUrl":"/yard/pcs/PcsDepts/byUse","serviceMethod":"GET","checked":false,"key":"7-4-0-2-2"},{"serviceUrl":"/yard/pcs/pcsDepots/byUMdepot/count","serviceMethod":"GET","checked":false,"key":"7-4-0-2-3"},{"serviceUrl":"/yard/pcs/pcsDepots/byUMdepot","serviceMethod":"GET","checked":false,"key":"7-4-0-2-4"},{"serviceUrl":"/yard/pcs/PcsDepts/byUse","serviceMethod":"GET","checked":false,"key":"7-4-0-2-5"},{"serviceUrl":"/yard/spd/spdPls","serviceMethod":"POST","checked":false,"key":"7-4-0-2-6"},{"serviceUrl":"/yard/spd/ydsGoods/ids,{ids}","serviceMethod":"GET","checked":false,"key":"7-4-0-2-7"},{"serviceUrl":"/yard/spd/ydsGoodsLots/ids,{ids}","serviceMethod":"GET","checked":false,"key":"7-4-0-2-8"},{"serviceUrl":"/yard/pcs/depotShelfs/ids,{ids}","serviceMethod":"GET","checked":false,"key":"7-4-0-2-9"},{"serviceUrl":"/yard/spd/spdPlItems","serviceMethod":"POST","checked":false,"key":"7-4-0-2-10"},{"serviceUrl":"/yard/spd/spdDepotStocks","serviceMethod":"GET","checked":false,"key":"7-4-0-2-11"},{"serviceUrl":"/yard/spd/spdDepotStocks/count","serviceMethod":"GET","checked":false,"key":"7-4-0-2-12"},{"serviceUrl":"/yard/spd/ydsGoodsInfos/{goodsId}","serviceMethod":"GET","checked":false,"key":"7-4-0-2-13"}],"checked":false,"key":"7-4-0-2-0","id":"P0309"},{"opId":"P0310","opName":"报损报溢申请编辑","opSort":"P0310","elementClass":"acl_edit_spdPlApply,acl_edit_spdPlItemApply,acl_view_spdPlApply,acl_view_spdPlItemApply,acl_delete_spdPlItemApply","webApis":[{"serviceUrl":"/yard/spd/spdPlItems/plId,{plId}/count","serviceMethod":"GET","checked":false,"key":"7-4-0-3-0"},{"serviceUrl":"/yard/spd/spdPlItems/plId,{plId}","serviceMethod":"GET","checked":false,"key":"7-4-0-3-1"},{"serviceUrl":"/yard/spd/spdPlApplys/count","serviceMethod":"GET","checked":false,"key":"7-4-0-3-2"},{"serviceUrl":"/yard/spd/spdPlApplys","serviceMethod":"GET","checked":false,"key":"7-4-0-3-3"},{"serviceUrl":"/yard/spd/ydsGoodsLots/ids,{ids}","serviceMethod":"GET","checked":false,"key":"7-4-0-3-4"},{"serviceUrl":"/yard/spd/spdPls/{plId}","serviceMethod":"PUT","checked":false,"key":"7-4-0-3-5"},{"serviceUrl":"/yard/spd/ydsGoods/ids,{ids}","serviceMethod":"GET","checked":false,"key":"7-4-0-3-6"},{"serviceUrl":"/yard/pcs/depotShelfs/ids,{ids}","serviceMethod":"GET","checked":false,"key":"7-4-0-3-7"},{"serviceUrl":"/yard/spd/spdPlItems/{plItemId}","serviceMethod":"PUT","checked":false,"key":"7-4-0-3-8"},{"serviceUrl":"/yard/spd/spdPlItems","serviceMethod":"POST","checked":false,"key":"7-4-0-3-9"},{"serviceUrl":"/yard/spd/spdGoodsLotStockViews/byDepot/{depotId}","serviceMethod":"GET","checked":false,"key":"7-4-0-3-10"},{"serviceUrl":"/yard/spd/spdGoodsLotStockViews/byDepot/{depotId}/count","serviceMethod":"GET","checked":false,"key":"7-4-0-3-11"},{"serviceUrl":"/yard/spd/ydsGoodsInfos/{goodsId}","serviceMethod":"GET","checked":false,"key":"7-4-0-3-12"}],"checked":false,"key":"7-4-0-3-0","id":"P0310"},{"opId":"P0311","opName":"报损报溢申请删除","opSort":"P0311","elementClass":"acl_delete_spdPlApply","webApis":[{"serviceUrl":"/yard/spd/spdPls/{plId}","serviceMethod":"DELETE","checked":false,"key":"7-4-0-4-0"},{"serviceUrl":"/yard/spd/spdPlItems/{plItemId}","serviceMethod":"DELETE","checked":false,"key":"7-4-0-4-1"}],"checked":false,"key":"7-4-0-4-0","id":"P0311"}],"checked":false,"key":"7-4-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"7-4-0-0-0"},{"systemName":"收货系统","menuId":"10008-006","menuCode":"10008-006","menuParentId":"10008","icon":null,"menuSort":6,"name":"报损报溢审核","level":2,"anchor":"#spd/spdPls","functions":[{"functionId":"F0054","functionName":"报损报溢审核","operations":[{"opId":"P0439","opName":"报损报溢审核查看","opSort":"P0439","elementClass":"acl_view_spdPl","webApis":[{"serviceUrl":"/yard/spd/spdPls/{plId}","serviceMethod":"GET","checked":false,"key":"7-5-0-0-0"},{"serviceUrl":"/yard/spd/spdPlItems/plId,{plId}/count","serviceMethod":"GET","checked":false,"key":"7-5-0-0-1"},{"serviceUrl":"/yard/spd/spdPlItems/{plItemId}","serviceMethod":"PUT","checked":false,"key":"7-5-0-0-2"},{"serviceUrl":"/yard/spd/spdPlItems/plId,{plId}","serviceMethod":"GET","checked":false,"key":"7-5-0-0-3"},{"serviceUrl":"/yard/spd/spdPls","serviceMethod":"GET","checked":false,"key":"7-5-0-0-4"},{"serviceUrl":"/yard/spd/spdPls/count","serviceMethod":"GET","checked":false,"key":"7-5-0-0-5"}],"checked":false,"key":"7-5-0-0-0","id":"P0439"},{"opId":"P0441","opName":"报损报溢审核审核","opSort":"P0441","elementClass":"acl_reviewEntity_spdPl","webApis":[{"serviceUrl":"/yard/spd/spdPls/{plId}/checkState/reviewed","serviceMethod":"PUT","checked":false,"key":"7-5-0-1-0"}],"checked":false,"key":"7-5-0-1-0","id":"P0441"},{"opId":"P0442","opName":"报损报溢审核提交","opSort":"P0442","elementClass":"acl_commitEntity_spdPl","webApis":[{"serviceUrl":"/yard/spd/spdPls/{plId}/checkState/commited","serviceMethod":"PUT","checked":false,"key":"7-5-0-2-0"}],"checked":false,"key":"7-5-0-2-0","id":"P0442"},{"opId":"P0444","opName":"报损报溢审核撤回","opSort":"P0444","elementClass":"acl_cancelCommit_spdPl","webApis":[],"checked":false,"key":"7-5-0-3-0","id":"P0444"},{"opId":"P0658","opName":"报损报溢审核保存","opSort":"P0658","elementClass":"acl_update_pl","webApis":[],"checked":false,"key":"7-5-0-4-0","id":"P0658"},{"opId":"P0659","opName":"报损报溢审核确认","opSort":"P0659","elementClass":"acl_confirm_pl","webApis":[],"checked":false,"key":"7-5-0-5-0","id":"P0659"}],"checked":false,"key":"7-5-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"7-5-0-0-0"},{"systemName":"收货系统","menuId":"10008-007","menuCode":"10008-007","menuParentId":"10008","icon":null,"menuSort":7,"name":"报损报溢记录","level":2,"anchor":"#spd/spdPlHiss","functions":[{"functionId":"F0029","functionName":"报损报溢记录","operations":[{"opId":"P0197","opName":"报损报溢记录查看","opSort":"P0197","elementClass":"acl_view_spdPl","webApis":[{"serviceUrl":"/yard/spd/spdPlItems/plId,{plId}/count","serviceMethod":"GET","checked":false,"key":"7-6-0-0-0"},{"serviceUrl":"/yard/spd/spdPlItems/plId,{plId}","serviceMethod":"GET","checked":false,"key":"7-6-0-0-1"},{"serviceUrl":"/yard/spd/spdPlsHis/count","serviceMethod":"GET","checked":false,"key":"7-6-0-0-2"},{"serviceUrl":"/yard/spd/spdPlsHis","serviceMethod":"GET","checked":false,"key":"7-6-0-0-3"}],"checked":false,"key":"7-6-0-0-0","id":"P0197"}],"checked":false,"key":"7-6-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"7-6-0-0-0"},{"systemName":"收货系统","menuId":"10008-009","menuCode":"10008-009","menuParentId":"10008","icon":null,"menuSort":9,"name":"定数拆包管理","level":2,"anchor":"#spd/spdFixedMakeUnPackings","functions":[{"functionId":"F0044","functionName":"定数拆包管理","operations":[{"opId":"P0461","opName":"定数拆包管理查看","opSort":"P0461","elementClass":"acl_view_spdFixedMakeUnPacking","webApis":[{"serviceUrl":"/yard/spd/spdFixedMakeItems/makeId,{makeId}","serviceMethod":"GET","checked":false,"key":"7-7-0-0-0"},{"serviceUrl":"/yard/spd/spdFixedMakeItems/makeId,{makeId}/count","serviceMethod":"GET","checked":false,"key":"7-7-0-0-1"},{"serviceUrl":"/yard/pcs/pcsDepots/{depotId}","serviceMethod":"GET","checked":false,"key":"7-7-0-0-2"},{"serviceUrl":"/yard/pcs/depotShelfs/ids,{ids}","serviceMethod":"GET","checked":false,"key":"7-7-0-0-3"},{"serviceUrl":"/yard/spd/spdFixeds/ids,{ids}","serviceMethod":"GET","checked":false,"key":"7-7-0-0-4"},{"serviceUrl":"/yard/spd/ydsGoodsLots/ids,{ids}","serviceMethod":"GET","checked":false,"key":"7-7-0-0-5"},{"serviceUrl":"/yard/spd/ydsGoods/ids,{ids}","serviceMethod":"GET","checked":false,"key":"7-7-0-0-6"},{"serviceUrl":"/yard/spd/spdFixedMakeUnPackings/count","serviceMethod":"GET","checked":false,"key":"7-7-0-0-7"},{"serviceUrl":"/yard/spd/spdFixedMakeUnPackings","serviceMethod":"GET","checked":false,"key":"7-7-0-0-8"}],"checked":false,"key":"7-7-0-0-0","id":"P0461"},{"opId":"P0462","opName":"定数拆包管理编辑","opSort":"P0462","elementClass":"acl_edit_spdFixedMakeUnPacking,acl_add_spdFixedMakeItemUnPacking","webApis":[{"serviceUrl":"/yard/spd/spdDepotStocks/byDepot/{depotId}","serviceMethod":"GET","checked":false,"key":"7-7-0-1-0"},{"serviceUrl":"/yard/spd/spdDepotStocks/byDepot/{depotId}/count","serviceMethod":"GET","checked":false,"key":"7-7-0-1-1"},{"serviceUrl":"/yard/spd/spdFixedMakeItems","serviceMethod":"POST","checked":false,"key":"7-7-0-1-2"},{"serviceUrl":"/yard/spd/spdFixedMakeItems/makeId,{makeId}/count","serviceMethod":"GET","checked":false,"key":"7-7-0-1-3"},{"serviceUrl":"/yard/spd/spdFixedMakeItems/makeId,{makeId}","serviceMethod":"GET","checked":false,"key":"7-7-0-1-4"},{"serviceUrl":"/yard/spd/spdFixedMakes","serviceMethod":"GET","checked":false,"key":"7-7-0-1-5"},{"serviceUrl":"/yard/spd/ydsGoods/ids,{ids}","serviceMethod":"GET","checked":false,"key":"7-7-0-1-6"},{"serviceUrl":"/yard/spd/ydsGoodsLots/ids,{ids}","serviceMethod":"GET","checked":false,"key":"7-7-0-1-7"},{"serviceUrl":"/yard/spd/spdFixeds/ids,{ids}","serviceMethod":"GET","checked":false,"key":"7-7-0-1-8"},{"serviceUrl":"/yard/spd/ydsGoods/ids,{ids}","serviceMethod":"GET","checked":false,"key":"7-7-0-1-9"},{"serviceUrl":"/yard/pcs/depotShelfs/ids,{ids}","serviceMethod":"GET","checked":false,"key":"7-7-0-1-10"},{"serviceUrl":"/yard/spd/spdFixedMakes","serviceMethod":"PUT","checked":false,"key":"7-7-0-1-11"},{"serviceUrl":"/yard/spd/spdFixedMakeItems","serviceMethod":"PUT","checked":false,"key":"7-7-0-1-12"},{"serviceUrl":"/yard/spd/spdFixedMakeItems/{makeItemId}","serviceMethod":"DELETE","checked":false,"key":"7-7-0-1-13"},{"serviceUrl":"/yard/pcs/pcsDepots/{depotId}","serviceMethod":"GET","checked":false,"key":"7-7-0-1-14"},{"serviceUrl":"/yard/spd/spdFixedBarcodes/byUnPacking/{depotId}","serviceMethod":"GET","checked":false,"key":"7-7-0-1-15"},{"serviceUrl":"/yard/spd/spdFixedBarcodes/byUnPacking/{depotId}/count","serviceMethod":"GET","checked":false,"key":"7-7-0-1-16"}],"checked":false,"key":"7-7-0-1-0","id":"P0462"},{"opId":"P0463","opName":"定数拆包管理增加","opSort":"P0463","elementClass":"acl_add_spdFixedMakeUnPacking,acl_add_spdFixedMakeItemUnPacking","webApis":[{"serviceUrl":"/yard/spd/spdFixedMakes","serviceMethod":"POST","checked":false,"key":"7-7-0-2-0"},{"serviceUrl":"/yard/spd/spdFixedMakeItems","serviceMethod":"POST","checked":false,"key":"7-7-0-2-1"},{"serviceUrl":"/yard/spd/spdFixedMakes","serviceMethod":"GET","checked":false,"key":"7-7-0-2-2"},{"serviceUrl":"/yard/spd/spdFixedMakes/count","serviceMethod":"GET","checked":false,"key":"7-7-0-2-3"},{"serviceUrl":"/yard/pcs/pcsDepots/byUMdepot/count","serviceMethod":"GET","checked":false,"key":"7-7-0-2-4"},{"serviceUrl":"/yard/pcs/pcsDepots/byUMdepot","serviceMethod":"GET","checked":false,"key":"7-7-0-2-5"},{"serviceUrl":"/yard/spd/spdFixedBarcodes/byUnPacking/{depotId}","serviceMethod":"GET","checked":false,"key":"7-7-0-2-6"},{"serviceUrl":"/yard/spd/spdFixedBarcodes/byUnPacking/{depotId}/count","serviceMethod":"GET","checked":false,"key":"7-7-0-2-7"}],"checked":false,"key":"7-7-0-2-0","id":"P0463"},{"opId":"P0464","opName":"定数拆包管理删除","opSort":"P0464","elementClass":"acl_delete_spdFixedMakeUnPacking","webApis":[{"serviceUrl":"/yard/spd/spdFixedMakes/{makeId}","serviceMethod":"DELETE","checked":false,"key":"7-7-0-3-0"},{"serviceUrl":"/yard/pcs/pcsDepots/{depotId}","serviceMethod":"GET","checked":false,"key":"7-7-0-3-1"},{"serviceUrl":"/yard/pcs/pcsDepots/{depotId}","serviceMethod":"GET","checked":false,"key":"7-7-0-3-2"},{"serviceUrl":"/yard/spd/spdFixedMakes","serviceMethod":"GET","checked":false,"key":"7-7-0-3-3"},{"serviceUrl":"/yard/spd/ydsGoods/ids,{ids}","serviceMethod":"GET","checked":false,"key":"7-7-0-3-4"},{"serviceUrl":"/yard/spd/ydsGoodsLots/ids,{ids}","serviceMethod":"GET","checked":false,"key":"7-7-0-3-5"},{"serviceUrl":"/yard/spd/spdFixedMakeItems/makeId,{makeId}/count","serviceMethod":"GET","checked":false,"key":"7-7-0-3-6"},{"serviceUrl":"/yard/spd/spdFixedMakeItems/makeId,{makeId}","serviceMethod":"GET","checked":false,"key":"7-7-0-3-7"},{"serviceUrl":"/yard/pcs/depotShelfs/ids,{ids}","serviceMethod":"GET","checked":false,"key":"7-7-0-3-8"}],"checked":false,"key":"7-7-0-3-0","id":"P0464"},{"opId":"P0465","opName":"定数拆包管理提交","opSort":"P0465","elementClass":"acl_commitEntity_spdFixedMakeUnPacking,acl_view_spdFixedMakeUnPacking","webApis":[{"serviceUrl":"/yard/spd/spdFixedMakes/{makeId}/checkState/commited","serviceMethod":"PUT","checked":false,"key":"7-7-0-4-0"},{"serviceUrl":"/yard/spd/spdFixedMakes/{makeId}","serviceMethod":"GET","checked":false,"key":"7-7-0-4-1"}],"checked":false,"key":"7-7-0-4-0","id":"P0465"},{"opId":"P0466","opName":"定数拆包管理审核","opSort":"P0466","elementClass":"acl_reviewEntity_spdFixedMakeUnPacking","webApis":[{"serviceUrl":"/yard/spd/spdFixedMakes/{makeId}/checkState/reviewed","serviceMethod":"PUT","checked":false,"key":"7-7-0-5-0"},{"serviceUrl":"/yard/spd/spdFixedMakes/{makeId}","serviceMethod":"GET","checked":false,"key":"7-7-0-5-1"}],"checked":false,"key":"7-7-0-5-0","id":"P0466"},{"opId":"P0467","opName":"定数拆包管理撤回","opSort":"P0467","elementClass":"acl_cancelCommit_spdFixedMakeUnPacking","webApis":[],"checked":false,"key":"7-7-0-6-0","id":"P0467"}],"checked":false,"key":"7-7-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"7-7-0-0-0"},{"systemName":"收货系统","menuId":"10008-008","menuCode":"10008-008","menuParentId":"10008","icon":null,"menuSort":8,"name":"定数条码查询","level":2,"anchor":"#spd/spdFixedBarcodes","functions":[{"functionId":"F0059","functionName":"定数条码查询","operations":[{"opId":"P0468","opName":"定数条码查询查看","opSort":"P0468","elementClass":"acl_view_spdFixedBarcodes","webApis":[{"serviceUrl":"/yard/spd/spdFixedBarcodes","serviceMethod":"GET","checked":false,"key":"7-8-0-0-0"},{"serviceUrl":"/yard/spd/spdFixedBarcodes/count","serviceMethod":"GET","checked":false,"key":"7-8-0-0-1"}],"checked":false,"key":"7-8-0-0-0","id":"P0468"},{"opId":"P0652","opName":"定数条码查询打印","opSort":"P0652","elementClass":"acl_export_spdFixedBarcode","webApis":[],"checked":false,"key":"7-8-0-1-0","id":"P0652"}],"checked":false,"key":"7-8-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"7-8-0-0-0"},{"systemName":"收货系统","menuId":"10008-010","menuCode":"10008-010","menuParentId":"10008","icon":null,"menuSort":10,"name":"定数上架作业","level":2,"anchor":"#spd/spdTaskFixeds","functions":[{"functionId":"F0060","functionName":"定数上架作业","operations":[{"opId":"P0469","opName":"定数上架作业查看","opSort":"P0469","elementClass":null,"webApis":[{"serviceUrl":"/yard/spd/spdTasks/byFixedPutaway","serviceMethod":"GET","checked":false,"key":"7-9-0-0-0"},{"serviceUrl":"/yard/spd/spdTasks/byFixedPutaway/count","serviceMethod":"GET","checked":false,"key":"7-9-0-0-1"},{"serviceUrl":"/yard/spd/spdTaskFixedItems/taskId,{taskId}","serviceMethod":"GET","checked":false,"key":"7-9-0-0-2"},{"serviceUrl":"/yard/spd/spdTaskFixedItemBarcodes","serviceMethod":"GET","checked":false,"key":"7-9-0-0-3"}],"checked":false,"key":"7-9-0-0-0","id":"P0469"},{"opId":"P0470","opName":"定数上架作业保存","opSort":"P0470","elementClass":"acl_update_spdTaskFixed","webApis":[],"checked":false,"key":"7-9-0-1-0","id":"P0470"},{"opId":"P0471","opName":"定数上架作业确认","opSort":"P0471","elementClass":"acl_confirm_spdTaskFixed","webApis":[{"serviceUrl":"/yard/spd/spdTasks/{taskId}/checkState/reviewed","serviceMethod":"PUT","checked":false,"key":"7-9-0-2-0"},{"serviceUrl":"/yard/spd/spdTaskItems/{taskItemId}","serviceMethod":"PUT","checked":false,"key":"7-9-0-2-1"},{"serviceUrl":"/yard/spd/spdTaskFixedItemBarcodes","serviceMethod":"POST","checked":false,"key":"7-9-0-2-2"},{"serviceUrl":"/yard/spd/spdTaskFixedItemBarcodes","serviceMethod":"DELETE","checked":false,"key":"7-9-0-2-3"}],"checked":false,"key":"7-9-0-2-0","id":"P0471"}],"checked":false,"key":"7-9-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"7-9-0-0-0"},{"systemName":"收货系统","menuId":"10008-011","menuCode":"10008-011","menuParentId":"10008","icon":null,"menuSort":11,"name":"定数下架作业","level":2,"anchor":"#spd/spdTaskFixedOuts","functions":[{"functionId":"F0061","functionName":"定数下架作业","operations":[{"opId":"P0472","opName":"定数下架作业查看","opSort":"P0472","elementClass":null,"webApis":[{"serviceUrl":"/yard/spd/spdTasks/byFixedOffShelf","serviceMethod":"GET","checked":false,"key":"7-10-0-0-0"},{"serviceUrl":"/yard/spd/spdTasks/byFixedOffShelf/count","serviceMethod":"GET","checked":false,"key":"7-10-0-0-1"},{"serviceUrl":"/yard/spd/spdTaskFixedItems/taskId,{taskId}","serviceMethod":"GET","checked":false,"key":"7-10-0-0-2"}],"checked":false,"key":"7-10-0-0-0","id":"P0472"},{"opId":"P0473","opName":"定数下架作业保存","opSort":"P0473","elementClass":"acl_update_spdTaskFixedOut","webApis":[{"serviceUrl":"/yard/spd/spdTaskItems/{taskItemId}","serviceMethod":"PUT","checked":false,"key":"7-10-0-1-0"}],"checked":false,"key":"7-10-0-1-0","id":"P0473"},{"opId":"P0474","opName":"定数下架作业确认","opSort":"P0474","elementClass":"acl_confirm_spdTaskFixedOut","webApis":[{"serviceUrl":"/yard/spd/spdTasks/{taskId}/checkState/reviewed","serviceMethod":"PUT","checked":false,"key":"7-10-0-2-0"}],"checked":false,"key":"7-10-0-2-0","id":"P0474"}],"checked":false,"key":"7-10-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"7-10-0-0-0"},{"systemName":"收货系统","menuId":"10008-012","menuCode":"10008-012","menuParentId":"10008","icon":null,"menuSort":12,"name":"定数作业记录","level":2,"anchor":"#spd/spdTaskFixedHiss","functions":[{"functionId":"F0065","functionName":"定数作业记录","operations":[{"opId":"P0613","opName":"定数作业记录查看","opSort":"P0613","elementClass":null,"webApis":[{"serviceUrl":"/yard/spd/spdTasks/byFixedHis","serviceMethod":"GET","checked":false,"key":"7-11-0-0-0"},{"serviceUrl":"/yard/spd/spdTasks/byFixedHis/count","serviceMethod":"GET","checked":false,"key":"7-11-0-0-1"},{"serviceUrl":"/yard/pcs/pcsDepotAreas/ids,{ids}","serviceMethod":"GET","checked":false,"key":"7-11-0-0-2"},{"serviceUrl":"/yard/pcs/pcsDepts/ids,{ids}","serviceMethod":"GET","checked":false,"key":"7-11-0-0-3"},{"serviceUrl":"/yard/spd/spdTaskFixedItems/taskId,{taskId}","serviceMethod":"GET","checked":false,"key":"7-11-0-0-4"},{"serviceUrl":"/yard/spd/spdTaskFixedItems/taskId,{taskId}/count","serviceMethod":"GET","checked":false,"key":"7-11-0-0-5"},{"serviceUrl":"/yard/pcs/depotShelfs/ids,{ids}","serviceMethod":"GET","checked":false,"key":"7-11-0-0-6"},{"serviceUrl":"/yard/spd/ydsGoodsLots/ids,{ids}","serviceMethod":"GET","checked":false,"key":"7-11-0-0-7"},{"serviceUrl":"/yard/spd/ydsGoods/ids,{ids}","serviceMethod":"GET","checked":false,"key":"7-11-0-0-8"},{"serviceUrl":"/yard/spd/spdTaskFixedItemBarcodes","serviceMethod":"GET","checked":false,"key":"7-11-0-0-9"},{"serviceUrl":"/yard/spd/spdFixedBarcodes/ids,{ids}","serviceMethod":"GET","checked":false,"key":"7-11-0-0-10"}],"checked":false,"key":"7-11-0-0-0","id":"P0613"},{"opId":"P0662","opName":"定数作业记录打印","opSort":"P0662","elementClass":"acl_exportPdf_spdTaskFixedHis","webApis":[{"serviceUrl":"/yard/spd/spdTaskFixedItems/taskId,{taskId}/pdf","serviceMethod":"GET","checked":false,"key":"7-11-0-1-0"}],"checked":false,"key":"7-11-0-1-0","id":"P0662"}],"checked":false,"key":"7-11-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"7-11-0-0-0"},{"systemName":"收货系统","menuId":"10008-013","menuCode":"10008-013","menuParentId":"10008","icon":null,"menuSort":13,"name":"定数盘点管理","level":2,"anchor":"#spd/spdInventoryFixeds","functions":[{"functionId":"F0066","functionName":"定数盘点管理","operations":[{"opId":"P0618","opName":"定数盘点管理新增","opSort":"P0618","elementClass":"acl_add_spdInventoryFixed,acl_add_spdInventoryFixedItem,acl_view_spdInventoryFixedItem,acl_edit_spdInventoryFixedItem","webApis":[{"serviceUrl":"/yard/spd/spdInventoryFixeds/byUser/count","serviceMethod":"GET","checked":false,"key":"7-12-0-0-0"},{"serviceUrl":"/yard/spd/spdInventoryFixeds/byUser","serviceMethod":"GET","checked":false,"key":"7-12-0-0-1"},{"serviceUrl":"/yard/pcs/pcsUsers","serviceMethod":"GET","checked":false,"key":"7-12-0-0-2"},{"serviceUrl":"/yard/pcs/pcsDepots/byFixedDepot/count","serviceMethod":"GET","checked":false,"key":"7-12-0-0-3"},{"serviceUrl":"/yard/pcs/pcsDepots/byFixedDepot","serviceMethod":"GET","checked":false,"key":"7-12-0-0-4"},{"serviceUrl":"/yard/spd/spdInventorys","serviceMethod":"POST","checked":false,"key":"7-12-0-0-5"}],"checked":false,"key":"7-12-0-0-0","id":"P0618"},{"opId":"P0615","opName":"定数盘点管理编辑","opSort":"P0615","elementClass":"acl_edit_spdInventoryFixed,acl_edit_spdInventoryFixedItem,acl_view_spdInventoryFixedItem","webApis":[{"serviceUrl":"/yard/spd/spdInventoryFixeds/byUser/count","serviceMethod":"GET","checked":false,"key":"7-12-0-1-0"},{"serviceUrl":"/yard/spd/spdInventoryFixeds/byUser","serviceMethod":"GET","checked":false,"key":"7-12-0-1-1"},{"serviceUrl":"/yard/pcs/pcsUsers","serviceMethod":"GET","checked":false,"key":"7-12-0-1-2"},{"serviceUrl":"/yard/spd/spdInventoryFixedItems/inventoryId,{inventoryId}","serviceMethod":"GET","checked":false,"key":"7-12-0-1-3"},{"serviceUrl":"/yard/spd/spdInventoryFixedItems/inventoryId,{inventoryId}/count","serviceMethod":"GET","checked":false,"key":"7-12-0-1-4"},{"serviceUrl":"/yard/spd/ydsGoods/ids,{ids}","serviceMethod":"GET","checked":false,"key":"7-12-0-1-5"},{"serviceUrl":"/yard/spd/spdInventoryFixedItems/{inventoryFixedItemId}","serviceMethod":"PUT","checked":false,"key":"7-12-0-1-6"}],"checked":false,"key":"7-12-0-1-0","id":"P0615"},{"opId":"P0617","opName":"定数盘点管理审核","opSort":"P0617","elementClass":"acl_reviewEntity_spdInventoryFixed,acl_reviewEntity_spdInventoryFixedItem","webApis":[],"checked":false,"key":"7-12-0-2-0","id":"P0617"},{"opId":"P0641","opName":"定数盘点管理提交","opSort":"P0641","elementClass":"acl_commitEntity_spdInventoryFixed","webApis":[],"checked":false,"key":"7-12-0-3-0","id":"P0641"},{"opId":"P0642","opName":"定数盘点管理撤回","opSort":"P0642","elementClass":"acl_cancelCommit_spdInventoryFixed","webApis":[],"checked":false,"key":"7-12-0-4-0","id":"P0642"},{"opId":"P0643","opName":"定数盘点管理打印","opSort":"P0643","elementClass":"acl_export_spdInventoryFixed,acl_view_spdInventoryFixed","webApis":[],"checked":false,"key":"7-12-0-5-0","id":"P0643"},{"opId":"P0614","opName":"定数盘点管理查看","opSort":"P0614","elementClass":"acl_view_spdInventoryFixedItem,acl_view_spdInventoryFixed","webApis":[{"serviceUrl":"/yard/spd/spdFixedBarcodes/byAvailable/count","serviceMethod":"GET","checked":false,"key":"7-12-0-6-0"},{"serviceUrl":"/yard/spd/spdFixedBarcodes/byAvailable","serviceMethod":"GET","checked":false,"key":"7-12-0-6-1"},{"serviceUrl":"/yard/spd/spdFixedBarcodes/{depotId}/byAvailable","serviceMethod":"GET","checked":false,"key":"7-12-0-6-2"},{"serviceUrl":"/yard/spd/spdFixedBarcodes/{depotId}/byAvailable/count","serviceMethod":"GET","checked":false,"key":"7-12-0-6-3"},{"serviceUrl":"/yard/spd/spdFixedBarcodes/ids,{ids}","serviceMethod":"GET","checked":false,"key":"7-12-0-6-4"},{"serviceUrl":"/yard/spd/spdInventoryFixeds/byUser/count","serviceMethod":"GET","checked":false,"key":"7-12-0-6-5"},{"serviceUrl":"/yard/spd/spdInventoryFixeds/byUser","serviceMethod":"GET","checked":false,"key":"7-12-0-6-6"},{"serviceUrl":"/yard/pcs/pcsUsers","serviceMethod":"GET","checked":false,"key":"7-12-0-6-7"},{"serviceUrl":"/yard/spd/spdInventoryFixedItems/inventoryId,{inventoryId}/count","serviceMethod":"GET","checked":false,"key":"7-12-0-6-8"},{"serviceUrl":"/yard/spd/spdInventoryFixedItems/inventoryId,{inventoryId}","serviceMethod":"GET","checked":false,"key":"7-12-0-6-9"},{"serviceUrl":"/yard/spd/ydsGoods/ids,{ids}","serviceMethod":"GET","checked":false,"key":"7-12-0-6-10"}],"checked":false,"key":"7-12-0-6-0","id":"P0614"},{"opId":"P0616","opName":"定数盘点管理删除","opSort":"P0616","elementClass":"acl_delete_spdInventoryFixed,acl_delete_spdInventoryFixedItem","webApis":[{"serviceUrl":"/yard/spd/spdInventoryFixeds/byUser/count","serviceMethod":"GET","checked":false,"key":"7-12-0-7-0"},{"serviceUrl":"/yard/spd/spdInventoryFixeds/byUser","serviceMethod":"GET","checked":false,"key":"7-12-0-7-1"},{"serviceUrl":"/yard/spd/spdInventorys/{inventory}","serviceMethod":"DELETE","checked":false,"key":"7-12-0-7-2"}],"checked":false,"key":"7-12-0-7-0","id":"P0616"}],"checked":false,"key":"7-12-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"7-12-0-0-0"},{"systemName":"收货系统","menuId":"10008-014","menuCode":"10008-014","menuParentId":"10008","icon":null,"menuSort":14,"name":"定数损溢申请","level":2,"anchor":"#spd/spdPlApplyFixeds","functions":[{"functionId":"F0067","functionName":"定数损溢申请","operations":[{"opId":"P0620","opName":"定数损溢申请新增","opSort":"P0620","elementClass":"acl_add_spdPlApplyFixed,acl_add_spdPlFixedItem","webApis":[{"serviceUrl":"/yard/spd/spdPlFixedItems","serviceMethod":"POST","checked":false,"key":"7-13-0-0-0"}],"checked":false,"key":"7-13-0-0-0","id":"P0620"},{"opId":"P0621","opName":"定数损溢申请编辑","opSort":"P0621","elementClass":"acl_edit_spdPlApplyFixed","webApis":[],"checked":false,"key":"7-13-0-1-0","id":"P0621"},{"opId":"P0622","opName":"定数损溢申请删除","opSort":"P0622","elementClass":"acl_delete_spdPlApplyFixed","webApis":[{"serviceUrl":"/yard/spd/spdPlFixedItems/{plFixedItemId}","serviceMethod":"DELETE","checked":false,"key":"7-13-0-2-0"}],"checked":false,"key":"7-13-0-2-0","id":"P0622"},{"opId":"P0623","opName":"定数损溢申请提交","opSort":"P0623","elementClass":"acl_commitEntity_spdPlApplyFixed","webApis":[],"checked":false,"key":"7-13-0-3-0","id":"P0623"},{"opId":"P0619","opName":"定数损溢申请查看","opSort":"P0619","elementClass":"acl_view_spdPlApplyFixed,acl_view_spdPlFixedItem","webApis":[{"serviceUrl":"/yard/spd/spdPlFixedItems/plId,{plId}/count","serviceMethod":"GET","checked":false,"key":"7-13-0-4-0"},{"serviceUrl":"/yard/spd/spdPlApplyFixeds","serviceMethod":"GET","checked":false,"key":"7-13-0-4-1"},{"serviceUrl":"/yard/spd/spdPlApplyFixeds/count","serviceMethod":"GET","checked":false,"key":"7-13-0-4-2"}],"checked":false,"key":"7-13-0-4-0","id":"P0619"}],"checked":false,"key":"7-13-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"7-13-0-0-0"},{"systemName":"收货系统","menuId":"10008-015","menuCode":"10008-015","menuParentId":"10008","icon":null,"menuSort":15,"name":"定数损溢审核","level":2,"anchor":"#spd/spdPlFixeds","functions":[{"functionId":"F0068","functionName":"定数损溢审核","operations":[{"opId":"P0625","opName":"定数损溢审核编辑","opSort":"P0625","elementClass":"acl_edit_spdPlFixed,acl_edit_spdPlFixedItem","webApis":[],"checked":false,"key":"7-14-0-0-0","id":"P0625"},{"opId":"P0628","opName":"定数损溢审核新增","opSort":"P0628","elementClass":"acl_add_spdPlFixed,acl_add_spdPlFixedItem","webApis":[],"checked":false,"key":"7-14-0-1-0","id":"P0628"},{"opId":"P0624","opName":"定数损溢审核查看","opSort":"P0624","elementClass":"acl_view_spdPlFixed,acl_view_spdPlFixedItem","webApis":[{"serviceUrl":"/yard/spd/spdPlFixeds","serviceMethod":"GET","checked":false,"key":"7-14-0-2-0"},{"serviceUrl":"/yard/spd/spdPlFixeds/count","serviceMethod":"GET","checked":false,"key":"7-14-0-2-1"},{"serviceUrl":"/yard/spd/spdFixedBarcodes/ids,{ids}","serviceMethod":"GET","checked":false,"key":"7-14-0-2-2"},{"serviceUrl":"/yard/spd/spdPlFixedItems/plId,{plId}","serviceMethod":"GET","checked":false,"key":"7-14-0-2-3"}],"checked":false,"key":"7-14-0-2-0","id":"P0624"},{"opId":"P0627","opName":"定数损溢审核审核","opSort":"P0627","elementClass":"acl_check_spdPlFixed,acl_check_spdPlFixedItem","webApis":[],"checked":false,"key":"7-14-0-3-0","id":"P0627"},{"opId":"P0626","opName":"定数损溢审核提交","opSort":"P0626","elementClass":"acl_commit_spdPlFixed,acl_commit_spdPlFixedItem","webApis":[],"checked":false,"key":"7-14-0-4-0","id":"P0626"},{"opId":"P0650","opName":"定数损溢审核保存","opSort":"P0650","elementClass":"acl_update_plFixed","webApis":[{"serviceUrl":"/yard/spd/spdPlFixedItems/{plFixedItemId}","serviceMethod":"PUT","checked":false,"key":"7-14-0-5-0"}],"checked":false,"key":"7-14-0-5-0","id":"P0650"},{"opId":"P0651","opName":"定数损溢审核确认","opSort":"P0651","elementClass":"acl_confirm_plFixed","webApis":[],"checked":false,"key":"7-14-0-6-0","id":"P0651"}],"checked":false,"key":"7-14-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"7-14-0-0-0"},{"systemName":"收货系统","menuId":"10008-016","menuCode":"10008-016","menuParentId":"10008","icon":null,"menuSort":16,"name":"定数损溢记录","level":2,"anchor":"#spd/spdPlFixedHiss","functions":[{"functionId":"F0069","functionName":"定数损溢记录","operations":[{"opId":"P0629","opName":"定数损溢记录查看","opSort":"P0629","elementClass":"acl_view_spdPlFixed,acl_view_spdPlFixedItem","webApis":[{"serviceUrl":"/yard/spd/spdPlFixedsHis","serviceMethod":"GET","checked":false,"key":"7-15-0-0-0"},{"serviceUrl":"/yard/spd/spdPlFixedsHis/count","serviceMethod":"GET","checked":false,"key":"7-15-0-0-1"}],"checked":false,"key":"7-15-0-0-0","id":"P0629"}],"checked":false,"key":"7-15-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"7-15-0-0-0"}],"topMenu":true,"open":false,"checked":false,"key":"7-0-0-0-0"},{"systemName":"收货系统","menuId":"10009","menuCode":"10009","menuParentId":"-1","icon":"fa-medkit","menuSort":9,"name":"院内配送管理","level":1,"anchor":null,"functions":null,"children":[{"systemName":"收货系统","menuId":"10009-001","menuCode":"10009-001","menuParentId":"10009","icon":null,"menuSort":1,"name":"运输调度管理","level":2,"anchor":null,"functions":[{"functionId":"F0049","functionName":"运输调度管理","operations":[{"opId":"P0405","opName":"运输调度管理查看","opSort":"P0405","elementClass":null,"webApis":[],"checked":false,"key":"8-0-0-0-0","id":"P0405"}],"checked":false,"key":"8-0-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"8-0-0-0-0"},{"systemName":"收货系统","menuId":"10009-002","menuCode":"10009-002","menuParentId":"10009","icon":null,"menuSort":2,"name":"周转装箱作业","level":2,"anchor":null,"functions":[{"functionId":"F0050","functionName":"周转装箱作业\n","operations":[{"opId":"P0406","opName":"周转装箱作业查看\n","opSort":"P0406","elementClass":null,"webApis":[],"checked":false,"key":"8-1-0-0-0","id":"P0406"}],"checked":false,"key":"8-1-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"8-1-0-0-0"},{"systemName":"收货系统","menuId":"10009-003","menuCode":"10009-003","menuParentId":"10009","icon":null,"menuSort":3,"name":"物流配送签收","level":2,"anchor":null,"functions":[{"functionId":"F0018","functionName":"物流配送签收","operations":[{"opId":"P0407","opName":"物流配送签收查看","opSort":"P0407","elementClass":null,"webApis":[],"checked":false,"key":"8-2-0-0-0","id":"P0407"}],"checked":false,"key":"8-2-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"8-2-0-0-0"}],"topMenu":true,"open":false,"checked":false,"key":"8-0-0-0-0"},{"systemName":"收货系统","menuId":"10010","menuCode":"10010","menuParentId":"-1","icon":"fa fa-credit-card","menuSort":10,"name":"结算对账管理","level":1,"anchor":null,"functions":null,"children":[{"systemName":"收货系统","menuId":"10010-001","menuCode":"10010-001","menuParentId":"10010","icon":null,"menuSort":1,"name":"物权交接确认","level":2,"anchor":"#spd/spdWiths","functions":[{"functionId":"F0019","functionName":"物权交接确认","operations":[{"opId":"P0005","opName":"物权交接确认确认","opSort":"P0005","elementClass":"acl_confirm_spdWith,acl_view_spdWith,acl_view_spdWithItem","webApis":[{"serviceUrl":"/yard/spd/spdWithItems/withId,{withId}","serviceMethod":"GET","checked":false,"key":"9-0-0-0-0"},{"serviceUrl":"/yard/spd/ydsGoodsLots/ids,{ids}","serviceMethod":"GET","checked":false,"key":"9-0-0-0-1"},{"serviceUrl":"/yard/spd/spdWiths/1/checkState/reviewed","serviceMethod":"PUT","checked":false,"key":"9-0-0-0-2"},{"serviceUrl":"/yard/spd/spdWiths/count","serviceMethod":"GET","checked":false,"key":"9-0-0-0-3"},{"serviceUrl":"/yard/spd/spdWiths","serviceMethod":"GET","checked":false,"key":"9-0-0-0-4"}],"checked":false,"key":"9-0-0-0-0","id":"P0005"},{"opId":"P0033","opName":"物权交接确认查看","opSort":"P0033","elementClass":"acl_view_spdWith,acl_view_spdWithItem","webApis":[{"serviceUrl":"/yard/spd/spdWiths/count","serviceMethod":"GET","checked":false,"key":"9-0-0-1-0"},{"serviceUrl":"/yard/spd/spdWiths","serviceMethod":"GET","checked":false,"key":"9-0-0-1-1"},{"serviceUrl":"/yard/spd/spdWithItems/withId,{withId}","serviceMethod":"GET","checked":false,"key":"9-0-0-1-2"}],"checked":false,"key":"9-0-0-1-0","id":"P0033"},{"opId":"P0004","opName":"物权交接确认保存","opSort":"P0004","elementClass":"acl_update_spdWith,acl_view_spdWith,acl_view_spdWithItem","webApis":[{"serviceUrl":"/yard/spd/spdWiths","serviceMethod":"GET","checked":false,"key":"9-0-0-2-0"},{"serviceUrl":"/yard/spd/spdWithItems/withId,{withId}","serviceMethod":"GET","checked":false,"key":"9-0-0-2-1"},{"serviceUrl":"/yard/spd/spdWithItems/{withItemId}","serviceMethod":"PUT","checked":false,"key":"9-0-0-2-2"},{"serviceUrl":"/yard/spd/spdWiths/count","serviceMethod":"GET","checked":false,"key":"9-0-0-2-3"},{"serviceUrl":"/yard/spd/ydsWorkBooks/{workbookId}","serviceMethod":"GET","checked":false,"key":"9-0-0-2-4"},{"serviceUrl":"/yard/spd/ydsWorkBooks/{workbookId}/checkState/commited","serviceMethod":"PUT","checked":false,"key":"9-0-0-2-5"}],"checked":false,"key":"9-0-0-2-0","id":"P0004"}],"checked":false,"key":"9-0-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"9-0-0-0-0"},{"systemName":"收货系统","menuId":"10010-002","menuCode":"10010-002","menuParentId":"10010","icon":null,"menuSort":2,"name":"物权交接记录","level":2,"anchor":"#spd/spdWithHiss","functions":[{"functionId":"F0070","functionName":"物权交接记录","operations":[{"opId":"P0630","opName":"物权交接记录查看","opSort":"P0630","elementClass":"acl_view_spdWithHis","webApis":[{"serviceUrl":"/yard/spd/spdWiths/byHis/count","serviceMethod":"GET","checked":false,"key":"9-1-0-0-0"},{"serviceUrl":"/yard/spd/spdWiths/byHis","serviceMethod":"GET","checked":false,"key":"9-1-0-0-1"}],"checked":false,"key":"9-1-0-0-0","id":"P0630"},{"opId":"P0631","opName":"物权交接记录打印","opSort":"P0631","elementClass":"acl_exportPdf_spdWithHis","webApis":[],"checked":false,"key":"9-1-0-1-0","id":"P0631"}],"checked":false,"key":"9-1-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"9-1-0-0-0"},{"systemName":"收货系统","menuId":"10010-003","menuCode":"10010-003","menuParentId":"10010","icon":null,"menuSort":3,"name":"物资结算申请","level":2,"anchor":"#spd/spdSettles","functions":[{"functionId":"F0031","functionName":"物资结算申请","operations":[{"opId":"P0203","opName":"物资结算查看","opSort":"P0203","elementClass":"acl_view_spdSettle,acl_view_spdSettleItem,acl_view_spdSettleAccount","webApis":[{"serviceUrl":"/yard/spd/spdSettles/count","serviceMethod":"GET","checked":false,"key":"9-2-0-0-0"},{"serviceUrl":"/yard/spd/spdSettles","serviceMethod":"GET","checked":false,"key":"9-2-0-0-1"},{"serviceUrl":"/yard/spd/spdSettleItems/settleId,{settleId}/count","serviceMethod":"GET","checked":false,"key":"9-2-0-0-2"},{"serviceUrl":"/yard/spd/spdSettleItems/settleId,{settleId}","serviceMethod":"GET","checked":false,"key":"9-2-0-0-3"},{"serviceUrl":"/yard/spd/spdSettles/{settleId}","serviceMethod":"GET","checked":false,"key":"9-2-0-0-4"},{"serviceUrl":"/yard/spd/spdSettleAccounts/count","serviceMethod":"GET","checked":false,"key":"9-2-0-0-5"},{"serviceUrl":"/yard/spd/spdSettleAccounts","serviceMethod":"GET","checked":false,"key":"9-2-0-0-6"},{"serviceUrl":"/yard/spd/spdSettleAccounts/settleId,{settleId}/count","serviceMethod":"GET","checked":false,"key":"9-2-0-0-7"},{"serviceUrl":"/yard/spd/spdSettleAccounts/settleId,{settleId}","serviceMethod":"GET","checked":false,"key":"9-2-0-0-8"},{"serviceUrl":"/yard/spd/spdSettleTaxs/bySettleTaxsOrg/count","serviceMethod":"GET","checked":false,"key":"9-2-0-0-9"},{"serviceUrl":"/yard/spd/spdSettleTaxs/bySettleTaxsOrg","serviceMethod":"GET","checked":false,"key":"9-2-0-0-10"}],"checked":false,"key":"9-2-0-0-0","id":"P0203"},{"opId":"P0204","opName":"物资结算编辑","opSort":"P0204","elementClass":"acl_edit_spdSettle,acl_edit_spdSettleItem","webApis":[{"serviceUrl":"/yard/spd/spdSettles/count","serviceMethod":"GET","checked":false,"key":"9-2-0-1-0"},{"serviceUrl":"/yard/spd/spdSettles","serviceMethod":"GET","checked":false,"key":"9-2-0-1-1"},{"serviceUrl":"/yard/spd/spdSettleItems/settleId,{settleId}/count","serviceMethod":"GET","checked":false,"key":"9-2-0-1-2"},{"serviceUrl":"/yard/spd/spdSettleItems/settleId,{settleId}","serviceMethod":"GET","checked":false,"key":"9-2-0-1-3"},{"serviceUrl":"/yard/spd/spdSettles/{settleId}","serviceMethod":"GET","checked":false,"key":"9-2-0-1-4"},{"serviceUrl":"/yard/spd/spdSettleAccounts","serviceMethod":"GET","checked":false,"key":"9-2-0-1-5"},{"serviceUrl":"/yard/spd/spdSettleAccounts/count","serviceMethod":"GET","checked":false,"key":"9-2-0-1-6"},{"serviceUrl":"/yard/spd/spdSettles/{settleId}","serviceMethod":"PUT","checked":false,"key":"9-2-0-1-7"},{"serviceUrl":"/yard/spd/spdSettleTaxItems/taxId,{taxId}","serviceMethod":"GET","checked":false,"key":"9-2-0-1-8"}],"checked":false,"key":"9-2-0-1-0","id":"P0204"},{"opId":"P0205","opName":"物资结算增加","opSort":"P0205","elementClass":"acl_add_spdSettle,acl_add_spdSettleItem,acl_view_spdSettleItem,acl_view_spdSettleAccount","webApis":[{"serviceUrl":"/yard/spd/spdSettles/count","serviceMethod":"GET","checked":false,"key":"9-2-0-2-0"},{"serviceUrl":"/yard/spd/spdSettles","serviceMethod":"GET","checked":false,"key":"9-2-0-2-1"},{"serviceUrl":"/yard/spd/spdSettleItems/settleId,{settleId}","serviceMethod":"GET","checked":false,"key":"9-2-0-2-2"},{"serviceUrl":"/yard/spd/spdSettles/{settleId}","serviceMethod":"GET","checked":false,"key":"9-2-0-2-3"},{"serviceUrl":"/yard/spd/spdSettleAccounts/count","serviceMethod":"GET","checked":false,"key":"9-2-0-2-4"},{"serviceUrl":"/yard/spd/spdSettleAccounts","serviceMethod":"GET","checked":false,"key":"9-2-0-2-5"},{"serviceUrl":"/yard/pcs/PcsDepts/bySupplierDept","serviceMethod":"GET","checked":false,"key":"9-2-0-2-6"},{"serviceUrl":"/yard/spd/spdSettles","serviceMethod":"POST","checked":false,"key":"9-2-0-2-7"},{"serviceUrl":"/yard/spd/spdSettleTaxs","serviceMethod":"POST","checked":false,"key":"9-2-0-2-8"},{"serviceUrl":"/yard/spd/spdSettleTaxs/bySettleTaxsOrg/count","serviceMethod":"GET","checked":false,"key":"9-2-0-2-9"},{"serviceUrl":"/yard/spd/spdSettleTaxs/bySettleTaxsOrg","serviceMethod":"GET","checked":false,"key":"9-2-0-2-10"}],"checked":false,"key":"9-2-0-2-0","id":"P0205"},{"opId":"P0206","opName":"物资结算删除","opSort":"P0206","elementClass":"acl_delete_spdSettle,acl_delete_spdSettleItem","webApis":[{"serviceUrl":"/yard/spd/spdSettles/count","serviceMethod":"GET","checked":false,"key":"9-2-0-3-0"},{"serviceUrl":"/yard/spd/spdSettles","serviceMethod":"GET","checked":false,"key":"9-2-0-3-1"},{"serviceUrl":"/yard/spd/spdSettleItems/settleId,{settleId}/count","serviceMethod":"GET","checked":false,"key":"9-2-0-3-2"},{"serviceUrl":"/yard/spd/spdSettleItems/settleId,{settleId}","serviceMethod":"GET","checked":false,"key":"9-2-0-3-3"},{"serviceUrl":"/yard/spd/spdSettles/{settleId}","serviceMethod":"GET","checked":false,"key":"9-2-0-3-4"},{"serviceUrl":"/yard/spd/spdSettleAccounts","serviceMethod":"GET","checked":false,"key":"9-2-0-3-5"},{"serviceUrl":"/yard/spd/spdSettleAccounts/count","serviceMethod":"GET","checked":false,"key":"9-2-0-3-6"},{"serviceUrl":"/yard/spd/spdSettles/{settleId}","serviceMethod":"DELETE","checked":false,"key":"9-2-0-3-7"}],"checked":false,"key":"9-2-0-3-0","id":"P0206"},{"opId":"P0208","opName":"物资结算审核","opSort":"P0208","elementClass":"acl_reviewEntity_spdSettle,acl_view_spdSettle","webApis":[{"serviceUrl":"/yard/spd/spdSettles","serviceMethod":"GET","checked":false,"key":"9-2-0-4-0"},{"serviceUrl":"/yard/spd/spdSettles/count","serviceMethod":"GET","checked":false,"key":"9-2-0-4-1"},{"serviceUrl":"/yard/spd/spdSettleItems/settleId,{settleId}/count","serviceMethod":"GET","checked":false,"key":"9-2-0-4-2"},{"serviceUrl":"/yard/spd/spdSettleItems/settleId,{settleId}","serviceMethod":"GET","checked":false,"key":"9-2-0-4-3"},{"serviceUrl":"/yard/spd/spdSettles/{settleId}","serviceMethod":"GET","checked":false,"key":"9-2-0-4-4"},{"serviceUrl":"/yard/spd/spdSettleAccounts/count","serviceMethod":"GET","checked":false,"key":"9-2-0-4-5"},{"serviceUrl":"/yard/spd/spdSettleAccounts","serviceMethod":"GET","checked":false,"key":"9-2-0-4-6"},{"serviceUrl":"/yard/spd/spdSettles/{settleId}/checkState/reviewed","serviceMethod":"PUT","checked":false,"key":"9-2-0-4-7"}],"checked":false,"key":"9-2-0-4-0","id":"P0208"}],"checked":false,"key":"9-2-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"9-2-0-0-0"},{"systemName":"收货系统","menuId":"10010-004","menuCode":"10010-004","menuParentId":"10010","icon":null,"menuSort":4,"name":"结算发票管理","level":2,"anchor":"#spd/spdSettleTaxs","functions":[{"functionId":"F0032","functionName":"结算发票管理","operations":[{"opId":"P0210","opName":"结算发票查看","opSort":"P0210","elementClass":"acl_view_spdSettleTax,acl_view_spdSettleTaxItem","webApis":[{"serviceUrl":"/yard/spd/spdSettleTaxItems/taxId,{taxId}","serviceMethod":"GET","checked":false,"key":"9-3-0-0-0"},{"serviceUrl":"/yard/spd/spdSettleTaxs/bySettleTaxsOrg/count","serviceMethod":"GET","checked":false,"key":"9-3-0-0-1"},{"serviceUrl":"/yard/spd/spdSettleTaxs/bySettleTaxsOrg","serviceMethod":"GET","checked":false,"key":"9-3-0-0-2"},{"serviceUrl":"/yard/spd/spdSettleTaxs/bySettleTaxsOrg/count","serviceMethod":"GET","checked":false,"key":"9-3-0-0-3"},{"serviceUrl":"/yard/spd/spdSettleTaxs/bySettleTaxsOrg","serviceMethod":"GET","checked":false,"key":"9-3-0-0-4"}],"checked":false,"key":"9-3-0-0-0","id":"P0210"},{"opId":"P0211","opName":"结算发票编辑","opSort":"P0211","elementClass":"acl_edit_spdSettleTax,acl_edit_spdSettleTaxItem,acl_view_spdSettleTaxItem,acl_add_spdSettleTaxItem,acl_delete_spdSettleTaxItem","webApis":[{"serviceUrl":"/yard/spd/spdSettleTaxs/{taxId}/checkState/reviewed","serviceMethod":"PUT","checked":false,"key":"9-3-0-1-0"},{"serviceUrl":"/yard/spd/spdSettleTaxs/bySettleTaxsOrg/count","serviceMethod":"GET","checked":false,"key":"9-3-0-1-1"},{"serviceUrl":"/yard/spd/spdSettleTaxs/bySettleTaxsOrg","serviceMethod":"GET","checked":false,"key":"9-3-0-1-2"},{"serviceUrl":"/yard/spd/spdSettleTaxItems/taxId,{taxId}","serviceMethod":"GET","checked":false,"key":"9-3-0-1-3"},{"serviceUrl":"/yard/spd/spdSettleTaxs/{taxId}","serviceMethod":"PUT","checked":false,"key":"9-3-0-1-4"},{"serviceUrl":"/yard/spd/ydsWorkBooks/byUse","serviceMethod":"GET","checked":false,"key":"9-3-0-1-5"},{"serviceUrl":"/yard/spd/spdSettleItems/buyerOrg","serviceMethod":"GET","checked":false,"key":"9-3-0-1-6"},{"serviceUrl":"/yard/spd/spdSettleItems/buyerOrg/count","serviceMethod":"GET","checked":false,"key":"9-3-0-1-7"},{"serviceUrl":"/yard/spd/spdSettleTaxItems","serviceMethod":"POST","checked":false,"key":"9-3-0-1-8"}],"checked":false,"key":"9-3-0-1-0","id":"P0211"},{"opId":"P0213","opName":"结算发票删除","opSort":"P0213","elementClass":"acl_delete_spdSettleTax,acl_delete_spdSettleTaxItem","webApis":[{"serviceUrl":"/yard/spd/spdSettleTaxItems/{taxItemId}","serviceMethod":"DELETE","checked":false,"key":"9-3-0-2-0"},{"serviceUrl":"/yard/spd/spdSettleTaxs/bySettleTaxsOrg/count","serviceMethod":"GET","checked":false,"key":"9-3-0-2-1"},{"serviceUrl":"/yard/spd/spdSettleTaxs/bySettleTaxsOrg","serviceMethod":"GET","checked":false,"key":"9-3-0-2-2"},{"serviceUrl":"/yard/spd/spdSettleTaxs/{taxId}","serviceMethod":"DELETE","checked":false,"key":"9-3-0-2-3"}],"checked":false,"key":"9-3-0-2-0","id":"P0213"},{"opId":"P0212","opName":"结算发票增加","opSort":"P0212","elementClass":"acl_add_spdSettleTax,acl_add_spdSettleTaxItem,acl_view_spdSettleTaxItem,acl_edit_spdSettleTaxItem,acl_delete_spdSettleTaxItem","webApis":[],"checked":false,"key":"9-3-0-3-0","id":"P0212"},{"opId":"P0215","opName":"结算发票审核","opSort":"P0215","elementClass":"acl_reviewEntity_spdSettleTax,acl_reviewEntity_spdSettleTaxItem","webApis":[{"serviceUrl":"/yard/spd/spdSettleTaxs/bySettleTaxsOrg/count","serviceMethod":"GET","checked":false,"key":"9-3-0-4-0"},{"serviceUrl":"/yard/spd/spdSettleTaxs/bySettleTaxsOrg","serviceMethod":"GET","checked":false,"key":"9-3-0-4-1"},{"serviceUrl":"/yard/spd/spdSettleTaxs/{taxId}/checkState/reviewed","serviceMethod":"PUT","checked":false,"key":"9-3-0-4-2"}],"checked":false,"key":"9-3-0-4-0","id":"P0215"}],"checked":false,"key":"9-3-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"9-3-0-0-0"},{"systemName":"收货系统","menuId":"10010-005","menuCode":"10010-005","menuParentId":"10010","icon":null,"menuSort":5,"name":"结算对账查询","level":2,"anchor":"#spd/spdSettleTaxHiss","functions":[{"functionId":"F0033","functionName":"结算对账查询","operations":[{"opId":"P0217","opName":"结算对账查看","opSort":"P0217","elementClass":"acl_view_spdSettleTaxHis,acl_view_spdSettleTaxItemHis","webApis":[{"serviceUrl":"/yard/spd/spdSettleTaxs/byHis","serviceMethod":"GET","checked":false,"key":"9-4-0-0-0"},{"serviceUrl":"/yard/spd/spdSettleTaxs/byHis/count","serviceMethod":"GET","checked":false,"key":"9-4-0-0-1"}],"checked":false,"key":"9-4-0-0-0","id":"P0217"}],"checked":false,"key":"9-4-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"9-4-0-0-0"}],"topMenu":true,"open":false,"checked":false,"key":"9-0-0-0-0"},{"systemName":"收货系统","menuId":"10011","menuCode":"10011","menuParentId":"-1","icon":"fa-heartbeat","menuSort":11,"name":"患者关系管理","level":1,"anchor":null,"functions":null,"children":[{"systemName":"收货系统","menuId":"10011-001","menuCode":"10011-001","menuParentId":"10011","icon":null,"menuSort":1,"name":"患者信息查询","level":2,"anchor":"#spd/spdHisPatients","functions":[{"functionId":"F0045","functionName":"患者信息查询","operations":[{"opId":"P0132","opName":"患者信息查询查看","opSort":"P0132","elementClass":"acl_view_spdHisPatient,acl_view_spdHisPatientUsed","webApis":[{"serviceUrl":"/yard/spd/spdHisPatients/count","serviceMethod":"GET","checked":false,"key":"10-0-0-0-0"},{"serviceUrl":"/yard/spd/spdHisPatients","serviceMethod":"GET","checked":false,"key":"10-0-0-0-1"},{"serviceUrl":"/yard/spd/spdHisPatientUseds/patientId,{patientId}/count","serviceMethod":"GET","checked":false,"key":"10-0-0-0-2"},{"serviceUrl":"/yard/spd/spdHisPatientUseds/patientId,{patientId}","serviceMethod":"GET","checked":false,"key":"10-0-0-0-3"},{"serviceUrl":"/yard/spd/spdUsedItems/ids,{ids}","serviceMethod":"GET","checked":false,"key":"10-0-0-0-4"}],"checked":false,"key":"10-0-0-0-0","id":"P0132"}],"checked":false,"key":"10-0-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"10-0-0-0-0"}],"topMenu":true,"open":false,"checked":false,"key":"10-0-0-0-0"},{"systemName":"收货系统","menuId":"10012","menuCode":"10012","menuParentId":"-1","icon":"fa-bar-chart","menuSort":12,"name":"业务报表查询","level":1,"anchor":null,"functions":null,"children":[{"systemName":"收货系统","menuId":"10012-001","menuCode":"10012-001","menuParentId":"10012","icon":null,"menuSort":1,"name":"全院库存查询","level":2,"anchor":"#spd/spdDepotStocks","functions":[{"functionId":"F0022","functionName":"全院库存查询","operations":[{"opId":"P0140","opName":"全院库存查询查看","opSort":"P0140","elementClass":"acl_view_spdDepotStocks","webApis":[{"serviceUrl":"/yard/spd/spdDepotStocks","serviceMethod":"GET","checked":false,"key":"11-0-0-0-0"},{"serviceUrl":"/yard/spd/spdDepotStocks/count","serviceMethod":"GET","checked":false,"key":"11-0-0-0-1"}],"checked":false,"key":"11-0-0-0-0","id":"P0140"}],"checked":false,"key":"11-0-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"11-0-0-0-0"}],"topMenu":true,"open":false,"checked":false,"key":"11-0-0-0-0"},{"systemName":"收货系统","menuId":"10013","menuCode":"10013","menuParentId":"-1","icon":"fa-cogs","menuSort":13,"name":"应用配置管理","level":1,"anchor":null,"functions":null,"children":[{"systemName":"收货系统","menuId":"10013-001","menuCode":"10013-001","menuParentId":"10013","icon":null,"menuSort":1,"name":"业务机构管理","level":2,"anchor":"#pcs/orgs","functions":[{"functionId":"F0006","functionName":"业务机构管理","operations":[{"opId":"P0040","opName":"业务机构查看","opSort":"P0040","elementClass":"acl_view_pcsOrg","webApis":[{"serviceUrl":"/yard/pcs/pcsDepts","serviceMethod":"GET","checked":false,"key":"12-0-0-0-0"},{"serviceUrl":"/yard/pcs/pcsDepts/orgId,{orgId}","serviceMethod":"GET","checked":false,"key":"12-0-0-0-1"},{"serviceUrl":"/yard/pcs/pcsOrgs","serviceMethod":"GET","checked":false,"key":"12-0-0-0-2"},{"serviceUrl":"/yard/pcs/pcsOrgs/{orgId}","serviceMethod":"GET","checked":false,"key":"12-0-0-0-3"}],"checked":false,"key":"12-0-0-0-0","id":"P0040"},{"opId":"P0041","opName":"业务机构增加","opSort":"P0041","elementClass":"acl_add_pcsOrg,acl_add_pcsDept","webApis":[{"serviceUrl":"/yard/pcs/pcsDepts","serviceMethod":"GET","checked":false,"key":"12-0-0-1-0"},{"serviceUrl":"/yard/pcs/pcsOrgs","serviceMethod":"POST","checked":false,"key":"12-0-0-1-1"},{"serviceUrl":"/yard/pcs/pcsOrgs/{orgId}","serviceMethod":"GET","checked":false,"key":"12-0-0-1-2"},{"serviceUrl":"/yard/pcs/pcsOrgs","serviceMethod":"POST","checked":false,"key":"12-0-0-1-3"},{"serviceUrl":"/yard/pcs/pcsOrgs","serviceMethod":"GET","checked":false,"key":"12-0-0-1-4"},{"serviceUrl":"/yard/pcs/pcsDepts","serviceMethod":"POST","checked":false,"key":"12-0-0-1-5"}],"checked":false,"key":"12-0-0-1-0","id":"P0041"},{"opId":"P0042","opName":"业务机构编辑","opSort":"P0042","elementClass":"acl_edit_pcsOrg,acl_edit_pcsDept","webApis":[{"serviceUrl":"/yard/pcs/pcsOrgs/{orgId}","serviceMethod":"PUT","checked":false,"key":"12-0-0-2-0"},{"serviceUrl":"/yard/pcs/pcsDepts/{deptId}","serviceMethod":"PUT","checked":false,"key":"12-0-0-2-1"},{"serviceUrl":"/yard/pcs/pcsOrgs","serviceMethod":"GET","checked":false,"key":"12-0-0-2-2"},{"serviceUrl":"/yard/pcs/pcsOrgs/{orgId}","serviceMethod":"GET","checked":false,"key":"12-0-0-2-3"},{"serviceUrl":"/yard/pcs/pcsOrgs","serviceMethod":"PUT","checked":false,"key":"12-0-0-2-4"}],"checked":false,"key":"12-0-0-2-0","id":"P0042"},{"opId":"P0286","opName":"业务机构撤回","opSort":"P0286","elementClass":"acl_cancelCommit_pcsOrg","webApis":[{"serviceUrl":"/yard/pcs/pcsOrgs/{orgId}/checkState/commited","serviceMethod":"PUT","checked":false,"key":"12-0-0-3-0"}],"checked":false,"key":"12-0-0-3-0","id":"P0286"},{"opId":"P0043","opName":"业务机构删除","opSort":"P0043","elementClass":"acl_delete_pcsOrg,acl_delete_pcsDept","webApis":[{"serviceUrl":"/yard/pcs/pcsOrgs","serviceMethod":"GET","checked":false,"key":"12-0-0-4-0"},{"serviceUrl":"/yard/pcs/pcsOrgs/{orgId}","serviceMethod":"GET","checked":false,"key":"12-0-0-4-1"},{"serviceUrl":"/yard/pcs/pcsOrgs","serviceMethod":"DELETE","checked":false,"key":"12-0-0-4-2"}],"checked":false,"key":"12-0-0-4-0","id":"P0043"},{"opId":"P0044","opName":"业务机构提交","opSort":"P0044","elementClass":"acl_commitEntity_pcsOrg","webApis":[{"serviceUrl":"/yard/pcs/pcsOrgs/{orgId}/checkState/commited","serviceMethod":"PUT","checked":false,"key":"12-0-0-5-0"},{"serviceUrl":"/yard/pcs/pcsOrgs","serviceMethod":"GET","checked":false,"key":"12-0-0-5-1"},{"serviceUrl":"/yard/pcs/pcsOrgs/{orgId}","serviceMethod":"GET","checked":false,"key":"12-0-0-5-2"},{"serviceUrl":"/yard/spd/spdSellerSendItems/{sendItemId}/checkState/commited","serviceMethod":"PUT","checked":false,"key":"12-0-0-5-3"}],"checked":false,"key":"12-0-0-5-0","id":"P0044"}],"checked":false,"key":"12-0-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"12-0-0-0-0"},{"systemName":"收货系统","menuId":"10013-002","menuCode":"10013-002","menuParentId":"10013","icon":null,"menuSort":2,"name":"部门仓库管理","level":2,"anchor":"#pcs/depots","functions":[{"functionId":"F0007","functionName":"部门仓库管理","operations":[{"opId":"P0047","opName":"部门仓库查看","opSort":"P0047","elementClass":"acl_view_pcsDepot,acl_view_pcsDepotArea,acl_view_pcsDepotShelf","webApis":[{"serviceUrl":"/yard/pcs/pcsDepots/count","serviceMethod":"GET","checked":false,"key":"12-1-0-0-0"},{"serviceUrl":"/yard/pcs/pcsDepotAreas/depotId,{depotId}","serviceMethod":"GET","checked":false,"key":"12-1-0-0-1"},{"serviceUrl":"/yard/pcs/depotShelfs/count","serviceMethod":"GET","checked":false,"key":"12-1-0-0-2"},{"serviceUrl":"/yard/pcs/depotShelfs","serviceMethod":"GET","checked":false,"key":"12-1-0-0-3"},{"serviceUrl":"/yard/pcs/depotShelfs/areaId,{areaId}/count","serviceMethod":"GET","checked":false,"key":"12-1-0-0-4"},{"serviceUrl":"/yard/pcs/depotShelfs/areaId,{areaId}","serviceMethod":"GET","checked":false,"key":"12-1-0-0-5"},{"serviceUrl":"/yard/pcs/pcsDepots","serviceMethod":"GET","checked":false,"key":"12-1-0-0-6"},{"serviceUrl":"/yard/pcs/pcsDepots","serviceMethod":"GET","checked":false,"key":"12-1-0-0-7"},{"serviceUrl":"/yard/pcs/pcsDepots","serviceMethod":"GET","checked":false,"key":"12-1-0-0-8"},{"serviceUrl":"/yard/pcs/pcsDepots/count","serviceMethod":"GET","checked":false,"key":"12-1-0-0-9"},{"serviceUrl":"yard/pcs/pcsDepots/{depotId}","serviceMethod":"GET","checked":false,"key":"12-1-0-0-10"}],"checked":false,"key":"12-1-0-0-0","id":"P0047"},{"opId":"P0051","opName":"部门仓库提交","opSort":"P0051","elementClass":"acl_commitEntity_pcsDepot","webApis":[{"serviceUrl":"/yard/pcs/pcsDepotAreas/depotId,{depotId}","serviceMethod":"GET","checked":false,"key":"12-1-0-1-0"},{"serviceUrl":"/yard/pcs/depotShelfs/areaId,{areaId}","serviceMethod":"GET","checked":false,"key":"12-1-0-1-1"},{"serviceUrl":"/yard/spd/ydsWorkBooks","serviceMethod":"GET","checked":false,"key":"12-1-0-1-2"},{"serviceUrl":"/yard/pcs/pcsDepots","serviceMethod":"GET","checked":false,"key":"12-1-0-1-3"},{"serviceUrl":"/yard/pcs/pcsDepots/count","serviceMethod":"GET","checked":false,"key":"12-1-0-1-4"},{"serviceUrl":"yard/pcs/pcsDepots/{depotId}","serviceMethod":"GET","checked":false,"key":"12-1-0-1-5"},{"serviceUrl":"/yard/pcs/pcsDepots/{depotId}/checkState/commited","serviceMethod":"PUT","checked":false,"key":"12-1-0-1-6"}],"checked":false,"key":"12-1-0-1-0","id":"P0051"},{"opId":"P0283","opName":"部门仓库撤回","opSort":"P0283","elementClass":"acl_cancelCommit_pcsDepot","webApis":[{"serviceUrl":"/yard/pcs/pcsDepotAreas/depotId,{depotId}","serviceMethod":"GET","checked":false,"key":"12-1-0-2-0"},{"serviceUrl":"/yard/pcs/depotShelfs/areaId,{areaId}","serviceMethod":"GET","checked":false,"key":"12-1-0-2-1"},{"serviceUrl":"/yard/spd/ydsWorkBooks","serviceMethod":"GET","checked":false,"key":"12-1-0-2-2"}],"checked":false,"key":"12-1-0-2-0","id":"P0283"},{"opId":"P0049","opName":"部门仓库编辑","opSort":"P0049","elementClass":"acl_edit_pcsDepot,acl_edit_pcsDepotArea,acl_edit_pcsDepotShelf,acl_view_pcsDepotArea,acl_view_pcsDepotShelf,acl_add_pcsDepotShelf,acl_add_pcsDepotArea","webApis":[{"serviceUrl":"/yard/pcs/pcsDepotAreas/depotId,{depotId}","serviceMethod":"GET","checked":false,"key":"12-1-0-3-0"},{"serviceUrl":"/yard/pcs/depotShelfs/{shelfId}","serviceMethod":"PUT","checked":false,"key":"12-1-0-3-1"},{"serviceUrl":"/yard/spd/ydsWorkBooks/byUse","serviceMethod":"GET","checked":false,"key":"12-1-0-3-2"},{"serviceUrl":"/yard/pcs/PcsDepts/byUse","serviceMethod":"GET","checked":false,"key":"12-1-0-3-3"},{"serviceUrl":"/yard/pcs/depotShelfs/areaId,{areaId}","serviceMethod":"GET","checked":false,"key":"12-1-0-3-4"},{"serviceUrl":"/yard/pcs/depotShelfs/areaId,{areaId}/count","serviceMethod":"GET","checked":false,"key":"12-1-0-3-5"},{"serviceUrl":"/yard/pcs/pcsDepotAreas/{areaId}","serviceMethod":"PUT","checked":false,"key":"12-1-0-3-6"},{"serviceUrl":"/yard/pcs/pcsDepots","serviceMethod":"GET","checked":false,"key":"12-1-0-3-7"},{"serviceUrl":"/yard/pcs/pcsDepots/count","serviceMethod":"GET","checked":false,"key":"12-1-0-3-8"},{"serviceUrl":"/yard/pcs/pcsDepots/{depotId}","serviceMethod":"GET","checked":false,"key":"12-1-0-3-9"},{"serviceUrl":"/yard/pcs/pcsDepots/{depotId}","serviceMethod":"PUT","checked":false,"key":"12-1-0-3-10"}],"checked":false,"key":"12-1-0-3-0","id":"P0049"},{"opId":"P0048","opName":"部门仓库增加","opSort":"P0048","elementClass":"acl_add_pcsDepot,acl_add_pcsDepotArea,acl_add_pcsDepotShelf,acl_view_pcsDepotArea,acl_view_pcsDepotShelf,acl_edit_pcsDepotArea,acl_edit_pcsDepotShelf","webApis":[{"serviceUrl":"/yard/pcs/pcsDepotAreas","serviceMethod":"POST","checked":false,"key":"12-1-0-4-0"},{"serviceUrl":"/yard/pcs/pcsDepots","serviceMethod":"POST","checked":false,"key":"12-1-0-4-1"},{"serviceUrl":"/yard/pcs/depotShelfs/areaId,{areaId}","serviceMethod":"GET","checked":false,"key":"12-1-0-4-2"},{"serviceUrl":"/yard/pcs/depotShelfs/areaId,{areaId}/count","serviceMethod":"GET","checked":false,"key":"12-1-0-4-3"},{"serviceUrl":"/yard/pcs/depotShelfs","serviceMethod":"POST","checked":false,"key":"12-1-0-4-4"},{"serviceUrl":"/yard/pcs/pcsDepotAreas/{areaId}","serviceMethod":"PUT","checked":false,"key":"12-1-0-4-5"},{"serviceUrl":"/yard/pcs/pcsDepots","serviceMethod":"GET","checked":false,"key":"12-1-0-4-6"},{"serviceUrl":"/yard/pcs/pcsDepots/count","serviceMethod":"GET","checked":false,"key":"12-1-0-4-7"},{"serviceUrl":"yard/pcs/pcsDepots/{depotId}","serviceMethod":"GET","checked":false,"key":"12-1-0-4-8"},{"serviceUrl":"/yard/pcs/pcsDepots","serviceMethod":"POST","checked":false,"key":"12-1-0-4-9"}],"checked":false,"key":"12-1-0-4-0","id":"P0048"}],"checked":false,"key":"12-1-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"12-1-0-0-0"},{"systemName":"收货系统","menuId":"10013-004","menuCode":"10013-004","menuParentId":"10013","icon":null,"menuSort":4,"name":"角色权限管理","level":2,"anchor":"#pcs/roles","functions":[{"functionId":"F0009","functionName":"角色权限管理","operations":[{"opId":"P0065","opName":"角色权限管理批量删除","opSort":"P0065","elementClass":"acl_deleteEntitis_pcsRoleOp","webApis":[{"serviceUrl":"/yard/pcs/pcsRoles","serviceMethod":"GET","checked":false,"key":"12-2-0-0-0"},{"serviceUrl":"/yard/pcs/pcsRoles/count","serviceMethod":"GET","checked":false,"key":"12-2-0-0-1"},{"serviceUrl":"/yard/pcs/pcsRoleTypes/ids,{ids}","serviceMethod":"GET","checked":false,"key":"12-2-0-0-2"}],"checked":false,"key":"12-2-0-0-0","id":"P0065"},{"opId":"P0061","opName":"角色权限查看","opSort":"P0061","elementClass":"acl_view_pcsRole","webApis":[{"serviceUrl":"/yard/pcs/pcsRoles/count","serviceMethod":"GET","checked":false,"key":"12-2-0-1-0"},{"serviceUrl":"/yard/pcs/pcsRoleOps/roleId","serviceMethod":"GET","checked":false,"key":"12-2-0-1-1"},{"serviceUrl":"/yard/pcs/pcsRoles","serviceMethod":"GET","checked":false,"key":"12-2-0-1-2"},{"serviceUrl":"/yard/pcs/pcsRoleTypes/ids,{ids}","serviceMethod":"GET","checked":false,"key":"12-2-0-1-3"},{"serviceUrl":"/yard/pcs/sysSystemFunctionOpViews/ids,{ids}","serviceMethod":"GET","checked":false,"key":"12-2-0-1-4"},{"serviceUrl":"/yard/pcs/pcsRoleOps/count","serviceMethod":"GET","checked":false,"key":"12-2-0-1-5"},{"serviceUrl":"/yard/pcs/pcsRoleOps","serviceMethod":"GET","checked":false,"key":"12-2-0-1-6"}],"checked":false,"key":"12-2-0-1-0","id":"P0061"},{"opId":"P0062","opName":"角色权限编辑","opSort":"P0062","elementClass":"acl_edit_pcsRole,acl_add_pcsRoleOp,acl_delete_pcsRoleOp,acl_view_pcsRoleOp","webApis":[{"serviceUrl":"/yard/pcs/pcsRoles","serviceMethod":"GET","checked":false,"key":"12-2-0-2-0"},{"serviceUrl":"/yard/pcs/pcsRoles/count","serviceMethod":"GET","checked":false,"key":"12-2-0-2-1"},{"serviceUrl":"/yard/pcs/sysSystemFunctionOpViews","serviceMethod":"GET","checked":false,"key":"12-2-0-2-2"},{"serviceUrl":"/yard/pcs/pcsRoleOps","serviceMethod":"GET","checked":false,"key":"12-2-0-2-3"},{"serviceUrl":"/yard/pcs/pcsRoleOps/roleId,{roleId}","serviceMethod":"GET","checked":false,"key":"12-2-0-2-4"},{"serviceUrl":"/yard/pcs/pcsRoleOps/{roleId}/count","serviceMethod":"GET","checked":false,"key":"12-2-0-2-5"},{"serviceUrl":"/yard/pcs/pcsRoles","serviceMethod":"PUT","checked":false,"key":"12-2-0-2-6"}],"checked":false,"key":"12-2-0-2-0","id":"P0062"},{"opId":"P0063","opName":"角色权限删除","opSort":"P0063","elementClass":"acl_delete_pcsRole","webApis":[{"serviceUrl":"/yard/pcs/pcsRoles","serviceMethod":"GET","checked":false,"key":"12-2-0-3-0"},{"serviceUrl":"/yard/pcs/pcsRoles/count","serviceMethod":"GET","checked":false,"key":"12-2-0-3-1"},{"serviceUrl":"/yard/pcs/pcsRoleTypeOps/{id}","serviceMethod":"DELETE","checked":false,"key":"12-2-0-3-2"},{"serviceUrl":"/yard/pcs/pcsRoleOps/{id}","serviceMethod":"DELETE","checked":false,"key":"12-2-0-3-3"},{"serviceUrl":"/yard/pcs/pcsRoles/{roleId}","serviceMethod":"DELETE","checked":false,"key":"12-2-0-3-4"}],"checked":false,"key":"12-2-0-3-0","id":"P0063"},{"opId":"P0064","opName":"角色权限增加","opSort":"P0064","elementClass":"acl_add_pcsRole,acl_add_pcsRoleOp,acl_delete_pcsRoleOp,acl_view_pcsRoleOp","webApis":[{"serviceUrl":"/yard/pcs/pcsRoles/count","serviceMethod":"GET","checked":false,"key":"12-2-0-4-0"},{"serviceUrl":"/yard/pcs/pcsRoles","serviceMethod":"GET","checked":false,"key":"12-2-0-4-1"},{"serviceUrl":"/yard/pcs/pcsRoleTypes/ids,{ids}","serviceMethod":"GET","checked":false,"key":"12-2-0-4-2"},{"serviceUrl":"/yard/pcs/pcsRoleOps/{id}","serviceMethod":"GET","checked":false,"key":"12-2-0-4-3"},{"serviceUrl":"/yard/pcs/pcsRoles","serviceMethod":"POST","checked":false,"key":"12-2-0-4-4"},{"serviceUrl":"/yard/pcs/pcsRoleOps","serviceMethod":"POST","checked":false,"key":"12-2-0-4-5"},{"serviceUrl":"/yard/pcs/pcsRoles","serviceMethod":"POST","checked":false,"key":"12-2-0-4-6"}],"checked":false,"key":"12-2-0-4-0","id":"P0064"}],"checked":false,"key":"12-2-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"12-2-0-0-0"},{"systemName":"收货系统","menuId":"10013-005","menuCode":"10013-005","menuParentId":"10013","icon":null,"menuSort":5,"name":"业务用户管理","level":2,"anchor":"#pcs/users","functions":[{"functionId":"F0010","functionName":"业务用户管理","operations":[{"opId":"P0661","opName":"业务用户权限刷新","opSort":"P0661","elementClass":"acl_refreshAuthorty_pcsUser","webApis":[],"checked":false,"key":"12-3-0-0-0","id":"P0661"},{"opId":"P0068","opName":"业务用户查看","opSort":"P0068","elementClass":"acl_view_pcsUser","webApis":[{"serviceUrl":"/yard/pcs/pcsUserRoles/userId,{userId}","serviceMethod":"GET","checked":false,"key":"12-3-0-1-0"},{"serviceUrl":"/yard/pcs/pcsUsers","serviceMethod":"GET","checked":false,"key":"12-3-0-1-1"},{"serviceUrl":"/yard/pcs/pcsOrgs","serviceMethod":"GET","checked":false,"key":"12-3-0-1-2"},{"serviceUrl":"/yard/pcs/pcsRoles/ids,{ids}","serviceMethod":"GET","checked":false,"key":"12-3-0-1-3"}],"checked":false,"key":"12-3-0-1-0","id":"P0068"},{"opId":"P0070","opName":"业务用户增加","opSort":"P0070","elementClass":"acl_add_pcsUser","webApis":[{"serviceUrl":"/yard/pcs/pcsUserRoles","serviceMethod":"POST","checked":false,"key":"12-3-0-2-0"},{"serviceUrl":"/yard/pcs/pcsUserRoles/{id}","serviceMethod":"GET","checked":false,"key":"12-3-0-2-1"},{"serviceUrl":"/yard/pcs/pcsUsers","serviceMethod":"POST","checked":false,"key":"12-3-0-2-2"},{"serviceUrl":"/yard/pcs/pcsUsers","serviceMethod":"GET","checked":false,"key":"12-3-0-2-3"},{"serviceUrl":"/yard/pcs/pcsUsers","serviceMethod":"POST","checked":false,"key":"12-3-0-2-4"}],"checked":false,"key":"12-3-0-2-0","id":"P0070"},{"opId":"P0071","opName":"业务用户删除","opSort":"P0071","elementClass":"acl_delete_pcsUser","webApis":[{"serviceUrl":"/yard/pcs/pcsUsers","serviceMethod":"GET","checked":false,"key":"12-3-0-3-0"},{"serviceUrl":"/yard/pcs/pcsUserRoles/{id}","serviceMethod":"DELETE","checked":false,"key":"12-3-0-3-1"},{"serviceUrl":"/yard/pcs/pcsUsers/{userId}","serviceMethod":"DELETE","checked":false,"key":"12-3-0-3-2"}],"checked":false,"key":"12-3-0-3-0","id":"P0071"},{"opId":"P0069","opName":"业务用户编辑","opSort":"P0069","elementClass":"acl_edit_pcsUser,acl_add_pcsUserRole,acl_delete_pcsUserRole,acl_view_pcsUserRole","webApis":[{"serviceUrl":"/yard/pcs/pcsDepts/{deptId}","serviceMethod":"GET","checked":false,"key":"12-3-0-4-0"},{"serviceUrl":"/yard/pcs/pcsUsers/{userId}","serviceMethod":"PUT","checked":false,"key":"12-3-0-4-1"},{"serviceUrl":"/yard/pcs/pcsUserRoles/userId,{userId}","serviceMethod":"GET","checked":false,"key":"12-3-0-4-2"},{"serviceUrl":"/yard/pcs/pcsUsers/{userId}","serviceMethod":"PUT","checked":false,"key":"12-3-0-4-3"},{"serviceUrl":"/yard/pcs/pcsUserRoles","serviceMethod":"POST","checked":false,"key":"12-3-0-4-4"}],"checked":false,"key":"12-3-0-4-0","id":"P0069"}],"checked":false,"key":"12-3-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"12-3-0-0-0"}],"topMenu":true,"open":false,"checked":false,"key":"12-0-0-0-0"},{"systemName":"收货系统","menuId":"10014","menuCode":"10014","menuParentId":"-1","icon":"fa-exclamation-triangle","menuSort":14,"name":"异常数据管理","level":1,"anchor":null,"functions":null,"children":[{"systemName":"收货系统","menuId":"10014-001","menuCode":"10014-001","menuParentId":"10014","icon":null,"menuSort":1,"name":"错误日志管理","level":2,"anchor":"#basics/loggingEvents","functions":[{"functionId":"F0075","functionName":"错误日志管理","operations":[{"opId":"P0663","opName":"错误日志管理查看","opSort":"P0663","elementClass":"acl_view_loggingEvent","webApis":[{"serviceUrl":"/yard/loggingEvents","serviceMethod":"GET","checked":false,"key":"13-0-0-0-0"},{"serviceUrl":"/yard/loggingEvents/{eventId}","serviceMethod":"GET","checked":false,"key":"13-0-0-0-1"},{"serviceUrl":"/yard/loggingEvents/count","serviceMethod":"GET","checked":false,"key":"13-0-0-0-2"}],"checked":false,"key":"13-0-0-0-0","id":"P0663"},{"opId":"P0664","opName":"错误日志管理删除","opSort":"P0664","elementClass":"acl_delete_loggingEvent","webApis":[{"serviceUrl":"/yard/loggingEvents/{eventId}","serviceMethod":"DELETE","checked":false,"key":"13-0-0-1-0"}],"checked":false,"key":"13-0-0-1-0","id":"P0664"}],"checked":false,"key":"13-0-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"13-0-0-0-0"},{"systemName":"收货系统","menuId":"10014-002","menuCode":"10014-002","menuParentId":"10014","icon":null,"menuSort":2,"name":"数据检查报告","level":2,"anchor":"#basics/sysDataCheckTaskReports","functions":[{"functionId":"F0076","functionName":"数据检查报告","operations":[{"opId":"P0666","opName":"数据检查报告查看","opSort":"P0666","elementClass":"acl_view_sysDataCheckTaskReport","webApis":[{"serviceUrl":"/yard/sysDataCheckTaskReports","serviceMethod":"GET","checked":false,"key":"13-1-0-0-0"},{"serviceUrl":"/yard/sysDataCheckTaskReports/{id}","serviceMethod":"GET","checked":false,"key":"13-1-0-0-1"},{"serviceUrl":"/yard/sysDataCheckTaskReports/count","serviceMethod":"GET","checked":false,"key":"13-1-0-0-2"},{"serviceUrl":"/yard/sysDataCheckTasks/ids,{ids}","serviceMethod":"GET","checked":false,"key":"13-1-0-0-3"},{"serviceUrl":"/yard/sysDataCheckTaskItems/{reportId}","serviceMethod":"GET","checked":false,"key":"13-1-0-0-4"},{"serviceUrl":"/yard/sysDataCheckTaskItems/{reportId}/count","serviceMethod":"GET","checked":false,"key":"13-1-0-0-5"}],"checked":false,"key":"13-1-0-0-0","id":"P0666"},{"opId":"P0667","opName":"数据检查任务执行","opSort":"P0667","elementClass":"acl_checkData_sysCheckDataTask","webApis":[{"serviceUrl":"/yard/sysDataCheckTaskManualStart","serviceMethod":"GET","checked":false,"key":"13-1-0-1-0"}],"checked":false,"key":"13-1-0-1-0","id":"P0667"}],"checked":false,"key":"13-1-0-0-0"}],"children":[],"topMenu":false,"checked":false,"key":"13-1-0-0-0"}],"topMenu":true,"open":false,"checked":false,"key":"13-0-0-0-0"}]};}
 
 /***/ },
 /* 205 */
@@ -25697,7 +22944,10 @@
 	    /**
 	     * 选择该二级菜单
 	     */
-	    case _actionsMenus.SELECTED_MENUS:
+	    // case GET_KEY:
+	    //   return state.map(menu => menu.preKey = action.key)
+
+	    // case SELECTED_MENUS:
 	    // state.map(menu => menu.children.map(child => child.selected = false))
 	    // return state.map(menu => Object.assign({}, menu, {
 	    //   children: menu.children.map(child => child.menuId === action.menuId?
@@ -25807,6 +23057,32 @@
 
 /***/ },
 /* 207 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	exports.keys = keys;
+
+	var _actionsMenus = __webpack_require__(204);
+
+	function keys(state, action) {
+	  if (state === undefined) state = '';
+
+	  switch (action.type) {
+	    case _actionsMenus.GET_KEY:
+	      state = action.key;
+	      return state;
+
+	    default:
+	      return state;
+	  }
+	}
+
+/***/ },
+/* 208 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -25825,7 +23101,7 @@
 	module.exports = thunkMiddleware;
 
 /***/ },
-/* 208 */
+/* 209 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -25836,11 +23112,11 @@
 	  value: true
 	});
 
-	var _core = __webpack_require__(209);
+	var _core = __webpack_require__(210);
 
-	var _helpers = __webpack_require__(210);
+	var _helpers = __webpack_require__(211);
 
-	var _defaults = __webpack_require__(213);
+	var _defaults = __webpack_require__(214);
 
 	var _defaults2 = _interopRequireDefault(_defaults);
 
@@ -25943,7 +23219,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 209 */
+/* 210 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -25953,9 +23229,9 @@
 	});
 	exports.printBuffer = printBuffer;
 
-	var _helpers = __webpack_require__(210);
+	var _helpers = __webpack_require__(211);
 
-	var _diff = __webpack_require__(211);
+	var _diff = __webpack_require__(212);
 
 	var _diff2 = _interopRequireDefault(_diff);
 
@@ -26084,7 +23360,7 @@
 	}
 
 /***/ },
-/* 210 */
+/* 211 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -26108,7 +23384,7 @@
 	var timer = exports.timer = typeof performance !== "undefined" && performance !== null && typeof performance.now === "function" ? performance : Date;
 
 /***/ },
-/* 211 */
+/* 212 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -26118,7 +23394,7 @@
 	});
 	exports.default = diffLogger;
 
-	var _deepDiff = __webpack_require__(212);
+	var _deepDiff = __webpack_require__(213);
 
 	var _deepDiff2 = _interopRequireDefault(_deepDiff);
 
@@ -26204,7 +23480,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 212 */
+/* 213 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global) {/*!
@@ -26633,7 +23909,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 213 */
+/* 214 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -26684,7 +23960,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 214 */
+/* 215 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -26693,16 +23969,16 @@
 
 	function _interopRequire(obj) { return obj && obj.__esModule ? obj['default'] : obj; }
 
-	var _devTools = __webpack_require__(215);
+	var _devTools = __webpack_require__(216);
 
 	exports.devTools = _interopRequire(_devTools);
 
-	var _persistState = __webpack_require__(216);
+	var _persistState = __webpack_require__(217);
 
 	exports.persistState = _interopRequire(_persistState);
 
 /***/ },
-/* 215 */
+/* 216 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -27003,7 +24279,7 @@
 	}
 
 /***/ },
-/* 216 */
+/* 217 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -27098,23 +24374,23 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 217 */
+/* 218 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var defaultClickRejectionStrategy = __webpack_require__(218);
+	var defaultClickRejectionStrategy = __webpack_require__(219);
 
 	module.exports = function injectTapEventPlugin (strategyOverrides) {
 	  strategyOverrides = strategyOverrides || {}
 	  var shouldRejectClick = strategyOverrides.shouldRejectClick || defaultClickRejectionStrategy;
 
 	  __webpack_require__(20).injection.injectEventPluginsByName({
-	    "TapEventPlugin":       __webpack_require__(219)(shouldRejectClick)
+	    "TapEventPlugin":       __webpack_require__(220)(shouldRejectClick)
 	  });
 	};
 
 
 /***/ },
-/* 218 */
+/* 219 */
 /***/ function(module, exports) {
 
 	module.exports = function(lastTouchEvent, clickTimestamp) {
@@ -27125,7 +24401,7 @@
 
 
 /***/ },
-/* 219 */
+/* 220 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -27153,10 +24429,10 @@
 	var EventPluginUtils = __webpack_require__(22);
 	var EventPropagators = __webpack_require__(85);
 	var SyntheticUIEvent = __webpack_require__(99);
-	var TouchEventUtils = __webpack_require__(220);
+	var TouchEventUtils = __webpack_require__(221);
 	var ViewportMetrics = __webpack_require__(30);
 
-	var keyOf = __webpack_require__(221);
+	var keyOf = __webpack_require__(222);
 	var topLevelTypes = EventConstants.topLevelTypes;
 
 	var isStartish = EventPluginUtils.isStartish;
@@ -27302,7 +24578,7 @@
 
 
 /***/ },
-/* 220 */
+/* 221 */
 /***/ function(module, exports) {
 
 	/**
@@ -27350,7 +24626,7 @@
 
 
 /***/ },
-/* 221 */
+/* 222 */
 /***/ function(module, exports) {
 
 	/**
@@ -27390,7 +24666,7 @@
 	module.exports = keyOf;
 
 /***/ },
-/* 222 */
+/* 223 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -27419,21 +24695,21 @@
 
 	var _reactRedux = __webpack_require__(171);
 
-	var _materialUiLibAppBar = __webpack_require__(223);
+	var _materialUiLibAppBar = __webpack_require__(224);
 
 	var _materialUiLibAppBar2 = _interopRequireDefault(_materialUiLibAppBar);
 
-	var _materialUiLibIconButton = __webpack_require__(251);
+	var _materialUiLibIconButton = __webpack_require__(252);
 
 	var _materialUiLibIconButton2 = _interopRequireDefault(_materialUiLibIconButton);
 
-	var _materialUiLibSvgIconsActionHome = __webpack_require__(306);
+	var _materialUiLibSvgIconsActionHome = __webpack_require__(307);
 
 	var _materialUiLibSvgIconsActionHome2 = _interopRequireDefault(_materialUiLibSvgIconsActionHome);
 
-	var _materialUiLibStylesColors = __webpack_require__(250);
+	var _materialUiLibStylesColors = __webpack_require__(251);
 
-	var _materialUiLibCheckbox = __webpack_require__(307);
+	var _materialUiLibCheckbox = __webpack_require__(308);
 
 	var _materialUiLibCheckbox2 = _interopRequireDefault(_materialUiLibCheckbox);
 
@@ -27445,11 +24721,11 @@
 
 	var ItemsActions = _interopRequireWildcard(_actionsItems);
 
-	var _componentsItemsItems = __webpack_require__(315);
+	var _componentsItemsItems = __webpack_require__(316);
 
 	var _componentsItemsItems2 = _interopRequireDefault(_componentsItemsItems);
 
-	var _componentsMenusMenus = __webpack_require__(339);
+	var _componentsMenusMenus = __webpack_require__(340);
 
 	var _componentsMenusMenus2 = _interopRequireDefault(_componentsMenusMenus);
 
@@ -27465,8 +24741,8 @@
 	  _createClass(App, [{
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
-	      this.props.menusActions.readItemsFile(); //electron下，用fs读取文件
-	      // this.props.menusActions.receiveMenus()  //web下，假数据
+	      // this.props.menusActions.readItemsFile()  //electron下，用fs读取文件
+	      this.props.menusActions.receiveMenus(); //web下，假数据
 	    }
 	  }, {
 	    key: 'componentWillReceiveProps',
@@ -27485,6 +24761,7 @@
 	    value: function render() {
 	      var _props = this.props;
 	      var items = _props.items;
+	      var keys = _props.keys;
 	      var menusActions = _props.menusActions;
 	      var itemsActions = _props.itemsActions;
 	      var menus = _props.menus;
@@ -27516,6 +24793,7 @@
 	            _react2['default'].createElement(_componentsItemsItems2['default'], {
 	              itemsActions: itemsActions,
 	              menusActions: menusActions,
+	              keys: keys,
 	              menus: menus,
 	              items: items })
 	          )
@@ -27531,7 +24809,8 @@
 	  // menu = Object.assign({}, menu, {functions: item}) //想把items上改变合并到menus上用这个方法行不通,因为item和menu是平级
 	  return {
 	    items: state.items,
-	    menus: state.menus
+	    menus: state.menus,
+	    keys: state.keys
 	  };
 	}
 
@@ -27546,7 +24825,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 223 */
+/* 224 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -27561,35 +24840,35 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _stylePropable = __webpack_require__(224);
+	var _stylePropable = __webpack_require__(225);
 
 	var _stylePropable2 = _interopRequireDefault(_stylePropable);
 
-	var _typography = __webpack_require__(249);
+	var _typography = __webpack_require__(250);
 
 	var _typography2 = _interopRequireDefault(_typography);
 
-	var _iconButton = __webpack_require__(251);
+	var _iconButton = __webpack_require__(252);
 
 	var _iconButton2 = _interopRequireDefault(_iconButton);
 
-	var _menu = __webpack_require__(303);
+	var _menu = __webpack_require__(304);
 
 	var _menu2 = _interopRequireDefault(_menu);
 
-	var _getMuiTheme = __webpack_require__(271);
+	var _getMuiTheme = __webpack_require__(272);
 
 	var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
 
-	var _paper = __webpack_require__(305);
+	var _paper = __webpack_require__(306);
 
 	var _paper2 = _interopRequireDefault(_paper);
 
-	var _propTypes = __webpack_require__(255);
+	var _propTypes = __webpack_require__(256);
 
 	var _propTypes2 = _interopRequireDefault(_propTypes);
 
-	var _warning = __webpack_require__(246);
+	var _warning = __webpack_require__(247);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
@@ -27918,7 +25197,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14)))
 
 /***/ },
-/* 224 */
+/* 225 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -27931,7 +25210,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _styles = __webpack_require__(225);
+	var _styles = __webpack_require__(226);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -27973,7 +25252,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 225 */
+/* 226 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -27985,15 +25264,15 @@
 	exports.mergeAndPrefix = mergeAndPrefix;
 	exports.prepareStyles = prepareStyles;
 
-	var _autoPrefix = __webpack_require__(226);
+	var _autoPrefix = __webpack_require__(227);
 
 	var _autoPrefix2 = _interopRequireDefault(_autoPrefix);
 
-	var _reactAddonsUpdate = __webpack_require__(247);
+	var _reactAddonsUpdate = __webpack_require__(248);
 
 	var _reactAddonsUpdate2 = _interopRequireDefault(_reactAddonsUpdate);
 
-	var _warning = __webpack_require__(246);
+	var _warning = __webpack_require__(247);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
@@ -28148,7 +25427,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14)))
 
 /***/ },
-/* 226 */
+/* 227 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -28159,11 +25438,11 @@
 	  value: true
 	});
 
-	var _inlineStylePrefixer = __webpack_require__(227);
+	var _inlineStylePrefixer = __webpack_require__(228);
 
 	var _inlineStylePrefixer2 = _interopRequireDefault(_inlineStylePrefixer);
 
-	var _warning = __webpack_require__(246);
+	var _warning = __webpack_require__(247);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
@@ -28284,7 +25563,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14)))
 
 /***/ },
-/* 227 */
+/* 228 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -28303,31 +25582,31 @@
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	var _utilsGetBrowserInformation = __webpack_require__(228);
+	var _utilsGetBrowserInformation = __webpack_require__(229);
 
 	var _utilsGetBrowserInformation2 = _interopRequireDefault(_utilsGetBrowserInformation);
 
-	var _utilsGetPrefixedKeyframes = __webpack_require__(231);
+	var _utilsGetPrefixedKeyframes = __webpack_require__(232);
 
 	var _utilsGetPrefixedKeyframes2 = _interopRequireDefault(_utilsGetPrefixedKeyframes);
 
-	var _utilsCapitalizeString = __webpack_require__(232);
+	var _utilsCapitalizeString = __webpack_require__(233);
 
 	var _utilsCapitalizeString2 = _interopRequireDefault(_utilsCapitalizeString);
 
-	var _utilsAssign = __webpack_require__(233);
+	var _utilsAssign = __webpack_require__(234);
 
 	var _utilsAssign2 = _interopRequireDefault(_utilsAssign);
 
-	var _utilsWarn = __webpack_require__(234);
+	var _utilsWarn = __webpack_require__(235);
 
 	var _utilsWarn2 = _interopRequireDefault(_utilsWarn);
 
-	var _caniuseData = __webpack_require__(235);
+	var _caniuseData = __webpack_require__(236);
 
 	var _caniuseData2 = _interopRequireDefault(_caniuseData);
 
-	var _Plugins = __webpack_require__(236);
+	var _Plugins = __webpack_require__(237);
 
 	var _Plugins2 = _interopRequireDefault(_Plugins);
 
@@ -28521,7 +25800,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 228 */
+/* 229 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -28532,7 +25811,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _bowser = __webpack_require__(229);
+	var _bowser = __webpack_require__(230);
 
 	var _bowser2 = _interopRequireDefault(_bowser);
 
@@ -28681,7 +25960,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 229 */
+/* 230 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -28692,7 +25971,7 @@
 
 	!function (name, definition) {
 	  if (typeof module != 'undefined' && module.exports) module.exports = definition()
-	  else if (true) __webpack_require__(230)(name, definition)
+	  else if (true) __webpack_require__(231)(name, definition)
 	  else this[name] = definition()
 	}('bowser', function () {
 	  /**
@@ -29267,14 +26546,14 @@
 
 
 /***/ },
-/* 230 */
+/* 231 */
 /***/ function(module, exports) {
 
 	module.exports = function() { throw new Error("define cannot be used indirect"); };
 
 
 /***/ },
-/* 231 */
+/* 232 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -29299,7 +26578,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 232 */
+/* 233 */
 /***/ function(module, exports) {
 
 	// helper to capitalize strings
@@ -29316,7 +26595,7 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 233 */
+/* 234 */
 /***/ function(module, exports) {
 
 	// leight polyfill for Object.assign
@@ -29338,7 +26617,7 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 234 */
+/* 235 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {// only throw warnings if devmode is enabled
@@ -29358,13 +26637,13 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14)))
 
 /***/ },
-/* 235 */
+/* 236 */
 /***/ function(module, exports) {
 
 	var caniuseData = {"chrome":{"transform":35,"transformOrigin":35,"transformOriginX":35,"transformOriginY":35,"backfaceVisibility":35,"perspective":35,"perspectiveOrigin":35,"transformStyle":35,"transformOriginZ":35,"animation":42,"animationDelay":42,"animationDirection":42,"animationFillMode":42,"animationDuration":42,"animationIterationCount":42,"animationName":42,"animationPlayState":42,"animationTimingFunction":42,"appearance":50,"userSelect":50,"fontKerning":32,"textEmphasisPosition":50,"textEmphasis":50,"textEmphasisStyle":50,"textEmphasisColor":50,"boxDecorationBreak":50,"clipPath":50,"maskImage":50,"maskMode":50,"maskRepeat":50,"maskPosition":50,"maskClip":50,"maskOrigin":50,"maskSize":50,"maskComposite":50,"mask":50,"maskBorderSource":50,"maskBorderMode":50,"maskBorderSlice":50,"maskBorderWidth":50,"maskBorderOutset":50,"maskBorderRepeat":50,"maskBorder":50,"maskType":50,"textDecorationStyle":50,"textDecorationSkip":50,"textDecorationLine":50,"textDecorationColor":50,"filter":50,"fontFeatureSettings":47,"breakAfter":50,"breakBefore":50,"breakInside":50,"columnCount":50,"columnFill":50,"columnGap":50,"columnRule":50,"columnRuleColor":50,"columnRuleStyle":50,"columnRuleWidth":50,"columns":50,"columnSpan":50,"columnWidth":50},"safari":{"flex":8,"flexBasis":8,"flexDirection":8,"flexGrow":8,"flexFlow":8,"flexShrink":8,"flexWrap":8,"alignContent":8,"alignItems":8,"alignSelf":8,"justifyContent":8,"order":8,"transition":6,"transitionDelay":6,"transitionDuration":6,"transitionProperty":6,"transitionTimingFunction":6,"transform":8,"transformOrigin":8,"transformOriginX":8,"transformOriginY":8,"backfaceVisibility":8,"perspective":8,"perspectiveOrigin":8,"transformStyle":8,"transformOriginZ":8,"animation":8,"animationDelay":8,"animationDirection":8,"animationFillMode":8,"animationDuration":8,"animationIterationCount":8,"animationName":8,"animationPlayState":8,"animationTimingFunction":8,"appearance":9.1,"userSelect":9.1,"backdropFilter":9.1,"fontKerning":9.1,"scrollSnapType":9.1,"scrollSnapPointsX":9.1,"scrollSnapPointsY":9.1,"scrollSnapDestination":9.1,"scrollSnapCoordinate":9.1,"textEmphasisPosition":7,"textEmphasis":7,"textEmphasisStyle":7,"textEmphasisColor":7,"boxDecorationBreak":9.1,"clipPath":9.1,"maskImage":9.1,"maskMode":9.1,"maskRepeat":9.1,"maskPosition":9.1,"maskClip":9.1,"maskOrigin":9.1,"maskSize":9.1,"maskComposite":9.1,"mask":9.1,"maskBorderSource":9.1,"maskBorderMode":9.1,"maskBorderSlice":9.1,"maskBorderWidth":9.1,"maskBorderOutset":9.1,"maskBorderRepeat":9.1,"maskBorder":9.1,"maskType":9.1,"textDecorationStyle":9.1,"textDecorationSkip":9.1,"textDecorationLine":9.1,"textDecorationColor":9.1,"shapeImageThreshold":9.1,"shapeImageMargin":9.1,"shapeImageOutside":9.1,"filter":9,"hyphens":9.1,"flowInto":9.1,"flowFrom":9.1,"breakBefore":8,"breakAfter":8,"breakInside":8,"regionFragment":9.1,"columnCount":8,"columnFill":8,"columnGap":8,"columnRule":8,"columnRuleColor":8,"columnRuleStyle":8,"columnRuleWidth":8,"columns":8,"columnSpan":8,"columnWidth":8},"firefox":{"appearance":46,"userSelect":46,"boxSizing":28,"textAlignLast":46,"textDecorationStyle":35,"textDecorationSkip":35,"textDecorationLine":35,"textDecorationColor":35,"tabSize":46,"hyphens":42,"fontFeatureSettings":33,"breakAfter":46,"breakBefore":46,"breakInside":46,"columnCount":46,"columnFill":46,"columnGap":46,"columnRule":46,"columnRuleColor":46,"columnRuleStyle":46,"columnRuleWidth":46,"columns":46,"columnSpan":46,"columnWidth":46},"opera":{"flex":16,"flexBasis":16,"flexDirection":16,"flexGrow":16,"flexFlow":16,"flexShrink":16,"flexWrap":16,"alignContent":16,"alignItems":16,"alignSelf":16,"justifyContent":16,"order":16,"transform":22,"transformOrigin":22,"transformOriginX":22,"transformOriginY":22,"backfaceVisibility":22,"perspective":22,"perspectiveOrigin":22,"transformStyle":22,"transformOriginZ":22,"animation":29,"animationDelay":29,"animationDirection":29,"animationFillMode":29,"animationDuration":29,"animationIterationCount":29,"animationName":29,"animationPlayState":29,"animationTimingFunction":29,"appearance":36,"userSelect":36,"fontKerning":19,"textEmphasisPosition":36,"textEmphasis":36,"textEmphasisStyle":36,"textEmphasisColor":36,"boxDecorationBreak":36,"clipPath":36,"maskImage":36,"maskMode":36,"maskRepeat":36,"maskPosition":36,"maskClip":36,"maskOrigin":36,"maskSize":36,"maskComposite":36,"mask":36,"maskBorderSource":36,"maskBorderMode":36,"maskBorderSlice":36,"maskBorderWidth":36,"maskBorderOutset":36,"maskBorderRepeat":36,"maskBorder":36,"maskType":36,"filter":36,"fontFeatureSettings":36,"breakAfter":36,"breakBefore":36,"breakInside":36,"columnCount":36,"columnFill":36,"columnGap":36,"columnRule":36,"columnRuleColor":36,"columnRuleStyle":36,"columnRuleWidth":36,"columns":36,"columnSpan":36,"columnWidth":36},"ie":{"gridArea":11,"gridGap":11,"gridColumnStart":11,"userSelect":11,"grid":11,"breakInside":11,"hyphens":11,"gridTemplateAreas":11,"breakAfter":11,"scrollSnapCoordinate":11,"gridRowStart":11,"gridAutoFlow":11,"scrollSnapDestination":11,"gridTemplate":11,"gridTemplateColumns":11,"transformOrigin":9,"gridAutoRows":11,"gridColumnEnd":11,"transformOriginY":9,"scrollSnapPointsY":11,"breakBefore":11,"gridRowGap":11,"scrollSnapPointsX":11,"regionFragment":11,"flexWrap":10,"wrapFlow":11,"gridRowEnd":11,"flex":10,"flexDirection":10,"flowInto":11,"touchAction":10,"gridColumn":11,"transform":9,"gridTemplateRows":11,"flexFlow":10,"transformOriginX":9,"flowFrom":11,"scrollSnapType":11,"wrapMargin":11,"gridColumnGap":11,"gridRow":11,"wrapThrough":11,"gridAutoColumns":11,"textSizeAdjust":11},"edge":{"userSelect":14,"wrapFlow":14,"wrapThrough":14,"wrapMargin":14,"scrollSnapType":14,"scrollSnapPointsX":14,"scrollSnapPointsY":14,"scrollSnapDestination":14,"scrollSnapCoordinate":14,"hyphens":14,"flowInto":14,"flowFrom":14,"breakBefore":14,"breakAfter":14,"breakInside":14,"regionFragment":14,"gridTemplateColumns":14,"gridTemplateRows":14,"gridTemplateAreas":14,"gridTemplate":14,"gridAutoColumns":14,"gridAutoRows":14,"gridAutoFlow":14,"grid":14,"gridRowStart":14,"gridColumnStart":14,"gridRowEnd":14,"gridRow":14,"gridColumn":14,"gridColumnEnd":14,"gridColumnGap":14,"gridRowGap":14,"gridArea":14,"gridGap":14},"ios_saf":{"flex":8.1,"flexBasis":8.1,"flexDirection":8.1,"flexGrow":8.1,"flexFlow":8.1,"flexShrink":8.1,"flexWrap":8.1,"alignContent":8.1,"alignItems":8.1,"alignSelf":8.1,"justifyContent":8.1,"order":8.1,"transition":6,"transitionDelay":6,"transitionDuration":6,"transitionProperty":6,"transitionTimingFunction":6,"transform":8.1,"transformOrigin":8.1,"transformOriginX":8.1,"transformOriginY":8.1,"backfaceVisibility":8.1,"perspective":8.1,"perspectiveOrigin":8.1,"transformStyle":8.1,"transformOriginZ":8.1,"animation":8.1,"animationDelay":8.1,"animationDirection":8.1,"animationFillMode":8.1,"animationDuration":8.1,"animationIterationCount":8.1,"animationName":8.1,"animationPlayState":8.1,"animationTimingFunction":8.1,"appearance":9.3,"userSelect":9.3,"backdropFilter":9.3,"fontKerning":9.3,"scrollSnapType":9.3,"scrollSnapPointsX":9.3,"scrollSnapPointsY":9.3,"scrollSnapDestination":9.3,"scrollSnapCoordinate":9.3,"boxDecorationBreak":9.3,"clipPath":9.3,"maskImage":9.3,"maskMode":9.3,"maskRepeat":9.3,"maskPosition":9.3,"maskClip":9.3,"maskOrigin":9.3,"maskSize":9.3,"maskComposite":9.3,"mask":9.3,"maskBorderSource":9.3,"maskBorderMode":9.3,"maskBorderSlice":9.3,"maskBorderWidth":9.3,"maskBorderOutset":9.3,"maskBorderRepeat":9.3,"maskBorder":9.3,"maskType":9.3,"textSizeAdjust":9.3,"textDecorationStyle":9.3,"textDecorationSkip":9.3,"textDecorationLine":9.3,"textDecorationColor":9.3,"shapeImageThreshold":9.3,"shapeImageMargin":9.3,"shapeImageOutside":9.3,"filter":9,"hyphens":9.3,"flowInto":9.3,"flowFrom":9.3,"breakBefore":8.1,"breakAfter":8.1,"breakInside":8.1,"regionFragment":9.3,"columnCount":8.1,"columnFill":8.1,"columnGap":8.1,"columnRule":8.1,"columnRuleColor":8.1,"columnRuleStyle":8.1,"columnRuleWidth":8.1,"columns":8.1,"columnSpan":8.1,"columnWidth":8.1},"android":{"borderImage":4.2,"borderImageOutset":4.2,"borderImageRepeat":4.2,"borderImageSlice":4.2,"borderImageSource":4.2,"borderImageWidth":4.2,"flex":4.2,"flexBasis":4.2,"flexDirection":4.2,"flexGrow":4.2,"flexFlow":4.2,"flexShrink":4.2,"flexWrap":4.2,"alignContent":4.2,"alignItems":4.2,"alignSelf":4.2,"justifyContent":4.2,"order":4.2,"transition":4.2,"transitionDelay":4.2,"transitionDuration":4.2,"transitionProperty":4.2,"transitionTimingFunction":4.2,"transform":4.4,"transformOrigin":4.4,"transformOriginX":4.4,"transformOriginY":4.4,"backfaceVisibility":4.4,"perspective":4.4,"perspectiveOrigin":4.4,"transformStyle":4.4,"transformOriginZ":4.4,"animation":4.4,"animationDelay":4.4,"animationDirection":4.4,"animationFillMode":4.4,"animationDuration":4.4,"animationIterationCount":4.4,"animationName":4.4,"animationPlayState":4.4,"animationTimingFunction":4.4,"appearance":46,"userSelect":46,"fontKerning":4.4,"textEmphasisPosition":46,"textEmphasis":46,"textEmphasisStyle":46,"textEmphasisColor":46,"boxDecorationBreak":46,"clipPath":46,"maskImage":46,"maskMode":46,"maskRepeat":46,"maskPosition":46,"maskClip":46,"maskOrigin":46,"maskSize":46,"maskComposite":46,"mask":46,"maskBorderSource":46,"maskBorderMode":46,"maskBorderSlice":46,"maskBorderWidth":46,"maskBorderOutset":46,"maskBorderRepeat":46,"maskBorder":46,"maskType":46,"filter":46,"fontFeatureSettings":46,"breakAfter":46,"breakBefore":46,"breakInside":46,"columnCount":46,"columnFill":46,"columnGap":46,"columnRule":46,"columnRuleColor":46,"columnRuleStyle":46,"columnRuleWidth":46,"columns":46,"columnSpan":46,"columnWidth":46},"and_chr":{"appearance":47,"userSelect":47,"textEmphasisPosition":47,"textEmphasis":47,"textEmphasisStyle":47,"textEmphasisColor":47,"boxDecorationBreak":47,"clipPath":47,"maskImage":47,"maskMode":47,"maskRepeat":47,"maskPosition":47,"maskClip":47,"maskOrigin":47,"maskSize":47,"maskComposite":47,"mask":47,"maskBorderSource":47,"maskBorderMode":47,"maskBorderSlice":47,"maskBorderWidth":47,"maskBorderOutset":47,"maskBorderRepeat":47,"maskBorder":47,"maskType":47,"textDecorationStyle":47,"textDecorationSkip":47,"textDecorationLine":47,"textDecorationColor":47,"filter":47,"fontFeatureSettings":47,"breakAfter":47,"breakBefore":47,"breakInside":47,"columnCount":47,"columnFill":47,"columnGap":47,"columnRule":47,"columnRuleColor":47,"columnRuleStyle":47,"columnRuleWidth":47,"columns":47,"columnSpan":47,"columnWidth":47},"and_uc":{"flex":9.9,"flexBasis":9.9,"flexDirection":9.9,"flexGrow":9.9,"flexFlow":9.9,"flexShrink":9.9,"flexWrap":9.9,"alignContent":9.9,"alignItems":9.9,"alignSelf":9.9,"justifyContent":9.9,"order":9.9,"transition":9.9,"transitionDelay":9.9,"transitionDuration":9.9,"transitionProperty":9.9,"transitionTimingFunction":9.9,"transform":9.9,"transformOrigin":9.9,"transformOriginX":9.9,"transformOriginY":9.9,"backfaceVisibility":9.9,"perspective":9.9,"perspectiveOrigin":9.9,"transformStyle":9.9,"transformOriginZ":9.9,"animation":9.9,"animationDelay":9.9,"animationDirection":9.9,"animationFillMode":9.9,"animationDuration":9.9,"animationIterationCount":9.9,"animationName":9.9,"animationPlayState":9.9,"animationTimingFunction":9.9,"appearance":9.9,"userSelect":9.9,"fontKerning":9.9,"textEmphasisPosition":9.9,"textEmphasis":9.9,"textEmphasisStyle":9.9,"textEmphasisColor":9.9,"maskImage":9.9,"maskMode":9.9,"maskRepeat":9.9,"maskPosition":9.9,"maskClip":9.9,"maskOrigin":9.9,"maskSize":9.9,"maskComposite":9.9,"mask":9.9,"maskBorderSource":9.9,"maskBorderMode":9.9,"maskBorderSlice":9.9,"maskBorderWidth":9.9,"maskBorderOutset":9.9,"maskBorderRepeat":9.9,"maskBorder":9.9,"maskType":9.9,"textSizeAdjust":9.9,"filter":9.9,"hyphens":9.9,"flowInto":9.9,"flowFrom":9.9,"breakBefore":9.9,"breakAfter":9.9,"breakInside":9.9,"regionFragment":9.9,"fontFeatureSettings":9.9,"columnCount":9.9,"columnFill":9.9,"columnGap":9.9,"columnRule":9.9,"columnRuleColor":9.9,"columnRuleStyle":9.9,"columnRuleWidth":9.9,"columns":9.9,"columnSpan":9.9,"columnWidth":9.9},"op_mini":{"borderImage":5,"borderImageOutset":5,"borderImageRepeat":5,"borderImageSlice":5,"borderImageSource":5,"borderImageWidth":5,"tabSize":5,"objectFit":5,"objectPosition":5}}; module.exports = caniuseData
 
 /***/ },
-/* 236 */
+/* 237 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29375,37 +26654,37 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _pluginsCalc = __webpack_require__(237);
+	var _pluginsCalc = __webpack_require__(238);
 
 	var _pluginsCalc2 = _interopRequireDefault(_pluginsCalc);
 
-	var _pluginsCursor = __webpack_require__(238);
+	var _pluginsCursor = __webpack_require__(239);
 
 	var _pluginsCursor2 = _interopRequireDefault(_pluginsCursor);
 
-	var _pluginsFlex = __webpack_require__(239);
+	var _pluginsFlex = __webpack_require__(240);
 
 	var _pluginsFlex2 = _interopRequireDefault(_pluginsFlex);
 
-	var _pluginsSizing = __webpack_require__(240);
+	var _pluginsSizing = __webpack_require__(241);
 
 	var _pluginsSizing2 = _interopRequireDefault(_pluginsSizing);
 
-	var _pluginsGradient = __webpack_require__(241);
+	var _pluginsGradient = __webpack_require__(242);
 
 	var _pluginsGradient2 = _interopRequireDefault(_pluginsGradient);
 
-	var _pluginsTransition = __webpack_require__(242);
+	var _pluginsTransition = __webpack_require__(243);
 
 	var _pluginsTransition2 = _interopRequireDefault(_pluginsTransition);
 
 	// special flexbox specifications
 
-	var _pluginsFlexboxIE = __webpack_require__(244);
+	var _pluginsFlexboxIE = __webpack_require__(245);
 
 	var _pluginsFlexboxIE2 = _interopRequireDefault(_pluginsFlexboxIE);
 
-	var _pluginsFlexboxOld = __webpack_require__(245);
+	var _pluginsFlexboxOld = __webpack_require__(246);
 
 	var _pluginsFlexboxOld2 = _interopRequireDefault(_pluginsFlexboxOld);
 
@@ -29415,7 +26694,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 237 */
+/* 238 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -29452,7 +26731,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 238 */
+/* 239 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -29495,7 +26774,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 239 */
+/* 240 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -29531,7 +26810,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 240 */
+/* 241 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -29587,7 +26866,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 241 */
+/* 242 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -29626,7 +26905,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 242 */
+/* 243 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29640,11 +26919,11 @@
 
 	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-	var _utilsCamelToDashCase = __webpack_require__(243);
+	var _utilsCamelToDashCase = __webpack_require__(244);
 
 	var _utilsCamelToDashCase2 = _interopRequireDefault(_utilsCamelToDashCase);
 
-	var _utilsCapitalizeString = __webpack_require__(232);
+	var _utilsCapitalizeString = __webpack_require__(233);
 
 	var _utilsCapitalizeString2 = _interopRequireDefault(_utilsCapitalizeString);
 
@@ -29705,7 +26984,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 243 */
+/* 244 */
 /***/ function(module, exports) {
 
 	/**
@@ -29727,7 +27006,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 244 */
+/* 245 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -29793,7 +27072,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 245 */
+/* 246 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -29867,7 +27146,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 246 */
+/* 247 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -29934,13 +27213,13 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14)))
 
 /***/ },
-/* 247 */
+/* 248 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(248);
+	module.exports = __webpack_require__(249);
 
 /***/ },
-/* 248 */
+/* 249 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -30053,7 +27332,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14)))
 
 /***/ },
-/* 249 */
+/* 250 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -30062,7 +27341,7 @@
 	  value: true
 	});
 
-	var _colors = __webpack_require__(250);
+	var _colors = __webpack_require__(251);
 
 	var _colors2 = _interopRequireDefault(_colors);
 
@@ -30094,7 +27373,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 250 */
+/* 251 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -30392,7 +27671,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 251 */
+/* 252 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -30407,39 +27686,39 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _stylePropable = __webpack_require__(224);
+	var _stylePropable = __webpack_require__(225);
 
 	var _stylePropable2 = _interopRequireDefault(_stylePropable);
 
-	var _contextPure = __webpack_require__(252);
+	var _contextPure = __webpack_require__(253);
 
 	var _contextPure2 = _interopRequireDefault(_contextPure);
 
-	var _transitions = __webpack_require__(254);
+	var _transitions = __webpack_require__(255);
 
 	var _transitions2 = _interopRequireDefault(_transitions);
 
-	var _propTypes = __webpack_require__(255);
+	var _propTypes = __webpack_require__(256);
 
 	var _propTypes2 = _interopRequireDefault(_propTypes);
 
-	var _enhancedButton = __webpack_require__(256);
+	var _enhancedButton = __webpack_require__(257);
 
 	var _enhancedButton2 = _interopRequireDefault(_enhancedButton);
 
-	var _fontIcon = __webpack_require__(301);
+	var _fontIcon = __webpack_require__(302);
 
 	var _fontIcon2 = _interopRequireDefault(_fontIcon);
 
-	var _tooltip = __webpack_require__(302);
+	var _tooltip = __webpack_require__(303);
 
 	var _tooltip2 = _interopRequireDefault(_tooltip);
 
-	var _children = __webpack_require__(260);
+	var _children = __webpack_require__(261);
 
 	var _children2 = _interopRequireDefault(_children);
 
-	var _getMuiTheme = __webpack_require__(271);
+	var _getMuiTheme = __webpack_require__(272);
 
 	var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
 
@@ -30730,7 +28009,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 252 */
+/* 253 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -30739,7 +28018,7 @@
 	  value: true
 	});
 
-	var _shallowEqual = __webpack_require__(253);
+	var _shallowEqual = __webpack_require__(254);
 
 	var _shallowEqual2 = _interopRequireDefault(_shallowEqual);
 
@@ -30800,7 +28079,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 253 */
+/* 254 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -30840,7 +28119,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 254 */
+/* 255 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -30881,7 +28160,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 255 */
+/* 256 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -30922,7 +28201,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 256 */
+/* 257 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -30937,39 +28216,39 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactAddonsPureRenderMixin = __webpack_require__(257);
+	var _reactAddonsPureRenderMixin = __webpack_require__(258);
 
 	var _reactAddonsPureRenderMixin2 = _interopRequireDefault(_reactAddonsPureRenderMixin);
 
-	var _stylePropable = __webpack_require__(224);
+	var _stylePropable = __webpack_require__(225);
 
 	var _stylePropable2 = _interopRequireDefault(_stylePropable);
 
-	var _colors = __webpack_require__(250);
+	var _colors = __webpack_require__(251);
 
 	var _colors2 = _interopRequireDefault(_colors);
 
-	var _children = __webpack_require__(260);
+	var _children = __webpack_require__(261);
 
 	var _children2 = _interopRequireDefault(_children);
 
-	var _events = __webpack_require__(263);
+	var _events = __webpack_require__(264);
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _keyCode = __webpack_require__(264);
+	var _keyCode = __webpack_require__(265);
 
 	var _keyCode2 = _interopRequireDefault(_keyCode);
 
-	var _focusRipple = __webpack_require__(265);
+	var _focusRipple = __webpack_require__(266);
 
 	var _focusRipple2 = _interopRequireDefault(_focusRipple);
 
-	var _touchRipple = __webpack_require__(298);
+	var _touchRipple = __webpack_require__(299);
 
 	var _touchRipple2 = _interopRequireDefault(_touchRipple);
 
-	var _getMuiTheme = __webpack_require__(271);
+	var _getMuiTheme = __webpack_require__(272);
 
 	var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
 
@@ -31271,13 +28550,13 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 257 */
+/* 258 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(258);
+	module.exports = __webpack_require__(259);
 
 /***/ },
-/* 258 */
+/* 259 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -31293,7 +28572,7 @@
 
 	'use strict';
 
-	var shallowCompare = __webpack_require__(259);
+	var shallowCompare = __webpack_require__(260);
 
 	/**
 	 * If your React component's render function is "pure", e.g. it will render the
@@ -31328,7 +28607,7 @@
 	module.exports = ReactComponentWithPureRenderMixin;
 
 /***/ },
-/* 259 */
+/* 260 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -31357,7 +28636,7 @@
 	module.exports = shallowCompare;
 
 /***/ },
-/* 260 */
+/* 261 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -31370,7 +28649,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactAddonsCreateFragment = __webpack_require__(261);
+	var _reactAddonsCreateFragment = __webpack_require__(262);
 
 	var _reactAddonsCreateFragment2 = _interopRequireDefault(_reactAddonsCreateFragment);
 
@@ -31412,13 +28691,13 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 261 */
+/* 262 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(262).create;
+	module.exports = __webpack_require__(263).create;
 
 /***/ },
-/* 262 */
+/* 263 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -31488,7 +28767,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14)))
 
 /***/ },
-/* 263 */
+/* 264 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -31533,7 +28812,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 264 */
+/* 265 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -31554,7 +28833,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 265 */
+/* 266 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -31571,27 +28850,27 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _reactAddonsPureRenderMixin = __webpack_require__(257);
+	var _reactAddonsPureRenderMixin = __webpack_require__(258);
 
 	var _reactAddonsPureRenderMixin2 = _interopRequireDefault(_reactAddonsPureRenderMixin);
 
-	var _stylePropable = __webpack_require__(224);
+	var _stylePropable = __webpack_require__(225);
 
 	var _stylePropable2 = _interopRequireDefault(_stylePropable);
 
-	var _autoPrefix = __webpack_require__(226);
+	var _autoPrefix = __webpack_require__(227);
 
 	var _autoPrefix2 = _interopRequireDefault(_autoPrefix);
 
-	var _colors = __webpack_require__(250);
+	var _colors = __webpack_require__(251);
 
 	var _colors2 = _interopRequireDefault(_colors);
 
-	var _transitions = __webpack_require__(254);
+	var _transitions = __webpack_require__(255);
 
 	var _transitions2 = _interopRequireDefault(_transitions);
 
-	var _scaleIn = __webpack_require__(266);
+	var _scaleIn = __webpack_require__(267);
 
 	var _scaleIn2 = _interopRequireDefault(_scaleIn);
 
@@ -31719,7 +28998,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 266 */
+/* 267 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -31734,23 +29013,23 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactAddonsPureRenderMixin = __webpack_require__(257);
+	var _reactAddonsPureRenderMixin = __webpack_require__(258);
 
 	var _reactAddonsPureRenderMixin2 = _interopRequireDefault(_reactAddonsPureRenderMixin);
 
-	var _reactAddonsTransitionGroup = __webpack_require__(267);
+	var _reactAddonsTransitionGroup = __webpack_require__(268);
 
 	var _reactAddonsTransitionGroup2 = _interopRequireDefault(_reactAddonsTransitionGroup);
 
-	var _stylePropable = __webpack_require__(224);
+	var _stylePropable = __webpack_require__(225);
 
 	var _stylePropable2 = _interopRequireDefault(_stylePropable);
 
-	var _scaleInChild = __webpack_require__(270);
+	var _scaleInChild = __webpack_require__(271);
 
 	var _scaleInChild2 = _interopRequireDefault(_scaleInChild);
 
-	var _getMuiTheme = __webpack_require__(271);
+	var _getMuiTheme = __webpack_require__(272);
 
 	var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
 
@@ -31853,13 +29132,13 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 267 */
+/* 268 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(268);
+	module.exports = __webpack_require__(269);
 
 /***/ },
-/* 268 */
+/* 269 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -31876,7 +29155,7 @@
 	'use strict';
 
 	var React = __webpack_require__(67);
-	var ReactTransitionChildMapping = __webpack_require__(269);
+	var ReactTransitionChildMapping = __webpack_require__(270);
 
 	var assign = __webpack_require__(31);
 	var emptyFunction = __webpack_require__(25);
@@ -32069,7 +29348,7 @@
 	module.exports = ReactTransitionGroup;
 
 /***/ },
-/* 269 */
+/* 270 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -32172,7 +29451,7 @@
 	module.exports = ReactTransitionChildMapping;
 
 /***/ },
-/* 270 */
+/* 271 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -32191,23 +29470,23 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _reactAddonsPureRenderMixin = __webpack_require__(257);
+	var _reactAddonsPureRenderMixin = __webpack_require__(258);
 
 	var _reactAddonsPureRenderMixin2 = _interopRequireDefault(_reactAddonsPureRenderMixin);
 
-	var _stylePropable = __webpack_require__(224);
+	var _stylePropable = __webpack_require__(225);
 
 	var _stylePropable2 = _interopRequireDefault(_stylePropable);
 
-	var _autoPrefix = __webpack_require__(226);
+	var _autoPrefix = __webpack_require__(227);
 
 	var _autoPrefix2 = _interopRequireDefault(_autoPrefix);
 
-	var _transitions = __webpack_require__(254);
+	var _transitions = __webpack_require__(255);
 
 	var _transitions2 = _interopRequireDefault(_transitions);
 
-	var _getMuiTheme = __webpack_require__(271);
+	var _getMuiTheme = __webpack_require__(272);
 
 	var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
 
@@ -32337,7 +29616,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 271 */
+/* 272 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -32347,33 +29626,33 @@
 	});
 	exports.default = getMuiTheme;
 
-	var _lodash = __webpack_require__(272);
+	var _lodash = __webpack_require__(273);
 
 	var _lodash2 = _interopRequireDefault(_lodash);
 
-	var _colors = __webpack_require__(250);
+	var _colors = __webpack_require__(251);
 
 	var _colors2 = _interopRequireDefault(_colors);
 
-	var _colorManipulator = __webpack_require__(289);
+	var _colorManipulator = __webpack_require__(290);
 
 	var _colorManipulator2 = _interopRequireDefault(_colorManipulator);
 
-	var _autoPrefix = __webpack_require__(226);
+	var _autoPrefix = __webpack_require__(227);
 
 	var _autoPrefix2 = _interopRequireDefault(_autoPrefix);
 
-	var _lightBaseTheme = __webpack_require__(290);
+	var _lightBaseTheme = __webpack_require__(291);
 
 	var _lightBaseTheme2 = _interopRequireDefault(_lightBaseTheme);
 
-	var _zIndex = __webpack_require__(292);
+	var _zIndex = __webpack_require__(293);
 
 	var _zIndex2 = _interopRequireDefault(_zIndex);
 
-	var _transformers = __webpack_require__(293);
+	var _transformers = __webpack_require__(294);
 
-	var _lodash3 = __webpack_require__(297);
+	var _lodash3 = __webpack_require__(298);
 
 	var _lodash4 = _interopRequireDefault(_lodash3);
 
@@ -32621,7 +29900,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 272 */
+/* 273 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -32632,15 +29911,15 @@
 	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
-	var arrayCopy = __webpack_require__(273),
-	    arrayEach = __webpack_require__(274),
-	    createAssigner = __webpack_require__(275),
-	    isArguments = __webpack_require__(279),
-	    isArray = __webpack_require__(280),
-	    isPlainObject = __webpack_require__(281),
-	    isTypedArray = __webpack_require__(284),
-	    keys = __webpack_require__(285),
-	    toPlainObject = __webpack_require__(287);
+	var arrayCopy = __webpack_require__(274),
+	    arrayEach = __webpack_require__(275),
+	    createAssigner = __webpack_require__(276),
+	    isArguments = __webpack_require__(280),
+	    isArray = __webpack_require__(281),
+	    isPlainObject = __webpack_require__(282),
+	    isTypedArray = __webpack_require__(285),
+	    keys = __webpack_require__(286),
+	    toPlainObject = __webpack_require__(288);
 
 	/**
 	 * Checks if `value` is object-like.
@@ -32893,7 +30172,7 @@
 
 
 /***/ },
-/* 273 */
+/* 274 */
 /***/ function(module, exports) {
 
 	/**
@@ -32928,7 +30207,7 @@
 
 
 /***/ },
-/* 274 */
+/* 275 */
 /***/ function(module, exports) {
 
 	/**
@@ -32965,7 +30244,7 @@
 
 
 /***/ },
-/* 275 */
+/* 276 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -32976,9 +30255,9 @@
 	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
-	var bindCallback = __webpack_require__(276),
-	    isIterateeCall = __webpack_require__(277),
-	    restParam = __webpack_require__(278);
+	var bindCallback = __webpack_require__(277),
+	    isIterateeCall = __webpack_require__(278),
+	    restParam = __webpack_require__(279);
 
 	/**
 	 * Creates a function that assigns properties of source object(s) to a given
@@ -33023,7 +30302,7 @@
 
 
 /***/ },
-/* 276 */
+/* 277 */
 /***/ function(module, exports) {
 
 	/**
@@ -33094,7 +30373,7 @@
 
 
 /***/ },
-/* 277 */
+/* 278 */
 /***/ function(module, exports) {
 
 	/**
@@ -33232,7 +30511,7 @@
 
 
 /***/ },
-/* 278 */
+/* 279 */
 /***/ function(module, exports) {
 
 	/**
@@ -33305,7 +30584,7 @@
 
 
 /***/ },
-/* 279 */
+/* 280 */
 /***/ function(module, exports) {
 
 	/**
@@ -33540,7 +30819,7 @@
 
 
 /***/ },
-/* 280 */
+/* 281 */
 /***/ function(module, exports) {
 
 	/**
@@ -33726,7 +31005,7 @@
 
 
 /***/ },
-/* 281 */
+/* 282 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -33737,9 +31016,9 @@
 	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
-	var baseFor = __webpack_require__(282),
-	    isArguments = __webpack_require__(279),
-	    keysIn = __webpack_require__(283);
+	var baseFor = __webpack_require__(283),
+	    isArguments = __webpack_require__(280),
+	    keysIn = __webpack_require__(284);
 
 	/** `Object#toString` result references. */
 	var objectTag = '[object Object]';
@@ -33835,7 +31114,7 @@
 
 
 /***/ },
-/* 282 */
+/* 283 */
 /***/ function(module, exports) {
 
 	/**
@@ -33889,7 +31168,7 @@
 
 
 /***/ },
-/* 283 */
+/* 284 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -33900,8 +31179,8 @@
 	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
-	var isArguments = __webpack_require__(279),
-	    isArray = __webpack_require__(280);
+	var isArguments = __webpack_require__(280),
+	    isArray = __webpack_require__(281);
 
 	/** Used to detect unsigned integer values. */
 	var reIsUint = /^\d+$/;
@@ -34027,7 +31306,7 @@
 
 
 /***/ },
-/* 284 */
+/* 285 */
 /***/ function(module, exports) {
 
 	/**
@@ -34181,7 +31460,7 @@
 
 
 /***/ },
-/* 285 */
+/* 286 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -34192,9 +31471,9 @@
 	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
-	var getNative = __webpack_require__(286),
-	    isArguments = __webpack_require__(279),
-	    isArray = __webpack_require__(280);
+	var getNative = __webpack_require__(287),
+	    isArguments = __webpack_require__(280),
+	    isArray = __webpack_require__(281);
 
 	/** Used to detect unsigned integer values. */
 	var reIsUint = /^\d+$/;
@@ -34423,7 +31702,7 @@
 
 
 /***/ },
-/* 286 */
+/* 287 */
 /***/ function(module, exports) {
 
 	/**
@@ -34566,7 +31845,7 @@
 
 
 /***/ },
-/* 287 */
+/* 288 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -34577,8 +31856,8 @@
 	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
-	var baseCopy = __webpack_require__(288),
-	    keysIn = __webpack_require__(283);
+	var baseCopy = __webpack_require__(289),
+	    keysIn = __webpack_require__(284);
 
 	/**
 	 * Converts `value` to a plain object flattening inherited enumerable
@@ -34611,7 +31890,7 @@
 
 
 /***/ },
-/* 288 */
+/* 289 */
 /***/ function(module, exports) {
 
 	/**
@@ -34649,7 +31928,7 @@
 
 
 /***/ },
-/* 289 */
+/* 290 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -34658,7 +31937,7 @@
 	  value: true
 	});
 
-	var _warning = __webpack_require__(246);
+	var _warning = __webpack_require__(247);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
@@ -34840,7 +32119,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14)))
 
 /***/ },
-/* 290 */
+/* 291 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34849,15 +32128,15 @@
 	  value: true
 	});
 
-	var _colors = __webpack_require__(250);
+	var _colors = __webpack_require__(251);
 
 	var _colors2 = _interopRequireDefault(_colors);
 
-	var _colorManipulator = __webpack_require__(289);
+	var _colorManipulator = __webpack_require__(290);
 
 	var _colorManipulator2 = _interopRequireDefault(_colorManipulator);
 
-	var _spacing = __webpack_require__(291);
+	var _spacing = __webpack_require__(292);
 
 	var _spacing2 = _interopRequireDefault(_spacing);
 
@@ -34892,7 +32171,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 291 */
+/* 292 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -34917,7 +32196,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 292 */
+/* 293 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -34940,7 +32219,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 293 */
+/* 294 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34950,15 +32229,15 @@
 	});
 	exports.rtl = exports.callOnce = exports.autoprefixer = undefined;
 
-	var _autoprefixer = __webpack_require__(294);
+	var _autoprefixer = __webpack_require__(295);
 
 	var _autoprefixer2 = _interopRequireDefault(_autoprefixer);
 
-	var _callOnce = __webpack_require__(295);
+	var _callOnce = __webpack_require__(296);
 
 	var _callOnce2 = _interopRequireDefault(_callOnce);
 
-	var _rtl = __webpack_require__(296);
+	var _rtl = __webpack_require__(297);
 
 	var _rtl2 = _interopRequireDefault(_rtl);
 
@@ -34969,7 +32248,7 @@
 	exports.rtl = _rtl2.default;
 
 /***/ },
-/* 294 */
+/* 295 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -34989,7 +32268,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 295 */
+/* 296 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -34999,7 +32278,7 @@
 	});
 	exports.default = callOnce;
 
-	var _warning = __webpack_require__(246);
+	var _warning = __webpack_require__(247);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
@@ -35022,7 +32301,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14)))
 
 /***/ },
-/* 296 */
+/* 297 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -35111,7 +32390,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 297 */
+/* 298 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
@@ -35560,7 +32839,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 298 */
+/* 299 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35577,27 +32856,27 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _reactAddonsPureRenderMixin = __webpack_require__(257);
+	var _reactAddonsPureRenderMixin = __webpack_require__(258);
 
 	var _reactAddonsPureRenderMixin2 = _interopRequireDefault(_reactAddonsPureRenderMixin);
 
-	var _reactAddonsTransitionGroup = __webpack_require__(267);
+	var _reactAddonsTransitionGroup = __webpack_require__(268);
 
 	var _reactAddonsTransitionGroup2 = _interopRequireDefault(_reactAddonsTransitionGroup);
 
-	var _stylePropable = __webpack_require__(224);
+	var _stylePropable = __webpack_require__(225);
 
 	var _stylePropable2 = _interopRequireDefault(_stylePropable);
 
-	var _dom = __webpack_require__(299);
+	var _dom = __webpack_require__(300);
 
 	var _dom2 = _interopRequireDefault(_dom);
 
-	var _circleRipple = __webpack_require__(300);
+	var _circleRipple = __webpack_require__(301);
 
 	var _circleRipple2 = _interopRequireDefault(_circleRipple);
 
-	var _reactAddonsUpdate = __webpack_require__(247);
+	var _reactAddonsUpdate = __webpack_require__(248);
 
 	var _reactAddonsUpdate2 = _interopRequireDefault(_reactAddonsUpdate);
 
@@ -35773,7 +33052,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 299 */
+/* 300 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -35850,7 +33129,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 300 */
+/* 301 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35869,23 +33148,23 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _reactAddonsPureRenderMixin = __webpack_require__(257);
+	var _reactAddonsPureRenderMixin = __webpack_require__(258);
 
 	var _reactAddonsPureRenderMixin2 = _interopRequireDefault(_reactAddonsPureRenderMixin);
 
-	var _stylePropable = __webpack_require__(224);
+	var _stylePropable = __webpack_require__(225);
 
 	var _stylePropable2 = _interopRequireDefault(_stylePropable);
 
-	var _autoPrefix = __webpack_require__(226);
+	var _autoPrefix = __webpack_require__(227);
 
 	var _autoPrefix2 = _interopRequireDefault(_autoPrefix);
 
-	var _transitions = __webpack_require__(254);
+	var _transitions = __webpack_require__(255);
 
 	var _transitions2 = _interopRequireDefault(_transitions);
 
-	var _colors = __webpack_require__(250);
+	var _colors = __webpack_require__(251);
 
 	var _colors2 = _interopRequireDefault(_colors);
 
@@ -35983,7 +33262,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 301 */
+/* 302 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35998,15 +33277,15 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _stylePropable = __webpack_require__(224);
+	var _stylePropable = __webpack_require__(225);
 
 	var _stylePropable2 = _interopRequireDefault(_stylePropable);
 
-	var _transitions = __webpack_require__(254);
+	var _transitions = __webpack_require__(255);
 
 	var _transitions2 = _interopRequireDefault(_transitions);
 
-	var _getMuiTheme = __webpack_require__(271);
+	var _getMuiTheme = __webpack_require__(272);
 
 	var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
 
@@ -36130,7 +33409,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 302 */
+/* 303 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36149,19 +33428,19 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _stylePropable = __webpack_require__(224);
+	var _stylePropable = __webpack_require__(225);
 
 	var _stylePropable2 = _interopRequireDefault(_stylePropable);
 
-	var _transitions = __webpack_require__(254);
+	var _transitions = __webpack_require__(255);
 
 	var _transitions2 = _interopRequireDefault(_transitions);
 
-	var _colors = __webpack_require__(250);
+	var _colors = __webpack_require__(251);
 
 	var _colors2 = _interopRequireDefault(_colors);
 
-	var _getMuiTheme = __webpack_require__(271);
+	var _getMuiTheme = __webpack_require__(272);
 
 	var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
 
@@ -36336,7 +33615,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 303 */
+/* 304 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36349,11 +33628,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactAddonsPureRenderMixin = __webpack_require__(257);
+	var _reactAddonsPureRenderMixin = __webpack_require__(258);
 
 	var _reactAddonsPureRenderMixin2 = _interopRequireDefault(_reactAddonsPureRenderMixin);
 
-	var _svgIcon = __webpack_require__(304);
+	var _svgIcon = __webpack_require__(305);
 
 	var _svgIcon2 = _interopRequireDefault(_svgIcon);
 
@@ -36377,7 +33656,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 304 */
+/* 305 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36392,15 +33671,15 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _stylePropable = __webpack_require__(224);
+	var _stylePropable = __webpack_require__(225);
 
 	var _stylePropable2 = _interopRequireDefault(_stylePropable);
 
-	var _transitions = __webpack_require__(254);
+	var _transitions = __webpack_require__(255);
 
 	var _transitions2 = _interopRequireDefault(_transitions);
 
-	var _getMuiTheme = __webpack_require__(271);
+	var _getMuiTheme = __webpack_require__(272);
 
 	var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
 
@@ -36545,7 +33824,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 305 */
+/* 306 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36560,23 +33839,23 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactAddonsPureRenderMixin = __webpack_require__(257);
+	var _reactAddonsPureRenderMixin = __webpack_require__(258);
 
 	var _reactAddonsPureRenderMixin2 = _interopRequireDefault(_reactAddonsPureRenderMixin);
 
-	var _stylePropable = __webpack_require__(224);
+	var _stylePropable = __webpack_require__(225);
 
 	var _stylePropable2 = _interopRequireDefault(_stylePropable);
 
-	var _propTypes = __webpack_require__(255);
+	var _propTypes = __webpack_require__(256);
 
 	var _propTypes2 = _interopRequireDefault(_propTypes);
 
-	var _transitions = __webpack_require__(254);
+	var _transitions = __webpack_require__(255);
 
 	var _transitions2 = _interopRequireDefault(_transitions);
 
-	var _getMuiTheme = __webpack_require__(271);
+	var _getMuiTheme = __webpack_require__(272);
 
 	var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
 
@@ -36689,7 +33968,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 306 */
+/* 307 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36702,11 +33981,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactAddonsPureRenderMixin = __webpack_require__(257);
+	var _reactAddonsPureRenderMixin = __webpack_require__(258);
 
 	var _reactAddonsPureRenderMixin2 = _interopRequireDefault(_reactAddonsPureRenderMixin);
 
-	var _svgIcon = __webpack_require__(304);
+	var _svgIcon = __webpack_require__(305);
 
 	var _svgIcon2 = _interopRequireDefault(_svgIcon);
 
@@ -36730,7 +34009,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 307 */
+/* 308 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36745,27 +34024,27 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _enhancedSwitch = __webpack_require__(308);
+	var _enhancedSwitch = __webpack_require__(309);
 
 	var _enhancedSwitch2 = _interopRequireDefault(_enhancedSwitch);
 
-	var _stylePropable = __webpack_require__(224);
+	var _stylePropable = __webpack_require__(225);
 
 	var _stylePropable2 = _interopRequireDefault(_stylePropable);
 
-	var _transitions = __webpack_require__(254);
+	var _transitions = __webpack_require__(255);
 
 	var _transitions2 = _interopRequireDefault(_transitions);
 
-	var _checkBoxOutlineBlank = __webpack_require__(313);
+	var _checkBoxOutlineBlank = __webpack_require__(314);
 
 	var _checkBoxOutlineBlank2 = _interopRequireDefault(_checkBoxOutlineBlank);
 
-	var _checkBox = __webpack_require__(314);
+	var _checkBox = __webpack_require__(315);
 
 	var _checkBox2 = _interopRequireDefault(_checkBox);
 
-	var _getMuiTheme = __webpack_require__(271);
+	var _getMuiTheme = __webpack_require__(272);
 
 	var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
 
@@ -36991,7 +34270,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 308 */
+/* 309 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -37010,47 +34289,47 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _keyCode = __webpack_require__(264);
+	var _keyCode = __webpack_require__(265);
 
 	var _keyCode2 = _interopRequireDefault(_keyCode);
 
-	var _stylePropable = __webpack_require__(224);
+	var _stylePropable = __webpack_require__(225);
 
 	var _stylePropable2 = _interopRequireDefault(_stylePropable);
 
-	var _transitions = __webpack_require__(254);
+	var _transitions = __webpack_require__(255);
 
 	var _transitions2 = _interopRequireDefault(_transitions);
 
-	var _uniqueId = __webpack_require__(309);
+	var _uniqueId = __webpack_require__(310);
 
 	var _uniqueId2 = _interopRequireDefault(_uniqueId);
 
-	var _windowListenable = __webpack_require__(310);
+	var _windowListenable = __webpack_require__(311);
 
 	var _windowListenable2 = _interopRequireDefault(_windowListenable);
 
-	var _clearfix = __webpack_require__(311);
+	var _clearfix = __webpack_require__(312);
 
 	var _clearfix2 = _interopRequireDefault(_clearfix);
 
-	var _focusRipple = __webpack_require__(265);
+	var _focusRipple = __webpack_require__(266);
 
 	var _focusRipple2 = _interopRequireDefault(_focusRipple);
 
-	var _touchRipple = __webpack_require__(298);
+	var _touchRipple = __webpack_require__(299);
 
 	var _touchRipple2 = _interopRequireDefault(_touchRipple);
 
-	var _paper = __webpack_require__(305);
+	var _paper = __webpack_require__(306);
 
 	var _paper2 = _interopRequireDefault(_paper);
 
-	var _getMuiTheme = __webpack_require__(271);
+	var _getMuiTheme = __webpack_require__(272);
 
 	var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
 
-	var _warning = __webpack_require__(246);
+	var _warning = __webpack_require__(247);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
@@ -37471,7 +34750,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14)))
 
 /***/ },
-/* 309 */
+/* 310 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -37489,7 +34768,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 310 */
+/* 311 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -37498,7 +34777,7 @@
 	  value: true
 	});
 
-	var _events = __webpack_require__(263);
+	var _events = __webpack_require__(264);
 
 	var _events2 = _interopRequireDefault(_events);
 
@@ -37525,7 +34804,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 311 */
+/* 312 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -37540,7 +34819,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _beforeAfterWrapper = __webpack_require__(312);
+	var _beforeAfterWrapper = __webpack_require__(313);
 
 	var _beforeAfterWrapper2 = _interopRequireDefault(_beforeAfterWrapper);
 
@@ -37592,7 +34871,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 312 */
+/* 313 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -37605,11 +34884,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _stylePropable = __webpack_require__(224);
+	var _stylePropable = __webpack_require__(225);
 
 	var _stylePropable2 = _interopRequireDefault(_stylePropable);
 
-	var _getMuiTheme = __webpack_require__(271);
+	var _getMuiTheme = __webpack_require__(272);
 
 	var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
 
@@ -37746,7 +35025,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 313 */
+/* 314 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -37759,11 +35038,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactAddonsPureRenderMixin = __webpack_require__(257);
+	var _reactAddonsPureRenderMixin = __webpack_require__(258);
 
 	var _reactAddonsPureRenderMixin2 = _interopRequireDefault(_reactAddonsPureRenderMixin);
 
-	var _svgIcon = __webpack_require__(304);
+	var _svgIcon = __webpack_require__(305);
 
 	var _svgIcon2 = _interopRequireDefault(_svgIcon);
 
@@ -37787,7 +35066,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 314 */
+/* 315 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -37800,11 +35079,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactAddonsPureRenderMixin = __webpack_require__(257);
+	var _reactAddonsPureRenderMixin = __webpack_require__(258);
 
 	var _reactAddonsPureRenderMixin2 = _interopRequireDefault(_reactAddonsPureRenderMixin);
 
-	var _svgIcon = __webpack_require__(304);
+	var _svgIcon = __webpack_require__(305);
 
 	var _svgIcon2 = _interopRequireDefault(_svgIcon);
 
@@ -37828,7 +35107,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 315 */
+/* 316 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -37851,16 +35130,16 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _materialUiLibRaisedButton = __webpack_require__(316);
+	var _materialUiLibRaisedButton = __webpack_require__(317);
 
 	var _materialUiLibRaisedButton2 = _interopRequireDefault(_materialUiLibRaisedButton);
 
-	var _ChildrenItems = __webpack_require__(317);
+	var _ChildrenItems = __webpack_require__(318);
 
 	var _ChildrenItems2 = _interopRequireDefault(_ChildrenItems);
 
-	var remote = window.require('electron').remote;
-	var fs = remote.require('fs');
+	// const remote = window.require('electron').remote
+	// const fs = remote.require('fs')
 
 	var style = {
 	  raisedButton: {
@@ -37880,16 +35159,26 @@
 	  _createClass(Items, [{
 	    key: 'writeItemsFile',
 	    value: function writeItemsFile(data) {
-	      data = JSON.stringify(data);
-	      // console.log(typeof(data))
-	      // console.log(data) //todo TypeError: Cannot read property 'type' of undefined
-	      fs.writeFileSync('./test.json', data, 'utf-8');
+	      // data = JSON.stringify(data)
+	      // fs.writeFileSync(__dirname + '/test.json', data, 'utf-8') 
+	      var aa = data.filter(function (item) {
+	        return item.checked === true;
+	      });
+	      var bb = aa.map(function (xi) {
+	        return xi.children.filter(function (child) {
+	          return child.checked === true;
+	        });
+	      }); //导出勾选的数组应该是先从最底下的开始遍历，一层一层遍历，最后合并成一个新的数组
+	      console.log(aa);
+	      console.log(bb);
+	      // console.log(data.filter(item => item.checked === true?item.children.filter(child => child.checked === true):''))
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var _props = this.props;
 	      var items = _props.items;
+	      var keys = _props.keys;
 	      var menus = _props.menus;
 	      var itemsActions = _props.itemsActions;
 
@@ -37898,6 +35187,7 @@
 	        null,
 	        _react2['default'].createElement(_ChildrenItems2['default'], {
 	          items: items,
+	          keys: keys,
 	          forward: false,
 	          itemsActions: itemsActions
 	        }),
@@ -37919,7 +35209,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 316 */
+/* 317 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -37938,35 +35228,35 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _stylePropable = __webpack_require__(224);
+	var _stylePropable = __webpack_require__(225);
 
 	var _stylePropable2 = _interopRequireDefault(_stylePropable);
 
-	var _transitions = __webpack_require__(254);
+	var _transitions = __webpack_require__(255);
 
 	var _transitions2 = _interopRequireDefault(_transitions);
 
-	var _colorManipulator = __webpack_require__(289);
+	var _colorManipulator = __webpack_require__(290);
 
 	var _colorManipulator2 = _interopRequireDefault(_colorManipulator);
 
-	var _children = __webpack_require__(260);
+	var _children = __webpack_require__(261);
 
 	var _children2 = _interopRequireDefault(_children);
 
-	var _typography = __webpack_require__(249);
+	var _typography = __webpack_require__(250);
 
 	var _typography2 = _interopRequireDefault(_typography);
 
-	var _enhancedButton = __webpack_require__(256);
+	var _enhancedButton = __webpack_require__(257);
 
 	var _enhancedButton2 = _interopRequireDefault(_enhancedButton);
 
-	var _paper = __webpack_require__(305);
+	var _paper = __webpack_require__(306);
 
 	var _paper2 = _interopRequireDefault(_paper);
 
-	var _getMuiTheme = __webpack_require__(271);
+	var _getMuiTheme = __webpack_require__(272);
 
 	var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
 
@@ -38367,7 +35657,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 317 */
+/* 318 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -38390,19 +35680,19 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _materialUiLibDialog = __webpack_require__(318);
+	var _materialUiLibDialog = __webpack_require__(319);
 
 	var _materialUiLibDialog2 = _interopRequireDefault(_materialUiLibDialog);
 
-	var _DialogEditTextField = __webpack_require__(324);
+	var _DialogEditTextField = __webpack_require__(325);
 
 	var _DialogEditTextField2 = _interopRequireDefault(_DialogEditTextField);
 
-	var _DialogFunctionsDialog = __webpack_require__(332);
+	var _DialogFunctionsDialog = __webpack_require__(333);
 
 	var _DialogFunctionsDialog2 = _interopRequireDefault(_DialogFunctionsDialog);
 
-	var _DialogForwardTable = __webpack_require__(333);
+	var _DialogForwardTable = __webpack_require__(334);
 
 	var _DialogForwardTable2 = _interopRequireDefault(_DialogForwardTable);
 
@@ -38429,7 +35719,7 @@
 	      edit: false,
 	      addItems: false,
 	      nextContent: '',
-	      nextKey: ''
+	      nextKey: '0-0-0-0-0'
 	    };
 	  }
 
@@ -38458,6 +35748,7 @@
 	    value: function render() {
 	      var _props = this.props;
 	      var items = _props.items;
+	      var keys = _props.keys;
 	      var itemsActions = _props.itemsActions;
 
 	      /**wwwwww */ //2.key的值可以正常获取
@@ -38467,6 +35758,7 @@
 	        _react2['default'].createElement(_DialogForwardTable2['default'], {
 	          forward: true,
 	          items: items,
+	          keys: keys,
 	          _handleChecked: itemsActions.handleSelected,
 	          _handleEdit: this.handleEdit,
 	          _handleAdd: this.handleAdd,
@@ -38488,6 +35780,7 @@
 	            array: ['functionId', 'functionName']
 	          }) : _react2['default'].createElement(_DialogFunctionsDialog2['default'], {
 	            edit: this.state.edit,
+	            keys: keys,
 	            itemsActions: itemsActions,
 	            content: this.state.nextContent,
 	            Key: this.state.nextKey
@@ -38504,7 +35797,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 318 */
+/* 319 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -38523,51 +35816,51 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _windowListenable = __webpack_require__(310);
+	var _windowListenable = __webpack_require__(311);
 
 	var _windowListenable2 = _interopRequireDefault(_windowListenable);
 
-	var _keyCode = __webpack_require__(264);
+	var _keyCode = __webpack_require__(265);
 
 	var _keyCode2 = _interopRequireDefault(_keyCode);
 
-	var _transitions = __webpack_require__(254);
+	var _transitions = __webpack_require__(255);
 
 	var _transitions2 = _interopRequireDefault(_transitions);
 
-	var _stylePropable = __webpack_require__(224);
+	var _stylePropable = __webpack_require__(225);
 
 	var _stylePropable2 = _interopRequireDefault(_stylePropable);
 
-	var _flatButton = __webpack_require__(319);
+	var _flatButton = __webpack_require__(320);
 
 	var _flatButton2 = _interopRequireDefault(_flatButton);
 
-	var _overlay = __webpack_require__(321);
+	var _overlay = __webpack_require__(322);
 
 	var _overlay2 = _interopRequireDefault(_overlay);
 
-	var _renderToLayer = __webpack_require__(322);
+	var _renderToLayer = __webpack_require__(323);
 
 	var _renderToLayer2 = _interopRequireDefault(_renderToLayer);
 
-	var _paper = __webpack_require__(305);
+	var _paper = __webpack_require__(306);
 
 	var _paper2 = _interopRequireDefault(_paper);
 
-	var _getMuiTheme = __webpack_require__(271);
+	var _getMuiTheme = __webpack_require__(272);
 
 	var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
 
-	var _warning = __webpack_require__(246);
+	var _warning = __webpack_require__(247);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
-	var _deprecatedPropType = __webpack_require__(323);
+	var _deprecatedPropType = __webpack_require__(324);
 
 	var _deprecatedPropType2 = _interopRequireDefault(_deprecatedPropType);
 
-	var _reactAddonsTransitionGroup = __webpack_require__(267);
+	var _reactAddonsTransitionGroup = __webpack_require__(268);
 
 	var _reactAddonsTransitionGroup2 = _interopRequireDefault(_reactAddonsTransitionGroup);
 
@@ -39160,7 +36453,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14)))
 
 /***/ },
-/* 319 */
+/* 320 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -39175,37 +36468,37 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _contextPure = __webpack_require__(252);
+	var _contextPure = __webpack_require__(253);
 
 	var _contextPure2 = _interopRequireDefault(_contextPure);
 
-	var _transitions = __webpack_require__(254);
+	var _transitions = __webpack_require__(255);
 
 	var _transitions2 = _interopRequireDefault(_transitions);
 
-	var _children = __webpack_require__(260);
+	var _children = __webpack_require__(261);
 
 	var _children2 = _interopRequireDefault(_children);
 
-	var _colorManipulator = __webpack_require__(289);
+	var _colorManipulator = __webpack_require__(290);
 
 	var _colorManipulator2 = _interopRequireDefault(_colorManipulator);
 
-	var _styles = __webpack_require__(225);
+	var _styles = __webpack_require__(226);
 
-	var _typography = __webpack_require__(249);
+	var _typography = __webpack_require__(250);
 
 	var _typography2 = _interopRequireDefault(_typography);
 
-	var _enhancedButton = __webpack_require__(256);
+	var _enhancedButton = __webpack_require__(257);
 
 	var _enhancedButton2 = _interopRequireDefault(_enhancedButton);
 
-	var _flatButtonLabel = __webpack_require__(320);
+	var _flatButtonLabel = __webpack_require__(321);
 
 	var _flatButtonLabel2 = _interopRequireDefault(_flatButtonLabel);
 
-	var _getMuiTheme = __webpack_require__(271);
+	var _getMuiTheme = __webpack_require__(272);
 
 	var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
 
@@ -39518,7 +36811,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 320 */
+/* 321 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -39531,15 +36824,15 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _contextPure = __webpack_require__(252);
+	var _contextPure = __webpack_require__(253);
 
 	var _contextPure2 = _interopRequireDefault(_contextPure);
 
-	var _stylePropable = __webpack_require__(224);
+	var _stylePropable = __webpack_require__(225);
 
 	var _stylePropable2 = _interopRequireDefault(_stylePropable);
 
-	var _getMuiTheme = __webpack_require__(271);
+	var _getMuiTheme = __webpack_require__(272);
 
 	var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
 
@@ -39620,7 +36913,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 321 */
+/* 322 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -39639,15 +36932,15 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _stylePropable = __webpack_require__(224);
+	var _stylePropable = __webpack_require__(225);
 
 	var _stylePropable2 = _interopRequireDefault(_stylePropable);
 
-	var _transitions = __webpack_require__(254);
+	var _transitions = __webpack_require__(255);
 
 	var _transitions2 = _interopRequireDefault(_transitions);
 
-	var _colors = __webpack_require__(250);
+	var _colors = __webpack_require__(251);
 
 	var _colors2 = _interopRequireDefault(_colors);
 
@@ -39765,7 +37058,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 322 */
+/* 323 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -39782,11 +37075,11 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _dom = __webpack_require__(299);
+	var _dom = __webpack_require__(300);
 
 	var _dom2 = _interopRequireDefault(_dom);
 
-	var _getMuiTheme = __webpack_require__(271);
+	var _getMuiTheme = __webpack_require__(272);
 
 	var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
 
@@ -39940,7 +37233,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 323 */
+/* 324 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -39950,7 +37243,7 @@
 	});
 	exports.default = deprecated;
 
-	var _warning = __webpack_require__(246);
+	var _warning = __webpack_require__(247);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
@@ -39969,7 +37262,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14)))
 
 /***/ },
-/* 324 */
+/* 325 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -39994,11 +37287,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _materialUiLibTextField = __webpack_require__(325);
+	var _materialUiLibTextField = __webpack_require__(326);
 
 	var _materialUiLibTextField2 = _interopRequireDefault(_materialUiLibTextField);
 
-	var _materialUiLibFlatButton = __webpack_require__(319);
+	var _materialUiLibFlatButton = __webpack_require__(320);
 
 	var _materialUiLibFlatButton2 = _interopRequireDefault(_materialUiLibFlatButton);
 
@@ -40099,25 +37392,6 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 325 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _TextField = __webpack_require__(326);
-
-	var _TextField2 = _interopRequireDefault(_TextField);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	exports.default = _TextField2.default;
-	module.exports = exports['default'];
-
-/***/ },
 /* 326 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -40140,6 +37414,25 @@
 /* 327 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _TextField = __webpack_require__(328);
+
+	var _TextField2 = _interopRequireDefault(_TextField);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = _TextField2.default;
+	module.exports = exports['default'];
+
+/***/ },
+/* 328 */
+/***/ function(module, exports, __webpack_require__) {
+
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -40156,47 +37449,47 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _colorManipulator = __webpack_require__(289);
+	var _colorManipulator = __webpack_require__(290);
 
 	var _colorManipulator2 = _interopRequireDefault(_colorManipulator);
 
-	var _stylePropable = __webpack_require__(224);
+	var _stylePropable = __webpack_require__(225);
 
 	var _stylePropable2 = _interopRequireDefault(_stylePropable);
 
-	var _transitions = __webpack_require__(254);
+	var _transitions = __webpack_require__(255);
 
 	var _transitions2 = _interopRequireDefault(_transitions);
 
-	var _uniqueId = __webpack_require__(309);
+	var _uniqueId = __webpack_require__(310);
 
 	var _uniqueId2 = _interopRequireDefault(_uniqueId);
 
-	var _enhancedTextarea = __webpack_require__(328);
+	var _enhancedTextarea = __webpack_require__(329);
 
 	var _enhancedTextarea2 = _interopRequireDefault(_enhancedTextarea);
 
-	var _getMuiTheme = __webpack_require__(271);
+	var _getMuiTheme = __webpack_require__(272);
 
 	var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
 
-	var _contextPure = __webpack_require__(252);
+	var _contextPure = __webpack_require__(253);
 
 	var _contextPure2 = _interopRequireDefault(_contextPure);
 
-	var _TextFieldHint = __webpack_require__(329);
+	var _TextFieldHint = __webpack_require__(330);
 
 	var _TextFieldHint2 = _interopRequireDefault(_TextFieldHint);
 
-	var _TextFieldLabel = __webpack_require__(330);
+	var _TextFieldLabel = __webpack_require__(331);
 
 	var _TextFieldLabel2 = _interopRequireDefault(_TextFieldLabel);
 
-	var _TextFieldUnderline = __webpack_require__(331);
+	var _TextFieldUnderline = __webpack_require__(332);
 
 	var _TextFieldUnderline2 = _interopRequireDefault(_TextFieldUnderline);
 
-	var _warning = __webpack_require__(246);
+	var _warning = __webpack_require__(247);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
@@ -40703,7 +37996,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14)))
 
 /***/ },
-/* 328 */
+/* 329 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -40722,11 +38015,11 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _stylePropable = __webpack_require__(224);
+	var _stylePropable = __webpack_require__(225);
 
 	var _stylePropable2 = _interopRequireDefault(_stylePropable);
 
-	var _getMuiTheme = __webpack_require__(271);
+	var _getMuiTheme = __webpack_require__(272);
 
 	var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
 
@@ -40909,7 +38202,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 329 */
+/* 330 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -40922,11 +38215,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _transitions = __webpack_require__(254);
+	var _transitions = __webpack_require__(255);
 
 	var _transitions2 = _interopRequireDefault(_transitions);
 
-	var _styles = __webpack_require__(225);
+	var _styles = __webpack_require__(226);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -40987,7 +38280,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 330 */
+/* 331 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -41000,11 +38293,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _transitions = __webpack_require__(254);
+	var _transitions = __webpack_require__(255);
 
 	var _transitions2 = _interopRequireDefault(_transitions);
 
-	var _styles = __webpack_require__(225);
+	var _styles = __webpack_require__(226);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -41099,7 +38392,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 331 */
+/* 332 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -41112,11 +38405,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _transitions = __webpack_require__(254);
+	var _transitions = __webpack_require__(255);
 
 	var _transitions2 = _interopRequireDefault(_transitions);
 
-	var _styles = __webpack_require__(225);
+	var _styles = __webpack_require__(226);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -41237,7 +38530,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 332 */
+/* 333 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -41260,19 +38553,19 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _materialUiLibDialog = __webpack_require__(318);
+	var _materialUiLibDialog = __webpack_require__(319);
 
 	var _materialUiLibDialog2 = _interopRequireDefault(_materialUiLibDialog);
 
-	var _ForwardTable = __webpack_require__(333);
+	var _ForwardTable = __webpack_require__(334);
 
 	var _ForwardTable2 = _interopRequireDefault(_ForwardTable);
 
-	var _EditTextField = __webpack_require__(324);
+	var _EditTextField = __webpack_require__(325);
 
 	var _EditTextField2 = _interopRequireDefault(_EditTextField);
 
-	var _DialogOperationsDialog = __webpack_require__(338);
+	var _DialogOperationsDialog = __webpack_require__(339);
 
 	var _DialogOperationsDialog2 = _interopRequireDefault(_DialogOperationsDialog);
 
@@ -41299,7 +38592,7 @@
 	      addItems: false,
 	      edit: false,
 	      nextContent: '',
-	      nextKey: ''
+	      nextKey: '0-0-0-0-0'
 	    };
 	  }
 
@@ -41331,6 +38624,7 @@
 	      var key = _props.key;
 	      var edit = _props.edit;
 	      var itemsActions = _props.itemsActions;
+	      var keys = _props.keys;
 
 	      var element = edit ? _react2['default'].createElement(_EditTextField2['default'], {
 	        menus: content,
@@ -41340,6 +38634,7 @@
 	      }) : _react2['default'].createElement(_ForwardTable2['default'], {
 	        forward: true, //不同点  控制是否有下一级，true为有，false反之
 	        items: content.operations, //不同点   下一级为operations,若webApis则为webApis
+	        keys: keys,
 	        _handleChecked: itemsActions.operationsSelected, //不同点
 	        _handleEdit: this.handleEdit,
 	        _handleAdd: this.handleAdd,
@@ -41381,7 +38676,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 333 */
+/* 334 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -41404,27 +38699,27 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _materialUiLibCheckbox = __webpack_require__(307);
+	var _materialUiLibCheckbox = __webpack_require__(308);
 
 	var _materialUiLibCheckbox2 = _interopRequireDefault(_materialUiLibCheckbox);
 
-	var _materialUiLibFloatingActionButton = __webpack_require__(334);
+	var _materialUiLibFloatingActionButton = __webpack_require__(335);
 
 	var _materialUiLibFloatingActionButton2 = _interopRequireDefault(_materialUiLibFloatingActionButton);
 
-	var _materialUiLibSvgIconsContentCreate = __webpack_require__(335);
+	var _materialUiLibSvgIconsContentCreate = __webpack_require__(336);
 
 	var _materialUiLibSvgIconsContentCreate2 = _interopRequireDefault(_materialUiLibSvgIconsContentCreate);
 
-	var _materialUiLibSvgIconsContentForward = __webpack_require__(336);
+	var _materialUiLibSvgIconsContentForward = __webpack_require__(337);
 
 	var _materialUiLibSvgIconsContentForward2 = _interopRequireDefault(_materialUiLibSvgIconsContentForward);
 
-	var _materialUiLibSvgIconsContentAdd = __webpack_require__(337);
+	var _materialUiLibSvgIconsContentAdd = __webpack_require__(338);
 
 	var _materialUiLibSvgIconsContentAdd2 = _interopRequireDefault(_materialUiLibSvgIconsContentAdd);
 
-	var _materialUiLibStylesColors = __webpack_require__(250);
+	var _materialUiLibStylesColors = __webpack_require__(251);
 
 	var _materialUiLibStylesColors2 = _interopRequireDefault(_materialUiLibStylesColors);
 
@@ -41456,6 +38751,7 @@
 	      var _handleAdd = _props._handleAdd;
 	      var _handleEdit = _props._handleEdit;
 	      var _handleChecked = _props._handleChecked;
+	      var keys = _props.keys;
 
 	      /**pppppppp */ //1.key的值可以正常获取
 	      return _react2['default'].createElement(
@@ -41536,7 +38832,7 @@
 	        _react2['default'].createElement(
 	          _materialUiLibFloatingActionButton2['default'],
 	          { secondary: true, mini: true, style: style.actionButton, onTouchTap: function () {
-	              return _handleAdd(items[0].key);
+	              return _handleAdd(keys);
 	            } },
 	          _react2['default'].createElement(_materialUiLibSvgIconsContentAdd2['default'], null)
 	        )
@@ -41551,7 +38847,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 334 */
+/* 335 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -41570,43 +38866,43 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _stylePropable = __webpack_require__(224);
+	var _stylePropable = __webpack_require__(225);
 
 	var _stylePropable2 = _interopRequireDefault(_stylePropable);
 
-	var _transitions = __webpack_require__(254);
+	var _transitions = __webpack_require__(255);
 
 	var _transitions2 = _interopRequireDefault(_transitions);
 
-	var _colors = __webpack_require__(250);
+	var _colors = __webpack_require__(251);
 
 	var _colors2 = _interopRequireDefault(_colors);
 
-	var _colorManipulator = __webpack_require__(289);
+	var _colorManipulator = __webpack_require__(290);
 
 	var _colorManipulator2 = _interopRequireDefault(_colorManipulator);
 
-	var _enhancedButton = __webpack_require__(256);
+	var _enhancedButton = __webpack_require__(257);
 
 	var _enhancedButton2 = _interopRequireDefault(_enhancedButton);
 
-	var _fontIcon = __webpack_require__(301);
+	var _fontIcon = __webpack_require__(302);
 
 	var _fontIcon2 = _interopRequireDefault(_fontIcon);
 
-	var _paper = __webpack_require__(305);
+	var _paper = __webpack_require__(306);
 
 	var _paper2 = _interopRequireDefault(_paper);
 
-	var _children = __webpack_require__(260);
+	var _children = __webpack_require__(261);
 
 	var _children2 = _interopRequireDefault(_children);
 
-	var _getMuiTheme = __webpack_require__(271);
+	var _getMuiTheme = __webpack_require__(272);
 
 	var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
 
-	var _warning = __webpack_require__(246);
+	var _warning = __webpack_require__(247);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
@@ -41730,7 +39026,7 @@
 	    };
 	  },
 	  getInitialState: function getInitialState() {
-	    var zDepth = this.props.disabled ? 0 : 0;//设置为0之后，取消背景阴影
+	    var zDepth = this.props.disabled ? 0 : 0;//修改背景阴影，原本为2
 
 	    return {
 	      hovered: false,
@@ -41924,7 +39220,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14)))
 
 /***/ },
-/* 335 */
+/* 336 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -41937,11 +39233,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactAddonsPureRenderMixin = __webpack_require__(257);
+	var _reactAddonsPureRenderMixin = __webpack_require__(258);
 
 	var _reactAddonsPureRenderMixin2 = _interopRequireDefault(_reactAddonsPureRenderMixin);
 
-	var _svgIcon = __webpack_require__(304);
+	var _svgIcon = __webpack_require__(305);
 
 	var _svgIcon2 = _interopRequireDefault(_svgIcon);
 
@@ -41965,7 +39261,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 336 */
+/* 337 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -41978,11 +39274,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactAddonsPureRenderMixin = __webpack_require__(257);
+	var _reactAddonsPureRenderMixin = __webpack_require__(258);
 
 	var _reactAddonsPureRenderMixin2 = _interopRequireDefault(_reactAddonsPureRenderMixin);
 
-	var _svgIcon = __webpack_require__(304);
+	var _svgIcon = __webpack_require__(305);
 
 	var _svgIcon2 = _interopRequireDefault(_svgIcon);
 
@@ -42006,7 +39302,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 337 */
+/* 338 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -42019,11 +39315,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactAddonsPureRenderMixin = __webpack_require__(257);
+	var _reactAddonsPureRenderMixin = __webpack_require__(258);
 
 	var _reactAddonsPureRenderMixin2 = _interopRequireDefault(_reactAddonsPureRenderMixin);
 
-	var _svgIcon = __webpack_require__(304);
+	var _svgIcon = __webpack_require__(305);
 
 	var _svgIcon2 = _interopRequireDefault(_svgIcon);
 
@@ -42047,7 +39343,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 338 */
+/* 339 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -42070,15 +39366,15 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _materialUiLibDialog = __webpack_require__(318);
+	var _materialUiLibDialog = __webpack_require__(319);
 
 	var _materialUiLibDialog2 = _interopRequireDefault(_materialUiLibDialog);
 
-	var _ForwardTable = __webpack_require__(333);
+	var _ForwardTable = __webpack_require__(334);
 
 	var _ForwardTable2 = _interopRequireDefault(_ForwardTable);
 
-	var _EditTextField = __webpack_require__(324);
+	var _EditTextField = __webpack_require__(325);
 
 	var _EditTextField2 = _interopRequireDefault(_EditTextField);
 
@@ -42104,7 +39400,7 @@
 	      open: false,
 	      addItems: false,
 	      nextContent: '',
-	      nextKey: ''
+	      nextKey: '0-0-0-0-0'
 	    };
 	  }
 
@@ -42182,7 +39478,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 339 */
+/* 340 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -42205,31 +39501,31 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _materialUiLibPaper = __webpack_require__(305);
+	var _materialUiLibPaper = __webpack_require__(306);
 
 	var _materialUiLibPaper2 = _interopRequireDefault(_materialUiLibPaper);
 
-	var _materialUiLibFloatingActionButton = __webpack_require__(334);
+	var _materialUiLibFloatingActionButton = __webpack_require__(335);
 
 	var _materialUiLibFloatingActionButton2 = _interopRequireDefault(_materialUiLibFloatingActionButton);
 
-	var _materialUiLibSvgIconsContentAdd = __webpack_require__(337);
+	var _materialUiLibSvgIconsContentAdd = __webpack_require__(338);
 
 	var _materialUiLibSvgIconsContentAdd2 = _interopRequireDefault(_materialUiLibSvgIconsContentAdd);
 
-	var _materialUiLibSvgIconsContentCreate = __webpack_require__(335);
+	var _materialUiLibSvgIconsContentCreate = __webpack_require__(336);
 
 	var _materialUiLibSvgIconsContentCreate2 = _interopRequireDefault(_materialUiLibSvgIconsContentCreate);
 
-	var _materialUiLibDialog = __webpack_require__(318);
+	var _materialUiLibDialog = __webpack_require__(319);
 
 	var _materialUiLibDialog2 = _interopRequireDefault(_materialUiLibDialog);
 
-	var _MenusItems = __webpack_require__(340);
+	var _MenusItems = __webpack_require__(341);
 
 	var _MenusItems2 = _interopRequireDefault(_MenusItems);
 
-	var _DialogEditTextField = __webpack_require__(324);
+	var _DialogEditTextField = __webpack_require__(325);
 
 	var _DialogEditTextField2 = _interopRequireDefault(_DialogEditTextField);
 
@@ -42316,7 +39612,7 @@
 	            return _react2['default'].createElement(_MenusItems2['default'], {
 	              key: i,
 	              open: actions.openMenus,
-	              _dispatchActions: actions.receiveItems,
+	              _dispatchActions: actions.dispatchActions,
 	              _checkedAll: actions.checkedAll,
 	              _checkedMenus: actions.checkedMenus,
 	              menuItems: menu
@@ -42364,7 +39660,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 340 */
+/* 341 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -42387,7 +39683,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _materialUiLibCheckbox = __webpack_require__(307);
+	var _materialUiLibCheckbox = __webpack_require__(308);
 
 	var _materialUiLibCheckbox2 = _interopRequireDefault(_materialUiLibCheckbox);
 
@@ -42486,13 +39782,13 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 341 */
+/* 342 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var isReactClassish = __webpack_require__(342),
-	    isReactElementish = __webpack_require__(343);
+	var isReactClassish = __webpack_require__(343),
+	    isReactElementish = __webpack_require__(344);
 
 	function makeExportsHot(m, React) {
 	  if (isReactElementish(m.exports, React)) {
@@ -42546,7 +39842,7 @@
 
 
 /***/ },
-/* 342 */
+/* 343 */
 /***/ function(module, exports) {
 
 	function hasRender(Class) {
@@ -42596,10 +39892,10 @@
 	module.exports = isReactClassish;
 
 /***/ },
-/* 343 */
+/* 344 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var isReactClassish = __webpack_require__(342);
+	var isReactClassish = __webpack_require__(343);
 
 	function isReactElementish(obj, React) {
 	  if (!obj) {

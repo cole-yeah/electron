@@ -69,7 +69,7 @@ export default class Menus extends Component {
               <MenusItems
                 key={i}
                 open={actions.openMenus}
-                _dispatchActions={actions.receiveItems}
+                _dispatchActions={actions.dispatchActions}
                 _checkedAll={actions.checkedAll}
                 _checkedMenus={actions.checkedMenus}
                 menuItems={menu}

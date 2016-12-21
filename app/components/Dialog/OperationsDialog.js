@@ -42,31 +42,29 @@ export default class OperationsDialog extends Component {
   }
 
   render() {
-    const { content, key, edit, itemsActions, keys } = this.props
-
-    let element = (
-      edit?
-        <EditTextField
-          menus={content}
-          Key={key}
-          _MenusSubmit={itemsActions.operationsSubmit}
-          array={['opId', 'opSort', 'opName', 'elementClass']}
-        />:
-        <ForwardTable
-          forward={false}
-          items={content.webApis}
-          keys={keys}
-          _handleChecked={itemsActions.webApisSelected}
-          _handleEdit={this.handleEdit}
-          _handleAdd={this.handleAdd}
-          _handleOpen={this.handleOpen}
-          array={['serviceMethod', 'serviceUrl']}
-        />
-    )
-
+    const { content, key, edit, itemsActions } = this.props
+    // const keys = this.state.nextContent.key
     return (
       <span>
-        {element}
+        {      
+          edit?
+          <EditTextField
+            menus={content}
+            Key={key}
+            _MenusSubmit={itemsActions.operationsSubmit}
+            array={['opId', 'opSort', 'opName', 'elementClass']}
+          />:
+          <ForwardTable
+            forward={false}
+            items={content.webApis}
+            keys={content.key}  //用content.key解决那个webApis下新增每次都在第一个的operations中的webApis的问题 2016.12.21
+            _handleChecked={itemsActions.webApisSelected}
+            _handleEdit={this.handleEdit}
+            _handleAdd={this.handleAdd}
+            _handleOpen={this.handleOpen}
+            array={['serviceMethod', 'serviceUrl']}
+          />
+        }
 
         <Dialog
           modal={false}
@@ -74,16 +72,12 @@ export default class OperationsDialog extends Component {
           contentStyle={style.dialog}
           onRequestClose={this.handleClose}
         >
-
-          {
-            <EditTextField 
-              menus={this.state.nextContent}
-              Key={this.state.nextKey} //nextKey 的值其实就是从forwardTable通过handleAdd函数setState然后传过来的，这个值用于去生成新增的functions、operations、webApis下的key
-              _MenusSubmit={this.state.addItems?itemsActions.addWebApisSubmit:itemsActions.webApisSubmit}
-              array={['serviceMethod', 'serviceUrl']}
-            />
-          }
-
+          <EditTextField 
+            menus={this.state.nextContent}
+            Key={this.state.nextKey} //nextKey 的值其实就是从forwardTable通过handleAdd函数setState然后传过来的，这个值用于去生成新增的functions、operations、webApis下的key
+            _MenusSubmit={this.state.addItems?itemsActions.addWebApisSubmit:itemsActions.webApisSubmit}
+            array={['serviceMethod', 'serviceUrl']}
+          />
         </Dialog>
       </span>
     )

@@ -85,7 +85,7 @@ export default class FunctionsDialog extends Component {
             />:
             <OperationsDialog
               edit={this.state.edit}
-              keys={content.operations[0].key}      //这里content.operations[0].key会导致每次新增webApis都加在第一个的operations上
+              // keys={content.operations[0].key}      //这里content.operations[0].key会导致每次新增webApis都加在第一个的operations上, 后面已解决，不需要在这传keys了
               itemsActions={itemsActions}
               content={this.state.nextContent}
             />}

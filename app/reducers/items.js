@@ -125,7 +125,7 @@ export function items(state=[], action) {
       const l = state[j].operations[k].webApis.length 
       console.log(h, i, j, k, l)   
       state.map(item => Object.assign({}, item, {
-        operations: item.operations.map(operation => operation.key === action.nextKey?
+        operations: item.operations.map(operation => operation.key === action.nextKey?  //新增的webApis都会加到第一个operations下的webApis中，因为nextKey为点击菜单传过来的值
           Object.assign({}, operation, {
             webApis: operation.webApis.push({
               checked: false,

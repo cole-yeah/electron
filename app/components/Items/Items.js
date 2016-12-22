@@ -28,17 +28,37 @@ export default class Items extends Component {
       // const dd = cc.map(a => a.map(b => b.map(c => c.operations.filter(oper => oper.checked === true))))  //选中的operations
       // const ee = dd.map(a => a.map(b => b.map(c => c.map(d => d.webApis.filter(api => api.checked === true))))) //选中的webApis
 
-      // const kk = (data.map(item => item.checked===true?item:'')).trim()
-      const kk = data.map(item => item.checked === true?Object.assign({}, item, {
-        children: item.children.map(child => child.checked === true?Object.assign({}, child, {
-          functions: child.functions.map(func => func.checked === true?Object.assign({}, func, {
-            operations: func.operations.map(oper => oper.checked === true?Object.assign({}, oper, {
-              webApis: oper.webApis.map(api => api.checked === true?api:'')
-            }):'')
-          }):'')
-        }):'')
-      }):'')
-      // kk = kk.trim()
+      // const kk = data.map(item => item.checked === true?Object.assign({}, item, {
+      //   children: item.children.map(child => child.checked === true?Object.assign({}, child, {
+      //     functions: child.functions.map(func => func.checked === true?Object.assign({}, func, {
+      //       operations: func.operations.map(oper => oper.checked === true?Object.assign({}, oper, {
+      //         webApis: oper.webApis.map(api => api.checked === true?api:'')
+      //       }):null)
+      //     }):null)
+      //   }):null)
+      // }):null)
+
+      let kk = data.map(function(item) {
+        if(item.checked === true) {
+          Object.assign({}, item, {children: item.children.map(function(aa){
+            if(aa.checked === true) {
+              Object.assign({}, aa, {functions: aa.functions.map(function(bb){
+                if(bb.checked === true) {
+                  Object.assign({}, bb, {operations: bb.operations.map(function(cc){
+                    cc.checked === true
+                    // if(cc.checked === true) {
+                    //   Object.assign({}, cc, {webApis: cc.webApis.map(function(dd){
+                    //     dd.checked === true
+                    //   })})
+                    // }
+                  })})
+                }
+              })})
+            }
+          })})
+        }
+      })
+
       console.log(kk)
 
       // console.log(aa)

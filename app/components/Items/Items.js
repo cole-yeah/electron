@@ -5,7 +5,6 @@ import ChildrenItems from './ChildrenItems'
 // const remote = window.require('electron').remote
 // const fs = remote.require('fs')
 
-
 const style = {
   raisedButton: {
     margin: 10
@@ -20,36 +19,37 @@ export default class Items extends Component {
 
   writeItemsFile(data) {
       // data = JSON.stringify(data)
-      // fs.writeFileSync('./test.json', data, 'utf-8')  
-      // const aa = data.filter(item => item.checked===true)
-      // const bb = aa.map(xi => xi.children.filter(child => child.checked === true))//导出勾选的数组应该是先从最底下的开始遍历，一层一层遍历，最后合并成一个新的数组
-      // const cc = bb.map(i => i.map(ha => ha.functions.filter(func => func.checked === true)))
-      // const dd = cc.map(he => he.operations.filter(oper => oper.checked === true))
-      // const ee = dd.map(ga => ga.webApis.filter(api => api.checked === true))
+      // fs.writeFileSync('./menus.json', data, 'utf-8')  
+      //filter出来的只是如果第一个checked为true，那么其下面的子孙级不管true或false，都被带出来  因为filter的条件就是item.checked===xx啊,所以在这里item.checked===true?后面的也就没有任何意义了
+      // const aa = data.filter(item => item.checked===true)  //选中的一级菜单
+      // const bb = aa.map(a => a.children = a.children.filter(b => b.checked === true))
+      // aa.map(a => a.children.filter(child => child.checked === true)) //选中的二级菜单  //导出勾选的数组应该是先从最底下的开始遍历，一层一层遍历，最后合并成一个新的数组
+      // const cc = bb.map(a => a.map(b => b.functions.filter(func => func.checked === true))) //选中的functions
+      // const dd = cc.map(a => a.map(b => b.map(c => c.operations.filter(oper => oper.checked === true))))  //选中的operations
+      // const ee = dd.map(a => a.map(b => b.map(c => c.map(d => d.webApis.filter(api => api.checked === true))))) //选中的webApis
 
-      // let kk = data.filter(item => item.checked === true)
-      // console.log(kk)
-
-      let haha = data.filter(item => item.checked === true?
-        item.children.filter(child => child.checked === true?
-          child.functions.filter(func => func.checked === true?
-            func.operations.filter(oper => oper.checked === true?
-              oper.webApis.filter(api => {api.checked === true}
-              ):''
-            ):''
-          ):''
-        ):''
-      )
-      console.log(haha)
-
-      // data.filter(item => item)
+      // const kk = (data.map(item => item.checked===true?item:'')).trim()
+      const kk = data.map(item => item.checked === true?Object.assign({}, item, {
+        children: item.children.map(child => child.checked === true?Object.assign({}, child, {
+          functions: child.functions.map(func => func.checked === true?Object.assign({}, func, {
+            operations: func.operations.map(oper => oper.checked === true?Object.assign({}, oper, {
+              webApis: oper.webApis.map(api => api.checked === true?api:'')
+            }):'')
+          }):'')
+        }):'')
+      }):'')
+      // kk = kk.trim()
+      console.log(kk)
 
       // console.log(aa)
       // console.log(bb)
       // console.log(cc)
       // console.log(dd)
       // console.log(ee)
-      // console.log(data.filter(item => item.checked === true?item.children.filter(child => child.checked === true):''))
+      
+      // let kk = data.map((a, i) => a.checked === true?Object.assign({}, a, a.children = bb[i]):a)
+
+
 
   }    
 

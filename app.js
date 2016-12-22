@@ -63,7 +63,7 @@
 /******/ 	}
 
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "317be84f1327713f21f5"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "9844ea0cca51db9add5c"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 
@@ -22700,7 +22700,7 @@
 /***/ function(module, exports) {
 
 	'use strict';Object.defineProperty(exports,'__esModule',{value:true});exports.openMenus = openMenus;exports.checkedAll = checkedAll;exports.checkedMenus = checkedMenus;exports.receiveItems = receiveItems;exports.getKey = getKey;exports.dispatchActions = dispatchActions;exports.selectedMenus = selectedMenus;exports.combineItems = combineItems;exports.firstMenusSubmit = firstMenusSubmit;exports.secondMenusSubmit = secondMenusSubmit;exports.addFirstMenus = addFirstMenus;exports.addSecondMenus = addSecondMenus;exports.readItemsFile = readItemsFile;exports.receiveMenus = receiveMenus;var remote=window.require('electron').remote;var fs=remote.require('fs');var RECEIVE_MENUS='RECEIVE_MENUS';exports.RECEIVE_MENUS = RECEIVE_MENUS;var OPEN_MENUS='OPEN_MENUS';exports.OPEN_MENUS = OPEN_MENUS;var CHECKED_ALL='CHECKED_ALL';exports.CHECKED_ALL = CHECKED_ALL;var CHECKED_MENUS='CHECKED_MENUS';exports.CHECKED_MENUS = CHECKED_MENUS;var SELECTED_MENUS='SELECTED_MENUS';exports.SELECTED_MENUS = SELECTED_MENUS;var RECEIVE_ITEMS='RECEIVE_ITEMS';exports.RECEIVE_ITEMS = RECEIVE_ITEMS;var COMBINE_ITEMS='COMBINE_ITEMS';exports.COMBINE_ITEMS = COMBINE_ITEMS;var SECOND_MENUS_SUBMIT='SECOND_MENUS_SUBMIT';exports.SECOND_MENUS_SUBMIT = SECOND_MENUS_SUBMIT;var FIRST_MENUS_SUBMIT='FIRST_MENUS_SUBMIT';exports.FIRST_MENUS_SUBMIT = FIRST_MENUS_SUBMIT;var ADD_FIRST_MENUS='ADD_FIRST_MENUS';exports.ADD_FIRST_MENUS = ADD_FIRST_MENUS;var ADD_SECOND_MENUS='ADD_SECOND_MENUS';exports.ADD_SECOND_MENUS = ADD_SECOND_MENUS;var GET_KEY='GET_KEY';exports.GET_KEY = GET_KEY;function openMenus(key){return {type:OPEN_MENUS,key:key};}function checkedAll(menuId,key){return {type:CHECKED_ALL,menuId:menuId,key:key};}function checkedMenus(key){return {type:CHECKED_MENUS,key:key};}function receiveItems(key,menus){return {type:RECEIVE_ITEMS,items:menus,key:key};}function getKey(key){return {type:GET_KEY,key:key};}function dispatchActions(key,menus){return function(dispatch){dispatch(receiveItems(key,menus));dispatch(getKey(key));};}function selectedMenus(menuId){return {type:SELECTED_MENUS,menuId:menuId};}function combineItems(key,items){return {type:COMBINE_ITEMS,items:items,key:key};}function firstMenusSubmit(nextKey,key,menuId,menuCode,menuSort,name){return {type:FIRST_MENUS_SUBMIT,nextKey:nextKey,key:key,menuId:menuId,menuCode:menuCode,menuSort:menuSort,name:name};}function secondMenusSubmit(nextKey,key,menuId,menuCode,menuSort,name,menuParentId,anchor){return {type:SECOND_MENUS_SUBMIT,nextKey:nextKey,key:key,menuId:menuId,menuCode:menuCode,menuSort:menuSort,name:name,menuParentId:menuParentId,anchor:anchor};}function addFirstMenus(nextKey,key,menuId,menuCode,menuSort,name,icon){return {type:ADD_FIRST_MENUS,nextKey:nextKey,key:key,menuId:menuId,menuCode:menuCode,menuSort:menuSort,name:name,icon:icon};}function addSecondMenus(nextKey,key,menuId,menuCode,menuSort,name,menuParentId,anchor){return {type:ADD_SECOND_MENUS,nextKey:nextKey,key:key,menuId:menuId,menuCode:menuCode,menuSort:menuSort,name:name,menuParentId:menuParentId,anchor:anchor};} //读取本地json文件获取列表,根据参数first,second 索引出点击菜单下的数组
-	function readItemsFile(){return function(dispatch){return fs.readFile('./test.json','utf-8',function(err,data){data = JSON.parse(data);dispatch(receiveMenus(data));});};} //获取列表成功action
+	function readItemsFile(){return function(dispatch){return fs.readFile('./menus.json','utf-8',function(err,data){data = JSON.parse(data);dispatch(receiveMenus(data));});};} //获取列表成功action
 	function receiveMenus(data){return {type:RECEIVE_MENUS,menus:data // menus:
 	// [
 	//     {
@@ -37315,9 +37315,6 @@
 	    /**
 	     * 选择该二级菜单
 	     */
-	    // case GET_KEY:
-	    //   return state.map(menu => menu.preKey = action.key)
-
 	    // case SELECTED_MENUS:
 	    // state.map(menu => menu.children.map(child => child.selected = false))
 	    // return state.map(menu => Object.assign({}, menu, {
@@ -49533,12 +49530,19 @@
 	    key: 'writeItemsFile',
 	    value: function writeItemsFile(data) {
 	      data = JSON.stringify(data);
-	      fs.writeFileSync('./test.json', data, 'utf-8');
-	      // const aa = data.filter(item => item.checked===true)
-	      // const bb = aa.map(xi => xi.children.filter(child => child.checked === true))//导出勾选的数组应该是先从最底下的开始遍历，一层一层遍历，最后合并成一个新的数组
+	      fs.writeFileSync('./menus.json', data, 'utf-8');
+	      //filter出来的只是如果第一个checked为true，那么其下面的子孙级不管true或false，都被带出来  因为filter的条件就是item.checked===xx啊,所以在这里item.checked===true?后面的也就没有任何意义了
+	      // const aa = data.filter(item => item.checked===true)  //选中的一级菜单
+	      // const bb = aa.map(a => a.children.filter(child => child.checked === true)) //选中的二级菜单  //导出勾选的数组应该是先从最底下的开始遍历，一层一层遍历，最后合并成一个新的数组
+	      // const cc = bb.map(a => a.map(b => b.functions.filter(func => func.checked === true))) //选中的functions
+	      // const dd = cc.map(a => a.map(b => b.map(c => c.operations.filter(oper => oper.checked === true))))  //选中的operations
+	      // const ee = dd.map(a => a.map(b => b.map(c => c.map(d => d.webApis.filter(api => api.checked === true))))) //选中的webApis
+
 	      // console.log(aa)
 	      // console.log(bb)
-	      // console.log(data.filter(item => item.checked === true?item.children.filter(child => child.checked === true):''))
+	      // console.log(cc)
+	      // console.log(dd)
+	      // console.log(ee)
 	    }
 	  }, {
 	    key: 'render',

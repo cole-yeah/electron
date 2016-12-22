@@ -129,7 +129,7 @@ export function addSecondMenus(nextKey, key, menuId, menuCode, menuSort, name, m
 //读取本地json文件获取列表,根据参数first,second 索引出点击菜单下的数组
 // export function readItemsFile() {
 //   return dispatch => {
-//     return (fs.readFile('./test.json', 'utf-8', (err, data) => {
+//     return (fs.readFile('./menus.json', 'utf-8', (err, data) => {
 //       data = JSON.parse(data)
 //       dispatch(receiveMenus(data))
 //     }))

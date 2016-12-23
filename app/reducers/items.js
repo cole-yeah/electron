@@ -9,7 +9,6 @@ import {
   ADD_OPERATIONS_SUBMIT, 
   ADD_WEBAPIS_SUBMIT,
   ADD_FUNCTIONS_SUBMIT } from '../actions/items'
-
 /**
  * 获取items  
  */  
@@ -17,19 +16,11 @@ export function items(state=[], action) {
   switch (action.type) {
     case RECEIVE_ITEMS:
       return action.items
-      // action.items.map(item => {
-      //   // item.preKey = action.key
-      //   return item
-      // })
-
 /**
  * 点击勾选与否functions  
  */
     case HANDLE_SELECTED:
       return state.map(item => item.key === action.key?Object.assign({}, item, { checked: !item.checked}):item)  //到时有多个functions
-      // return [Object.assign({}, state[0], { checked: !state[0].checked })]
-
-
 /**
  * 点击勾选与否operations  
  */
@@ -37,8 +28,7 @@ export function items(state=[], action) {
       return state.map(item => Object.assign({}, item, {
         operations: item.operations.map(operation => operation.key === action.key?
           Object.assign({}, operation, { checked: !operation.checked }):operation)
-      }))
-      
+      }))  
 /**
  * 点击勾选与否webApis  
  */
@@ -49,24 +39,20 @@ export function items(state=[], action) {
             Object.assign({}, api, {checked: !api.checked}):api)
         }))
       }))
-
 /**
  * 提交修改functions的值，并合并到menus中
  */
     case HANDLE_SUBMIT:
       return state.map(item => item.key === action.key?Object.assign({}, item, { functionId: action.functionId, functionName: action.functionName}):item)//要增加判断，相等则进行取代2016.12.15
-
 /**
  * 提交修改operations的值，并合并到menus中
  */
     case OPERATIONS_SUBMIT:
-    // console.log(action.id)
       return state.map(item => Object.assign({}, item, {
         operations: item.operations.map(operation => operation.key === action.key?
           Object.assign({}, operation, {opId: action.opId, opSort: action.opSort, opName: action.opName, elementClass: action.elementClass}):operation)
         }
       ))
-
 /**
  * 提交修改webApis的值，并合并到menus中  
  */
@@ -77,7 +63,6 @@ export function items(state=[], action) {
             Object.assign({}, api, { serviceMethod: action.serviceMethod, serviceUrl: action.serviceUrl }):api)
         }))
       }))
-
 /**
  * 提交新增functions的值，并合并到menus中  
  */
@@ -92,7 +77,6 @@ export function items(state=[], action) {
         checked: false,
         operations:[]
       })
-
 /**
  * 提交新增operations的值，并合并到menus中  
  */
@@ -113,7 +97,6 @@ export function items(state=[], action) {
           webApis: []
         })  //todo 这里有点不明白，一return的话就会报childrenItems下的items.map is not a function错误. debug之后发现items变成了长度，不再是数组..
       }):item)  // 是push的原因, array.push('xx')为数组，var other = array.push('xx')为长度
-
 /**
  * 提交新增webApis的值，并合并到menus中  
  */
@@ -136,7 +119,6 @@ export function items(state=[], action) {
             })
           }):operation)
       }))
-
     default:
       return state
   }

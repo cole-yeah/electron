@@ -39,7 +39,6 @@ export function menus(state=[], action) {
         })
         return menu
       })
-
 /**
  * 选中该一级菜单
  */
@@ -85,17 +84,6 @@ export function menus(state=[], action) {
               checked: !child.checked
             }):child)
           }))
-/**
- * 选择该二级菜单
- */
-    // case SELECTED_MENUS:
-      // state.map(menu => menu.children.map(child => child.selected = false))
-      // return state.map(menu => Object.assign({}, menu, {
-      //   children: menu.children.map(child => child.menuId === action.menuId?
-      //     Object.assign({}, child, {
-      //       selected: true 
-      //     }):child)
-      //   }))
 /**
  * 合并items修改后的数据
  */

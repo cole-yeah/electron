@@ -63,7 +63,7 @@
 /******/ 	}
 
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "bab718e4ced8318f37d1"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "77b8d6505934db6ceaf1"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 
@@ -22546,11 +22546,6 @@
 	  switch (action.type) {
 	    case _actionsMenus.RECEIVE_ITEMS:
 	      return action.items;
-	    // action.items.map(item => {
-	    //   // item.preKey = action.key
-	    //   return item
-	    // })
-
 	    /**
 	     * 点击勾选与否functions  
 	     */
@@ -22558,8 +22553,6 @@
 	      return state.map(function (item) {
 	        return item.key === action.key ? Object.assign({}, item, { checked: !item.checked }) : item;
 	      }); //到时有多个functions
-	    // return [Object.assign({}, state[0], { checked: !state[0].checked })]
-
 	    /**
 	     * 点击勾选与否operations  
 	     */
@@ -22571,7 +22564,6 @@
 	          })
 	        });
 	      });
-
 	    /**
 	     * 点击勾选与否webApis  
 	     */
@@ -22587,7 +22579,6 @@
 	          })
 	        });
 	      });
-
 	    /**
 	     * 提交修改functions的值，并合并到menus中
 	     */
@@ -22595,12 +22586,10 @@
 	      return state.map(function (item) {
 	        return item.key === action.key ? Object.assign({}, item, { functionId: action.functionId, functionName: action.functionName }) : item;
 	      }); //要增加判断，相等则进行取代2016.12.15
-
 	    /**
 	     * 提交修改operations的值，并合并到menus中
 	     */
 	    case _actionsItems.OPERATIONS_SUBMIT:
-	      // console.log(action.id)
 	      return state.map(function (item) {
 	        return Object.assign({}, item, {
 	          operations: item.operations.map(function (operation) {
@@ -22608,7 +22597,6 @@
 	          })
 	        });
 	      });
-
 	    /**
 	     * 提交修改webApis的值，并合并到menus中  
 	     */
@@ -22624,7 +22612,6 @@
 	          })
 	        });
 	      });
-
 	    /**
 	     * 提交新增functions的值，并合并到menus中  
 	     */
@@ -22639,7 +22626,6 @@
 	        checked: false,
 	        operations: []
 	      });
-
 	    /**
 	     * 提交新增operations的值，并合并到menus中  
 	     */
@@ -22663,7 +22649,6 @@
 	          }) //todo 这里有点不明白，一return的话就会报childrenItems下的items.map is not a function错误. debug之后发现items变成了长度，不再是数组..
 	        }) : item;
 	      }); // 是push的原因, array.push('xx')为数组，var other = array.push('xx')为长度
-
 	    /**
 	     * 提交新增webApis的值，并合并到menus中  
 	     */
@@ -22690,7 +22675,6 @@
 	          })
 	        });
 	      });
-
 	    default:
 	      return state;
 	  }
@@ -22700,8 +22684,10 @@
 /* 204 */
 /***/ function(module, exports) {
 
-	'use strict';Object.defineProperty(exports,'__esModule',{value:true});exports.openMenus = openMenus;exports.checkedAll = checkedAll;exports.checkedMenus = checkedMenus;exports.receiveItems = receiveItems;exports.getKey = getKey;exports.dispatchActions = dispatchActions;exports.selectedMenus = selectedMenus;exports.combineItems = combineItems;exports.firstMenusSubmit = firstMenusSubmit;exports.secondMenusSubmit = secondMenusSubmit;exports.addFirstMenus = addFirstMenus;exports.addSecondMenus = addSecondMenus;exports.readItemsFile = readItemsFile;exports.receiveMenus = receiveMenus;var remote=window.require('electron').remote;var fs=remote.require('fs');var RECEIVE_MENUS='RECEIVE_MENUS';exports.RECEIVE_MENUS = RECEIVE_MENUS;var OPEN_MENUS='OPEN_MENUS';exports.OPEN_MENUS = OPEN_MENUS;var CHECKED_ALL='CHECKED_ALL';exports.CHECKED_ALL = CHECKED_ALL;var CHECKED_MENUS='CHECKED_MENUS';exports.CHECKED_MENUS = CHECKED_MENUS;var SELECTED_MENUS='SELECTED_MENUS';exports.SELECTED_MENUS = SELECTED_MENUS;var RECEIVE_ITEMS='RECEIVE_ITEMS';exports.RECEIVE_ITEMS = RECEIVE_ITEMS;var COMBINE_ITEMS='COMBINE_ITEMS';exports.COMBINE_ITEMS = COMBINE_ITEMS;var SECOND_MENUS_SUBMIT='SECOND_MENUS_SUBMIT';exports.SECOND_MENUS_SUBMIT = SECOND_MENUS_SUBMIT;var FIRST_MENUS_SUBMIT='FIRST_MENUS_SUBMIT';exports.FIRST_MENUS_SUBMIT = FIRST_MENUS_SUBMIT;var ADD_FIRST_MENUS='ADD_FIRST_MENUS';exports.ADD_FIRST_MENUS = ADD_FIRST_MENUS;var ADD_SECOND_MENUS='ADD_SECOND_MENUS';exports.ADD_SECOND_MENUS = ADD_SECOND_MENUS;var GET_KEY='GET_KEY';exports.GET_KEY = GET_KEY;function openMenus(key){return {type:OPEN_MENUS,key:key};}function checkedAll(menuId,key){return {type:CHECKED_ALL,menuId:menuId,key:key};}function checkedMenus(key){return {type:CHECKED_MENUS,key:key};}function receiveItems(key,menus){return {type:RECEIVE_ITEMS,items:menus,key:key};}function getKey(key){return {type:GET_KEY,key:key};}function dispatchActions(key,menus){return function(dispatch){dispatch(receiveItems(key,menus));dispatch(getKey(key));};}function selectedMenus(menuId){return {type:SELECTED_MENUS,menuId:menuId};}function combineItems(key,items){return {type:COMBINE_ITEMS,items:items,key:key};}function firstMenusSubmit(nextKey,key,menuId,menuCode,menuSort,name){return {type:FIRST_MENUS_SUBMIT,nextKey:nextKey,key:key,menuId:menuId,menuCode:menuCode,menuSort:menuSort,name:name};}function secondMenusSubmit(nextKey,key,menuId,menuCode,menuSort,name,menuParentId,anchor){return {type:SECOND_MENUS_SUBMIT,nextKey:nextKey,key:key,menuId:menuId,menuCode:menuCode,menuSort:menuSort,name:name,menuParentId:menuParentId,anchor:anchor};}function addFirstMenus(nextKey,key,menuId,menuCode,menuSort,name,icon){return {type:ADD_FIRST_MENUS,nextKey:nextKey,key:key,menuId:menuId,menuCode:menuCode,menuSort:menuSort,name:name,icon:icon};}function addSecondMenus(nextKey,key,menuId,menuCode,menuSort,name,menuParentId,anchor){return {type:ADD_SECOND_MENUS,nextKey:nextKey,key:key,menuId:menuId,menuCode:menuCode,menuSort:menuSort,name:name,menuParentId:menuParentId,anchor:anchor};} //读取本地json文件获取列表,根据参数first,second 索引出点击菜单下的数组
-	function readItemsFile(){return function(dispatch){return fs.readFile('./menus.json','utf-8',function(err,data){data = JSON.parse(data);dispatch(receiveMenus(data));});};} //获取列表成功action
+	'use strict';Object.defineProperty(exports,'__esModule',{value:true});exports.openMenus = openMenus;exports.checkedAll = checkedAll;exports.checkedMenus = checkedMenus;exports.receiveItems = receiveItems;exports.getKey = getKey;exports.dispatchActions = dispatchActions;exports.selectedMenus = selectedMenus;exports.combineItems = combineItems;exports.firstMenusSubmit = firstMenusSubmit;exports.secondMenusSubmit = secondMenusSubmit;exports.addFirstMenus = addFirstMenus;exports.addSecondMenus = addSecondMenus;exports.readItemsFile = readItemsFile;exports.importItemsFile = importItemsFile;exports.receiveMenus = receiveMenus;var remote=window.require('electron').remote;var fs=remote.require('fs');var dialog=remote.require('dialog');var RECEIVE_MENUS='RECEIVE_MENUS';exports.RECEIVE_MENUS = RECEIVE_MENUS;var OPEN_MENUS='OPEN_MENUS';exports.OPEN_MENUS = OPEN_MENUS;var CHECKED_ALL='CHECKED_ALL';exports.CHECKED_ALL = CHECKED_ALL;var CHECKED_MENUS='CHECKED_MENUS';exports.CHECKED_MENUS = CHECKED_MENUS;var SELECTED_MENUS='SELECTED_MENUS';exports.SELECTED_MENUS = SELECTED_MENUS;var RECEIVE_ITEMS='RECEIVE_ITEMS';exports.RECEIVE_ITEMS = RECEIVE_ITEMS;var COMBINE_ITEMS='COMBINE_ITEMS';exports.COMBINE_ITEMS = COMBINE_ITEMS;var SECOND_MENUS_SUBMIT='SECOND_MENUS_SUBMIT';exports.SECOND_MENUS_SUBMIT = SECOND_MENUS_SUBMIT;var FIRST_MENUS_SUBMIT='FIRST_MENUS_SUBMIT';exports.FIRST_MENUS_SUBMIT = FIRST_MENUS_SUBMIT;var ADD_FIRST_MENUS='ADD_FIRST_MENUS';exports.ADD_FIRST_MENUS = ADD_FIRST_MENUS;var ADD_SECOND_MENUS='ADD_SECOND_MENUS';exports.ADD_SECOND_MENUS = ADD_SECOND_MENUS;var GET_KEY='GET_KEY';exports.GET_KEY = GET_KEY;function openMenus(key){return {type:OPEN_MENUS,key:key};}function checkedAll(menuId,key){return {type:CHECKED_ALL,menuId:menuId,key:key};}function checkedMenus(key){return {type:CHECKED_MENUS,key:key};}function receiveItems(key,menus){return {type:RECEIVE_ITEMS,items:menus,key:key};}function getKey(key){return {type:GET_KEY,key:key};}function dispatchActions(key,menus){return function(dispatch){dispatch(receiveItems(key,menus));dispatch(getKey(key));};}function selectedMenus(menuId){return {type:SELECTED_MENUS,menuId:menuId};}function combineItems(key,items){return {type:COMBINE_ITEMS,items:items,key:key};}function firstMenusSubmit(nextKey,key,menuId,menuCode,menuSort,name){return {type:FIRST_MENUS_SUBMIT,nextKey:nextKey,key:key,menuId:menuId,menuCode:menuCode,menuSort:menuSort,name:name};}function secondMenusSubmit(nextKey,key,menuId,menuCode,menuSort,name,menuParentId,anchor){return {type:SECOND_MENUS_SUBMIT,nextKey:nextKey,key:key,menuId:menuId,menuCode:menuCode,menuSort:menuSort,name:name,menuParentId:menuParentId,anchor:anchor};}function addFirstMenus(nextKey,key,menuId,menuCode,menuSort,name,icon){return {type:ADD_FIRST_MENUS,nextKey:nextKey,key:key,menuId:menuId,menuCode:menuCode,menuSort:menuSort,name:name,icon:icon};}function addSecondMenus(nextKey,key,menuId,menuCode,menuSort,name,menuParentId,anchor){return {type:ADD_SECOND_MENUS,nextKey:nextKey,key:key,menuId:menuId,menuCode:menuCode,menuSort:menuSort,name:name,menuParentId:menuParentId,anchor:anchor};} //默认读取本地json文件获取列表,根据参数first,second 索引出点击菜单下的数组
+	function readItemsFile(){return function(dispatch){return fs.readFile('./menus.json','utf-8',function(err,data){data = JSON.parse(data);dispatch(receiveMenus(data));});};} //导入本地json文件获取列表
+	function importItemsFile(){return function(dispatch){dialog.showOpenDialog({filters:[{name:'Json',extensions:['json']},{name:'All Files',extensions:['*']} //读取类型限制
+	]},function(fileNames){fileNames === undefined?alert("请选择文件！"):readFile(fileNames[0]);});function readFile(filepath){return fs.readFile(filepath,'utf-8',function(err,data){if(err){alert("导入失败:" + err.message);return;}data = JSON.parse(data);dispatch(receiveMenus(data));});}};} //获取列表成功action
 	function receiveMenus(data){return {type:RECEIVE_MENUS,menus:data // menus:
 	// [
 	//     {
@@ -37256,7 +37242,6 @@
 	        });
 	        return menu;
 	      });
-
 	    /**
 	     * 选中该一级菜单
 	     */
@@ -37313,17 +37298,6 @@
 	          })
 	        });
 	      });
-	    /**
-	     * 选择该二级菜单
-	     */
-	    // case SELECTED_MENUS:
-	    // state.map(menu => menu.children.map(child => child.selected = false))
-	    // return state.map(menu => Object.assign({}, menu, {
-	    //   children: menu.children.map(child => child.menuId === action.menuId?
-	    //     Object.assign({}, child, {
-	    //       selected: true
-	    //     }):child)
-	    //   }))
 	    /**
 	     * 合并items修改后的数据
 	     */
@@ -49510,6 +49484,7 @@
 	var _ChildrenItems2 = _interopRequireDefault(_ChildrenItems);
 
 	var remote = window.require('electron').remote;
+	var dialog = remote.require('dialog');
 	var fs = remote.require('fs');
 
 	var style = {
@@ -49521,17 +49496,25 @@
 	var Items = (function (_Component) {
 	  _inherits(Items, _Component);
 
-	  function Items(props) {
+	  function Items() {
 	    _classCallCheck(this, Items);
 
-	    _get(Object.getPrototypeOf(Items.prototype), 'constructor', this).call(this, props);
+	    _get(Object.getPrototypeOf(Items.prototype), 'constructor', this).apply(this, arguments);
 	  }
 
 	  _createClass(Items, [{
 	    key: 'writeItemsFile',
 	    value: function writeItemsFile(data) {
-	      //filter出来的只是如果第一个checked为true，那么其下面的子孙级不管true或false，都被带出来，因为filter的条件就是item.checked===xx啊,所以在这里item.checked===true?后面的也就没有任何意义了
-
+	      data = JSON.stringify(data);
+	      fs.writeFileSync('./menus.json', data, 'utf-8', function (err) {
+	        err ? err : alert('保存成功！');
+	      });
+	    }
+	  }, {
+	    key: 'exportItemsFile',
+	    value: function exportItemsFile(data) {
+	      //完成了filter筛选，逻辑欠妥，点保存的时候不应该filter，因为如果这样那么每次新增或修改时需要保存都要去勾选这样很麻烦,这个应该放在导出上 2016.12.23
+	      //这个应该放在哪里呢？？ action要保持纯净 2016.12.23
 	      data = data.filter(function (item) {
 	        return item.checked === true;
 	      }); //筛选一级菜单
@@ -49587,10 +49570,22 @@
 	          })
 	        });
 	      });
-
 	      data = JSON.stringify(data);
-	      fs.writeFileSync('./menus.json', data, 'utf-8');
-	      // console.log(kk)
+	      dialog.showSaveDialog({
+	        filters: [{ name: 'Json', extensions: ['json'] }, { name: 'All Files', extensions: ['*'] }]
+	      }, function (fileName) {
+	        if (fileName === undefined) {
+	          console.log("请输入文件名！");
+	          return;
+	        }
+
+	        fs.writeFile(fileName, data, function (err) {
+	          if (err) {
+	            alert("导出失败 " + err.message);
+	          }
+	          alert("导出成功！");
+	        });
+	      });
 	    }
 	  }, {
 	    key: 'render',
@@ -49600,6 +49595,7 @@
 	      var keys = _props.keys;
 	      var menus = _props.menus;
 	      var itemsActions = _props.itemsActions;
+	      var menusActions = _props.menusActions;
 
 	      return _react2['default'].createElement(
 	        'div',
@@ -49613,8 +49609,10 @@
 	        _react2['default'].createElement(
 	          'div',
 	          { className: 'exp-imp' },
-	          _react2['default'].createElement(_materialUiLibRaisedButton2['default'], { label: '导 入', secondary: true, style: style.raisedButton }),
-	          _react2['default'].createElement(_materialUiLibRaisedButton2['default'], { label: '导 出', secondary: true, style: style.raisedButton }),
+	          _react2['default'].createElement(_materialUiLibRaisedButton2['default'], { label: '导 入', secondary: true, style: style.raisedButton, onTouchTap: function () {
+	              return menusActions.importItemsFile();
+	            } }),
+	          _react2['default'].createElement(_materialUiLibRaisedButton2['default'], { label: '导 出', secondary: true, style: style.raisedButton, onTouchTap: this.exportItemsFile.bind(this, menus) }),
 	          _react2['default'].createElement(_materialUiLibRaisedButton2['default'], { label: '保 存', primary: true, style: style.raisedButton, onTouchTap: this.writeItemsFile.bind(this, menus) })
 	        )
 	      );

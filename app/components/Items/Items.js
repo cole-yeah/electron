@@ -2,8 +2,9 @@ import React, { Component, PropTypes } from 'react'
 import RaisedButton from 'material-ui/lib/raised-button'
 import ChildrenItems from './ChildrenItems'
 
-// const remote = window.require('electron').remote
-// const fs = remote.require('fs')
+const remote = window.require('electron').remote
+const dialog = remote.require('dialog')
+const fs = remote.require('fs')
 
 const style = {
   raisedButton: {
@@ -13,13 +14,16 @@ const style = {
 
 export default class Items extends Component {
 
-  constructor(props) {
-    super(props)
-  }
-
   writeItemsFile(data) {
-      //filter出来的只是如果第一个checked为true，那么其下面的子孙级不管true或false，都被带出来，因为filter的条件就是item.checked===xx啊,所以在这里item.checked===true?后面的也就没有任何意义了
+    data = JSON.stringify(data)
+    fs.writeFileSync('./menus.json', data, 'utf-8', err => {
+      err?err:alert('保存成功！')
+    })
+  }    
 
+  exportItemsFile(data) {
+      //完成了filter筛选，逻辑欠妥，点保存的时候不应该filter，因为如果这样那么每次新增或修改时需要保存都要去勾选这样很麻烦,这个应该放在导出上 2016.12.23
+      //这个应该放在哪里呢？？ action要保持纯净 2016.12.23
       data = data.filter(item => item.checked === true)                  //筛选一级菜单
       data = data.map(item => Object.assign({}, item, {                  //筛选二级菜单
         children: item.children.filter(child => child.checked === true)
@@ -45,14 +49,29 @@ export default class Items extends Component {
           }))
         }))
       }))
-      //完成了filter筛选，逻辑欠妥，点保存的时候不应该filter，因为如果这样那么每次新增或修改时需要保存都要去勾选这样很麻烦,这个应该放在导出上 2016.12.23
-      // data = JSON.stringify(data)
-      // fs.writeFileSync('./menus.json', data, 'utf-8')  
-      console.log(kk)
-  }    
+      data = JSON.stringify(data)
+      dialog.showSaveDialog({
+        filters: [
+          {name: 'Json', extensions: ['json']},
+          {name: 'All Files', extensions: ['*']}
+        ]
+      },fileName => {
+        if (fileName === undefined){
+            console.log("请输入文件名！")
+            return
+        }
+
+        fs.writeFile(fileName, data,  err => {
+          if(err){
+            alert("导出失败 "+ err.message)
+          } 
+          alert("导出成功！")
+        })
+      }) 
+    }
 
   render() {
-    const { items, keys, menus, itemsActions } = this.props
+    const { items, keys, menus, itemsActions, menusActions } = this.props
     return (
       <div>
 
@@ -64,8 +83,8 @@ export default class Items extends Component {
         />
 
         <div className="exp-imp">
-          <RaisedButton label="导 入" secondary={true} style={style.raisedButton} />
-          <RaisedButton label="导 出" secondary={true} style={style.raisedButton} />
+          <RaisedButton label="导 入" secondary={true} style={style.raisedButton} onTouchTap={() => menusActions.importItemsFile()} />
+          <RaisedButton label="导 出" secondary={true} style={style.raisedButton} onTouchTap={this.exportItemsFile.bind(this, menus)} />
           <RaisedButton label="保 存" primary={true} style={style.raisedButton} onTouchTap={this.writeItemsFile.bind(this, menus)} />
         </div>
       </div>

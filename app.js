@@ -63,7 +63,7 @@
 /******/ 	}
 
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "9844ea0cca51db9add5c"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "bab718e4ced8318f37d1"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 
@@ -22545,10 +22545,11 @@
 
 	  switch (action.type) {
 	    case _actionsMenus.RECEIVE_ITEMS:
-	      return action.items.map(function (item) {
-	        item.preKey = action.key;
-	        return item;
-	      });
+	      return action.items;
+	    // action.items.map(item => {
+	    //   // item.preKey = action.key
+	    //   return item
+	    // })
 
 	    /**
 	     * 点击勾选与否functions  
@@ -49529,20 +49530,67 @@
 	  _createClass(Items, [{
 	    key: 'writeItemsFile',
 	    value: function writeItemsFile(data) {
+	      //filter出来的只是如果第一个checked为true，那么其下面的子孙级不管true或false，都被带出来，因为filter的条件就是item.checked===xx啊,所以在这里item.checked===true?后面的也就没有任何意义了
+
+	      data = data.filter(function (item) {
+	        return item.checked === true;
+	      }); //筛选一级菜单
+	      data = data.map(function (item) {
+	        return Object.assign({}, item, { //筛选二级菜单
+	          children: item.children.filter(function (child) {
+	            return child.checked === true;
+	          })
+	        });
+	      });
+	      data = data.map(function (item) {
+	        return Object.assign({}, item, { //筛选functions
+	          children: item.children.map(function (child) {
+	            return Object.assign({}, child, {
+	              functions: child.functions.filter(function (func) {
+	                return func.checked === true;
+	              })
+	            });
+	          })
+	        });
+	      });
+	      data = data.map(function (item) {
+	        return Object.assign({}, item, { //筛选operations
+	          children: item.children.map(function (child) {
+	            return Object.assign({}, child, {
+	              functions: child.functions.map(function (func) {
+	                return Object.assign({}, func, {
+	                  operations: func.operations.filter(function (oper) {
+	                    return oper.checked === true;
+	                  })
+	                });
+	              })
+	            });
+	          })
+	        });
+	      });
+	      data = data.map(function (item) {
+	        return Object.assign({}, item, { //筛选webApis
+	          children: item.children.map(function (child) {
+	            return Object.assign({}, child, {
+	              functions: child.functions.map(function (func) {
+	                return Object.assign({}, func, {
+	                  operations: func.operations.map(function (oper) {
+	                    return Object.assign({}, oper, {
+	                      webApis: oper.webApis.filter(function (api) {
+	                        return api.checked === true;
+	                      })
+	                    });
+	                  })
+	                });
+	              })
+	            });
+	          })
+	        });
+	      });
+
 	      data = JSON.stringify(data);
 	      fs.writeFileSync('./menus.json', data, 'utf-8');
-	      //filter出来的只是如果第一个checked为true，那么其下面的子孙级不管true或false，都被带出来  因为filter的条件就是item.checked===xx啊,所以在这里item.checked===true?后面的也就没有任何意义了
-	      // const aa = data.filter(item => item.checked===true)  //选中的一级菜单
-	      // const bb = aa.map(a => a.children.filter(child => child.checked === true)) //选中的二级菜单  //导出勾选的数组应该是先从最底下的开始遍历，一层一层遍历，最后合并成一个新的数组
-	      // const cc = bb.map(a => a.map(b => b.functions.filter(func => func.checked === true))) //选中的functions
-	      // const dd = cc.map(a => a.map(b => b.map(c => c.operations.filter(oper => oper.checked === true))))  //选中的operations
-	      // const ee = dd.map(a => a.map(b => b.map(c => c.map(d => d.webApis.filter(api => api.checked === true))))) //选中的webApis
-
-	      // console.log(aa)
-	      // console.log(bb)
-	      // console.log(cc)
-	      // console.log(dd)
-	      // console.log(ee)
+	      // console.log(kk)
 	    }
 	  }, {
 	    key: 'render',
@@ -53102,7 +53150,8 @@
 	var style = {
 	  actionButton: {
 	    position: 'relative',
-	    left: '48%'
+	    left: '48%',
+	    marginBottom: 30
 	  }
 	};
 

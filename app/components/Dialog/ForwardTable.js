@@ -10,6 +10,7 @@ const style = {
   actionButton: {
     position: 'relative',
     left: '48%',
+    marginBottom: 30
   }
 }
 

@@ -22,7 +22,7 @@
     "css-loader": "^0.15.0",
     "doctrine": "^1.2.0",
     "electron-packager": "^8.4.0",
-    "electron-prebuilt": "^0.36.0",
+    "electron-prebuilt": "^0.36.12",
     "eslint": "^1.1.0",
     "eslint-loader": "^1.0.0",
     "eslint-plugin-react": "^3.2.2",

@@ -3,8 +3,8 @@ import RaisedButton from 'material-ui/lib/raised-button'
 import ChildrenItems from './ChildrenItems'
 
 const remote = window.require('electron').remote
-const dialog = remote.require('dialog')
 const fs = remote.require('fs')
+const {dialog} = window.require('electron').remote
 
 const style = {
   raisedButton: {

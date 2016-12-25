@@ -14,13 +14,13 @@ if (canUseDOM) {
   createStoreWithMiddleware = compose(
     applyMiddleware(thunk),
     applyMiddleware(createLogger()),
-    // devTools()
+    devTools()
   )(createStore);
 } else {
   createStoreWithMiddleware = compose(
     applyMiddleware(thunk),
     applyMiddleware(createLogger()),
-    // devTools()
+    devTools()
   )(createStore);
 }
 

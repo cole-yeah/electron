@@ -14,14 +14,18 @@ export const FIRST_MENUS_SUBMIT = 'FIRST_MENUS_SUBMIT'
 export const ADD_FIRST_MENUS = 'ADD_FIRST_MENUS'
 export const ADD_SECOND_MENUS = 'ADD_SECOND_MENUS'
 export const GET_KEY = 'GET_KEY'
-
+/**
+ * 打开菜单action
+ */
 export function openMenus(key) {
   return {
     type: OPEN_MENUS,
     key,
   }
 }
-
+/**
+ * 勾选一、二、三、四级菜单action
+ */
 export function checkedAll(menuId, key) {
   return {
     type: CHECKED_ALL,
@@ -29,14 +33,18 @@ export function checkedAll(menuId, key) {
     key,
   }
 }
-
+/**
+ * 选中菜单action
+ */
 export function checkedMenus(key) {
   return {
     type: CHECKED_MENUS,
     key
   }
 }
-
+/**
+ * 获取items action
+ */
 export function receiveItems(key, menus) {
   return {
     type: RECEIVE_ITEMS,
@@ -44,28 +52,36 @@ export function receiveItems(key, menus) {
     key,
   }
 }
-
+/**
+ * 从menus传keys给items action
+ */
 export function getKey(key) {
   return {
     type: GET_KEY,
     key
   }
 }
-
+/**
+ * 派发器action
+ */
 export function dispatchActions(key, menus) {
   return dispatch => {
     dispatch(receiveItems(key, menus))
     dispatch(getKey(key))
   }
 }
-
+/**
+ * 选中菜单action
+ */
 export function selectedMenus(menuId) {
   return {
     type: SELECTED_MENUS,
     menuId,
   }
 }
-
+/**
+ * 把items合并到menus上action
+ */
 export function combineItems(key, items) {
   return {
     type: COMBINE_ITEMS,
@@ -73,7 +89,9 @@ export function combineItems(key, items) {
     key
   }
 }
-
+/**
+ * 修改一级菜单action
+ */
 export function firstMenusSubmit(nextKey, key, menuId, menuCode, menuSort, name) {
   return {
     type: FIRST_MENUS_SUBMIT,
@@ -85,7 +103,9 @@ export function firstMenusSubmit(nextKey, key, menuId, menuCode, menuSort, name)
     name
   }
 }
-
+/**
+ * 修改二级菜单action
+ */
 export function secondMenusSubmit(nextKey, key, menuId, menuCode, menuSort, name, menuParentId, anchor) {
   return {
     type: SECOND_MENUS_SUBMIT,
@@ -99,7 +119,9 @@ export function secondMenusSubmit(nextKey, key, menuId, menuCode, menuSort, name
     anchor
   }
 }
-
+/**
+ * 新增一级菜单action
+ */
 export function addFirstMenus(nextKey, key, menuId, menuCode, menuSort, name, icon) {
   return {
     type: ADD_FIRST_MENUS,
@@ -112,7 +134,9 @@ export function addFirstMenus(nextKey, key, menuId, menuCode, menuSort, name, ic
     icon    
   }
 }
-
+/**
+ * 新增二级菜单action
+ */
 export function addSecondMenus(nextKey, key, menuId, menuCode, menuSort, name, menuParentId, anchor) {
   return {
     type: ADD_SECOND_MENUS,
@@ -126,8 +150,9 @@ export function addSecondMenus(nextKey, key, menuId, menuCode, menuSort, name, m
     anchor    
   }
 }
-
-//默认读取本地json文件获取列表,根据参数first,second 索引出点击菜单下的数组
+/**
+ * 默认读取本地json文件获取列表,根据参数first,second 索引出点击菜单下的数组
+ */
 export function readItemsFile() {
   return dispatch => {
     return (fs.readFile('./menus.json', 'utf-8', (err, data) => {
@@ -136,7 +161,9 @@ export function readItemsFile() {
     }))
   }
 }
-//导入本地json文件获取列表
+/**
+* 导入本地json文件获取列表
+*/
 export function importItemsFile() {
   return dispatch => {
     dialog.showOpenDialog({
@@ -159,14 +186,12 @@ export function importItemsFile() {
       }
     }
 }
-
-//获取列表成功action
+/**
+ * 获取列表成功action
+ */
 export function receiveMenus(data) {
   return {
     type: RECEIVE_MENUS,
     menus:data
   }
 }
-
-
-

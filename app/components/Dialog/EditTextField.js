@@ -16,32 +16,36 @@ const style = {
 export default class EditTextField extends Component {
   constructor(props) {
     super(props)
+  //todo  不要重复取一个对象里面的数据'
+    const {anchor, menuCode, menuId, menuParentId, menuSort, name, icon, functionId, functionName, opId, opSort, opName, 
+           elementClass, serviceMethod, serviceUrl} = this.props.menus || {}
     this.state = {
       /**menus */
-      anchor: this.props.menus.anchor || '',
-      menuCode: this.props.menus.menuCode || '',
-      menuId: this.props.menus.menuId || '',
-      menuParentId: this.props.menus.menuParentId || '',
-      menuSort: this.props.menus.menuSort || '',
-      name: this.props.menus.name || '',
-      icon: this.props.menus.icon || '',
+      anchor, 
+      menuCode, 
+      menuId, 
+      menuParentId, 
+      menuSort, 
+      name, 
       /**functions */
-      functionId: this.props.menus.functionId || '',
-      functionName: this.props.menus.functionName || '',
+      icon, 
+      functionId, 
+      functionName, 
       /*operations */
-      opId: this.props.menus.opId || '',
-      opSort: this.props.menus.opSort || '',
-      opName: this.props.menus.opName || '',
-      elementClass: this.props.menus.elementClass || '',
-      /**webApis*/
-      serviceMethod: this.props.menus.serviceMethod || '',
-      serviceUrl: this.props.menus.serviceUrl || '',
+      opId, 
+      opSort, 
+      opName, 
+      elementClass,
+      /**webApis*/ 
+      serviceMethod, 
+      serviceUrl
     }
   }
 
   handleChange(name, event) {
     let newState = {}
-    newState[name] = event.target.value
+    //todo  target -》 currentTarget
+    newState[name] = event.currentTarget.value
     this.setState(newState)
   }
 /**hahahah */  //3.key在这里为undefined

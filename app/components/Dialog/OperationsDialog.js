@@ -43,7 +43,6 @@ export default class OperationsDialog extends Component {
 
   render() {
     const { content, key, edit, itemsActions } = this.props
-    // const keys = this.state.nextContent.key
     return (
       <span>
         {      

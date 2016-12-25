@@ -13,6 +13,7 @@ import {
  * 获取items  
  */  
 export function items(state=[], action) {
+  const {nextKey, functionId, functionName, opId, opSort, opName, elementClass, serviceMethod, serviceUrl } = action
   switch (action.type) {
     case RECEIVE_ITEMS:
       return action.items
@@ -43,14 +44,14 @@ export function items(state=[], action) {
  * 提交修改functions的值，并合并到menus中
  */
     case HANDLE_SUBMIT:
-      return state.map(item => item.key === action.key?Object.assign({}, item, { functionId: action.functionId, functionName: action.functionName}):item)//要增加判断，相等则进行取代2016.12.15
+      return state.map(item => item.key === action.key?Object.assign({}, item, { functionId, functionName }):item)//要增加判断，相等则进行取代2016.12.15
 /**
  * 提交修改operations的值，并合并到menus中
  */
     case OPERATIONS_SUBMIT:
       return state.map(item => Object.assign({}, item, {
         operations: item.operations.map(operation => operation.key === action.key?
-          Object.assign({}, operation, {opId: action.opId, opSort: action.opSort, opName: action.opName, elementClass: action.elementClass}):operation)
+          Object.assign({}, operation, {opId, opSort, opName, elementClass}):operation)
         }
       ))
 /**
@@ -60,15 +61,16 @@ export function items(state=[], action) {
       return state.map(item => Object.assign({}, item, {
         operations: item.operations.map(operation => Object.assign({}, operation, {
           webApis: operation.webApis.map(api => api.key === action.key?
-            Object.assign({}, api, { serviceMethod: action.serviceMethod, serviceUrl: action.serviceUrl }):api)
+            Object.assign({}, api, { serviceMethod, serviceUrl }):api)
         }))
       }))
 /**
  * 提交新增functions的值，并合并到menus中  
  */
     case ADD_FUNCTIONS_SUBMIT:
-      const a = parseInt((action.nextKey).split('-')[0])
-      const b = parseInt((action.nextKey).split('-')[1])
+      const arrayFunc = action.nextKey.split('-')
+      const a = parseInt(arrayFunc[0])
+      const b = parseInt(arrayFunc[1])
       const c = state.length
       state.push({
         functionId: action.functionId,
@@ -77,35 +79,39 @@ export function items(state=[], action) {
         checked: false,
         operations:[]
       })
+    // return //这里加return或break会报错，明天debug调试一下 2016.12.26
 /**
  * 提交新增operations的值，并合并到menus中  
  */
     case ADD_OPERATIONS_SUBMIT:  //有两个问题，1.新增同个children下会同时新增，2.action为undefined  2016.12.16
-      const d = parseInt((action.nextKey).split('-')[0])  //在新增的functions下再新增operations会报item[0].key undefined
-      const e = parseInt((action.nextKey).split('-')[1])  //因为这个item是取functions下的数组的第一个的key，所以若一开始没有数组即会报错
-      const f = parseInt((action.nextKey).split('-')[2])
+      const arrayOper = action.nextKey.split('-')
+      const d = parseInt(arrayOper[0])  //在新增的functions下再新增operations会报item[0].key undefined
+      const e = parseInt(arrayOper[1])  //因为这个item是取functions下的数组的第一个的key，所以若一开始没有数组即会报错
+      const f = parseInt(arrayOper[2])
       const g = state[f].operations.length
 
       state.map(item => item.key === action.nextKey?Object.assign({}, item, {
         operations: item.operations.push({
           checked: false,
-          opId: action.opId, 
-          opSort: action.opSort, 
-          opName: action.opName, 
-          elementClass: action.elementClass,
+          opId, 
+          opSort, 
+          opName, 
+          elementClass,
           key: d+'-'+e+'-'+f+'-'+g+'-'+0, 
           webApis: []
         })  //todo 这里有点不明白，一return的话就会报childrenItems下的items.map is not a function错误. debug之后发现items变成了长度，不再是数组..
       }):item)  // 是push的原因, array.push('xx')为数组，var other = array.push('xx')为长度
+      // return 
 /**
  * 提交新增webApis的值，并合并到menus中  
  */
     case ADD_WEBAPIS_SUBMIT:
       console.log(action.nextKey)
-      const h = parseInt((action.nextKey).split('-')[0])
-      const i = parseInt((action.nextKey).split('-')[1])
-      const j = parseInt((action.nextKey).split('-')[2])
-      const k = parseInt((action.nextKey).split('-')[3])
+      const arrayApis = action.nextKey.split('-')
+      const h = parseInt(arrayApis[0])
+      const i = parseInt(arrayApis[1])
+      const j = parseInt(arrayApis[2])
+      const k = parseInt(arrayApis[3])
       const l = state[j].operations[k].webApis.length 
       console.log(h, i, j, k, l)   
       state.map(item => Object.assign({}, item, {
@@ -113,12 +119,13 @@ export function items(state=[], action) {
           Object.assign({}, operation, {
             webApis: operation.webApis.push({
               checked: false,
-              serviceUrl: action.serviceUrl,
-              serviceMethod: action.serviceMethod,
+              serviceUrl,
+              serviceMethod,
               key: h+'-'+i+'-'+j+'-'+k+'-'+l, 
             })
           }):operation)
       }))
+    // return 
     default:
       return state
   }

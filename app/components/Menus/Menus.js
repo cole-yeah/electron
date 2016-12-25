@@ -45,14 +45,14 @@ export default class Menus extends Component {
     }
     const functions =  menus[0].children.filter(child => child.checked === true) 
     functions.length !== 0?
-      (this.setState({addMenus: false, open: true, first: false, content: functions[0]})):
-        (menus.length !== 0?(this.setState({addMenus: false, open: true, first: true, content: menus[0]})):this.state)
-
+      (this.setState({addMenus: false, open: true, first: false, content: functions[0]}))
+      :(menus.length !== 0?(this.setState({addMenus: false, open: true, first: true, content: menus[0]})):this.state)
   }
 
   handleAdd() {
     const menus = this.props.menus.filter(menu => menu.checked === true)
-    menus.length === 0?this.setState({open: true, first: true, addMenus: true }):this.setState({open: true, first: false, addMenus: true, nextKey: menus[0].key })
+    menus.length === 0?this.setState({open: true, first: true, addMenus: true })
+    :this.setState({open: true, first: false, addMenus: true, nextKey: menus[0].key })
   }
 
   handleClose() {

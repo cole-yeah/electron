@@ -26,7 +26,7 @@ class App extends Component {
     nextState.items.map((item, i) =>
       nextState.items !== this.props.items ? this.props.menusActions.combineItems(item.key, nextState.items) : item//不加这个判断很容易进行死循环，一直更新
     )
-  }//item.key不能combine的原因是key不一样，如一个为0-0，另一个为0-0-0，所以不相等 2016.12.15
+  }
 
   render() {
     const {items, keys, menusActions, itemsActions, menus} = this.props

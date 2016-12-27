@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import AppBar from 'material-ui/lib/app-bar'
 import IconButton from 'material-ui/lib/icon-button'
 import ActionHome from 'material-ui/lib/svg-icons/action/home'
-import {fullWhite} from 'material-ui/lib/styles/colors'
+import { fullWhite } from 'material-ui/lib/styles/colors'
 import Checkbox from 'material-ui/lib/checkbox'
 
 import * as MenusActions from '../actions/menus'
@@ -20,33 +20,33 @@ class App extends Component {
 
   componentDidMount() {
     this.props.menusActions.readItemsFile()  //electron下，用fs读取文件
-  }                  
+  }
 
   componentWillReceiveProps(nextState) {
-    nextState.items.map((item, i) => 
-      nextState.items !== this.props.items?this.props.menusActions.combineItems(item.key, nextState.items):item//不加这个判断很容易进行死循环，一直更新
+    nextState.items.map((item, i) =>
+      nextState.items !== this.props.items ? this.props.menusActions.combineItems(item.key, nextState.items) : item//不加这个判断很容易进行死循环，一直更新
     )
   }//item.key不能combine的原因是key不一样，如一个为0-0，另一个为0-0-0，所以不相等 2016.12.15
 
   render() {
     const {items, keys, menusActions, itemsActions, menus} = this.props
-    return(    
+    return (
       <div>
         <AppBar
           title="Coooooool"
-            iconElementLeft={
-                <IconButton>
-                  <ActionHome color={fullWhite} />
-                </IconButton>
-              }
-        />
+          iconElementLeft={
+            <IconButton>
+              <ActionHome color={fullWhite} />
+            </IconButton>
+          }
+          />
 
         <div className="MainBody">
 
           <div className="MainLeft">
             <Menus
               actions={menusActions}
-              menus={menus}/>
+              menus={menus} />
           </div>
 
           <div className="MainRight">
@@ -55,12 +55,12 @@ class App extends Component {
               menusActions={menusActions}
               keys={keys}
               menus={menus}
-              items={items}/>
+              items={items} />
           </div>
 
         </div>
       </div>
-      )
+    )
   }
 }
 

@@ -26,43 +26,43 @@ export default class OperationsDialog extends Component {
     }
   }
   handleOpen(content) {
-    this.setState({open: true, addItems: false, nextContent: content})
+    this.setState({ open: true, addItems: false, nextContent: content })
   }
 
   handleEdit(content) {
-    this.setState({open: true, addItems: false, nextContent: content})
+    this.setState({ open: true, addItems: false, nextContent: content })
   }
 
   handleAdd(key) {
-    this.setState({open: true, addItems: true, nextKey: key})
+    this.setState({ open: true, addItems: true, nextKey: key })
   }
 
   handleClose() {
-    this.setState({open: false, addItems: true})
+    this.setState({ open: false, addItems: true })
   }
 
   render() {
     const { content, key, edit, itemsActions } = this.props
     return (
       <span>
-        {      
-          edit?
-          <EditTextField
-            menus={content}
-            Key={key}
-            _MenusSubmit={itemsActions.operationsSubmit}
-            array={['opId', 'opSort', 'opName', 'elementClass']}
-          />:
-          <ForwardTable
-            forward={false}
-            items={content.webApis}
-            keys={content.key}  //用content.key解决那个webApis下新增每次都在第一个的operations中的webApis的问题 2016.12.21
-            _handleChecked={itemsActions.webApisSelected}
-            _handleEdit={this.handleEdit}
-            _handleAdd={this.handleAdd}
-            _handleOpen={this.handleOpen}
-            array={['serviceMethod', 'serviceUrl']}
-          />
+        {
+          edit ?
+            <EditTextField
+              menus={content}
+              Key={key}
+              _MenusSubmit={itemsActions.operationsSubmit}
+              array={['opId', 'opSort', 'opName', 'elementClass']}
+              /> :
+            <ForwardTable
+              forward={false}
+              items={content.webApis}
+              keys={content.key}  //用content.key解决那个webApis下新增每次都在第一个的operations中的webApis的问题 2016.12.21
+              _handleChecked={itemsActions.webApisSelected}
+              _handleEdit={this.handleEdit}
+              _handleAdd={this.handleAdd}
+              _handleOpen={this.handleOpen}
+              array={['serviceMethod', 'serviceUrl']}
+              />
         }
 
         <Dialog
@@ -70,13 +70,13 @@ export default class OperationsDialog extends Component {
           open={this.state.open}
           contentStyle={style.dialog}
           onRequestClose={this.handleClose}
-        >
-          <EditTextField 
+          >
+          <EditTextField
             menus={this.state.nextContent}
             Key={this.state.nextKey} //nextKey 的值其实就是从forwardTable通过handleAdd函数setState然后传过来的，这个值用于去生成新增的functions、operations、webApis下的key
-            _MenusSubmit={this.state.addItems?itemsActions.addWebApisSubmit:itemsActions.webApisSubmit}
+            _MenusSubmit={this.state.addItems ? itemsActions.addWebApisSubmit : itemsActions.webApisSubmit}
             array={['serviceMethod', 'serviceUrl']}
-          />
+            />
         </Dialog>
       </span>
     )

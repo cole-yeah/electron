@@ -20,8 +20,8 @@ export default class ChildrenItems extends Component {
   }
 
   render() {
-    const { items=[], array, forward, _handleOpen, _handleAdd, _handleEdit, _handleChecked, keys } = this.props
-/**debug1 */ //1.key的值可以正常获取
+    const { items = [], array, forward, _handleOpen, _handleAdd, _handleEdit, _handleChecked, keys } = this.props
+    /**debug1 */ //1.key的值可以正常获取
     return (
       <div className="tableBox">
         <table className="tableItems" hahah={items}>
@@ -29,33 +29,33 @@ export default class ChildrenItems extends Component {
             <tr>
               <th className="toolItems"><Checkbox disabled={true} /></th>
               {
-                array.map((arr, i) => 
+                array.map((arr, i) =>
                   <th className="thItems" key={i}>{arr}</th>)
               }
-              {forward?<th className="toolItems">forward</th>:''}
+              {forward ? <th className="toolItems">forward</th> : ''}
               <th className="toolItems">edit</th>
             </tr>
-            </thead>
+          </thead>
           <tbody>
 
-          {
-            items.map((item, i) =>
-              <tr key={i}>
-                <td className="toolItems"><Checkbox checked={item.checked} onClick={() => _handleChecked(item.key)}/></td>
-                {
-                  array.map(arr => 
-                    <td className="tdItems">{item[arr]}</td>
-                  )
-                }
-                {forward?(<td className="toolItems">
-                  <ContentForward color={Colors.cyan500} onTouchTap={() => _handleOpen(item)} />
-                </td>):''}
-                <td className="toolItems">
-                  <ContentCreate color={Colors.cyan500} onTouchTap={() => _handleEdit(item)} />
-                </td>
-              </tr>
-            )
-          }
+            {
+              items.map((item, i) =>
+                <tr key={i}>
+                  <td className="toolItems"><Checkbox checked={item.checked} onClick={() => _handleChecked(item.key)} /></td>
+                  {
+                    array.map(arr =>
+                      <td className="tdItems">{item[arr]}</td>
+                    )
+                  }
+                  {forward ? (<td className="toolItems">
+                    <ContentForward color={Colors.cyan500} onTouchTap={() => _handleOpen(item)} />
+                  </td>) : ''}
+                  <td className="toolItems">
+                    <ContentCreate color={Colors.cyan500} onTouchTap={() => _handleEdit(item)} />
+                  </td>
+                </tr>
+              )
+            }
 
           </tbody>
 

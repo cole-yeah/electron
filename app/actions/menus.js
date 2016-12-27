@@ -99,7 +99,7 @@ export function firstMenusSubmit(nextKey, key, menuId, menuCode, menuSort, name)
     key,
     menuId,
     menuCode,
-    menuSort, 
+    menuSort,
     name
   }
 }
@@ -111,11 +111,11 @@ export function secondMenusSubmit(nextKey, key, menuId, menuCode, menuSort, name
     type: SECOND_MENUS_SUBMIT,
     nextKey,
     key,
-    menuId, 
-    menuCode, 
-    menuSort, 
-    name, 
-    menuParentId, 
+    menuId,
+    menuCode,
+    menuSort,
+    name,
+    menuParentId,
     anchor
   }
 }
@@ -129,9 +129,9 @@ export function addFirstMenus(nextKey, key, menuId, menuCode, menuSort, name, ic
     key,
     menuId,
     menuCode,
-    menuSort, 
+    menuSort,
     name,
-    icon    
+    icon
   }
 }
 /**
@@ -144,10 +144,10 @@ export function addSecondMenus(nextKey, key, menuId, menuCode, menuSort, name, m
     key,
     menuId,
     menuCode,
-    menuSort, 
+    menuSort,
     name,
     menuParentId,
-    anchor    
+    anchor
   }
 }
 /**
@@ -168,23 +168,23 @@ export function importItemsFile() {
   return dispatch => {
     dialog.showOpenDialog({
       filters: [
-        {name: 'Json', extensions: ['json']},
-        {name: 'All Files', extensions: ['*']}  //读取类型限制
+        { name: 'Json', extensions: ['json'] },
+        { name: 'All Files', extensions: ['*'] }  //读取类型限制
       ]
     }, fileNames => {
-        fileNames === undefined?alert("请选择文件！"):readFile(fileNames[0])
+      fileNames === undefined ? alert("请选择文件！") : readFile(fileNames[0])
     })
-    function readFile(filepath){
-        return fs.readFile(filepath, 'utf-8', (err, data) => {
-          if(err){
-              alert("导入失败:" + err.message)
-              return
-          }
-          data = JSON.parse(data)
-          dispatch(receiveMenus(data))
-        })
-      }
+    function readFile(filepath) {
+      return fs.readFile(filepath, 'utf-8', (err, data) => {
+        if (err) {
+          alert("导入失败:" + err.message)
+          return
+        }
+        data = JSON.parse(data)
+        dispatch(receiveMenus(data))
+      })
     }
+  }
 }
 /**
  * 获取列表成功action
@@ -192,6 +192,6 @@ export function importItemsFile() {
 export function receiveMenus(data) {
   return {
     type: RECEIVE_MENUS,
-    menus:data
+    menus: data
   }
 }

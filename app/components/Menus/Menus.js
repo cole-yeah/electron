@@ -18,7 +18,7 @@ const style = {
   }
 }
 
-const nameBox = [ 'menuId', 'menuCode', 'menuSort', 'name' ]
+const nameBox = ['menuId', 'menuCode', 'menuSort', 'name']
 
 export default class Menus extends Component {
   constructor(props) {
@@ -39,33 +39,33 @@ export default class Menus extends Component {
   handleEdit() {
     //todo 这个要修改二级菜单必须要有勾选一级菜单才行，要修改一级菜单就要全部取消勾选一级菜单下的所有二级菜单，逻辑欠妥 2016.12.12
     const menus = this.props.menus.filter(menu => menu.checked === true)
-    if(menus.length === 0){
+    if (menus.length === 0) {
       alert('勾选')
       return
     }
-    const functions =  menus[0].children.filter(child => child.checked === true) 
-    functions.length !== 0?
-      (this.setState({addMenus: false, open: true, first: false, content: functions[0]}))
-      :(menus.length !== 0?(this.setState({addMenus: false, open: true, first: true, content: menus[0]})):this.state)
+    const functions = menus[0].children.filter(child => child.checked === true)
+    functions.length !== 0 ?
+      (this.setState({ addMenus: false, open: true, first: false, content: functions[0] }))
+      : (menus.length !== 0 ? (this.setState({ addMenus: false, open: true, first: true, content: menus[0] })) : this.state)
   }
 
   handleAdd() {
     const menus = this.props.menus.filter(menu => menu.checked === true)
-    menus.length === 0?this.setState({open: true, first: true, addMenus: true })
-    :this.setState({open: true, first: false, addMenus: true, nextKey: menus[0].key })
+    menus.length === 0 ? this.setState({ open: true, first: true, addMenus: true })
+      : this.setState({ open: true, first: false, addMenus: true, nextKey: menus[0].key })
   }
 
   handleClose() {
-    this.setState({open: false})
+    this.setState({ open: false })
   }
 
   render() {
     const {menus, actions} = this.props
-    return(
+    return (
       <span className="mainLeftMenus">
         <ul className="menusBox">
           {
-            menus.map((menu, i) => 
+            menus.map((menu, i) =>
               <MenusItems
                 key={i}
                 open={actions.openMenus}
@@ -73,7 +73,7 @@ export default class Menus extends Component {
                 _checkedAll={actions.checkedAll}
                 _checkedMenus={actions.checkedMenus}
                 menuItems={menu}
-              />)
+                />)
           }
         </ul>
 
@@ -90,21 +90,21 @@ export default class Menus extends Component {
           modal={false}
           open={this.state.open}
           contentStyle={style.dialog}
-          onRequestClose={this.handleClose}        
-        >
+          onRequestClose={this.handleClose}
+          >
           {//todo 新增的content获取的是根据上次点击set的state，欠妥 2016.12.16
             <EditTextField
               menus={this.state.content}
               Key={this.state.nextKey}
               _MenusSubmit={
-                this.state.addMenus?
-                  (this.state.first?actions.addFirstMenus:actions.addSecondMenus):
-                  (this.state.first?actions.firstMenusSubmit:actions.secondMenusSubmit)}
+                this.state.addMenus ?
+                  (this.state.first ? actions.addFirstMenus : actions.addSecondMenus) :
+                  (this.state.first ? actions.firstMenusSubmit : actions.secondMenusSubmit)}
               array={
-                this.state.addMenus?
-                  (this.state.first?[ ...nameBox, 'icon' ]:[ ...nameBox, 'menuParentId', 'anchor' ]):
-                  (this.state.first?[ ...nameBox ]:[ ...nameBox, 'menuParentId', 'anchor' ])}
-            />
+                this.state.addMenus ?
+                  (this.state.first ? [...nameBox, 'icon'] : [...nameBox, 'menuParentId', 'anchor']) :
+                  (this.state.first ? [...nameBox] : [...nameBox, 'menuParentId', 'anchor'])}
+              />
           }
         </Dialog>
 

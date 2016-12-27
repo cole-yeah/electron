@@ -10,6 +10,6 @@ injectTapEventPlugin()
 const store = configureStore();//配置store
 
 render(
-    <Provider store={store}>
-      <App/>
-    </Provider>, document.getElementById('app'))
+  <Provider store={store}>
+    <App />
+  </Provider>, document.getElementById('app'))

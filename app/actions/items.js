@@ -37,19 +37,19 @@ export function webApisSelected(key) {
 export function handleSubmit(nextKey, key, functionId, functionName) {
   return {
     type: HANDLE_SUBMIT,
-    nextKey, 
+    nextKey,
     key,
     functionId,
     functionName,
   }
 }
 
-export function operationsSubmit(nextKey, key, opId,  opSort, opName,elementClass) {
+export function operationsSubmit(nextKey, key, opId, opSort, opName, elementClass) {
   return {
     type: OPERATIONS_SUBMIT,
-    nextKey, 
+    nextKey,
     key,
-    opId, 
+    opId,
     opSort,
     opName,
     elementClass
@@ -59,7 +59,7 @@ export function operationsSubmit(nextKey, key, opId,  opSort, opName,elementClas
 export function webApisSubmit(nextKey, key, serviceMethod, serviceUrl) {
   return {
     type: WEBAPIS_SUBMIT,
-    nextKey, 
+    nextKey,
     key,
     serviceMethod,
     serviceUrl
@@ -71,7 +71,7 @@ export function webApisSubmit(nextKey, key, serviceMethod, serviceUrl) {
 export function addFunctionsSubmit(nextKey, key, functionId, functionName) {
   return {
     type: ADD_FUNCTIONS_SUBMIT,
-    nextKey, 
+    nextKey,
     key,
     functionId,
     functionName
@@ -81,11 +81,11 @@ export function addFunctionsSubmit(nextKey, key, functionId, functionName) {
 export function addOperationsSubmit(nextKey, key, opId, opSort, opName, elementClass) {
   return {
     type: ADD_OPERATIONS_SUBMIT,
-    nextKey, 
+    nextKey,
     key,
-    opId, 
-    opSort, 
-    opName, 
+    opId,
+    opSort,
+    opName,
     elementClass
   }
 }

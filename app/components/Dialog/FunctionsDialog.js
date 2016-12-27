@@ -23,38 +23,38 @@ export default class FunctionsDialog extends Component {
     this.state = {
       open: false,
       addItems: false,
-      edit:false,
+      edit: false,
       nextContent: '',
       nextKey: '0-0-0-0-0',
     }
   }
   handleOpen(content) {
-    this.setState({open: true, addItems: false, nextContent: content})
+    this.setState({ open: true, addItems: false, nextContent: content })
   }
 
   handleEdit(content) {
-    this.setState({open: true, addItems: false, edit: true, nextContent: content})
+    this.setState({ open: true, addItems: false, edit: true, nextContent: content })
   }
 
   handleAdd(key) {
-    this.setState({open: true, addItems: true, nextKey: key})
+    this.setState({ open: true, addItems: true, nextKey: key })
   }
 
   handleClose() {
-    this.setState({edit: false, open: false})
+    this.setState({ edit: false, open: false })
   }
 
   render() {
     const { content, key, edit, itemsActions, keys } = this.props
 
     let element = (
-      edit?
+      edit ?
         <EditTextField
           menus={content}
           Key={key}
           _MenusSubmit={itemsActions.handleSubmit}
           array={['functionId', 'functionName']}//不同点
-        />:
+          /> :
         <ForwardTable
           forward={true}                        //不同点  控制是否有下一级，true为有，false反之
           items={content.operations}            //不同点   下一级为operations,若webApis则为webApis
@@ -64,7 +64,7 @@ export default class FunctionsDialog extends Component {
           _handleAdd={this.handleAdd}
           _handleOpen={this.handleOpen}
           array={['opId', 'opSort', 'opName', 'elementClass']}    //不同点
-        />
+          />
     )
 
     return (
@@ -75,20 +75,20 @@ export default class FunctionsDialog extends Component {
           open={this.state.open}
           contentStyle={style.dialog}
           onRequestClose={this.handleClose}
-        >
-          {this.state.addItems?
-            <EditTextField 
+          >
+          {this.state.addItems ?
+            <EditTextField
               menus={this.state.nextContent}
               Key={this.state.nextKey} //nextKey 的值其实就是从forwardTable通过handleAdd函数setState然后传过来的，这个值用于去生成新增的functions、operations、webApis下的key
               _MenusSubmit={itemsActions.addOperationsSubmit}
               array={['opId', 'opSort', 'opName', 'elementClass']}
-            />:
+              /> :
             <OperationsDialog
               edit={this.state.edit}
               // keys={content.operations[0].key}      //这里content.operations[0].key会导致每次新增webApis都加在第一个的operations上, 后面已解决，不需要在这传keys了
               itemsActions={itemsActions}
               content={this.state.nextContent}
-            />}
+              />}
         </Dialog>
       </span>
     )

@@ -161,6 +161,13 @@ export function readItemsFile() {
     }))
   }
 }
+
+export function deleteMenus() {
+  return {
+    type: DELETE_MENUS
+  }
+}
+
 /**
 * 导入本地json文件获取列表
 */

@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import AppBar from 'material-ui/lib/app-bar'
 import IconButton from 'material-ui/lib/icon-button'
 import ActionHome from 'material-ui/lib/svg-icons/action/home'
+import ActionDelete from 'material-ui/lib/svg-icons/action/delete'
 import { fullWhite } from 'material-ui/lib/styles/colors'
 import Checkbox from 'material-ui/lib/checkbox'
 
@@ -39,6 +40,10 @@ class App extends Component {
               <ActionHome color={fullWhite} />
             </IconButton>
           }
+          iconElementRight={            
+            <IconButton onClick={() => menusActions.deleteMenus()}>
+              <ActionDelete/>
+            </IconButton>}
           />
 
         <div className="MainBody">

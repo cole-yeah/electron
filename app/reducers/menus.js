@@ -178,6 +178,44 @@ export function menus(state = [], action) {
         })
       }) : menu)
 
+          /**
+     * 删除菜单数据
+     */
+      case DELETE_MENUS:
+        // console.log(state.length)
+        // const i = state.length
+        // // const d = parseInt((action.id).split('-')[0])
+
+        // return state.filter(menu => menu.name !== action.name)
+        // if(state[d].name === action.name){
+        //   state.splice(d, 1)
+        // }else{
+        //   state[d].children.map(child => {
+        //     if(child.name === action.name){
+        //       const e = parseInt((child.key).split('-')[1])
+        //       state[d].children.splice(e, 1)
+        //       alert('删除成功')}
+        //   })
+        // }
+        // console.log(state)
+
+        // return 
+        // console.log(state.filter(item => !item.checked))
+
+        return state.filter(item => !item.checked)         
+        .map(item => Object.assign({}, item, {                 
+        children: item.children.filter(child => !child.checked)
+        .map(child => Object.assign({}, child, {
+          functions: child.functions.filter(func => !func.checked)
+          .map(func => Object.assign({}, func, {
+            operations: func.operations.filter(oper => !oper.checked)
+            .map(oper => Object.assign({}, oper, {
+              webApis: oper.webApis.filter(api => !api.checked)
+            }))
+          }))
+        }))
+      }))
+
     default:
       return state
   }

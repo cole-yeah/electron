@@ -65,7 +65,7 @@
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "b950be065637f4c8b15b"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "58b89707f97bd431451b"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -608,11 +608,11 @@
 
 	var _storeConfigureStore2 = _interopRequireDefault(_storeConfigureStore);
 
-	var _reactTapEventPlugin = __webpack_require__(219);
+	var _reactTapEventPlugin = __webpack_require__(225);
 
 	var _reactTapEventPlugin2 = _interopRequireDefault(_reactTapEventPlugin);
 
-	var _containersApp = __webpack_require__(224);
+	var _containersApp = __webpack_require__(230);
 
 	var _containersApp2 = _interopRequireDefault(_containersApp);
 
@@ -626,7 +626,7 @@
 	  _react2['default'].createElement(_containersApp2['default'], null)
 	), document.getElementById('app'));
 
-	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(347); if (makeExportsHot(module, __webpack_require__(66))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot apply hot update to " + "index.jsx" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
+	/* REACT HOT LOADER */ }).call(this); } finally { if (true) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = __webpack_require__(354); if (makeExportsHot(module, __webpack_require__(66))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot apply hot update to " + "index.jsx" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)(module)))
 
 /***/ },
@@ -22455,21 +22455,22 @@
 
 	var _reducersIndex2 = _interopRequireDefault(_reducersIndex);
 
-	var _reduxThunk = __webpack_require__(209);
+	var _reduxThunk = __webpack_require__(215);
 
 	var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
 
-	var _reduxLogger = __webpack_require__(210);
+	var _reduxLogger = __webpack_require__(216);
 
 	var _reduxLogger2 = _interopRequireDefault(_reduxLogger);
 
-	var _reduxDevtools = __webpack_require__(216);
+	var _reduxDevtools = __webpack_require__(222);
 
 	var canUseDOM = !!(typeof window !== 'undefined' && window.document && window.document.createElement);
 
 	var createStoreWithMiddleware = undefined;
 	if (canUseDOM) {
-	  createStoreWithMiddleware = (0, _redux.compose)((0, _redux.applyMiddleware)(_reduxThunk2['default']), (0, _redux.applyMiddleware)((0, _reduxLogger2['default'])()), (0, _reduxDevtools.devTools)())(_redux.createStore);
+	  createStoreWithMiddleware = (0, _redux.compose)((0, _redux.applyMiddleware)(_reduxThunk2['default']), (0, _redux.applyMiddleware)((0, _reduxLogger2['default'])()), (0, _reduxDevtools.devTools)())( //开发模式下
+	  _redux.createStore);
 	} else {
 	  createStoreWithMiddleware = (0, _redux.compose)((0, _redux.applyMiddleware)(_reduxThunk2['default']), (0, _redux.applyMiddleware)((0, _reduxLogger2['default'])()), (0, _reduxDevtools.devTools)())(_redux.createStore);
 	}
@@ -22504,14 +22505,23 @@
 
 	var _items = __webpack_require__(203);
 
-	var _menus = __webpack_require__(206);
+	var _menus = __webpack_require__(210);
 
-	var _keys = __webpack_require__(207);
+	var _keys = __webpack_require__(211);
+
+	var _oper = __webpack_require__(212);
+
+	var _api = __webpack_require__(213);
+
+	var _top = __webpack_require__(214);
 
 	var rootReducer = (0, _redux.combineReducers)({
 	  items: _items.items,
 	  menus: _menus.menus,
-	  keys: _keys.keys
+	  keys: _keys.keys,
+	  oper: _oper.oper,
+	  api: _api.api,
+	  top: _top.top
 	});
 	exports['default'] = rootReducer;
 	module.exports = exports['default'];
@@ -22529,7 +22539,7 @@
 
 	var _actionsMenus = __webpack_require__(204);
 
-	var _actionsItems = __webpack_require__(205);
+	var _actionsItems = __webpack_require__(206);
 
 	/**
 	 * 获取items  
@@ -22561,6 +22571,7 @@
 	     * 点击勾选与否operations  
 	     */
 	    case _actionsItems.OPERATIONS_SELECTED:
+	      // const webApiChecked = state.map(item => )
 	      return state.map(function (item) {
 	        return Object.assign({}, item, {
 	          operations: item.operations.map(function (operation) {
@@ -22617,6 +22628,44 @@
 	        });
 	      });
 	    /**
+	    * 删除functions、operations、webApis  
+	    */
+	    case _actionsItems.HANDLE_DELETE:
+	      if (action.dataType === 'opId') {
+	        var dialogOper = confirm('确定删除operations?');
+	        if (dialogOper) {
+	          state = state.map(function (item) {
+	            return Object.assign({}, item, {
+	              operations: item.operations.filter(function (oper) {
+	                return oper.key !== action.key;
+	              })
+	            });
+	          });
+	          alert('删除成功！');
+	          return state;
+	        }
+	        return state;
+	      } else {
+	        var dialogApi = confirm('确定删除webApis?');
+	        if (dialogApi) {
+	          state = state.map(function (item) {
+	            return Object.assign({}, item, {
+	              operations: item.operations.map(function (oper) {
+	                return Object.assign({}, oper, {
+	                  webApis: oper.webApis.filter(function (api) {
+	                    return api.key !== action.key;
+	                  })
+	                });
+	              })
+	            });
+	          });
+	          alert('删除成功！');
+	          return state;
+	        }
+	        return state;
+	      }
+
+	    /**
 	     * 提交新增functions的值，并合并到menus中  
 	     */
 	    case _actionsItems.ADD_FUNCTIONS_SUBMIT:
@@ -22631,60 +22680,74 @@
 	        checked: false,
 	        operations: []
 	      });
-	    // return //这里加return或break会报错，明天debug调试一下 2016.12.26
+	    // return state
 	    /**
 	     * 提交新增operations的值，并合并到menus中  
 	     */
 	    case _actionsItems.ADD_OPERATIONS_SUBMIT:
-	      //有两个问题，1.新增同个children下会同时新增，2.action为undefined  2016.12.16
-	      var arrayOper = action.nextKey.split('-');
-	      var d = parseInt(arrayOper[0]); //在新增的functions下再新增operations会报item[0].key undefined
-	      var e = parseInt(arrayOper[1]); //因为这个item是取functions下的数组的第一个的key，所以若一开始没有数组即会报错
-	      var f = parseInt(arrayOper[2]);
-	      var g = state[f].operations.length;
+	      if (opId === undefined && opSort === undefined) {
+	        return state;
+	      } else {
+	        (function () {
+	          var arrayOper = action.nextKey.split('-');
+	          var d = parseInt(arrayOper[0]);
+	          var e = parseInt(arrayOper[1]);
+	          var f = parseInt(arrayOper[2]);
+	          var g = state[f].operations.length;
 
-	      state.map(function (item) {
-	        return item.key === action.nextKey ? Object.assign({}, item, {
-	          operations: item.operations.push({
-	            checked: false,
-	            opId: opId,
-	            opSort: opSort,
-	            opName: opName,
-	            elementClass: elementClass,
-	            key: d + '-' + e + '-' + f + '-' + g + '-' + 0,
-	            webApis: []
-	          }) //todo 这里有点不明白，一return的话就会报childrenItems下的items.map is not a function错误. debug之后发现items变成了长度，不再是数组..
-	        }) : item;
-	      }); // 是push的原因, array.push('xx')为数组，var other = array.push('xx')为长度
-	    // return
+	          state.map(function (item) {
+	            return item.key === action.nextKey ? Object.assign({}, item, {
+	              operations: item.operations.push({
+	                checked: false,
+	                opId: opId,
+	                opSort: opSort,
+	                opName: opName,
+	                elementClass: elementClass,
+	                key: d + '-' + e + '-' + f + '-' + g + '-' + 0,
+	                webApis: []
+	              })
+	            }) : item;
+	          });
+	        })();
+	      }
+	    //这里加return的时候报错，因为这里return的时候的nextState的operations变成了它的长度，如operations:4，而不是对象；但是不return的时候函数会一直执行下去，造成的就是会多出一些空的数组，
+	    //如新增operations之后会在继续执行ADD_WEBAPIS_SUBMIT，但是 serviceMethod和serviceUrl为undefined，所以数组为空的，这样导出时容易造成错误，暂时不知道return为什么会造成数组对象
+	    //变成长度，所以先在这里做个判断，待优化   2017.01.05
 	    /**
 	     * 提交新增webApis的值，并合并到menus中  
 	     */
 	    case _actionsItems.ADD_WEBAPIS_SUBMIT:
 	      console.log(action.nextKey);
-	      var arrayApis = action.nextKey.split('-');
-	      var h = parseInt(arrayApis[0]);
-	      var i = parseInt(arrayApis[1]);
-	      var j = parseInt(arrayApis[2]);
-	      var k = parseInt(arrayApis[3]);
-	      var l = state[j].operations[k].webApis.length;
-	      console.log(h, i, j, k, l);
-	      state.map(function (item) {
-	        return Object.assign({}, item, {
-	          operations: item.operations.map(function (operation) {
-	            return operation.key === action.nextKey ? //新增的webApis都会加到第一个operations下的webApis中，因为nextKey为点击菜单传过来的值
-	            Object.assign({}, operation, {
-	              webApis: operation.webApis.push({
-	                checked: false,
-	                serviceUrl: serviceUrl,
-	                serviceMethod: serviceMethod,
-	                key: h + '-' + i + '-' + j + '-' + k + '-' + l
+	      if (serviceUrl === undefined && serviceUrl === undefined) {
+	        return state;
+	      } else {
+	        (function () {
+	          var arrayApis = action.nextKey.split('-');
+	          var h = parseInt(arrayApis[0]);
+	          var i = parseInt(arrayApis[1]);
+	          var j = parseInt(arrayApis[2]);
+	          var k = parseInt(arrayApis[3]);
+	          var l = state[j].operations[k].webApis.length;
+	          console.log(h, i, j, k, l);
+	          state.map(function (item) {
+	            return Object.assign({}, item, {
+	              operations: item.operations.map(function (operation) {
+	                return operation.key === action.nextKey ? //新增的webApis都会加到第一个operations下的webApis中，因为nextKey为点击菜单传过来的值
+	                Object.assign({}, operation, {
+	                  webApis: operation.webApis.push({
+	                    checked: false,
+	                    serviceUrl: serviceUrl,
+	                    serviceMethod: serviceMethod,
+	                    key: h + '-' + i + '-' + j + '-' + k + '-' + l
+	                  })
+	                }) : operation;
 	              })
-	            }) : operation;
-	          })
-	        });
-	      });
-	    // return
+	            });
+	          });
+	        })();
+	      }
+	    // return state
+
 	    default:
 	      return state;
 	  }
@@ -22692,265 +22755,78 @@
 
 /***/ },
 /* 204 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	Object.defineProperty(exports, '__esModule', {
-	  value: true
-	});
-	exports.openMenus = openMenus;
-	exports.checkedAll = checkedAll;
-	exports.checkedMenus = checkedMenus;
-	exports.receiveItems = receiveItems;
-	exports.getKey = getKey;
-	exports.dispatchActions = dispatchActions;
-	exports.selectedMenus = selectedMenus;
-	exports.combineItems = combineItems;
-	exports.firstMenusSubmit = firstMenusSubmit;
-	exports.secondMenusSubmit = secondMenusSubmit;
-	exports.addFirstMenus = addFirstMenus;
-	exports.addSecondMenus = addSecondMenus;
-	exports.readItemsFile = readItemsFile;
-	exports.importItemsFile = importItemsFile;
-	exports.receiveMenus = receiveMenus;
-	var remote = window.require('electron').remote;
-	var fs = remote.require('fs');
-
-	var dialog = window.require('electron').remote.dialog;
-
-	var RECEIVE_MENUS = 'RECEIVE_MENUS';
-	exports.RECEIVE_MENUS = RECEIVE_MENUS;
-	var OPEN_MENUS = 'OPEN_MENUS';
-	exports.OPEN_MENUS = OPEN_MENUS;
-	var CHECKED_ALL = 'CHECKED_ALL';
-	exports.CHECKED_ALL = CHECKED_ALL;
-	var CHECKED_MENUS = 'CHECKED_MENUS';
-	exports.CHECKED_MENUS = CHECKED_MENUS;
-	var SELECTED_MENUS = 'SELECTED_MENUS';
-	exports.SELECTED_MENUS = SELECTED_MENUS;
-	var RECEIVE_ITEMS = 'RECEIVE_ITEMS';
-	exports.RECEIVE_ITEMS = RECEIVE_ITEMS;
-	var COMBINE_ITEMS = 'COMBINE_ITEMS';
-	exports.COMBINE_ITEMS = COMBINE_ITEMS;
-	var SECOND_MENUS_SUBMIT = 'SECOND_MENUS_SUBMIT';
-	exports.SECOND_MENUS_SUBMIT = SECOND_MENUS_SUBMIT;
-	var FIRST_MENUS_SUBMIT = 'FIRST_MENUS_SUBMIT';
-	exports.FIRST_MENUS_SUBMIT = FIRST_MENUS_SUBMIT;
-	var ADD_FIRST_MENUS = 'ADD_FIRST_MENUS';
-	exports.ADD_FIRST_MENUS = ADD_FIRST_MENUS;
-	var ADD_SECOND_MENUS = 'ADD_SECOND_MENUS';
-	exports.ADD_SECOND_MENUS = ADD_SECOND_MENUS;
-	var GET_KEY = 'GET_KEY';
-	exports.GET_KEY = GET_KEY;
+	// const remote = window.require('electron').remote
+	// const fs = remote.require('fs')
+	// const {dialog} = window.require('electron').remote
+	'use strict';Object.defineProperty(exports,'__esModule',{value:true});exports.openMenus = openMenus;exports.checkedAll = checkedAll;exports.checkedMenus = checkedMenus;exports.receiveItems = receiveItems;exports.getKey = getKey;exports.dispatchActions = dispatchActions;exports.selectedMenus = selectedMenus;exports.combineItems = combineItems;exports.menuDelete = menuDelete;exports.dispatchSubmitFirst = dispatchSubmitFirst;exports.dispatchSubmitSecond = dispatchSubmitSecond;exports.firstMenusSubmit = firstMenusSubmit;exports.secondMenusSubmit = secondMenusSubmit;exports.dispatchAddFirst = dispatchAddFirst;exports.dispatchAddSecond = dispatchAddSecond;exports.addFirstMenus = addFirstMenus;exports.addSecondMenus = addSecondMenus;exports.readItemsFile = readItemsFile;exports.importItemsFile = importItemsFile;exports.receiveMenus = receiveMenus;var _top=__webpack_require__(205); // export const MENU_SUBMIT
 	/**
 	 * 打开菜单action
-	 */
-
-	function openMenus(key) {
-	  return {
-	    type: OPEN_MENUS,
-	    key: key
-	  };
-	}
-
-	/**
+	 */var RECEIVE_MENUS='RECEIVE_MENUS';exports.RECEIVE_MENUS = RECEIVE_MENUS;var OPEN_MENUS='OPEN_MENUS';exports.OPEN_MENUS = OPEN_MENUS;var CHECKED_ALL='CHECKED_ALL';exports.CHECKED_ALL = CHECKED_ALL;var CHECKED_MENUS='CHECKED_MENUS';exports.CHECKED_MENUS = CHECKED_MENUS;var SELECTED_MENUS='SELECTED_MENUS';exports.SELECTED_MENUS = SELECTED_MENUS;var RECEIVE_ITEMS='RECEIVE_ITEMS';exports.RECEIVE_ITEMS = RECEIVE_ITEMS;var COMBINE_ITEMS='COMBINE_ITEMS';exports.COMBINE_ITEMS = COMBINE_ITEMS;var SECOND_MENUS_SUBMIT='SECOND_MENUS_SUBMIT';exports.SECOND_MENUS_SUBMIT = SECOND_MENUS_SUBMIT;var FIRST_MENUS_SUBMIT='FIRST_MENUS_SUBMIT';exports.FIRST_MENUS_SUBMIT = FIRST_MENUS_SUBMIT;var ADD_FIRST_MENUS='ADD_FIRST_MENUS';exports.ADD_FIRST_MENUS = ADD_FIRST_MENUS;var ADD_SECOND_MENUS='ADD_SECOND_MENUS';exports.ADD_SECOND_MENUS = ADD_SECOND_MENUS;var GET_KEY='GET_KEY';exports.GET_KEY = GET_KEY;var MENU_DELETE='MENU_DELETE';exports.MENU_DELETE = MENU_DELETE;function openMenus(key){return {type:OPEN_MENUS,key:key};} /**
 	 * 勾选一、二、三、四级菜单action
-	 */
-
-	function checkedAll(menuId, key) {
-	  return {
-	    type: CHECKED_ALL,
-	    menuId: menuId,
-	    key: key
-	  };
-	}
-
-	/**
+	 */function checkedAll(menuId,key){return {type:CHECKED_ALL,menuId:menuId,key:key};} /**
 	 * 选中菜单action
-	 */
-
-	function checkedMenus(key) {
-	  return {
-	    type: CHECKED_MENUS,
-	    key: key
-	  };
-	}
-
-	/**
+	 */function checkedMenus(key){return {type:CHECKED_MENUS,key:key};} /**
 	 * 获取items action
-	 */
-
-	function receiveItems(key, menus) {
-	  return {
-	    type: RECEIVE_ITEMS,
-	    items: menus,
-	    key: key
-	  };
-	}
-
-	/**
+	 */function receiveItems(key,menus){return {type:RECEIVE_ITEMS,items:menus,key:key};} /**
 	 * 从menus传keys给items action
-	 */
-
-	function getKey(key) {
-	  return {
-	    type: GET_KEY,
-	    key: key
-	  };
-	}
-
-	/**
+	 */function getKey(key){return {type:GET_KEY,key:key};} /**
 	 * 派发器action
-	 */
-
-	function dispatchActions(key, menus) {
-	  return function (dispatch) {
-	    dispatch(receiveItems(key, menus));
-	    dispatch(getKey(key));
-	  };
-	}
-
-	/**
+	 */function dispatchActions(key,menus){return function(dispatch){dispatch(receiveItems(key,menus));dispatch(getKey(key));};} /**
 	 * 选中菜单action
-	 */
-
-	function selectedMenus(menuId) {
-	  return {
-	    type: SELECTED_MENUS,
-	    menuId: menuId
-	  };
-	}
-
-	/**
+	 */function selectedMenus(menuId){return {type:SELECTED_MENUS,menuId:menuId};} /**
 	 * 把items合并到menus上action
-	 */
-
-	function combineItems(key, items) {
-	  return {
-	    type: COMBINE_ITEMS,
-	    items: items,
-	    key: key
-	  };
-	}
-
-	/**
+	 */function combineItems(key,items){return {type:COMBINE_ITEMS,items:items,key:key};}function menuDelete(dataType,key){return {type:MENU_DELETE,dataType:dataType,key:key};} /**
+	 * 派发修改一级菜单action
+	 */function dispatchSubmitFirst(idArray,nextKey,key,menuId,menuCode,menuSort,name){return function(dispatch){dispatch(firstMenusSubmit(idArray,nextKey,key,menuId,menuCode,menuSort,name));dispatch((0,_top.setTopClose)());};} /**
+	 * 派发修改二级菜单action
+	 */function dispatchSubmitSecond(idArray,nextKey,key,menuId,menuCode,menuSort,name,menuParentId,anchor){return function(dispatch){dispatch(secondMenusSubmit(idArray,nextKey,key,menuId,menuCode,menuSort,name,menuParentId,anchor));dispatch((0,_top.setTopClose)());};} /**
 	 * 修改一级菜单action
-	 */
-
-	function firstMenusSubmit(nextKey, key, menuId, menuCode, menuSort, name) {
-	  return {
-	    type: FIRST_MENUS_SUBMIT,
-	    nextKey: nextKey,
-	    key: key,
-	    menuId: menuId,
-	    menuCode: menuCode,
-	    menuSort: menuSort,
-	    name: name
-	  };
-	}
-
-	/**
+	 */function firstMenusSubmit(idArray,nextKey,key,menuId,menuCode,menuSort,name){return {type:FIRST_MENUS_SUBMIT,idArray:idArray,nextKey:nextKey,key:key,menuId:menuId,menuCode:menuCode,menuSort:menuSort,name:name};} /**
 	 * 修改二级菜单action
-	 */
-
-	function secondMenusSubmit(nextKey, key, menuId, menuCode, menuSort, name, menuParentId, anchor) {
-	  return {
-	    type: SECOND_MENUS_SUBMIT,
-	    nextKey: nextKey,
-	    key: key,
-	    menuId: menuId,
-	    menuCode: menuCode,
-	    menuSort: menuSort,
-	    name: name,
-	    menuParentId: menuParentId,
-	    anchor: anchor
-	  };
-	}
-
-	/**
+	 */function secondMenusSubmit(idArray,nextKey,key,menuId,menuCode,menuSort,name,menuParentId,anchor){return {type:SECOND_MENUS_SUBMIT,idArray:idArray,nextKey:nextKey,key:key,menuId:menuId,menuCode:menuCode,menuSort:menuSort,name:name,menuParentId:menuParentId,anchor:anchor};} /**
+	 * 派发新增一级菜单action
+	 */function dispatchAddFirst(idArray,nextKey,key,menuId,menuCode,menuSort,name,icon){return function(dispatch){idArray.includes(menuId)?alert('该menuId已存在！'):(dispatch(addFirstMenus(nextKey,key,menuId,menuCode,menuSort,name,icon)),dispatch((0,_top.setTopClose)()));};} /**
+	 * 派发新增二级菜单action
+	 */function dispatchAddSecond(idArray,nextKey,key,menuId,menuCode,menuSort,name,menuParentId,anchor){return function(dispatch){idArray.includes(menuId)?alert('该menuId已存在！'):(dispatch(addSecondMenus(nextKey,key,menuId,menuCode,menuSort,name,menuParentId,anchor)),dispatch((0,_top.setTopClose)()));};} /**
 	 * 新增一级菜单action
-	 */
-
-	function addFirstMenus(nextKey, key, menuId, menuCode, menuSort, name, icon) {
-	  return {
-	    type: ADD_FIRST_MENUS,
-	    nextKey: nextKey,
-	    key: key,
-	    menuId: menuId,
-	    menuCode: menuCode,
-	    menuSort: menuSort,
-	    name: name,
-	    icon: icon
-	  };
-	}
-
-	/**
+	 */function addFirstMenus(nextKey,key,menuId,menuCode,menuSort,name,icon){return {type:ADD_FIRST_MENUS,nextKey:nextKey,key:key,menuId:menuId,menuCode:menuCode,menuSort:menuSort,name:name,icon:icon};} /**
 	 * 新增二级菜单action
-	 */
-
-	function addSecondMenus(nextKey, key, menuId, menuCode, menuSort, name, menuParentId, anchor) {
-	  return {
-	    type: ADD_SECOND_MENUS,
-	    nextKey: nextKey,
-	    key: key,
-	    menuId: menuId,
-	    menuCode: menuCode,
-	    menuSort: menuSort,
-	    name: name,
-	    menuParentId: menuParentId,
-	    anchor: anchor
-	  };
-	}
-
-	/**
+	 */function addSecondMenus(nextKey,key,menuId,menuCode,menuSort,name,menuParentId,anchor){return {type:ADD_SECOND_MENUS,nextKey:nextKey,key:key,menuId:menuId,menuCode:menuCode,menuSort:menuSort,name:name,menuParentId:menuParentId,anchor:anchor};} /**
 	 * 默认读取本地json文件获取列表,根据参数first,second 索引出点击菜单下的数组
-	 */
-
-	function readItemsFile() {
-	  return function (dispatch) {
-	    return fs.readFile('./menus.json', 'utf-8', function (err, data) {
-	      data = JSON.parse(data);
-	      dispatch(receiveMenus(data));
-	    });
-	  };
-	}
-
+	 */function readItemsFile(){} // return dispatch => {
+	//   return (fs.readFile('./menus.json', 'utf-8', (err, data) => {
+	//     data = JSON.parse(data)
+	//     dispatch(receiveMenus(data))
+	//   }))
+	// }
 	/**
 	* 导入本地json文件获取列表
-	*/
-
-	function importItemsFile() {
-	  return function (dispatch) {
-	    dialog.showOpenDialog({
-	      filters: [{ name: 'Json', extensions: ['json'] }, { name: 'All Files', extensions: ['*'] } //读取类型限制
-	      ]
-	    }, function (fileNames) {
-	      fileNames === undefined ? alert("请选择文件！") : readFile(fileNames[0]);
-	    });
-	    function readFile(filepath) {
-	      return fs.readFile(filepath, 'utf-8', function (err, data) {
-	        if (err) {
-	          alert("导入失败:" + err.message);
-	          return;
-	        }
-	        data = JSON.parse(data);
-	        dispatch(receiveMenus(data));
-	      });
-	    }
-	  };
-	}
-
+	*/function importItemsFile(){} // return dispatch => {
+	//   dialog.showOpenDialog({
+	//     filters: [
+	//       { name: 'Json', extensions: ['json'] },
+	//       { name: 'All Files', extensions: ['*'] }  //读取类型限制
+	//     ]
+	//   }, fileNames => {
+	//     fileNames === undefined ? alert("请选择文件！") : readFile(fileNames[0])
+	//   })
+	//   function readFile(filepath) {
+	//     return fs.readFile(filepath, 'utf-8', (err, data) => {
+	//       if (err) {
+	//         alert("导入失败:" + err.message)
+	//         return
+	//       }
+	//       data = JSON.parse(data)
+	//       dispatch(receiveMenus(data))
+	//     })
+	//   }
+	// }
 	/**
 	 * 获取列表成功action
-	 */
-
-	function receiveMenus(data) {
-	  return {
-	    type: RECEIVE_MENUS,
-	    menus: data
-	  };
-	}
+	 */function receiveMenus(){return {type:RECEIVE_MENUS, // menus: data
+	menus:[{"systemName":"收货系统","menuId":"10001","menuCode":"10001","menuParentId":"-1","icon":"fa-database","menuSort":1,"name":"基础数据管理","level":1,"anchor":null,"functions":null,"children":[{"systemName":"收货系统","menuId":"10001-001","menuCode":"10001-001","menuParentId":"10001","icon":null,"menuSort":1,"name":"字典数据管理","level":2,"anchor":"#basics/ydsWorkbooks","functions":[{"functionId":"F0001","functionName":"字典数据管理","operations":[{"opId":"P0001","opName":"字典数据管理查看","opSort":"P0001","elementClass":"acl_view_ydsWorkBook","webApis":[{"serviceUrl":"/yard/spd/ydsWorkBooks","serviceMethod":"GET","checked":true,"key":"0-0-0-0-0"},{"serviceUrl":"/yard/spd/ydsWorkBooks/{workbookId}","serviceMethod":"GET","checked":true,"key":"0-0-0-0-1"},{"serviceUrl":"/yard/spd/ydsWorkBooks","serviceMethod":"GET","checked":true,"key":"0-0-0-0-2"},{"serviceUrl":"/yard/spd/ydsWorkBooks","serviceMethod":"GET","checked":true,"key":"0-0-0-0-3"},{"serviceUrl":"/yard/spd/ydsWorkBooks/count","serviceMethod":"GET","checked":true,"key":"0-0-0-0-4"}],"checked":true,"key":"0-0-0-0-0","id":"P0001"},{"opId":"P0002","opName":"字典数据管理新增","opSort":"P0002","elementClass":"acl_add_ydsWorkBook","webApis":[{"serviceUrl":"/yard/spd/ydsWorkBooks","serviceMethod":"POST","checked":true,"key":"0-0-0-1-0"},{"serviceUrl":"/yard/spd/ydsWorkBooks","serviceMethod":"GET","checked":true,"key":"0-0-0-1-1"},{"serviceUrl":"/yard/spd/ydsWorkBooks/{workbookId}","serviceMethod":"GET","checked":true,"key":"0-0-0-1-2"},{"serviceUrl":"/yard/spd/ydsWorkBooks","serviceMethod":"POST","checked":true,"key":"0-0-0-1-3"},{"serviceUrl":"/yard/spd/ydsWorkBooks/count","serviceMethod":"GET","checked":true,"key":"0-0-0-1-4"}],"checked":true,"key":"0-0-0-1-0","id":"P0002"},{"opId":"P0003","opName":"字典数据管理编辑","opSort":"P0003","elementClass":"acl_edit_ydsWorkBook","webApis":[{"serviceUrl":"/yard/spd/ydsWorkBooks/{workbookId}","serviceMethod":"PUT","checked":true,"key":"0-0-0-2-0"},{"serviceUrl":"/yard/spd/ydsWorkBooks","serviceMethod":"GET","checked":true,"key":"0-0-0-2-1"},{"serviceUrl":"/yard/spd/ydsWorkBooks/{workbookId}","serviceMethod":"GET","checked":true,"key":"0-0-0-2-2"},{"serviceUrl":"/yard/spd/ydsWorkBooks/count","serviceMethod":"GET","checked":true,"key":"0-0-0-2-3"},{"serviceUrl":"/yard/spd/ydsWorkBooks/{workbookId}","serviceMethod":"PUT","checked":true,"key":"0-0-0-2-4"}],"checked":true,"key":"0-0-0-2-0","id":"P0003"}],"checked":true,"key":"0-0-0-0-0"}],"children":[],"topMenu":false,"checked":true,"key":"0-0-0-0-0"},{"systemName":"收货系统","menuId":"10001-002","menuCode":"10001-002","menuParentId":"10001","icon":null,"menuSort":2,"name":"标准产品管理","level":2,"anchor":"#basics/standardProducts","functions":[{"functionId":"F0002","functionName":"标准产品管理","operations":[{"opId":"P0008","opName":"标准产品管理查看","opSort":"P0008","elementClass":"acl_view_ydsGood","webApis":[{"serviceUrl":"/yard/spd/ydsGoods/count","serviceMethod":"GET","checked":true,"key":"0-1-0-0-0"},{"serviceUrl":"/yard/spd/ydsGoods","serviceMethod":"GET","checked":true,"key":"0-1-0-0-1"},{"serviceUrl":"/yard/spd/ydsWorkBooks","serviceMethod":"GET","checked":true,"key":"0-1-0-0-2"},{"serviceUrl":"/yard/spd/ydsGoods","serviceMethod":"GET","checked":true,"key":"0-1-0-0-3"},{"serviceUrl":"/yard/spd/ydsGoods/{goodsId}","serviceMethod":"GET","checked":true,"key":"0-1-0-0-4"},{"serviceUrl":"/yard/spd/ydsGoods/count","serviceMethod":"GET","checked":true,"key":"0-1-0-0-5"},{"serviceUrl":"/yard/spd/ydsWorkBooks/byUse","serviceMethod":"GET","checked":true,"key":"0-1-0-0-6"}],"checked":true,"key":"0-1-0-0-0","id":"P0008"},{"opId":"P0009","opName":"标准产品管理新增","opSort":"P0009","elementClass":"acl_add_ydsGood","webApis":[{"serviceUrl":"/yard/spd/ydsGoods","serviceMethod":"POST","checked":true,"key":"0-1-0-1-0"},{"serviceUrl":"/yard/spd/ydsGoods","serviceMethod":"POST","checked":true,"key":"0-1-0-1-1"},{"serviceUrl":"/yard/spd/ydsGoods","serviceMethod":"GET","checked":true,"key":"0-1-0-1-2"},{"serviceUrl":"/yard/spd/ydsGoods/{goodsId}","serviceMethod":"GET","checked":true,"key":"0-1-0-1-3"},{"serviceUrl":"/yard/spd/ydsGoods/count","serviceMethod":"GET","checked":true,"key":"0-1-0-1-4"}],"checked":true,"key":"0-1-0-1-0","id":"P0009"},{"opId":"P0010","opName":"标准产品管理编辑","opSort":"P0010","elementClass":"acl_edit_ydsGood","webApis":[{"serviceUrl":"/yard/spd/ydsGoods","serviceMethod":"GET","checked":true,"key":"0-1-0-2-0"},{"serviceUrl":"/yard/spd/ydsGoods/{goodsId}","serviceMethod":"GET","checked":true,"key":"0-1-0-2-1"},{"serviceUrl":"/yard/spd/ydsGoods/count","serviceMethod":"GET","checked":true,"key":"0-1-0-2-2"},{"serviceUrl":"/yard/spd/ydsGoods/{goodsId}","serviceMethod":"PUT","checked":true,"key":"0-1-0-2-3"}],"checked":true,"key":"0-1-0-2-0","id":"P0010"},{"opId":"P0012","opName":"标准产品管理提交","opSort":"P0012","elementClass":"acl_commitEntity_ydsGood","webApis":[{"serviceUrl":"/yard/spd/ydsGoods/{goodsId}/checkState/commited","serviceMethod":"PUT","checked":true,"key":"0-1-0-3-0"},{"serviceUrl":"/yard/spd/ydsGoods/{goodsId}","serviceMethod":"GET","checked":true,"key":"0-1-0-3-1"},{"serviceUrl":"/yard/spd/ydsGoods/count","serviceMethod":"GET","checked":true,"key":"0-1-0-3-2"},{"serviceUrl":"/yard/spd/ydsGoods/{goodsId}/checkState/commited","serviceMethod":"PUT","checked":true,"key":"0-1-0-3-3"},{"serviceUrl":"/yard/spd/ydsGoods","serviceMethod":"GET","checked":true,"key":"0-1-0-3-4"}],"checked":true,"key":"0-1-0-3-0","id":"P0012"},{"opId":"P0015","opName":"标准产品管理导出","opSort":"P0015","elementClass":"acl_export_ydsGood","webApis":[{"serviceUrl":"/yard/spd/ydsGoods","serviceMethod":"GET","checked":true,"key":"0-1-0-4-0"},{"serviceUrl":"/yard/spd/ydsGoods/count","serviceMethod":"GET","checked":true,"key":"0-1-0-4-1"},{"serviceUrl":"/yard/spd/ydsGoods/{goodsId}","serviceMethod":"GET","checked":true,"key":"0-1-0-4-2"},{"serviceUrl":"/yard/spd/ydsGoods/ydsgoodsExcel","serviceMethod":"GET","checked":true,"key":"0-1-0-4-3"}],"checked":true,"key":"0-1-0-4-0","id":"P0015"},{"opId":"P0276","opName":"标准产品管理撤回","opSort":"P0276","elementClass":"acl_cancelCommit_ydsGood","webApis":[],"checked":true,"key":"0-1-0-5-0","id":"P0276"},{"opId":"P0279","opName":"标准产品批量提交","opSort":"P0279","elementClass":"acl_commitEntities_ydsGood","webApis":[],"checked":true,"key":"0-1-0-6-0","id":"P0279"},{"opId":"P0013","opName":"标准产品管理同步","opSort":"P0013","elementClass":"acl_view_ydsGood,acl_sync_ysdGood","webApis":[{"serviceUrl":"/yard/spd/ydsGoods","serviceMethod":"GET","checked":true,"key":"0-1-0-7-0"},{"serviceUrl":"/yard/spd/ydsGoods/count","serviceMethod":"GET","checked":true,"key":"0-1-0-7-1"},{"serviceUrl":"/yard/spd/ydsGoods/{goodsId}","serviceMethod":"GET","checked":true,"key":"0-1-0-7-2"},{"serviceUrl":"/yard/spd/ydsGoods/{goodsId}/checkState/reviewed","serviceMethod":"PUT","checked":true,"key":"0-1-0-7-3"}],"checked":true,"key":"0-1-0-7-0","id":"P0013"}],"checked":true,"key":"0-1-0-0-0"}],"children":[],"topMenu":false,"checked":true,"key":"0-1-0-0-0"},{"systemName":"收货系统","menuId":"10001-003","menuCode":"10001-003","menuParentId":"10001","icon":null,"menuSort":3,"name":"标准产品批次","level":2,"anchor":"#spd/ydsGoodsLots","functions":[{"functionId":"F0016","functionName":"标准产品批次","operations":[{"opId":"P0105","opName":"标准产品批次查看","opSort":"P0105","elementClass":"acl_view_ydsGoodsLot","webApis":[{"serviceUrl":"/yard/spd/ydsGoodsLots/count","serviceMethod":"GET","checked":true,"key":"0-2-0-0-0"},{"serviceUrl":"/yard/spd/ydsGoodsLots","serviceMethod":"GET","checked":true,"key":"0-2-0-0-1"},{"serviceUrl":"/yard/spd/ydsGoodsLots","serviceMethod":"GET","checked":true,"key":"0-2-0-0-2"}],"checked":true,"key":"0-2-0-0-0","id":"P0105"},{"opId":"P0107","opName":"标准产品批次新增","opSort":"P0107","elementClass":"acl_add_ydsGoodsLot","webApis":[{"serviceUrl":"/yard/spd/ydsGoodsLots","serviceMethod":"GET","checked":true,"key":"0-2-0-1-0"},{"serviceUrl":"/yard/spd/ydsGoodsLots","serviceMethod":"POST","checked":true,"key":"0-2-0-1-1"},{"serviceUrl":"/yard/spd/ydsGoodsLots","serviceMethod":"POST","checked":true,"key":"0-2-0-1-2"},{"serviceUrl":"/yard/spd/ydsGoodsLots/count","serviceMethod":"GET","checked":true,"key":"0-2-0-1-3"},{"serviceUrl":"/yard/spd/ydsGoodsLots","serviceMethod":"GET","checked":true,"key":"0-2-0-1-4"}],"checked":true,"key":"0-2-0-1-0","id":"P0107"},{"opId":"P0106","opName":"标准产品批次编辑","opSort":"P0106","elementClass":"acl_edit_ydsGoodsLot","webApis":[{"serviceUrl":"/yard/spd/ydsGoodsLots/{goodsLotId}","serviceMethod":"PUT","checked":true,"key":"0-2-0-2-0"},{"serviceUrl":"/yard/spd/ydsGoodsLots","serviceMethod":"GET","checked":true,"key":"0-2-0-2-1"}],"checked":true,"key":"0-2-0-2-0","id":"P0106"}],"checked":true,"key":"0-2-0-0-0"}],"children":[],"topMenu":false,"checked":true,"key":"0-2-0-0-0"},{"systemName":"收货系统","menuId":"10001-004","menuCode":"10001-004","menuParentId":"10001","icon":null,"menuSort":4,"name":"企业产品管理","level":2,"anchor":"#basics/ydsEdsGoods","functions":[{"functionId":"F0003","functionName":"企业产品管理","operations":[{"opId":"P0016","opName":"企业产品管理查看","opSort":"P0016","elementClass":"acl_view_ydsEdsGoods","webApis":[{"serviceUrl":"/yard/spd/ydsEdsGoods","serviceMethod":"GET","checked":true,"key":"0-3-0-0-0"},{"serviceUrl":"/yard/spd/ydsEdsGoods/count","serviceMethod":"GET","checked":true,"key":"0-3-0-0-1"},{"serviceUrl":"/yard/spd/ydsEdsGoods/count","serviceMethod":"GET","checked":true,"key":"0-3-0-0-2"},{"serviceUrl":"/yard/spd/ydsEdsGoods","serviceMethod":"GET","checked":true,"key":"0-3-0-0-3"},{"serviceUrl":"/yard/spd/ydsEdsGoods/{goodsId}","serviceMethod":"GET","checked":true,"key":"0-3-0-0-4"},{"serviceUrl":"/yard/spd/ydsWorkBooks/byUse","serviceMethod":"GET","checked":true,"key":"0-3-0-0-5"},{"serviceUrl":"/yard/spd/ydsWorkBooks/byUse","serviceMethod":"GET","checked":true,"key":"0-3-0-0-6"}],"checked":true,"key":"0-3-0-0-0","id":"P0016"},{"opId":"P0018","opName":"企业产品管理新增","opSort":"P0018","elementClass":"acl_add_ydsEdsGoods","webApis":[{"serviceUrl":"/yard/spd/ydsEdsGoods","serviceMethod":"POST","checked":true,"key":"0-3-0-1-0"},{"serviceUrl":"/yard/spd/ydsWorkBooks","serviceMethod":"GET","checked":true,"key":"0-3-0-1-1"},{"serviceUrl":"/yard/spd/ydsGoods/byUse","serviceMethod":"GET","checked":true,"key":"0-3-0-1-2"},{"serviceUrl":"/yard/spd/ydsEdsGoods","serviceMethod":"GET","checked":true,"key":"0-3-0-1-3"},{"serviceUrl":"/yard/spd/ydsEdsGoods/count","serviceMethod":"GET","checked":true,"key":"0-3-0-1-4"},{"serviceUrl":"/yard/spd/ydsEdsGoods/{goodsId}","serviceMethod":"GET","checked":true,"key":"0-3-0-1-5"},{"serviceUrl":"/yard/spd/ydsEdsGoods","serviceMethod":"POST","checked":true,"key":"0-3-0-1-6"},{"serviceUrl":"/yard/spd/ydsWorkBooks/byUse","serviceMethod":"GET","checked":true,"key":"0-3-0-1-7"},{"serviceUrl":"/yard/spd/ydsEdsGoods","serviceMethod":"POST","checked":true,"key":"0-3-0-1-8"},{"serviceUrl":"/yard/spd/ydsGoods/ids,{ids}","serviceMethod":"GET","checked":true,"key":"0-3-0-1-9"},{"serviceUrl":"/yard/spd/ydsGoods/byUse/count","serviceMethod":"GET","checked":true,"key":"0-3-0-1-10"},{"serviceUrl":"/yard/spd/ydsGoods/count","serviceMethod":"GET","checked":true,"key":"0-3-0-1-11"},{"serviceUrl":"/yard/spd/ydsGoods","serviceMethod":"GET","checked":true,"key":"0-3-0-1-12"}],"checked":true,"key":"0-3-0-1-0","id":"P0018"},{"opId":"P0020","opName":"企业产品管理提交","opSort":"P0020","elementClass":"acl_commitEntity_ydsEdsGoods","webApis":[{"serviceUrl":"/yard/spd/ydsEdsGoods/{ydsEdsGoodsId}/checkState/commited","serviceMethod":"PUT","checked":true,"key":"0-3-0-2-0"},{"serviceUrl":"/yard/spd/ydsGoods/ids,{ids}","serviceMethod":"GET","checked":true,"key":"0-3-0-2-1"},{"serviceUrl":"/yard/spd/ydsEdsGoods","serviceMethod":"GET","checked":true,"key":"0-3-0-2-2"},{"serviceUrl":"/yard/spd/ydsEdsGoods/count","serviceMethod":"GET","checked":true,"key":"0-3-0-2-3"},{"serviceUrl":"/yard/spd/ydsEdsGoods/{goodsId}","serviceMethod":"GET","checked":true,"key":"0-3-0-2-4"},{"serviceUrl":"/yard/spd/ydsEdsGoods/{goodsId}/checkState/commited","serviceMethod":"PUT","checked":true,"key":"0-3-0-2-5"},{"serviceUrl":"/yard/spd/ydsWorkBooks/byUse","serviceMethod":"GET","checked":true,"key":"0-3-0-2-6"}],"checked":true,"key":"0-3-0-2-0","id":"P0020"},{"opId":"P0023","opName":"企业产品管理导出","opSort":"P0023","elementClass":"acl_export_ydsEdsGoods,acl_view_ydsEdsGoods","webApis":[{"serviceUrl":"/yard/spd/ydsEdsGoods","serviceMethod":"GET","checked":true,"key":"0-3-0-3-0"},{"serviceUrl":"/yard/spd/ydsEdsGoods/Excel","serviceMethod":"GET","checked":true,"key":"0-3-0-3-1"},{"serviceUrl":"/yard/spd/ydsEdsGoods/count","serviceMethod":"GET","checked":true,"key":"0-3-0-3-2"}],"checked":true,"key":"0-3-0-3-0","id":"P0023"},{"opId":"P0284","opName":"企业产品管理撤回","opSort":"P0284","elementClass":"acl_cancelCommit_ydsEdsGoods","webApis":[],"checked":true,"key":"0-3-0-4-0","id":"P0284"},{"opId":"P0280","opName":"企业产品批量提交","opSort":"P0280","elementClass":"acl_commitEntities_ydsEdsGoods","webApis":[{"serviceUrl":"/yard/spd/ydsEdsGoods/count","serviceMethod":"GET","checked":true,"key":"0-3-0-5-0"},{"serviceUrl":"/yard/spd/ydsEdsGoods","serviceMethod":"GET","checked":true,"key":"0-3-0-5-1"},{"serviceUrl":"/yard/spd/ydsGoods/ids,{ids}","serviceMethod":"GET","checked":true,"key":"0-3-0-5-2"},{"serviceUrl":"/yard/spd/ydsEdsGoods/{ydsEdsGoodsId}/checkState/commited","serviceMethod":"PUT","checked":true,"key":"0-3-0-5-3"},{"serviceUrl":"/yard/spd/ydsEdsGoods/{edsGoodsId}","serviceMethod":"GET","checked":true,"key":"0-3-0-5-4"},{"serviceUrl":"/yard/spd/ydsWorkBooks/byUse","serviceMethod":"GET","checked":true,"key":"0-3-0-5-5"}],"checked":true,"key":"0-3-0-5-0","id":"P0280"},{"opId":"P0017","opName":"企业产品管理编辑","opSort":"P0017","elementClass":"acl_edit_ydsEdsGoods","webApis":[{"serviceUrl":"/yard/spd/ydsEdsGoods/{goodsId}","serviceMethod":"PUT","checked":true,"key":"0-3-0-6-0"},{"serviceUrl":"/yard/spd/ydsEdsGoods","serviceMethod":"GET","checked":true,"key":"0-3-0-6-1"},{"serviceUrl":"/yard/spd/ydsEdsGoods/count","serviceMethod":"GET","checked":true,"key":"0-3-0-6-2"},{"serviceUrl":"/yard/spd/ydsEdsGoods/{goodsId}","serviceMethod":"GET","checked":true,"key":"0-3-0-6-3"},{"serviceUrl":"/yard/spd/ydsWorkBooks/byUse","serviceMethod":"GET","checked":true,"key":"0-3-0-6-4"},{"serviceUrl":"/yard/spd/ydsGoods/ids,{ids}","serviceMethod":"GET","checked":true,"key":"0-3-0-6-5"},{"serviceUrl":"/yard/spd/ydsGoods/byUse/count","serviceMethod":"GET","checked":true,"key":"0-3-0-6-6"},{"serviceUrl":"/yard/spd/ydsGoods/byUse","serviceMethod":"GET","checked":true,"key":"0-3-0-6-7"},{"serviceUrl":"/yard/spd/ydsEdsGoods/{edsGoodsId}","serviceMethod":"PUT","checked":true,"key":"0-3-0-6-8"}],"checked":true,"key":"0-3-0-6-0","id":"P0017"}],"checked":true,"key":"0-3-0-0-0"}],"children":[],"topMenu":false,"checked":true,"key":"0-3-0-0-0"},{"systemName":"收货系统","menuId":"10001-005","menuCode":"10001-005","menuParentId":"10001","icon":null,"menuSort":5,"name":"企业产品批次","level":2,"anchor":"#spd/ydsEdsGoodsLots","functions":[{"functionId":"F0015","functionName":"企业产品批次","operations":[{"opId":"P0102","opName":"企业产品批次查看","opSort":"P0102","elementClass":"acl_view_ydsEdsGoodsLot","webApis":[{"serviceUrl":"/yard/spd/spdReceives/count","serviceMethod":"GET","checked":true,"key":"0-4-0-0-0"},{"serviceUrl":"/yard/spd/spdReceives","serviceMethod":"GET","checked":true,"key":"0-4-0-0-1"},{"serviceUrl":"/yard/spd/ydsEdsGoodsLots/count","serviceMethod":"GET","checked":true,"key":"0-4-0-0-2"},{"serviceUrl":"/yard/spd/ydsEdsGoodsLots","serviceMethod":"GET","checked":true,"key":"0-4-0-0-3"},{"serviceUrl":"/yard/spd/ydsEdsGoods/ids,{ids}","serviceMethod":"GET","checked":true,"key":"0-4-0-0-4"}],"checked":true,"key":"0-4-0-0-0","id":"P0102"},{"opId":"P0103","opName":"企业产品批次编辑","opSort":"P0103","elementClass":"acl_edit_ydsEdsGoodsLot","webApis":[{"serviceUrl":"/yard/spd/ydsEdsGoodsLots/{edsGoodsLotId}","serviceMethod":"PUT","checked":true,"key":"0-4-0-1-0"},{"serviceUrl":"/yard/spd/ydsEdsGoods/{edsGoodsId}","serviceMethod":"GET","checked":true,"key":"0-4-0-1-1"},{"serviceUrl":"/yard/spd/ydsEdsGoodsLots","serviceMethod":"GET","checked":true,"key":"0-4-0-1-2"},{"serviceUrl":"/yard/spd/ydsEdsGoodsLots/count","serviceMethod":"GET","checked":true,"key":"0-4-0-1-3"}],"checked":true,"key":"0-4-0-1-0","id":"P0103"},{"opId":"P0104","opName":"企业产品批次新增","opSort":"P0104","elementClass":"acl_add_ydsEdsGoodsLot","webApis":[{"serviceUrl":"/yard/spd/ydsEdsGoodsLots","serviceMethod":"POST","checked":true,"key":"0-4-0-2-0"},{"serviceUrl":"/yard/spd/ydsEdsGoodsLots/count","serviceMethod":"GET","checked":true,"key":"0-4-0-2-1"},{"serviceUrl":"/yard/spd/ydsEdsGoodsLots","serviceMethod":"GET","checked":true,"key":"0-4-0-2-2"},{"serviceUrl":"/yard/spd/ydsEdsGoodsLots","serviceMethod":"POST","checked":true,"key":"0-4-0-2-3"}],"checked":true,"key":"0-4-0-2-0","id":"P0104"}],"checked":true,"key":"0-4-0-0-0"}],"children":[],"topMenu":false,"checked":true,"key":"0-4-0-0-0"}],"topMenu":true,"open":false,"checked":true,"key":"0-0-0-0-0"},{"systemName":"收货系统","menuId":"10002","menuCode":"10003","menuParentId":"-1","icon":"fa-map-signs","menuSort":2,"name":"规则配置管理","level":1,"anchor":null,"functions":null,"children":[{"systemName":"收货系统","menuId":"10002-001","menuCode":"10002-001","menuParentId":"10002","icon":null,"menuSort":1,"name":"请领流向策略","level":2,"anchor":"#basics/spdDepotRoutes","functions":[{"functionId":"F0036","functionName":"请领流向策略","operations":[{"opId":"P0238","opName":"请领流向策略查看","opSort":"P0238","elementClass":"acl_view_spdDepotRoute","webApis":[{"serviceUrl":"/yard/spd/spdDepotRoutes/count","serviceMethod":"GET","checked":true,"key":"1-0-0-0-0"},{"serviceUrl":"/yard/spd/spdDepotRoutes","serviceMethod":"GET","checked":true,"key":"1-0-0-0-1"},{"serviceUrl":"/yard/spd/spdDepotRoutes","serviceMethod":"GET","checked":true,"key":"1-0-0-0-2"}],"checked":true,"key":"1-0-0-0-0","id":"P0238"},{"opId":"P0241","opName":"请领流向策略删除","opSort":"P0241","elementClass":"acl_delete_spdDepotRoute","webApis":[{"serviceUrl":"/yard/spd/spdDepotRoutes/{routeId}","serviceMethod":"DELETE","checked":true,"key":"1-0-0-1-0"},{"serviceUrl":"/yard/spd/spdDepotRoutes","serviceMethod":"GET","checked":true,"key":"1-0-0-1-1"},{"serviceUrl":"/yard/spd/spdDepotRoutes/count","serviceMethod":"GET","checked":true,"key":"1-0-0-1-2"}],"checked":true,"key":"1-0-0-1-0","id":"P0241"},{"opId":"P0240","opName":"请领流向策略编辑","opSort":"P0240","elementClass":"acl_edit_spdDepotRoute","webApis":[{"serviceUrl":"/yard/spd/spdDepotRoutes/count","serviceMethod":"GET","checked":true,"key":"1-0-0-2-0"},{"serviceUrl":"/yard/spd/spdDepotRoutes","serviceMethod":"GET","checked":true,"key":"1-0-0-2-1"}],"checked":true,"key":"1-0-0-2-0","id":"P0240"},{"opId":"P0239","opName":"请领流向策略新增","opSort":"P0239","elementClass":"acl_add_spdDepotRoute","webApis":[{"serviceUrl":"/yard/spd/spdDepotRoutes","serviceMethod":"POST","checked":true,"key":"1-0-0-3-0"},{"serviceUrl":"/yard/spd/spdDepotRoutes","serviceMethod":"POST","checked":true,"key":"1-0-0-3-1"},{"serviceUrl":"/yard/spd/spdDepotRoutes/count","serviceMethod":"GET","checked":true,"key":"1-0-0-3-2"},{"serviceUrl":"/yard/spd/spdDepotRoutes","serviceMethod":"GET","checked":true,"key":"1-0-0-3-3"},{"serviceUrl":"/yard/pcs/pcsDepots/byUse","serviceMethod":"GET","checked":true,"key":"1-0-0-3-4"},{"serviceUrl":"/yard/pcs/pcsDepots/byUse/count","serviceMethod":"GET","checked":true,"key":"1-0-0-3-5"},{"serviceUrl":"/yard/pcs/pcsDepots/byTakePoint/count","serviceMethod":"GET","checked":true,"key":"1-0-0-3-6"},{"serviceUrl":"/yard/pcs/pcsDepots/byTakePoint","serviceMethod":"GET","checked":true,"key":"1-0-0-3-7"}],"checked":true,"key":"1-0-0-3-0","id":"P0239"}],"checked":true,"key":"1-0-0-0-0"}],"children":[],"topMenu":false,"checked":true,"key":"1-0-0-0-0"},{"systemName":"收货系统","menuId":"10002-002","menuCode":"10002-002","menuParentId":"10002","icon":null,"menuSort":2,"name":"使用类型管理","level":2,"anchor":"#spd/spdUsedTypes","functions":[{"functionId":"F0074","functionName":"使用类型管理","operations":[{"opId":"P0644","opName":"使用类型管理查看","opSort":"P0644","elementClass":"acl_view_spdUsedType","webApis":[{"serviceUrl":"/yard/pcs/pcsDepotViews/ids,{ids}","serviceMethod":"GET","checked":true,"key":"1-1-0-0-0"},{"serviceUrl":"/yard/spd/spdUsedTypes","serviceMethod":"GET","checked":true,"key":"1-1-0-0-1"},{"serviceUrl":"/yard/spd/spdUsedTypes/count","serviceMethod":"GET","checked":true,"key":"1-1-0-0-2"}],"checked":true,"key":"1-1-0-0-0","id":"P0644"},{"opId":"P0645","opName":"使用类型管理增加","opSort":"P0645","elementClass":"acl_add_spdUsedType","webApis":[{"serviceUrl":"/yard/pcs/pcsDepotViews/byUsedDepot","serviceMethod":"GET","checked":true,"key":"1-1-0-1-0"},{"serviceUrl":"/yard/spd/spdUsedTypes","serviceMethod":"POST","checked":true,"key":"1-1-0-1-1"},{"serviceUrl":"/yard/pcs/pcsDepts/orgId,{orgId}","serviceMethod":"GET","checked":true,"key":"1-1-0-1-2"},{"serviceUrl":"/yard/pcs/pcsDepotViews/byUsedDepot","serviceMethod":"GET","checked":true,"key":"1-1-0-1-3"},{"serviceUrl":"/yard/pcs/pcsDepotViews/byUsedDepot/count","serviceMethod":"GET","checked":true,"key":"1-1-0-1-4"}],"checked":true,"key":"1-1-0-1-0","id":"P0645"},{"opId":"P0646","opName":"使用类型管理编辑","opSort":"P0646","elementClass":"acl_edit_spdUsedType","webApis":[{"serviceUrl":"/yard/spd/spdUsedTypes/{usedType}","serviceMethod":"PUT","checked":true,"key":"1-1-0-2-0"}],"checked":true,"key":"1-1-0-2-0","id":"P0646"},{"opId":"P0647","opName":"使用类型管理删除","opSort":"P0647","elementClass":"acl_delete_spdUsedType","webApis":[{"serviceUrl":"/yard/spd/spdUsedTypes/{usedType}","serviceMethod":"DELETE","checked":true,"key":"1-1-0-3-0"}],"checked":true,"key":"1-1-0-3-0","id":"P0647"},{"opId":"P0648","opName":"使用类型管理提交","opSort":"P0648","elementClass":"acl_commitEntity_spdUsedType","webApis":[{"serviceUrl":"/yard/spd/spdUsedTypes/{usedType}/checkState/commited","serviceMethod":"PUT","checked":true,"key":"1-1-0-4-0"},{"serviceUrl":"/yard/spd/spdUsedTypes/{usedType}","serviceMethod":"GET","checked":true,"key":"1-1-0-4-1"}],"checked":true,"key":"1-1-0-4-0","id":"P0648"},{"opId":"P0649","opName":"使用类型管理撤回","opSort":"P0649","elementClass":"acl_cancelCommit_spdUsedType","webApis":[],"checked":true,"key":"1-1-0-5-0","id":"P0649"}],"checked":true,"key":"1-1-0-0-0"}],"children":[],"topMenu":false,"checked":true,"key":"1-1-0-0-0"},{"systemName":"收货系统","menuId":"10002-003","menuCode":"10002-003","menuParentId":"10002","icon":null,"menuSort":3,"name":"仓库帐页管理","level":2,"anchor":"#spd/spdDepotCards","functions":[{"functionId":"F0017","functionName":"仓库帐页管理","operations":[{"opId":"P0108","opName":"仓库帐页管理查看","opSort":"P0108","elementClass":"acl_view_spdDepotCard","webApis":[{"serviceUrl":"/yard/pcs/depotShelfs/ids,{ids}","serviceMethod":"GET","checked":true,"key":"1-2-0-0-0"},{"serviceUrl":"/yard/spd/spdDepotCards/count","serviceMethod":"GET","checked":true,"key":"1-2-0-0-1"},{"serviceUrl":"/yard/spd/spdDepotCards","serviceMethod":"GET","checked":true,"key":"1-2-0-0-2"},{"serviceUrl":"/yard/spd/SpdDepotCardByStockTotalViews/ids,{ids}","serviceMethod":"GET","checked":true,"key":"1-2-0-0-3"}],"checked":true,"key":"1-2-0-0-0","id":"P0108"},{"opId":"P0109","opName":"仓库帐页管理编辑","opSort":"P0109","elementClass":"acl_edit_spdDepotCard","webApis":[{"serviceUrl":"/yard/spd/spdDepotCards","serviceMethod":"PUT","checked":true,"key":"1-2-0-1-0"},{"serviceUrl":"/yard/pcs/depotShelfs/byLoseSheft,{depotId}","serviceMethod":"GET","checked":true,"key":"1-2-0-1-1"},{"serviceUrl":"/yard/pcs/depotShelfs/byLoseSheft,{depotId}/count","serviceMethod":"GET","checked":true,"key":"1-2-0-1-2"},{"serviceUrl":"/yard/pcs/depotShelfs/{shelfId}","serviceMethod":"GET","checked":true,"key":"1-2-0-1-3"},{"serviceUrl":"/yard/pcs/depotShelfs/ids,{ids}","serviceMethod":"GET","checked":true,"key":"1-2-0-1-4"},{"serviceUrl":"/yard/spd/SpdDepotCardByStockTotalViews/ids,{ids}","serviceMethod":"GET","checked":true,"key":"1-2-0-1-5"},{"serviceUrl":"/yard/pcs/depotShelfs/byWMGDepotShelf,{depotId}/count","serviceMethod":"GET","checked":true,"key":"1-2-0-1-6"},{"serviceUrl":"/yard/pcs/depotShelfs/byWMGDepotShelf,{depotId}","serviceMethod":"GET","checked":true,"key":"1-2-0-1-7"},{"serviceUrl":"/yard/pcs/depotShelfs/WMGDepotShelf","serviceMethod":"GET","checked":true,"key":"1-2-0-1-8"},{"serviceUrl":"/yard/pcs/depotShelfs/WMGDepotShelf/count","serviceMethod":"GET","checked":true,"key":"1-2-0-1-9"}],"checked":true,"key":"1-2-0-1-0","id":"P0109"},{"opId":"P0110","opName":"仓库帐页管理新增","opSort":"P0110","elementClass":"acl_add_spdDepotCard","webApis":[{"serviceUrl":"/yard/pcs/depotShelfs/WMGDepotShelf/count","serviceMethod":"GET","checked":true,"key":"1-2-0-2-0"},{"serviceUrl":"/yard/pcs/depotShelfs/WMGDepotShelf","serviceMethod":"GET","checked":true,"key":"1-2-0-2-1"},{"serviceUrl":"/yard/spd/spdDepotCards","serviceMethod":"POST","checked":true,"key":"1-2-0-2-2"},{"serviceUrl":"/yard/spd/spdDepotCards","serviceMethod":"POST","checked":true,"key":"1-2-0-2-3"},{"serviceUrl":"/yard/spd/spdDepotCards","serviceMethod":"GET","checked":true,"key":"1-2-0-2-4"},{"serviceUrl":"/yard/pcs/depotShelfs/ids,{ids}","serviceMethod":"GET","checked":true,"key":"1-2-0-2-5"},{"serviceUrl":"/yard/spd/SpdDepotCardByStockTotalViews/ids,{ids}","serviceMethod":"GET","checked":true,"key":"1-2-0-2-6"},{"serviceUrl":"/yard/pcs/pcsDepotAreas/ids,{ids}","serviceMethod":"GET","checked":true,"key":"1-2-0-2-7"},{"serviceUrl":"/yard/pcs/depotShelfs/byLoseSheft,{depotId}","serviceMethod":"GET","checked":true,"key":"1-2-0-2-8"},{"serviceUrl":"/yard/pcs/depotShelfs/byLoseSheft,{depotId}/count","serviceMethod":"GET","checked":true,"key":"1-2-0-2-9"},{"serviceUrl":"/yard/pcs/depotShelfs/byWMGDepotShelf,{depotId}/count","serviceMethod":"GET","checked":true,"key":"1-2-0-2-10"},{"serviceUrl":"/yard/pcs/depotShelfs/byWMGDepotShelf,{depotId}","serviceMethod":"GET","checked":true,"key":"1-2-0-2-11"}],"checked":true,"key":"1-2-0-2-0","id":"P0110"},{"opId":"P0111","opName":"仓库帐页管理删除","opSort":"P0111","elementClass":"acl_delete_spdDepotCard","webApis":[{"serviceUrl":"/yard/spd/spdDepotCards/{cardId}","serviceMethod":"DELETE","checked":true,"key":"1-2-0-3-0"},{"serviceUrl":"/yard/spd/SpdDepotCardByStockTotalViews/ids,{ids}","serviceMethod":"GET","checked":true,"key":"1-2-0-3-1"},{"serviceUrl":"/yard/pcs/depotShelfs/ids,{ids}","serviceMethod":"GET","checked":true,"key":"1-2-0-3-2"},{"serviceUrl":"/yard/spd/spdDepotCards/count","serviceMethod":"GET","checked":true,"key":"1-2-0-3-3"},{"serviceUrl":"/yard/spd/spdDepotCards","serviceMethod":"GET","checked":true,"key":"1-2-0-3-4"}],"checked":true,"key":"1-2-0-3-0","id":"P0111"},{"opId":"P0307","opName":"仓库帐页管理撤回","opSort":"P0307","elementClass":"acl_cancelCommit_spdDepotCard","webApis":[{"serviceUrl":"/yard/spd/spdDepotCards","serviceMethod":"GET","checked":true,"key":"1-2-0-4-0"},{"serviceUrl":"/yard/pcs/depotShelfs/ids,{ids}","serviceMethod":"GET","checked":true,"key":"1-2-0-4-1"},{"serviceUrl":"/yard/spd/SpdDepotCardByStockTotalViews/ids,{ids}","serviceMethod":"GET","checked":true,"key":"1-2-0-4-2"},{"serviceUrl":"/yard/spd/spdDepotCards/{cardId}/checkState/completed","serviceMethod":"PUT","checked":true,"key":"1-2-0-4-3"}],"checked":true,"key":"1-2-0-4-0","id":"P0307"},{"opId":"P0277","opName":"仓库帐页管理提交","opSort":"P0277","elementClass":"acl_commitEntity_spdDepotCard","webApis":[{"serviceUrl":"/yard/spd/spdDepotCards/{cardId}/checkState/commited","serviceMethod":"PUT","checked":true,"key":"1-2-0-5-0"},{"serviceUrl":"/yard/spd/spdDepotCards","serviceMethod":"GET","checked":true,"key":"1-2-0-5-1"},{"serviceUrl":"/yard/pcs/depotShelfs/ids,{ids}","serviceMethod":"GET","checked":true,"key":"1-2-0-5-2"},{"serviceUrl":"/yard/spd/SpdDepotCardByStockTotalViews/ids,{ids}","serviceMethod":"GET","checked":true,"key":"1-2-0-5-3"},{"serviceUrl":"/yard/spd/spdDepotCards/{cardId}","serviceMethod":"GET","checked":true,"key":"1-2-0-5-4"}],"checked":true,"key":"1-2-0-5-0","id":"P0277"}],"checked":true,"key":"1-2-0-0-0"}],"children":[],"topMenu":false,"checked":true,"key":"1-2-0-0-0"},{"systemName":"收货系统","menuId":"10002-004","menuCode":"10002-004","menuParentId":"10002","icon":null,"menuSort":4,"name":"定数配置管理","level":2,"anchor":"#spd/spdFixeds","functions":[{"functionId":"F0056","functionName":"定数帐页管理","operations":[{"opId":"P0453","opName":"定数帐页管理编辑","opSort":"P0453","elementClass":"acl_edit_spdDepotFixedCard","webApis":[{"serviceUrl":"/yard/spd/spdFixeds/{fixedId}","serviceMethod":"GET","checked":true,"key":"1-3-0-0-0"},{"serviceUrl":"/yard/spd/spdDepotFixedCards","serviceMethod":"GET","checked":true,"key":"1-3-0-0-1"},{"serviceUrl":"/yard/spd/spdDepotFixedCards/count","serviceMethod":"GET","checked":true,"key":"1-3-0-0-2"},{"serviceUrl":"/yard/spd/spdFixeds/ids,{ids}","serviceMethod":"GET","checked":true,"key":"1-3-0-0-3"},{"serviceUrl":"/yard/spd/spdDepotFixedCards","serviceMethod":"PUT","checked":true,"key":"1-3-0-0-4"}],"checked":true,"key":"1-3-0-0-0","id":"P0453"},{"opId":"P0454","opName":"定数帐页管理新增","opSort":"P0454","elementClass":"acl_add_spdDepotFixedCard","webApis":[{"serviceUrl":"/yard/spd/spdDepotCards/ids,{ids}","serviceMethod":"GET","checked":true,"key":"1-3-0-1-0"},{"serviceUrl":"/yard/spd/spdDepotCards/byGoodsCard,{goodsId}","serviceMethod":"GET","checked":true,"key":"1-3-0-1-1"},{"serviceUrl":"/yard/spd/spdDepotFixedCards","serviceMethod":"POST","checked":true,"key":"1-3-0-1-2"},{"serviceUrl":"/yard/spd/spdDepotFixedCards","serviceMethod":"GET","checked":true,"key":"1-3-0-1-3"},{"serviceUrl":"/yard/spd/spdDepotFixedCards/count","serviceMethod":"GET","checked":true,"key":"1-3-0-1-4"},{"serviceUrl":"/yard/spd/spdFixeds/ids,{ids}","serviceMethod":"GET","checked":true,"key":"1-3-0-1-5"},{"serviceUrl":"/yard/spd/spdDepotFixedCards","serviceMethod":"POST","checked":true,"key":"1-3-0-1-6"},{"serviceUrl":"/yard/spd/spdFixeds/byUsed","serviceMethod":"GET","checked":true,"key":"1-3-0-1-7"},{"serviceUrl":"/yard/spd/spdFixeds/byUsed/count","serviceMethod":"GET","checked":true,"key":"1-3-0-1-8"}],"checked":true,"key":"1-3-0-1-0","id":"P0454"},{"opId":"P0455","opName":"定数帐页管理删除","opSort":"P0455","elementClass":"acl_delete_spdDepotFixedCard","webApis":[{"serviceUrl":"/yard/spd/spdDepotFixedCards","serviceMethod":"GET","checked":true,"key":"1-3-0-2-0"},{"serviceUrl":"/yard/spd/spdDepotFixedCards/count","serviceMethod":"GET","checked":true,"key":"1-3-0-2-1"},{"serviceUrl":"/yard/spd/spdFixeds/ids,{ids}","serviceMethod":"GET","checked":true,"key":"1-3-0-2-2"},{"serviceUrl":"/yard/spd/spdDepotCards/ids,{ids}","serviceMethod":"GET","checked":true,"key":"1-3-0-2-3"},{"serviceUrl":"/yard/spd/spdDepotCards/{cardId}","serviceMethod":"GET","checked":true,"key":"1-3-0-2-4"},{"serviceUrl":"/yard/spd/spdFixeds/{fixedId}","serviceMethod":"GET","checked":true,"key":"1-3-0-2-5"},{"serviceUrl":"/yard/spd/spdDepotFixedCards/{cardFixedId}","serviceMethod":"DELETE","checked":true,"key":"1-3-0-2-6"}],"checked":true,"key":"1-3-0-2-0","id":"P0455"},{"opId":"P0456","opName":"定数帐页管理提交","opSort":"P0456","elementClass":"acl_commitEntity_spdDepotFixedCard","webApis":[{"serviceUrl":"/yard/spd/spdDepotFixedCards","serviceMethod":"GET","checked":true,"key":"1-3-0-3-0"},{"serviceUrl":"/yard/spd/spdDepotFixedCards/count","serviceMethod":"GET","checked":true,"key":"1-3-0-3-1"},{"serviceUrl":"/yard/spd/spdDepotFixedCards/{cardFixedId}","serviceMethod":"GET","checked":true,"key":"1-3-0-3-2"},{"serviceUrl":"/yard/spd/spdDepotFixedCards/{cardFixedId}/checkState/commited","serviceMethod":"PUT","checked":true,"key":"1-3-0-3-3"},{"serviceUrl":"/yard/spd/spdDepotFixedCards/{cardFixedId}/checkState/commited","serviceMethod":"PUT","checked":true,"key":"1-3-0-3-4"}],"checked":true,"key":"1-3-0-3-0","id":"P0456"},{"opId":"P0457","opName":"定数帐页管理撤回","opSort":"P0457","elementClass":"acl_cancelCommit_spdDepotFixedCard","webApis":[{"serviceUrl":"/yard/spd/spdDepotFixedCards","serviceMethod":"GET","checked":true,"key":"1-3-0-4-0"},{"serviceUrl":"/yard/spd/spdDepotFixedCards/count","serviceMethod":"GET","checked":true,"key":"1-3-0-4-1"},{"serviceUrl":"/yard/spd/spdDepotFixedCards/{cardFixedId}","serviceMethod":"GET","checked":true,"key":"1-3-0-4-2"}],"checked":true,"key":"1-3-0-4-0","id":"P0457"},{"opId":"P0446","opName":"定数帐页管理查看","opSort":"P0446","elementClass":"acl_view_spdDepotFixedCard","webApis":[{"serviceUrl":"/yard/spd/spdDepotFixedCards","serviceMethod":"GET","checked":true,"key":"1-3-0-5-0"},{"serviceUrl":"/yard/spd/spdDepotFixedCards/count","serviceMethod":"GET","checked":true,"key":"1-3-0-5-1"},{"serviceUrl":"/yard/spd/spdFixeds/{fixedId}","serviceMethod":"GET","checked":true,"key":"1-3-0-5-2"},{"serviceUrl":"/yard/spd/spdDepotCards/byGoodsCard,{goodsId}/count","serviceMethod":"GET","checked":true,"key":"1-3-0-5-3"},{"serviceUrl":"/yard/spd/spdDepotCards/byGoodsCard,{goodsId}","serviceMethod":"GET","checked":true,"key":"1-3-0-5-4"},{"serviceUrl":"/yard/spd/spdDepotFixedCards/{cardFixedId}","serviceMethod":"GET","checked":true,"key":"1-3-0-5-5"}],"checked":true,"key":"1-3-0-5-0","id":"P0446"}],"checked":true,"key":"1-3-0-0-0"}],"children":[],"topMenu":false,"checked":true,"key":"1-3-0-0-0"},{"systemName":"收货系统","menuId":"10002-005","menuCode":"10002-005","menuParentId":"10002","icon":null,"menuSort":5,"name":"定数帐页管理","level":2,"anchor":"#spd/spdDepotFixedCards","functions":[{"functionId":"F0055","functionName":"定数配置管理","operations":[{"opId":"P0448","opName":"定数配置管理编辑","opSort":"P0448","elementClass":"acl_edit_spdFixed","webApis":[{"serviceUrl":"/yard/spd/spdFixeds/count","serviceMethod":"GET","checked":true,"key":"1-4-0-0-0"},{"serviceUrl":"/yard/spd/spdFixeds","serviceMethod":"GET","checked":true,"key":"1-4-0-0-1"},{"serviceUrl":"/yard/spd/spdFixeds","serviceMethod":"PUT","checked":true,"key":"1-4-0-0-2"}],"checked":true,"key":"1-4-0-0-0","id":"P0448"},{"opId":"P0449","opName":"定数配置管理新增","opSort":"P0449","elementClass":"acl_add_spdFixed","webApis":[{"serviceUrl":"/yard/spd/spdFixeds","serviceMethod":"POST","checked":true,"key":"1-4-0-1-0"},{"serviceUrl":"/yard/spd/spdFixeds","serviceMethod":"GET","checked":true,"key":"1-4-0-1-1"},{"serviceUrl":"/yard/spd/spdFixeds/count","serviceMethod":"GET","checked":true,"key":"1-4-0-1-2"},{"serviceUrl":"/yard/spd/spdFixeds","serviceMethod":"POST","checked":true,"key":"1-4-0-1-3"}],"checked":true,"key":"1-4-0-1-0","id":"P0449"},{"opId":"P0450","opName":"定数配置管理删除","opSort":"P0450","elementClass":"acl_delete_spdFixed","webApis":[{"serviceUrl":"/yard/spd/spdFixeds","serviceMethod":"GET","checked":true,"key":"1-4-0-2-0"},{"serviceUrl":"/yard/spd/spdFixeds/count","serviceMethod":"GET","checked":true,"key":"1-4-0-2-1"},{"serviceUrl":"/yard/spd/spdFixeds/{fixedId}","serviceMethod":"DELETE","checked":true,"key":"1-4-0-2-2"}],"checked":true,"key":"1-4-0-2-0","id":"P0450"},{"opId":"P0451","opName":"定数配置管理提交","opSort":"P0451","elementClass":"acl_commitEntity_spdFixed","webApis":[{"serviceUrl":"/yard/spd/spdFixeds","serviceMethod":"GET","checked":true,"key":"1-4-0-3-0"},{"serviceUrl":"/yard/spd/spdFixeds/count","serviceMethod":"GET","checked":true,"key":"1-4-0-3-1"},{"serviceUrl":"/yard/spd/spdFixeds/{fixedId}","serviceMethod":"GET","checked":true,"key":"1-4-0-3-2"},{"serviceUrl":"/yard/spd/spdFixeds/{fixedId}/checkState/commited","serviceMethod":"PUT","checked":true,"key":"1-4-0-3-3"}],"checked":true,"key":"1-4-0-3-0","id":"P0451"},{"opId":"P0452","opName":"定数配置管理撤回","opSort":"P0452","elementClass":"acl_cancelCommit_spdFixed","webApis":[{"serviceUrl":"/yard/spd/spdFixeds","serviceMethod":"GET","checked":true,"key":"1-4-0-4-0"},{"serviceUrl":"/yard/spd/spdFixeds/count","serviceMethod":"GET","checked":true,"key":"1-4-0-4-1"},{"serviceUrl":"/yard/spd/spdFixeds/{fixedId}","serviceMethod":"GET","checked":true,"key":"1-4-0-4-2"}],"checked":true,"key":"1-4-0-4-0","id":"P0452"},{"opId":"P0445","opName":"定数配置管理查看","opSort":"P0445","elementClass":"acl_view_spdFixed","webApis":[{"serviceUrl":"/yard/spd/spdFixeds/count","serviceMethod":"GET","checked":true,"key":"1-4-0-5-0"},{"serviceUrl":"/yard/spd/spdFixeds","serviceMethod":"GET","checked":true,"key":"1-4-0-5-1"}],"checked":true,"key":"1-4-0-5-0","id":"P0445"}],"checked":true,"key":"1-4-0-0-0"}],"children":[],"topMenu":false,"checked":true,"key":"1-4-0-0-0"}],"topMenu":true,"open":false,"checked":true,"key":"1-0-0-0-0"},{"systemName":"收货系统","menuId":"10003","menuCode":"10003","menuParentId":"-1","icon":"fa-cart-arrow-down","menuSort":3,"name":"采购业务管理","level":1,"anchor":null,"functions":null,"children":[{"systemName":"收货系统","menuId":"10003-001","menuCode":"10003-001","menuParentId":"10003","icon":null,"menuSort":1,"name":"物资价格维护","level":2,"anchor":"#spd/ydsGoodsInfos","functions":[{"functionId":"F0011","functionName":"物资价格维护","operations":[{"opId":"P0077","opName":"物资价格维护新增","opSort":"P0077","elementClass":"acl_add_ydsGoodsInfo","webApis":[{"serviceUrl":"/yard/spd/ydsGoodsInfos","serviceMethod":"POST","checked":true,"key":"2-0-0-0-0"},{"serviceUrl":"/yard/spd/ydsGoodsInfos","serviceMethod":"POST","checked":true,"key":"2-0-0-0-1"},{"serviceUrl":"/yard/spd/ydsGoodsInfos/count","serviceMethod":"GET","checked":true,"key":"2-0-0-0-2"},{"serviceUrl":"/yard/spd/ydsGoodsInfos","serviceMethod":"GET","checked":true,"key":"2-0-0-0-3"}],"checked":true,"key":"2-0-0-0-0","id":"P0077"},{"opId":"P0078","opName":"物资价格维护删除","opSort":"P0078","elementClass":"acl_delete_ydsGoodsInfo","webApis":[{"serviceUrl":"/yard/spd/ydsGoodsInfos/count","serviceMethod":"GET","checked":true,"key":"2-0-0-1-0"},{"serviceUrl":"/yard/spd/ydsGoodsInfos","serviceMethod":"GET","checked":true,"key":"2-0-0-1-1"},{"serviceUrl":"/yard/spd/ydsGoodsInfos/count","serviceMethod":"GET","checked":true,"key":"2-0-0-1-2"},{"serviceUrl":"/yard/spd/ydsGoodsInfos","serviceMethod":"GET","checked":true,"key":"2-0-0-1-3"},{"serviceUrl":"/yard/spd/ydsGoodsInfos/{goodsId}","serviceMethod":"DELETE","checked":true,"key":"2-0-0-1-4"}],"checked":true,"key":"2-0-0-1-0","id":"P0078"},{"opId":"P0079","opName":"物资价格维护编辑","opSort":"P0079","elementClass":"acl_edit_ydsGoodsInfo","webApis":[{"serviceUrl":"/yard/spd/ydsGoodsInfos/count","serviceMethod":"GET","checked":true,"key":"2-0-0-2-0"},{"serviceUrl":"/yard/spd/ydsGoodsInfos","serviceMethod":"GET","checked":true,"key":"2-0-0-2-1"},{"serviceUrl":"/yard/spd/ydsGoodsInfos/{goodsId}","serviceMethod":"PUT","checked":true,"key":"2-0-0-2-2"}],"checked":true,"key":"2-0-0-2-0","id":"P0079"},{"opId":"P0080","opName":"物资价格维护查看","opSort":"P0080","elementClass":"acl_view_ydsGoodsInfo","webApis":[{"serviceUrl":"/yard/spd/ydsGoodsInfos/count","serviceMethod":"GET","checked":true,"key":"2-0-0-3-0"},{"serviceUrl":"/yard/spd/ydsGoodsInfos","serviceMethod":"GET","checked":true,"key":"2-0-0-3-1"},{"serviceUrl":"/yard/spd/ydsGoodsInfos/count","serviceMethod":"GET","checked":true,"key":"2-0-0-3-2"},{"serviceUrl":"/yard/spd/ydsGoodsInfos","serviceMethod":"GET","checked":true,"key":"2-0-0-3-3"}],"checked":true,"key":"2-0-0-3-0","id":"P0080"}],"checked":true,"key":"2-0-0-0-0"}],"children":[],"topMenu":false,"checked":true,"key":"2-0-0-0-0"},{"systemName":"收货系统","menuId":"10003-002","menuCode":"10003-002","menuParentId":"10003","icon":null,"menuSort":2,"name":"采购合同管理","level":2,"anchor":"#spd/spdPoContracts","functions":[{"functionId":"F0012","functionName":"采购合同管理","operations":[{"opId":"P0083","opName":"采购合同管理编辑","opSort":"P0083","elementClass":"acl_edit_spdPoContract,acl_edit_spdPoContractItem,acl_delete_spdPoContractItem,acl_add_spdPoContractItem,acl_view_spdPoContractItem","webApis":[{"serviceUrl":"/yard/spd/spdPoContractItems","serviceMethod":"POST","checked":true,"key":"2-1-0-0-0"},{"serviceUrl":"/yard/spd/spdPoContracts/{conId}","serviceMethod":"GET","checked":true,"key":"2-1-0-0-1"},{"serviceUrl":"/yard/spd/spdPoContractItems/conId,{conId}","serviceMethod":"GET","checked":true,"key":"2-1-0-0-2"},{"serviceUrl":"/yard/spd/spdPoContracts/{conId}","serviceMethod":"PUT","checked":true,"key":"2-1-0-0-3"},{"serviceUrl":"/yard/spd/spdPoContractItems/conId,{conId}","serviceMethod":"GET","checked":true,"key":"2-1-0-0-4"},{"serviceUrl":"/yard/spd/spdPoContractItems/{conItemId}","serviceMethod":"PUT","checked":true,"key":"2-1-0-0-5"},{"serviceUrl":"/yard/pcs/PcsDepts/byProcurementDept","serviceMethod":"GET","checked":true,"key":"2-1-0-0-6"}],"checked":true,"key":"2-1-0-0-0","id":"P0083"},{"opId":"P0084","opName":"采购合同管理新增","opSort":"P0084","elementClass":"acl_add_spdPoContract,acl_add_spdPoContractItem,acl_view_spdPoContractItem,acl_edit_spdPoContractItem,acl_delete_spdPoContractItem","webApis":[{"serviceUrl":"/yard/spd/spdPoContractItems","serviceMethod":"POST","checked":true,"key":"2-1-0-1-0"},{"serviceUrl":"/yard/pcs/PcsDepts/byProcurementType","serviceMethod":"GET","checked":true,"key":"2-1-0-1-1"},{"serviceUrl":"/yard/spd/spdPoContracts/count","serviceMethod":"GET","checked":true,"key":"2-1-0-1-2"},{"serviceUrl":"/yard/spd/spdPoContracts","serviceMethod":"GET","checked":true,"key":"2-1-0-1-3"},{"serviceUrl":"/yard/spd/spdPoContracts","serviceMethod":"POST","checked":true,"key":"2-1-0-1-4"},{"serviceUrl":"/yard/pcs/PcsDepts/byUse","serviceMethod":"GET","checked":true,"key":"2-1-0-1-5"},{"serviceUrl":"/yard/pcs/PcsDepts/byProcurementDept","serviceMethod":"GET","checked":true,"key":"2-1-0-1-6"}],"checked":true,"key":"2-1-0-1-0","id":"P0084"},{"opId":"P0085","opName":"采购合同管理删除","opSort":"P0085","elementClass":"acl_delete_spdPoContract,acl_delete_spdPoContractItem","webApis":[{"serviceUrl":"/yard/spd/spdPoContracts/{conId}","serviceMethod":"DELETE","checked":true,"key":"2-1-0-2-0"},{"serviceUrl":"/yard/spd/spdPoContracts/count","serviceMethod":"GET","checked":true,"key":"2-1-0-2-1"},{"serviceUrl":"/yard/spd/spdPoContractItems/conId,{conId}","serviceMethod":"GET","checked":true,"key":"2-1-0-2-2"},{"serviceUrl":"/yard/spd/spdPoContractItems/{conItemId}","serviceMethod":"DELETE","checked":true,"key":"2-1-0-2-3"},{"serviceUrl":"/yard/spd/spdPoContracts","serviceMethod":"GET","checked":true,"key":"2-1-0-2-4"}],"checked":true,"key":"2-1-0-2-0","id":"P0085"},{"opId":"P0086","opName":"采购合同管理提交","opSort":"P0086","elementClass":"acl_commitEntity_spdPoContract","webApis":[{"serviceUrl":"/yard/spd/spdPoContracts/{conId}/checkState/commited","serviceMethod":"PUT","checked":true,"key":"2-1-0-3-0"},{"serviceUrl":"/yard/spd/spdPoContracts/count","serviceMethod":"GET","checked":true,"key":"2-1-0-3-1"},{"serviceUrl":"/yard/spd/spdPoContracts","serviceMethod":"GET","checked":true,"key":"2-1-0-3-2"},{"serviceUrl":"/yard/spd/spdPoContracts/{conId}","serviceMethod":"GET","checked":true,"key":"2-1-0-3-3"}],"checked":true,"key":"2-1-0-3-0","id":"P0086"},{"opId":"P0087","opName":"采购合同管理审核","opSort":"P0087","elementClass":"acl_reviewEntity_spdPoContract","webApis":[{"serviceUrl":"/yard/spd/spdPoContracts/{conId}","serviceMethod":"PUT","checked":true,"key":"2-1-0-4-0"}],"checked":true,"key":"2-1-0-4-0","id":"P0087"},{"opId":"P0088","opName":"采购合同管理撤回","opSort":"P0088","elementClass":"acl_cancelCommit_spdPoContract","webApis":[],"checked":true,"key":"2-1-0-5-0","id":"P0088"},{"opId":"P0082","opName":"采购合同管理查看","opSort":"P0082","elementClass":"acl_view_spdPoContract,acl_view_spdPoContractItem","webApis":[{"serviceUrl":"/yard/spd/spdPoContracts/count","serviceMethod":"GET","checked":true,"key":"2-1-0-6-0"},{"serviceUrl":"/yard/spd/spdPoContracts","serviceMethod":"GET","checked":true,"key":"2-1-0-6-1"},{"serviceUrl":"/yard/pcs/PcsDepts/byProcurementType","serviceMethod":"GET","checked":true,"key":"2-1-0-6-2"},{"serviceUrl":"/yard/spd/spdPoContractItems/conId,{conId}","serviceMethod":"GET","checked":true,"key":"2-1-0-6-3"}],"checked":true,"key":"2-1-0-6-0","id":"P0082"}],"checked":true,"key":"2-1-0-0-0"}],"children":[],"topMenu":false,"checked":true,"key":"2-1-0-0-0"},{"systemName":"收货系统","menuId":"10003-003","menuCode":"10003-003","menuParentId":"10003","icon":null,"menuSort":3,"name":"配额调节管理","level":2,"anchor":"#spd/spdPoContractItems","functions":[{"functionId":"F0040","functionName":"配额调节管理","operations":[{"opId":"P0478","opName":"配额调节管理编辑","opSort":"P0478","elementClass":"acl_edit_spdPoContractItemAdjust,acl_edit_spdPoContractAdjust","webApis":[{"serviceUrl":"/yard/spd/spdPoContractItems/byAdjust/count","serviceMethod":"GET","checked":true,"key":"2-2-0-0-0"},{"serviceUrl":"/yard/spd/spdPoContractItems/byAdjust","serviceMethod":"GET","checked":true,"key":"2-2-0-0-1"},{"serviceUrl":"/yard/spd/spdPoContracts/ids,{ids}","serviceMethod":"GET","checked":true,"key":"2-2-0-0-2"},{"serviceUrl":"/yard/spd/spdPoContractAdjusts/conItemId,{conItemId}/count","serviceMethod":"GET","checked":true,"key":"2-2-0-0-3"},{"serviceUrl":"/yard/spd/spdPoContractAdjusts/conItemId,{conItemId}","serviceMethod":"GET","checked":true,"key":"2-2-0-0-4"},{"serviceUrl":"/yard/spd/spdPoContractAdjusts/{adjustId}","serviceMethod":"PUT","checked":true,"key":"2-2-0-0-5"}],"checked":true,"key":"2-2-0-0-0","id":"P0478"},{"opId":"P0480","opName":"配额调节管理删除","opSort":"P0480","elementClass":"acl_edit_spdPoContractItemAdjust,acl_delete_spdPoContractAdjust","webApis":[{"serviceUrl":"/yard/spd/spdPoContractAdjusts/{adjustId}","serviceMethod":"DELETE","checked":true,"key":"2-2-0-1-0"},{"serviceUrl":"/yard/spd/spdPoContractItems/byAdjust/count","serviceMethod":"GET","checked":true,"key":"2-2-0-1-1"},{"serviceUrl":"/yard/spd/spdPoContractItems/byAdjust","serviceMethod":"GET","checked":true,"key":"2-2-0-1-2"},{"serviceUrl":"/yard/spd/spdPoContractAdjusts/conItemId,{conItemId}","serviceMethod":"GET","checked":true,"key":"2-2-0-1-3"},{"serviceUrl":"/yard/spd/spdPoContractAdjusts/conItemId,{conItemId}/count","serviceMethod":"GET","checked":true,"key":"2-2-0-1-4"},{"serviceUrl":"/yard/spd/spdPoContracts/ids,{ids}","serviceMethod":"GET","checked":true,"key":"2-2-0-1-5"}],"checked":true,"key":"2-2-0-1-0","id":"P0480"},{"opId":"P0479","opName":"配额调节管理新增","opSort":"P0479","elementClass":"acl_edit_spdPoContractItemAdjust,acl_add_spdPoContractAdjust","webApis":[{"serviceUrl":"/yard/spd/spdPoContractAdjusts","serviceMethod":"POST","checked":true,"key":"2-2-0-2-0"},{"serviceUrl":"/yard/spd/spdPoContractItems/byAdjust/count","serviceMethod":"GET","checked":true,"key":"2-2-0-2-1"},{"serviceUrl":"/yard/spd/spdPoContractItems/byAdjust","serviceMethod":"GET","checked":true,"key":"2-2-0-2-2"},{"serviceUrl":"/yard/spd/spdPoContracts/ids,{ids}","serviceMethod":"GET","checked":true,"key":"2-2-0-2-3"},{"serviceUrl":"/yard/spd/spdPoContractAdjusts/conItemId,{conItemId}/count","serviceMethod":"GET","checked":true,"key":"2-2-0-2-4"},{"serviceUrl":"/yard/spd/spdPoContractAdjusts/conItemId,{conItemId}","serviceMethod":"GET","checked":true,"key":"2-2-0-2-5"}],"checked":true,"key":"2-2-0-2-0","id":"P0479"},{"opId":"P0481","opName":"配额调节管理提交","opSort":"P0481","elementClass":"acl_edit_spdPoContractItemAdjust,acl_commitEntity_spdPoContractAdjust","webApis":[{"serviceUrl":"/yard/spd/spdPoContractItems/byAdjust/count","serviceMethod":"GET","checked":true,"key":"2-2-0-3-0"},{"serviceUrl":"/yard/spd/spdPoContractItems/byAdjust","serviceMethod":"GET","checked":true,"key":"2-2-0-3-1"},{"serviceUrl":"/yard/spd/spdPoContracts/ids,{ids}","serviceMethod":"GET","checked":true,"key":"2-2-0-3-2"},{"serviceUrl":"/yard/spd/spdPoContractAdjusts/conItemId,{conItemId}/count","serviceMethod":"GET","checked":true,"key":"2-2-0-3-3"},{"serviceUrl":"/yard/spd/spdPoContractAdjusts/conItemId,{conItemId}","serviceMethod":"GET","checked":true,"key":"2-2-0-3-4"},{"serviceUrl":"/yard/spd/spdPoContractAdjusts/{adjustId}/checkState/commited","serviceMethod":"PUT","checked":true,"key":"2-2-0-3-5"},{"serviceUrl":"/yard/spd/spdPoContractAdjusts/{adjustId}","serviceMethod":"GET","checked":true,"key":"2-2-0-3-6"}],"checked":true,"key":"2-2-0-3-0","id":"P0481"},{"opId":"P0482","opName":"配额调节管理审核","opSort":"P0482","elementClass":"acl_edit_spdPoContractItemAdjust,acl_reviewEntity_spdPoContractAdjust","webApis":[{"serviceUrl":"/yard/spd/spdPoContractAdjusts/{adjustId}/checkState/reviewed","serviceMethod":"PUT","checked":true,"key":"2-2-0-4-0"},{"serviceUrl":"/yard/spd/spdPoContractItems/byAdjust/count","serviceMethod":"GET","checked":true,"key":"2-2-0-4-1"},{"serviceUrl":"/yard/spd/spdPoContractItems/byAdjust","serviceMethod":"GET","checked":true,"key":"2-2-0-4-2"},{"serviceUrl":"/yard/spd/spdPoContracts/ids,{ids}","serviceMethod":"GET","checked":true,"key":"2-2-0-4-3"},{"serviceUrl":"/yard/spd/spdPoContractAdjusts/conItemId,{conItemId}","serviceMethod":"GET","checked":true,"key":"2-2-0-4-4"},{"serviceUrl":"/yard/spd/spdPoContractAdjusts/conItemId,{conItemId}/count","serviceMethod":"GET","checked":true,"key":"2-2-0-4-5"},{"serviceUrl":"/yard/spd/spdPoContractAdjusts/{adjustId}","serviceMethod":"GET","checked":true,"key":"2-2-0-4-6"}],"checked":true,"key":"2-2-0-4-0","id":"P0482"},{"opId":"P0098","opName":"配额调节管理查看","opSort":"P0098","elementClass":"acl_view_spdPoContractItemAdjust,acl_view_spdPoContractAdjust","webApis":[{"serviceUrl":"/yard/spd/spdPoContracts/ids,{ids}","serviceMethod":"GET","checked":true,"key":"2-2-0-5-0"},{"serviceUrl":"/yard/spd/spdPoContractItems/byAdjust/count","serviceMethod":"GET","checked":true,"key":"2-2-0-5-1"},{"serviceUrl":"/yard/spd/spdPoContractItems/byAdjust","serviceMethod":"GET","checked":true,"key":"2-2-0-5-2"},{"serviceUrl":"/yard/spd/spdPoContractAdjusts/conItemId,{conItemId}/count","serviceMethod":"GET","checked":true,"key":"2-2-0-5-3"},{"serviceUrl":"/yard/spd/spdPoContractAdjusts/conItemId,{conItemId}","serviceMethod":"GET","checked":true,"key":"2-2-0-5-4"}],"checked":true,"key":"2-2-0-5-0","id":"P0098"}],"checked":true,"key":"2-2-0-0-0"}],"children":[],"topMenu":false,"checked":true,"key":"2-2-0-0-0"},{"systemName":"收货系统","menuId":"10003-004","menuCode":"10003-004","menuParentId":"10003","icon":null,"menuSort":4,"name":"采购订单管理","level":2,"anchor":"#spd/spdPurchPos","functions":[{"functionId":"F0013","functionName":"采购订单管理","operations":[{"opId":"P0089","opName":"采购订单管理查看","opSort":"P0089","elementClass":"acl_view_spdPurch,acl_view_spdPurchItem","webApis":[{"serviceUrl":"/yard/spd/spdPurchItems/detail/poId,{poId}/pdf","serviceMethod":"GET","checked":true,"key":"2-3-0-0-0"},{"serviceUrl":"/yard/spd/spdDepotCards/{cardId}","serviceMethod":"GET","checked":true,"key":"2-3-0-0-1"},{"serviceUrl":"/yard/spd/spdPurchs/count","serviceMethod":"GET","checked":true,"key":"2-3-0-0-2"},{"serviceUrl":"/yard/spd/spdPurchs","serviceMethod":"GET","checked":true,"key":"2-3-0-0-3"},{"serviceUrl":"/yard/spd/spdPoContracts/{poId}","serviceMethod":"GET","checked":true,"key":"2-3-0-0-4"},{"serviceUrl":"/yard/spd/spdPurchs/{ids}","serviceMethod":"GET","checked":true,"key":"2-3-0-0-5"},{"serviceUrl":"/yard/spd/spdPurchItems","serviceMethod":"GET","checked":true,"key":"2-3-0-0-6"}],"checked":true,"key":"2-3-0-0-0","id":"P0089"},{"opId":"P0090","opName":"采购订单管理编辑","opSort":"P0090","elementClass":"acl_edit_spdPurch,acl_edit_spdPurchItem,acl_view_spdPurchItem,acl_add_spdPurchItem,acl_delete_spdPurchItem","webApis":[{"serviceUrl":"/yard/spd/spdPurchItems/poId,{poId}","serviceMethod":"GET","checked":true,"key":"2-3-0-1-0"},{"serviceUrl":"/yard/spd/spdPurchs/byPurchase/count","serviceMethod":"GET","checked":true,"key":"2-3-0-1-1"},{"serviceUrl":"/yard/spd/spdPurchs/byPurchase","serviceMethod":"GET","checked":true,"key":"2-3-0-1-2"},{"serviceUrl":"/yard/spd/spdDepotCards/count","serviceMethod":"GET","checked":true,"key":"2-3-0-1-3"},{"serviceUrl":"/yard/spd/spdDepotCards","serviceMethod":"GET","checked":true,"key":"2-3-0-1-4"},{"serviceUrl":"/yard/spd/spdPoContracts/count","serviceMethod":"GET","checked":true,"key":"2-3-0-1-5"},{"serviceUrl":"/yard/spd/spdPoContracts","serviceMethod":"GET","checked":true,"key":"2-3-0-1-6"},{"serviceUrl":"/yard/spd/spdPurchItems","serviceMethod":"POST","checked":true,"key":"2-3-0-1-7"},{"serviceUrl":"/yard/spd/spdPurchs/{poId}","serviceMethod":"PUT","checked":true,"key":"2-3-0-1-8"},{"serviceUrl":"/yard/spd/spdPurchItems/{poItemId}","serviceMethod":"PUT","checked":true,"key":"2-3-0-1-9"},{"serviceUrl":"/yard/spd/spdDepotCards/{cardId}","serviceMethod":"GET","checked":true,"key":"2-3-0-1-10"},{"serviceUrl":"/yard/spd/spdGoodsContractViews/{depotId},{supplierOrg}","serviceMethod":"GET","checked":true,"key":"2-3-0-1-11"},{"serviceUrl":"/yard/spd/spdGoodsContractViews/{depotId},{supplierOrg}/count","serviceMethod":"GET","checked":true,"key":"2-3-0-1-12"},{"serviceUrl":"/yard/spd/spdPurchItems/poId,{poId}/count","serviceMethod":"GET","checked":true,"key":"2-3-0-1-13"}],"checked":true,"key":"2-3-0-1-0","id":"P0090"},{"opId":"P0091","opName":"采购订单管理增加","opSort":"P0091","elementClass":"acl_add_spdPurch,acl_add_spdPurchItem,acl_view_spdPurchItem,acl_edit_spdPurchItem,acl_delete_spdPurchItem","webApis":[{"serviceUrl":"/yard/spd/spdPurchs","serviceMethod":"POST","checked":true,"key":"2-3-0-2-0"},{"serviceUrl":"/yard/spd/spdPurchs/byPurchase","serviceMethod":"GET","checked":true,"key":"2-3-0-2-1"},{"serviceUrl":"/yard/spd/spdPurchs/byPurchase/count","serviceMethod":"GET","checked":true,"key":"2-3-0-2-2"},{"serviceUrl":"/yard/pcs/pcsDepots/byReceivePoint,{ownerOrgId}/count","serviceMethod":"GET","checked":true,"key":"2-3-0-2-3"},{"serviceUrl":"/yard/pcs/pcsDepots/byOwnerHospital,{ownerOrgId}","serviceMethod":"GET","checked":true,"key":"2-3-0-2-4"},{"serviceUrl":"/yard/spd/spdDepotCards/byOwnerDepot,{depotId}","serviceMethod":"GET","checked":true,"key":"2-3-0-2-5"},{"serviceUrl":"/yard/spd/spdDepotCards/byOwnerDepot,{depotId}/count","serviceMethod":"GET","checked":true,"key":"2-3-0-2-6"},{"serviceUrl":"/yard/spd/spdPurchs","serviceMethod":"POST","checked":true,"key":"2-3-0-2-7"},{"serviceUrl":"/yard/spd/spdGoodsContractViews/{depotId},{supplierOrg}","serviceMethod":"GET","checked":true,"key":"2-3-0-2-8"},{"serviceUrl":"/yard/spd/spdGoodsContractViews/{depotId},{supplierOrg}/count","serviceMethod":"GET","checked":true,"key":"2-3-0-2-9"},{"serviceUrl":"/yard/spd/spdPurchItems/poId,{poId}/count","serviceMethod":"GET","checked":true,"key":"2-3-0-2-10"}],"checked":true,"key":"2-3-0-2-0","id":"P0091"},{"opId":"P0092","opName":"采购订单管理删除","opSort":"P0092","elementClass":"acl_delete_spdPurch,acl_delete_spdPurchItem","webApis":[{"serviceUrl":"/yard/spd/spdPurchs/{poId}","serviceMethod":"DELETE","checked":true,"key":"2-3-0-3-0"},{"serviceUrl":"/yard/spd/spdPurchItems/{poItemId}","serviceMethod":"DELETE","checked":true,"key":"2-3-0-3-1"},{"serviceUrl":"/yard/spd/spdPurchItems/poId,{poId}","serviceMethod":"GET","checked":true,"key":"2-3-0-3-2"},{"serviceUrl":"/yard/spd/spdPurchs/byPurchase/count","serviceMethod":"GET","checked":true,"key":"2-3-0-3-3"},{"serviceUrl":"/yard/spd/spdPurchs/byPurchase","serviceMethod":"GET","checked":true,"key":"2-3-0-3-4"}],"checked":true,"key":"2-3-0-3-0","id":"P0092"},{"opId":"P0094","opName":"采购订单管理审核","opSort":"P0094","elementClass":"acl_reviewEntity_spdPurch","webApis":[],"checked":true,"key":"2-3-0-4-0","id":"P0094"},{"opId":"P0306","opName":"采购订单管理打印","opSort":"P0306","elementClass":"acl_export_PurchItem","webApis":[{"serviceUrl":"/yard/spd/spdPurchItems/detail/poId,{poId}/pdf","serviceMethod":"GET","checked":true,"key":"2-3-0-5-0"},{"serviceUrl":"/yard/spd/spdPurchItems/detail/poId,{poId}/pdf","serviceMethod":"GET","checked":true,"key":"2-3-0-5-1"}],"checked":true,"key":"2-3-0-5-0","id":"P0306"}],"checked":true,"key":"2-3-0-0-0"}],"children":[],"topMenu":false,"checked":true,"key":"2-3-0-0-0"},{"systemName":"收货系统","menuId":"10003-005","menuCode":"10003-005","menuParentId":"10003","icon":null,"menuSort":5,"name":"备货业务管理","level":2,"anchor":"#spd/spdPurchRes","functions":[{"functionId":"F0038","functionName":"备货业务管理","operations":[{"opId":"P0258","opName":"备货业务管理增加","opSort":"P0258","elementClass":"acl_add_spdPurchRe,acl_add_spdPurchItemRe,acl_view_spdPurchRe,acl_view_spdPurchItemRe,acl_edit_spdPurchItemRe,acl_delete_spdPurchItemRe","webApis":[{"serviceUrl":"/yard/spd/spdPurchs","serviceMethod":"POST","checked":true,"key":"2-4-0-0-0"},{"serviceUrl":"/yard/spd/spdPurchs/byStocking","serviceMethod":"GET","checked":true,"key":"2-4-0-0-1"},{"serviceUrl":"/yard/spd/spdPurchs/byStocking/count","serviceMethod":"GET","checked":true,"key":"2-4-0-0-2"},{"serviceUrl":"/yard/pcs/pcsDepots/byOwnerSupplier,{ownerOrgId}/count","serviceMethod":"GET","checked":true,"key":"2-4-0-0-3"},{"serviceUrl":"/yard/pcs/pcsDepots/byOwnerSupplier,{ownerOrgId}","serviceMethod":"GET","checked":true,"key":"2-4-0-0-4"},{"serviceUrl":"/yard/spd/spdPurchItems/{poItemId}","serviceMethod":"PUT","checked":true,"key":"2-4-0-0-5"}],"checked":true,"key":"2-4-0-0-0","id":"P0258"},{"opId":"P0259","opName":"备货业务管理编辑","opSort":"P0259","elementClass":"acl_edit_spdPurchRe,acl_edit_spdPurchItemRe,acl_view_spdPurchItemRe,acl_add_spdPurchItemRe,acl_delete_spdPurchItemRe","webApis":[{"serviceUrl":"/yard/spd/spdPurchs/byStocking","serviceMethod":"GET","checked":true,"key":"2-4-0-1-0"},{"serviceUrl":"/yard/spd/spdPurchs/byStocking/count","serviceMethod":"GET","checked":true,"key":"2-4-0-1-1"},{"serviceUrl":"/yard/spd/spdPurchItems/poId,{poId}","serviceMethod":"GET","checked":true,"key":"2-4-0-1-2"},{"serviceUrl":"/yard/spd/spdPurchs/{poId}","serviceMethod":"PUT","checked":true,"key":"2-4-0-1-3"}],"checked":true,"key":"2-4-0-1-0","id":"P0259"},{"opId":"P0260","opName":"备货业务管理查看","opSort":"P0260","elementClass":"acl_view_spdPurchRe,acl_view_spdPurchItemRe","webApis":[{"serviceUrl":"/yard/spd/spdPurchItems/poId,{poId}","serviceMethod":"GET","checked":true,"key":"2-4-0-2-0"}],"checked":true,"key":"2-4-0-2-0","id":"P0260"},{"opId":"P0261","opName":"备货业务管理审核","opSort":"P0261","elementClass":"acl_reviewEntity_spdPurchRe","webApis":[],"checked":true,"key":"2-4-0-3-0","id":"P0261"},{"opId":"P0262","opName":"备货业务管理提交","opSort":"P0262","elementClass":"acl_commitEntity_spdPurchRe","webApis":[],"checked":true,"key":"2-4-0-4-0","id":"P0262"},{"opId":"P0264","opName":"备货业务管理删除","opSort":"P0264","elementClass":"acl_delete_spdPurchRe,acl_delete_spdPurchItemRe","webApis":[{"serviceUrl":"/yard/spd/spdPurchs/byStocking","serviceMethod":"GET","checked":true,"key":"2-4-0-5-0"},{"serviceUrl":"/yard/spd/spdPurchs/byStocking/count","serviceMethod":"GET","checked":true,"key":"2-4-0-5-1"}],"checked":true,"key":"2-4-0-5-0","id":"P0264"}],"checked":true,"key":"2-4-0-0-0"}],"children":[],"topMenu":false,"checked":true,"key":"2-4-0-0-0"},{"systemName":"收货系统","menuId":"10003-006","menuCode":"10003-006","menuParentId":"10003","icon":null,"menuSort":6,"name":"业务模版管理","level":2,"anchor":"#spd/spdBizExamples","functions":[{"functionId":"F0063","functionName":"业务模版管理","operations":[{"opId":"P0493","opName":"业务模版管理查看","opSort":"P0493","elementClass":"acl_view_spdBizExample,acl_view_spdBizExampleItem","webApis":[{"serviceUrl":"/yard/spd/spdBizExampleItems/exampleId,{exampleId}","serviceMethod":"GET","checked":true,"key":"2-5-0-0-0"},{"serviceUrl":"/yard/spd/spdBizExampleItems/exampleId,{exampleId}/count","serviceMethod":"GET","checked":true,"key":"2-5-0-0-1"},{"serviceUrl":"/yard/spd/spdBizExamples/count","serviceMethod":"GET","checked":true,"key":"2-5-0-0-2"},{"serviceUrl":"/yard/spd/spdBizExamples","serviceMethod":"GET","checked":true,"key":"2-5-0-0-3"}],"checked":true,"key":"2-5-0-0-0","id":"P0493"},{"opId":"P0494","opName":"业务模版管理新增","opSort":"P0494","elementClass":"acl_add_spdBizExample,acl_add_spdBizExampleItem,acl_view_spdBizExampleItem,acl_edit_spdBizExampleItem,acl_delete _spdBizExampleItem","webApis":[{"serviceUrl":"/yard/spd/spdBizExamples/count","serviceMethod":"GET","checked":true,"key":"2-5-0-1-0"},{"serviceUrl":"/yard/spd/spdBizExamples","serviceMethod":"GET","checked":true,"key":"2-5-0-1-1"},{"serviceUrl":"/yard/spd/spdBizExamples","serviceMethod":"POST","checked":true,"key":"2-5-0-1-2"},{"serviceUrl":"/yard/spd/spdBizExampleItems/exampleId,{exampleId}","serviceMethod":"GET","checked":true,"key":"2-5-0-1-3"},{"serviceUrl":"/yard/spd/spdBizExampleItems/exampleId,{exampleId}/count","serviceMethod":"GET","checked":true,"key":"2-5-0-1-4"},{"serviceUrl":"/yard/spd/spdDepotCards/byUse/count","serviceMethod":"GET","checked":true,"key":"2-5-0-1-5"},{"serviceUrl":"/yard/spd/spdDepotCards/byUse","serviceMethod":"GET","checked":true,"key":"2-5-0-1-6"},{"serviceUrl":"/yard/spd/ydsGoods/ids,{ids}","serviceMethod":"GET","checked":true,"key":"2-5-0-1-7"},{"serviceUrl":"/yard/spd/ydsGoods/{goodsId}","serviceMethod":"GET","checked":true,"key":"2-5-0-1-8"},{"serviceUrl":"/yard/spd/spdBizExampleItems","serviceMethod":"POST","checked":true,"key":"2-5-0-1-9"}],"checked":true,"key":"2-5-0-1-0","id":"P0494"},{"opId":"P0495","opName":"业务模版管理编辑","opSort":"P0495","elementClass":"acl_edit_spdBizExample,acl_edit_spdBizExampleItem,acl_view_spdBizExampleItem,acl_add_spdBizExampleItem,acl_delete _spdBizExampleItem","webApis":[{"serviceUrl":"/yard/spd/spdBizExampleItems/exampleId,{exampleId}","serviceMethod":"GET","checked":true,"key":"2-5-0-2-0"},{"serviceUrl":"/yard/spd/spdBizExampleItems/exampleId,{exampleId}/count","serviceMethod":"GET","checked":true,"key":"2-5-0-2-1"},{"serviceUrl":"/yard/spd/spdBizExamples/count","serviceMethod":"GET","checked":true,"key":"2-5-0-2-2"},{"serviceUrl":"/yard/spd/spdBizExamples","serviceMethod":"GET","checked":true,"key":"2-5-0-2-3"},{"serviceUrl":"/yard/spd/ydsGoods/ids,{ids}","serviceMethod":"GET","checked":true,"key":"2-5-0-2-4"},{"serviceUrl":"/yard/spd/spdDepotFixedCards/{cardFixedId}","serviceMethod":"GET","checked":true,"key":"2-5-0-2-5"},{"serviceUrl":"/yard/spd/spdBizExamples/{exampleId}","serviceMethod":"PUT","checked":true,"key":"2-5-0-2-6"},{"serviceUrl":"/yard/spd/ydsGoods/{goodsId}","serviceMethod":"GET","checked":true,"key":"2-5-0-2-7"},{"serviceUrl":"/yard/spd/spdBizExampleItems/{exampleItemId}","serviceMethod":"PUT","checked":true,"key":"2-5-0-2-8"}],"checked":true,"key":"2-5-0-2-0","id":"P0495"},{"opId":"P0496","opName":"业务模版管理删除","opSort":"P0496","elementClass":"acl_delete_spdBizExample,acl_delete_spdBizExampleItem","webApis":[{"serviceUrl":"/yard/spd/spdBizExamples/count","serviceMethod":"GET","checked":true,"key":"2-5-0-3-0"},{"serviceUrl":"/yard/spd/spdBizExamples","serviceMethod":"GET","checked":true,"key":"2-5-0-3-1"},{"serviceUrl":"/yard/spd/spdBizExamples/{exampleId}","serviceMethod":"DELETE","checked":true,"key":"2-5-0-3-2"},{"serviceUrl":"/yard/spd/spdBizExampleItems/{exampleItemId}","serviceMethod":"DELETE","checked":true,"key":"2-5-0-3-3"}],"checked":true,"key":"2-5-0-3-0","id":"P0496"},{"opId":"P0497","opName":"业务模版管理提交","opSort":"P0497","elementClass":null,"webApis":[],"checked":true,"key":"2-5-0-4-0","id":"P0497"}],"checked":true,"key":"2-5-0-0-0"}],"children":[],"topMenu":false,"checked":true,"key":"2-5-0-0-0"}],"topMenu":true,"open":false,"checked":true,"key":"2-0-0-0-0"},{"systemName":"收货系统","menuId":"10004","menuCode":"10004","menuParentId":"-1","icon":"fa-ambulance","menuSort":4,"name":"供应配货管理","level":1,"anchor":null,"functions":null,"children":[{"systemName":"收货系统","menuId":"10004-001","menuCode":"10004-001","menuParentId":"10004","icon":null,"menuSort":1,"name":"供应信息录入","level":2,"anchor":"#spd/spdSellerSends","functions":[{"functionId":"F0004","functionName":"供应信息录入","operations":[{"opId":"P0024","opName":"供应信息录入查看","opSort":"P0024","elementClass":"acl_view_spdSellerSend,acl_view_spdSellerSendItem","webApis":[{"serviceUrl":"/yard/spd/spdSellerSends","serviceMethod":"GET","checked":true,"key":"3-0-0-0-0"},{"serviceUrl":"/yard/pcs/pcsDepots/ids,{ids}","serviceMethod":"GET","checked":true,"key":"3-0-0-0-1"},{"serviceUrl":"/yard/spd/spdSellerSends","serviceMethod":"GET","checked":true,"key":"3-0-0-0-2"},{"serviceUrl":"/yard/spd/spdSellerSends/count","serviceMethod":"GET","checked":true,"key":"3-0-0-0-3"},{"serviceUrl":"/yard/spd/spdSellerSends/{sendId}","serviceMethod":"GET","checked":true,"key":"3-0-0-0-4"},{"serviceUrl":"/yard/spd/spdSellerSendItems","serviceMethod":"GET","checked":true,"key":"3-0-0-0-5"},{"serviceUrl":"/yard/spd/spdSellerSendItems/count","serviceMethod":"GET","checked":true,"key":"3-0-0-0-6"},{"serviceUrl":"/yard/spd/spdSellerSendItems/{sendItemId}","serviceMethod":"GET","checked":true,"key":"3-0-0-0-7"},{"serviceUrl":"/yard/spd/ydsEdsGoodsLots/{edsGoodsLotId}","serviceMethod":"GET","checked":true,"key":"3-0-0-0-8"},{"serviceUrl":"/yard/spd/ydsEdsGoodsLots/depotId,{depotId}","serviceMethod":"GET","checked":true,"key":"3-0-0-0-9"}],"checked":true,"key":"3-0-0-0-0","id":"P0024"},{"opId":"P0668","opName":"导入送货单","opSort":"P0668","elementClass":"","webApis":[{"serviceUrl":"/yard/spd/batchCreateDeliverySheetTasks","serviceMethod":"POST","checked":true,"key":"3-0-0-1-0"}],"checked":true,"key":"3-0-0-1-0","id":"P0668"},{"opId":"P0026","opName":"供应信息录入编辑","opSort":"P0026","elementClass":"acl_edit_spdSellerSend,acl_edit_spdSellerSendItem,acl_view_spdSellerSendItem,acl_add_spdSellerSendItem,acl_delete_spdSellerSendItem","webApis":[{"serviceUrl":"/yard/pcs/pcsDepots/depotId","serviceMethod":"GET","checked":true,"key":"3-0-0-2-0"},{"serviceUrl":"/yard/spd/ydsEdsGoods","serviceMethod":"GET","checked":true,"key":"3-0-0-2-1"},{"serviceUrl":"/yard/spd/ydsEdsGoods/count","serviceMethod":"GET","checked":true,"key":"3-0-0-2-2"},{"serviceUrl":"/yard/spd/ydsEdsGoodsLots","serviceMethod":"GET","checked":true,"key":"3-0-0-2-3"},{"serviceUrl":"/yard/spd/ydsEdsGoodsLots/count","serviceMethod":"GET","checked":true,"key":"3-0-0-2-4"},{"serviceUrl":"/yard/spd/spdSellerSends/{sendId},sendId","serviceMethod":"GET","checked":true,"key":"3-0-0-2-5"},{"serviceUrl":"/yard/spd/spdSellerSends/{sendId}","serviceMethod":"PUT","checked":true,"key":"3-0-0-2-6"},{"serviceUrl":"/yard/spd/spdSellerSendItems/sendId,{sendId}/count","serviceMethod":"GET","checked":true,"key":"3-0-0-2-7"},{"serviceUrl":"/yard/spd/spdSellerSends/{sendId}","serviceMethod":"GET","checked":true,"key":"3-0-0-2-8"},{"serviceUrl":"/yard/spd/spdSellerSends","serviceMethod":"GET","checked":true,"key":"3-0-0-2-9"},{"serviceUrl":"/yard/spd/spdSellerSends/count","serviceMethod":"GET","checked":true,"key":"3-0-0-2-10"},{"serviceUrl":"/yard/spd/spdSellerSendItems/count","serviceMethod":"GET","checked":true,"key":"3-0-0-2-11"},{"serviceUrl":"/yard/spd/spdSellerSendItems/{sendItemId}","serviceMethod":"GET","checked":true,"key":"3-0-0-2-12"},{"serviceUrl":"/yard/spd/spdSellerSendItems/{sendItemId}","serviceMethod":"PUT","checked":true,"key":"3-0-0-2-13"},{"serviceUrl":"/yard/spd/spdSellerSends/{sendId}","serviceMethod":"PUT","checked":true,"key":"3-0-0-2-14"},{"serviceUrl":"/yard/spd/ydsEdsGoodsLots/{edsGoodsLotId}","serviceMethod":"GET","checked":true,"key":"3-0-0-2-15"},{"serviceUrl":"/yard/spd/spdSellerSendItems","serviceMethod":"GET","checked":true,"key":"3-0-0-2-16"}],"checked":true,"key":"3-0-0-2-0","id":"P0026"},{"opId":"P0029","opName":"供应信息录入审核","opSort":"P0029","elementClass":"acl_reviewEntity_spdSellerSend","webApis":[{"serviceUrl":"/yard/spd/ydsEdsGoods/ids,{ids}","serviceMethod":"GET","checked":true,"key":"3-0-0-3-0"},{"serviceUrl":"/yard/spd/spdSellerSends","serviceMethod":"GET","checked":true,"key":"3-0-0-3-1"},{"serviceUrl":"/yard/spd/spdSellerSends/count","serviceMethod":"GET","checked":true,"key":"3-0-0-3-2"},{"serviceUrl":"/yard/spd/spdSellerSends/{sendId}","serviceMethod":"GET","checked":true,"key":"3-0-0-3-3"},{"serviceUrl":"/yard/spd/spdSellerSendItems","serviceMethod":"GET","checked":true,"key":"3-0-0-3-4"},{"serviceUrl":"/yard/spd/spdSellerSendItems/count","serviceMethod":"GET","checked":true,"key":"3-0-0-3-5"},{"serviceUrl":"/yard/spd/spdSellerSendItems/{sendItemId}","serviceMethod":"GET","checked":true,"key":"3-0-0-3-6"},{"serviceUrl":"/yard/spd/spdSellerSendItems/{sendItemId}/checkState/reviewed","serviceMethod":"PUT","checked":true,"key":"3-0-0-3-7"},{"serviceUrl":"/yard/spd/spdSellerSend/{sendItemId}/checkState/reviewed","serviceMethod":"PUT","checked":true,"key":"3-0-0-3-8"},{"serviceUrl":"/yard/spd/ydsEdsGoodsLots/ids,{ids}","serviceMethod":"GET","checked":true,"key":"3-0-0-3-9"}],"checked":true,"key":"3-0-0-3-0","id":"P0029"},{"opId":"P0031","opName":"供应信息录入打印","opSort":"P0031","elementClass":"acl_view_spdSellerSend,acl_view_spdSellerSendItem,acl_exportDetail,acl_exportBoxNo,acl_exportLabel","webApis":[{"serviceUrl":"/yard/spd/spdSellerSends","serviceMethod":"GET","checked":true,"key":"3-0-0-4-0"},{"serviceUrl":"/yard/spd/spdSellerSends","serviceMethod":"GET","checked":true,"key":"3-0-0-4-1"},{"serviceUrl":"/yard/spd/spdSellerSends/count","serviceMethod":"GET","checked":true,"key":"3-0-0-4-2"},{"serviceUrl":"/yard/spd/spdSellerSends/{sendId}","serviceMethod":"GET","checked":true,"key":"3-0-0-4-3"},{"serviceUrl":"/yard/spd/spdSellerSendItems","serviceMethod":"GET","checked":true,"key":"3-0-0-4-4"},{"serviceUrl":"/yard/spd/spdSellerSendItems/count","serviceMethod":"GET","checked":true,"key":"3-0-0-4-5"},{"serviceUrl":"/yard/spd/spdSellerSendItems/{sendItemId}","serviceMethod":"GET","checked":true,"key":"3-0-0-4-6"},{"serviceUrl":"/yard/spd/spdSellerSendItems/sendId,{sendId}/pdf","serviceMethod":"GET","checked":true,"key":"3-0-0-4-7"},{"serviceUrl":"/yard/spd/spdSellerSend/sendId,{sendId}/pdf","serviceMethod":"GET","checked":true,"key":"3-0-0-4-8"}],"checked":true,"key":"3-0-0-4-0","id":"P0031"},{"opId":"P0025","opName":"供应信息录入新增","opSort":"P0025","elementClass":"acl_add_spdSellerSend,acl_add_spdSellerSendItem,acl_view_spdSellerSendItem,acl_edit_spdSellerSendItem,acl_delete_spdSellerSendItem","webApis":[{"serviceUrl":"/yard/spd/ydsEdsGoodsLots","serviceMethod":"POST","checked":true,"key":"3-0-0-5-0"},{"serviceUrl":"/yard/spd/spdSellerSends","serviceMethod":"POST","checked":true,"key":"3-0-0-5-1"},{"serviceUrl":"/yard/spd/spdSellerSends","serviceMethod":"GET","checked":true,"key":"3-0-0-5-2"},{"serviceUrl":"/yard/spd/spdSellerSends/count","serviceMethod":"GET","checked":true,"key":"3-0-0-5-3"},{"serviceUrl":"/yard/spd/spdSellerSends","serviceMethod":"GET","checked":true,"key":"3-0-0-5-4"},{"serviceUrl":"/yard/spd/ydsEdsGoods/byDepotCard,{depotId}","serviceMethod":"GET","checked":true,"key":"3-0-0-5-5"},{"serviceUrl":"/yard/spd/ydsEdsGoods/byDepotCard,{depotId}/count","serviceMethod":"GET","checked":true,"key":"3-0-0-5-6"},{"serviceUrl":"/yard/spd/ydsEdsGoods/ids,{ids}","serviceMethod":"GET","checked":true,"key":"3-0-0-5-7"},{"serviceUrl":"/yard/spd/ydsEdsGoods/{edsGoodsId}","serviceMethod":"GET","checked":true,"key":"3-0-0-5-8"},{"serviceUrl":"/yard/spd/ydsEdsGoodsLots/edsGoodsId,{edsGoodsId}","serviceMethod":"GET","checked":true,"key":"3-0-0-5-9"},{"serviceUrl":"/yard/spd/ydsEdsGoodsLots/ids,{ids}","serviceMethod":"GET","checked":true,"key":"3-0-0-5-10"},{"serviceUrl":"/yard/spd/spdSellerSends/{sendId}","serviceMethod":"GET","checked":true,"key":"3-0-0-5-11"},{"serviceUrl":"/yard/spd/spdSellerSendItems","serviceMethod":"GET","checked":true,"key":"3-0-0-5-12"},{"serviceUrl":"/yard/spd/spdSellerSendItems/count","serviceMethod":"GET","checked":true,"key":"3-0-0-5-13"},{"serviceUrl":"/yard/spd/spdSellerSendItems/{sendItemId}","serviceMethod":"GET","checked":true,"key":"3-0-0-5-14"},{"serviceUrl":"/yard/spd/spdSellerSendItems","serviceMethod":"POST","checked":true,"key":"3-0-0-5-15"},{"serviceUrl":"/yard/pcs/pcsDepots/byReceivePoint,{ownerOrgId}","serviceMethod":"GET","checked":true,"key":"3-0-0-5-16"},{"serviceUrl":"/yard/pcs/pcsDepots/byReceivePoint,{ownerOrgId}/count","serviceMethod":"GET","checked":true,"key":"3-0-0-5-17"},{"serviceUrl":"/yard/pcs/pcsDepots/byReceivePointOffer,{manageOrgId}","serviceMethod":"GET","checked":true,"key":"3-0-0-5-18"},{"serviceUrl":"/yard/pcs/pcsDepots/byReceivePointOffer,{manageOrgId}/count","serviceMethod":"GET","checked":true,"key":"3-0-0-5-19"}],"checked":true,"key":"3-0-0-5-0","id":"P0025"},{"opId":"P0027","opName":"供应信息录入删除","opSort":"P0027","elementClass":"acl_delete_spdSellerSend,acl_delete_spdSellerSendItem","webApis":[{"serviceUrl":"/yard/spd/spdSellerSends","serviceMethod":"GET","checked":true,"key":"3-0-0-6-0"},{"serviceUrl":"/yard/spd/spdSellerSends/count","serviceMethod":"GET","checked":true,"key":"3-0-0-6-1"},{"serviceUrl":"/yard/spd/spdSellerSends/{sendId}","serviceMethod":"GET","checked":true,"key":"3-0-0-6-2"},{"serviceUrl":"/yard/spd/spdSellerSendItems","serviceMethod":"GET","checked":true,"key":"3-0-0-6-3"},{"serviceUrl":"/yard/spd/spdSellerSendItems/count","serviceMethod":"GET","checked":true,"key":"3-0-0-6-4"},{"serviceUrl":"/yard/spd/spdSellerSendItems/{sendItemId}","serviceMethod":"GET","checked":true,"key":"3-0-0-6-5"},{"serviceUrl":"/yard/spd/spdSellerSends/{sendId}","serviceMethod":"DELETE","checked":true,"key":"3-0-0-6-6"},{"serviceUrl":"/yard/spd/spdSellerSendItems/{sendItemId}","serviceMethod":"DELETE","checked":true,"key":"3-0-0-6-7"}],"checked":true,"key":"3-0-0-6-0","id":"P0027"}],"checked":true,"key":"3-0-0-0-0"}],"children":[],"topMenu":false,"checked":true,"key":"3-0-0-0-0"},{"systemName":"收货系统","menuId":"10004-002","menuCode":"10004-002","menuParentId":"10004","icon":null,"menuSort":2,"name":"送货信息录入","level":2,"anchor":"#spd/spdSellerSendSupplys","functions":[{"functionId":"F0034","functionName":"送货信息录入","operations":[{"opId":"P0226","opName":"送货信息录入新增","opSort":"P0226","elementClass":"acl_add_spdSellerSendSupply,acl_add_spdSellerSendItemSupply,acl_view_spdSellerSendItemSupply","webApis":[{"serviceUrl":"/yard/spd/ydsEdsGoodsLots","serviceMethod":"POST","checked":true,"key":"3-1-0-0-0"},{"serviceUrl":"/yard/spd/spdSellerSends","serviceMethod":"POST","checked":true,"key":"3-1-0-0-1"},{"serviceUrl":"/yard/spd/spdSellerSends/byOrder","serviceMethod":"GET","checked":true,"key":"3-1-0-0-2"},{"serviceUrl":"/yard/spd/spdSellerSends/byOrder/count","serviceMethod":"GET","checked":true,"key":"3-1-0-0-3"},{"serviceUrl":"/yard/spd/ydsEdsGoods/ids,{ids}","serviceMethod":"GET","checked":true,"key":"3-1-0-0-4"},{"serviceUrl":"/yard/spd/ydsEdsGoods/{edsGoodsId}","serviceMethod":"GET","checked":true,"key":"3-1-0-0-5"},{"serviceUrl":"/yard/spd/ydsEdsGoodsLots/edsGoodsId,{edsGoodsId}","serviceMethod":"GET","checked":true,"key":"3-1-0-0-6"},{"serviceUrl":"/yard/spd/ydsEdsGoodsLots/ids,{ids}","serviceMethod":"GET","checked":true,"key":"3-1-0-0-7"},{"serviceUrl":"/yard/spd/spdSellerSends/{sendId}","serviceMethod":"GET","checked":true,"key":"3-1-0-0-8"},{"serviceUrl":"/yard/spd/spdSellerSendItems","serviceMethod":"GET","checked":true,"key":"3-1-0-0-9"},{"serviceUrl":"/yard/spd/spdSellerSendItems/count","serviceMethod":"GET","checked":true,"key":"3-1-0-0-10"},{"serviceUrl":"/yard/spd/spdSellerSendItems/{sendItemId}","serviceMethod":"GET","checked":true,"key":"3-1-0-0-11"},{"serviceUrl":"/yard/spd/spdSellerSendItems","serviceMethod":"POST","checked":true,"key":"3-1-0-0-12"},{"serviceUrl":"/yard/pcs/pcsDepots/byReceivePoint,{ownerOrgId}","serviceMethod":"GET","checked":true,"key":"3-1-0-0-13"},{"serviceUrl":"/yard/pcs/pcsDepots/byReceivePoint,{ownerOrgId}/count","serviceMethod":"GET","checked":true,"key":"3-1-0-0-14"},{"serviceUrl":"/yard/spd/spdGoodsPurchItemViews","serviceMethod":"GET","checked":true,"key":"3-1-0-0-15"},{"serviceUrl":"/yard/spd/spdGoodsPurchItemViews/count","serviceMethod":"GET","checked":true,"key":"3-1-0-0-16"},{"serviceUrl":"/yard/spd/spdPurchs/ids,{ids}","serviceMethod":"GET","checked":true,"key":"3-1-0-0-17"},{"serviceUrl":"/yard/spd/spdGoodsPurchItemViews/{rid}","serviceMethod":"GET","checked":true,"key":"3-1-0-0-18"}],"checked":true,"key":"3-1-0-0-0","id":"P0226"},{"opId":"P0225","opName":"送货信息录入编辑","opSort":"P0225","elementClass":"acl_edit_spdSellerSendSupply,acl_edit_spdSellerSendItemSupply,acl_view_spdSellerSendItemSupply,acl_delete_spdSellerSendItemSupply,acl_add_spdSellerSendItemSupply","webApis":[{"serviceUrl":"/yard/spd/spdSellerSends/byOrder","serviceMethod":"GET","checked":true,"key":"3-1-0-1-0"},{"serviceUrl":"/yard/spd/spdSellerSends/byOrder/count","serviceMethod":"GET","checked":true,"key":"3-1-0-1-1"},{"serviceUrl":"/yard/spd/ydsEdsGoods/ids,{ids}","serviceMethod":"GET","checked":true,"key":"3-1-0-1-2"},{"serviceUrl":"/yard/spd/ydsEdsGoods/{edsGoodsId}","serviceMethod":"GET","checked":true,"key":"3-1-0-1-3"},{"serviceUrl":"/yard/spd/ydsEdsGoodsLots/edsGoodsId,{edsGoodsId}","serviceMethod":"GET","checked":true,"key":"3-1-0-1-4"},{"serviceUrl":"/yard/spd/ydsEdsGoodsLots/ids,{ids}","serviceMethod":"GET","checked":true,"key":"3-1-0-1-5"},{"serviceUrl":"/yard/spd/spdSellerSends/{sendId}","serviceMethod":"GET","checked":true,"key":"3-1-0-1-6"},{"serviceUrl":"/yard/spd/spdSellerSendItems","serviceMethod":"GET","checked":true,"key":"3-1-0-1-7"},{"serviceUrl":"/yard/spd/spdSellerSendItems/count","serviceMethod":"GET","checked":true,"key":"3-1-0-1-8"},{"serviceUrl":"/yard/spd/spdSellerSendItems/{sendItemId}","serviceMethod":"GET","checked":true,"key":"3-1-0-1-9"},{"serviceUrl":"/yard/spd/spdSellerSendItems","serviceMethod":"POST","checked":true,"key":"3-1-0-1-10"},{"serviceUrl":"/yard/spd/spdGoodsPurchItemViews","serviceMethod":"GET","checked":true,"key":"3-1-0-1-11"},{"serviceUrl":"/yard/spd/spdGoodsPurchItemViews/count","serviceMethod":"GET","checked":true,"key":"3-1-0-1-12"},{"serviceUrl":"/yard/spd/spdPurchs/ids,{ids}","serviceMethod":"GET","checked":true,"key":"3-1-0-1-13"},{"serviceUrl":"/yard/spd/spdGoodsPurchItemViews/{rid}","serviceMethod":"GET","checked":true,"key":"3-1-0-1-14"}],"checked":true,"key":"3-1-0-1-0","id":"P0225"},{"opId":"P0224","opName":"送货信息录入查看","opSort":"P0224","elementClass":"acl_view_spdSellerSendSupply,acl_view_spdSellerSendItemSupply","webApis":[],"checked":true,"key":"3-1-0-2-0","id":"P0224"},{"opId":"P0229","opName":"送货信息录入打印","opSort":"P0229","elementClass":"acl_export_spdSellerSendItemSupply,acl_view_spdSellerSendSupply,acl_view_spdSellerSendItemSupply","webApis":[{"serviceUrl":"/yard/spd/ydsEdsGoodsLots","serviceMethod":"POST","checked":true,"key":"3-1-0-3-0"},{"serviceUrl":"/yard/spd/spdSellerSends","serviceMethod":"POST","checked":true,"key":"3-1-0-3-1"},{"serviceUrl":"/yard/spd/spdSellerSends/byOrder","serviceMethod":"GET","checked":true,"key":"3-1-0-3-2"},{"serviceUrl":"/yard/spd/spdSellerSends/byOrder/count","serviceMethod":"GET","checked":true,"key":"3-1-0-3-3"},{"serviceUrl":"/yard/spd/ydsEdsGoods/ids,{ids}","serviceMethod":"GET","checked":true,"key":"3-1-0-3-4"},{"serviceUrl":"/yard/spd/ydsEdsGoods/{edsGoodsId}","serviceMethod":"GET","checked":true,"key":"3-1-0-3-5"},{"serviceUrl":"/yard/spd/ydsEdsGoodsLots/edsGoodsId,{edsGoodsId}","serviceMethod":"GET","checked":true,"key":"3-1-0-3-6"},{"serviceUrl":"/yard/spd/ydsEdsGoodsLots/ids,{ids}","serviceMethod":"GET","checked":true,"key":"3-1-0-3-7"},{"serviceUrl":"/yard/spd/spdSellerSends/{sendId}","serviceMethod":"GET","checked":true,"key":"3-1-0-3-8"},{"serviceUrl":"/yard/spd/spdSellerSendItems","serviceMethod":"GET","checked":true,"key":"3-1-0-3-9"},{"serviceUrl":"/yard/spd/spdSellerSendItems/count","serviceMethod":"GET","checked":true,"key":"3-1-0-3-10"},{"serviceUrl":"/yard/spd/spdSellerSendItems/{sendItemId}","serviceMethod":"GET","checked":true,"key":"3-1-0-3-11"},{"serviceUrl":"/yard/spd/spdSellerSendItems","serviceMethod":"POST","checked":true,"key":"3-1-0-3-12"},{"serviceUrl":"/yard/pcs/pcsDepots/byReceivePoint,{ownerOrgId}","serviceMethod":"GET","checked":true,"key":"3-1-0-3-13"},{"serviceUrl":"/yard/pcs/pcsDepots/byReceivePoint,{ownerOrgId}/count","serviceMethod":"GET","checked":true,"key":"3-1-0-3-14"},{"serviceUrl":"/yard/spd/spdGoodsPurchItemViews","serviceMethod":"GET","checked":true,"key":"3-1-0-3-15"},{"serviceUrl":"/yard/spd/spdGoodsPurchItemViews/count","serviceMethod":"GET","checked":true,"key":"3-1-0-3-16"},{"serviceUrl":"/yard/spd/spdPurchs/ids,{ids}","serviceMethod":"GET","checked":true,"key":"3-1-0-3-17"},{"serviceUrl":"/yard/spd/spdGoodsPurchItemViews/{rid}","serviceMethod":"GET","checked":true,"key":"3-1-0-3-18"}],"checked":true,"key":"3-1-0-3-0","id":"P0229"},{"opId":"P0225","opName":"送货信息录入编辑","opSort":"P0225","elementClass":"acl_edit_spdSellerSendSupply,acl_edit_spdSellerSendItemSupply,acl_view_spdSellerSendItemSupply,acl_delete_spdSellerSendItemSupply,acl_add_spdSellerSendItemSupply","webApis":[{"serviceUrl":"/yard/spd/spdSellerSends/byOrder","serviceMethod":"GET","checked":true,"key":"3-1-0-4-0"},{"serviceUrl":"/yard/spd/spdSellerSends/byOrder/count","serviceMethod":"GET","checked":true,"key":"3-1-0-4-1"},{"serviceUrl":"/yard/spd/ydsEdsGoods/ids,{ids}","serviceMethod":"GET","checked":true,"key":"3-1-0-4-2"},{"serviceUrl":"/yard/spd/ydsEdsGoods/{edsGoodsId}","serviceMethod":"GET","checked":true,"key":"3-1-0-4-3"},{"serviceUrl":"/yard/spd/ydsEdsGoodsLots/edsGoodsId,{edsGoodsId}","serviceMethod":"GET","checked":true,"key":"3-1-0-4-4"},{"serviceUrl":"/yard/spd/ydsEdsGoodsLots/ids,{ids}","serviceMethod":"GET","checked":true,"key":"3-1-0-4-5"},{"serviceUrl":"/yard/spd/spdSellerSends/{sendId}","serviceMethod":"GET","checked":true,"key":"3-1-0-4-6"},{"serviceUrl":"/yard/spd/spdSellerSendItems","serviceMethod":"GET","checked":true,"key":"3-1-0-4-7"},{"serviceUrl":"/yard/spd/spdSellerSendItems/count","serviceMethod":"GET","checked":true,"key":"3-1-0-4-8"},{"serviceUrl":"/yard/spd/spdSellerSendItems/{sendItemId}","serviceMethod":"GET","checked":true,"key":"3-1-0-4-9"},{"serviceUrl":"/yard/spd/spdGoodsPurchItemViews/{rid}","serviceMethod":"GET","checked":true,"key":"3-1-0-4-10"}],"checked":true,"key":"3-1-0-4-0","id":"P0225"},{"opId":"P0228","opName":"送货信息录入审核","opSort":"P0228","elementClass":"acl_reviewEntity_spdSellerSendSupply","webApis":[{"serviceUrl":"/yard/spd/ydsEdsGoods/ids,{ids}","serviceMethod":"GET","checked":true,"key":"3-1-0-5-0"},{"serviceUrl":"/yard/spd/spdSellerSends/byOrder","serviceMethod":"GET","checked":true,"key":"3-1-0-5-1"},{"serviceUrl":"/yard/spd/spdSellerSends/byOrder/count","serviceMethod":"GET","checked":true,"key":"3-1-0-5-2"},{"serviceUrl":"/yard/spd/spdSellerSends/{sendId}","serviceMethod":"GET","checked":true,"key":"3-1-0-5-3"},{"serviceUrl":"/yard/spd/spdSellerSendItems","serviceMethod":"GET","checked":true,"key":"3-1-0-5-4"},{"serviceUrl":"/yard/spd/spdSellerSendItems/count","serviceMethod":"GET","checked":true,"key":"3-1-0-5-5"},{"serviceUrl":"/yard/spd/spdSellerSendItems/{sendItemId}","serviceMethod":"GET","checked":true,"key":"3-1-0-5-6"},{"serviceUrl":"/yard/spd/spdSellerSendItems/{sendItemId}/checkState/reviewed","serviceMethod":"PUT","checked":true,"key":"3-1-0-5-7"},{"serviceUrl":"/yard/spd/spdSellerSend/{sendItemId}/checkState/reviewed","serviceMethod":"PUT","checked":true,"key":"3-1-0-5-8"},{"serviceUrl":"/yard/spd/ydsEdsGoodsLots/ids,{ids}","serviceMethod":"GET","checked":true,"key":"3-1-0-5-9"}],"checked":true,"key":"3-1-0-5-0","id":"P0228"},{"opId":"P0227","opName":"送货信息录入删除","opSort":"P0227","elementClass":"acl_delete_spdSellerSendSupply,acl_view_spdSellerSendItemSupply,acl_delete_spdSellerSendItemSupply","webApis":[{"serviceUrl":"/yard/spd/spdSellerSends","serviceMethod":"GET","checked":true,"key":"3-1-0-6-0"},{"serviceUrl":"/yard/spd/spdSellerSends/count","serviceMethod":"GET","checked":true,"key":"3-1-0-6-1"},{"serviceUrl":"/yard/spd/spdSellerSends/{sendId}","serviceMethod":"GET","checked":true,"key":"3-1-0-6-2"},{"serviceUrl":"/yard/spd/spdSellerSendItems","serviceMethod":"GET","checked":true,"key":"3-1-0-6-3"},{"serviceUrl":"/yard/spd/spdSellerSendItems/count","serviceMethod":"GET","checked":true,"key":"3-1-0-6-4"},{"serviceUrl":"/yard/spd/spdSellerSendItems/{sendItemId}","serviceMethod":"GET","checked":true,"key":"3-1-0-6-5"},{"serviceUrl":"/yard/spd/spdSellerSends/{sendId}","serviceMethod":"DELETE","checked":true,"key":"3-1-0-6-6"},{"serviceUrl":"/yard/spd/spdSellerSendItems/{sendItemId}","serviceMethod":"DELETE","checked":true,"key":"3-1-0-6-7"}],"checked":true,"key":"3-1-0-6-0","id":"P0227"}],"checked":true,"key":"3-1-0-0-0"}],"children":[],"topMenu":false,"checked":true,"key":"3-1-0-0-0"},{"systemName":"收货系统","menuId":"10004-003","menuCode":"10004-003","menuParentId":"10004","icon":null,"menuSort":3,"name":"销售发票管理","level":2,"anchor":"#spd/spdSellerSendTaxs","functions":[{"functionId":"F0039","functionName":"销售发票管理","operations":[{"opId":"P0265","opName":"销售发票管理新增","opSort":"P0265","elementClass":"acl_add_spdSellerSendTax,acl_add_spdSellerSendTaxItem,acl_view_spdSellerSendTaxItem,acl_delete_spdSellerSendTaxItem,acl_edit_spdSellerSendTaxItem","webApis":[{"serviceUrl":"/yard/spd/spdSellerSendTaxs","serviceMethod":"POST","checked":true,"key":"3-2-0-0-0"},{"serviceUrl":"/yard/spd/spdSellerSendTaxs","serviceMethod":"POST","checked":true,"key":"3-2-0-0-1"},{"serviceUrl":"/yard/spd/spdSellerSendTaxs/bySellerSendTaxsOrg/count","serviceMethod":"GET","checked":true,"key":"3-2-0-0-2"},{"serviceUrl":"/yard/spd/spdSellerSendTaxs/bySellerSendTaxsOrg","serviceMethod":"GET","checked":true,"key":"3-2-0-0-3"},{"serviceUrl":"/yard/spd/spdSellerSendTaxItems/count","serviceMethod":"GET","checked":true,"key":"3-2-0-0-4"},{"serviceUrl":"/yard/spd/spdSellerSendTaxItems/taxId,{taxId}","serviceMethod":"GET","checked":true,"key":"3-2-0-0-5"},{"serviceUrl":"/yard/spd/ydsWorkBooks","serviceMethod":"GET","checked":true,"key":"3-2-0-0-6"},{"serviceUrl":"/yard/spd/spdSellerSendItems/sellerOrg","serviceMethod":"GET","checked":true,"key":"3-2-0-0-7"},{"serviceUrl":"/yard/spd/spdSellerSends/ids,{ids}","serviceMethod":"GET","checked":true,"key":"3-2-0-0-8"},{"serviceUrl":"/yard/spd/spdSellerSendTaxItems","serviceMethod":"POST","checked":true,"key":"3-2-0-0-9"}],"checked":true,"key":"3-2-0-0-0","id":"P0265"},{"opId":"P0266","opName":"销售发票管理查看","opSort":"P0266","elementClass":"acl_view_spdSellerSendTax,acl_view_spdSellerSendTaxItem","webApis":[{"serviceUrl":"/yard/spd/spdSellerSendTaxs","serviceMethod":"GET","checked":true,"key":"3-2-0-1-0"},{"serviceUrl":"/yard/spd/spdSellerSendTaxs/count","serviceMethod":"GET","checked":true,"key":"3-2-0-1-1"},{"serviceUrl":"/yard/pcs/pcsUsers/ids,625","serviceMethod":"GET","checked":true,"key":"3-2-0-1-2"},{"serviceUrl":"/yard/spd/spdSellerSendTaxItems","serviceMethod":"GET","checked":true,"key":"3-2-0-1-3"},{"serviceUrl":"/yard/spd/spdSellerSendTaxItems/count","serviceMethod":"GET","checked":true,"key":"3-2-0-1-4"},{"serviceUrl":"/yard/pcs/pcsUsers/ids","serviceMethod":"GET","checked":true,"key":"3-2-0-1-5"},{"serviceUrl":"/yard/spd/spdSellerSendTaxs/bySellerSendTaxsOrg/count","serviceMethod":"GET","checked":true,"key":"3-2-0-1-6"},{"serviceUrl":"/yard/spd/spdSellerSendTaxs/bySellerSendTaxsOrg","serviceMethod":"GET","checked":true,"key":"3-2-0-1-7"},{"serviceUrl":"/yard/spd/spdSellerSendItems/{sellerOrgId}","serviceMethod":"GET","checked":true,"key":"3-2-0-1-8"}],"checked":true,"key":"3-2-0-1-0","id":"P0266"},{"opId":"P0267","opName":"销售发票管理编辑","opSort":"P0267","elementClass":"acl_edit_spdSellerSendTax,acl_edit_spdSellerSendTaxItem,acl_view_spdSellerSendTaxItem,acl_add_spdSellerSendTaxItem,acl_delete_spdSellerSendTaxItem","webApis":[{"serviceUrl":"/yard/spd/spdSellerSendTaxs/ids,{ids}","serviceMethod":"PUT","checked":true,"key":"3-2-0-2-0"},{"serviceUrl":"/yard/spd/spdSellerSendTaxs/{taxId}","serviceMethod":"PUT","checked":true,"key":"3-2-0-2-1"},{"serviceUrl":"/yard/spd/spdSellerSendTaxs/{taxId}","serviceMethod":"GET","checked":true,"key":"3-2-0-2-2"},{"serviceUrl":"/yard/spd/spdSellerSendItems/ids,{ids}","serviceMethod":"GET","checked":true,"key":"3-2-0-2-3"},{"serviceUrl":"/yard/spd/ydsWorkBooks","serviceMethod":"GET","checked":true,"key":"3-2-0-2-4"},{"serviceUrl":"/yard/spd/spdSellerSendTaxItems/{taxItemId}","serviceMethod":"GET","checked":true,"key":"3-2-0-2-5"},{"serviceUrl":"/yard/spd/spdSellerSendTaxItems/{taxItemId}","serviceMethod":"PUT","checked":true,"key":"3-2-0-2-6"}],"checked":true,"key":"3-2-0-2-0","id":"P0267"},{"opId":"P0268","opName":"销售发票管理删除","opSort":"P0268","elementClass":"acl_delete_spdSellerSendTax,acl_delete_spdSellerSendTaxItem","webApis":[{"serviceUrl":"/yard/spd/spdSellerSendTaxs/{taxId}","serviceMethod":"DELETE","checked":true,"key":"3-2-0-3-0"},{"serviceUrl":"/yard/spd/spdSellerSendTaxs/{taxId}","serviceMethod":"DELETE","checked":true,"key":"3-2-0-3-1"},{"serviceUrl":"/yard/spd/spdSellerSendTaxs/{taxId}","serviceMethod":"GET","checked":true,"key":"3-2-0-3-2"},{"serviceUrl":"/yard/spd/spdSellerSendTaxItems/{taxItemId}","serviceMethod":"DELETE","checked":true,"key":"3-2-0-3-3"}],"checked":true,"key":"3-2-0-3-0","id":"P0268"},{"opId":"P0269","opName":"销售发票管理审核","opSort":"P0269","elementClass":"acl_reviewEntity_spdSellerSendTax","webApis":[],"checked":true,"key":"3-2-0-4-0","id":"P0269"}],"checked":true,"key":"3-2-0-0-0"}],"children":[],"topMenu":false,"checked":true,"key":"3-2-0-0-0"}],"topMenu":true,"open":false,"checked":true,"key":"3-0-0-0-0"},{"systemName":"收货系统","menuId":"10005","menuCode":"10005","menuParentId":"-1","icon":"fa-university ","menuSort":5,"name":"库房库存管理","level":1,"anchor":null,"functions":null,"children":[{"systemName":"收货系统","menuId":"10005-001","menuCode":"10005-001","menuParentId":"10005","icon":null,"menuSort":1,"name":"库房收货确认","level":2,"anchor":"#spd/spdReceives","functions":[{"functionId":"F0005","functionName":"库房收货确认","operations":[{"opId":"P0032","opName":"库房收货确认查看","opSort":"P0032","elementClass":"acl_view_spdReceive","webApis":[{"serviceUrl":"/yard/spd/spdReceiveItems/receiveCode,{receiveCode}","serviceMethod":"GET","checked":true,"key":"4-0-0-0-0"},{"serviceUrl":"/yard/spd/spdReceives/code,{code}","serviceMethod":"GET","checked":true,"key":"4-0-0-0-1"},{"serviceUrl":"/yard/spd/spdSellerSends/ids,{ids}","serviceMethod":"GET","checked":true,"key":"4-0-0-0-2"},{"serviceUrl":"/yard/spd/spdReceives/byChecked/count","serviceMethod":"GET","checked":true,"key":"4-0-0-0-3"},{"serviceUrl":"/yard/spd/spdReceives/byChecked","serviceMethod":"GET","checked":true,"key":"4-0-0-0-4"},{"serviceUrl":"/yard/spd/spdReceives/byChecked","serviceMethod":"GET","checked":true,"key":"4-0-0-0-5"},{"serviceUrl":"/yard/spd/spdReceives/byChecked/count","serviceMethod":"GET","checked":true,"key":"4-0-0-0-6"},{"serviceUrl":"/yard/spd/spdSellerSends","serviceMethod":"GET","checked":true,"key":"4-0-0-0-7"},{"serviceUrl":"/yard/spd/spdSellerSends/count","serviceMethod":"GET","checked":true,"key":"4-0-0-0-8"},{"serviceUrl":"/yard/spd/spdReceives","serviceMethod":"GET","checked":true,"key":"4-0-0-0-9"},{"serviceUrl":"/yard/spd/spdReceives/count","serviceMethod":"GET","checked":true,"key":"4-0-0-0-10"},{"serviceUrl":"/yard/spd/ydsGoods/ids,{ids}","serviceMethod":"GET","checked":true,"key":"4-0-0-0-11"},{"serviceUrl":"/yard/pcs/pcsDepots/{depotId}","serviceMethod":"GET","checked":true,"key":"4-0-0-0-12"}],"checked":true,"key":"4-0-0-0-0","id":"P0032"},{"opId":"P0282","opName":"库房收货确认保存","opSort":"P0282","elementClass":"acl_update_spdReceive","webApis":[{"serviceUrl":"/yard/spd/spdSellerSendItems/{sendItemId}","serviceMethod":"PUT","checked":true,"key":"4-0-0-1-0"},{"serviceUrl":"/yard/spd/spdReceiveItems/{receiveItemId}","serviceMethod":"PUT","checked":true,"key":"4-0-0-1-1"},{"serviceUrl":"/yard/spd/spdReceiveItems/{receiveItemId}","serviceMethod":"PUT","checked":true,"key":"4-0-0-1-2"},{"serviceUrl":"/yard/spd/spdReceives/code,{code}","serviceMethod":"GET","checked":true,"key":"4-0-0-1-3"},{"serviceUrl":"/yard/pcs/pcsDepots/{depotId}","serviceMethod":"GET","checked":true,"key":"4-0-0-1-4"},{"serviceUrl":"/yard/spd/spdSellerSends/ids,{ids}","serviceMethod":"GET","checked":true,"key":"4-0-0-1-5"},{"serviceUrl":"/yard/spd/spdReceiveItems/receiveCode,{receiveCode}","serviceMethod":"GET","checked":true,"key":"4-0-0-1-6"},{"serviceUrl":"/yard/spd/ydsGoods/ids,{ids}","serviceMethod":"GET","checked":true,"key":"4-0-0-1-7"},{"serviceUrl":"/yard/spd/spdReceives/{receiveId}","serviceMethod":"GET","checked":true,"key":"4-0-0-1-8"}],"checked":true,"key":"4-0-0-1-0","id":"P0282"},{"opId":"P0281","opName":"库房收货确认收货","opSort":"P0281","elementClass":"acl_confirm_spdReceive","webApis":[{"serviceUrl":"/yard/spd/spdReceives/{receiveId}/checkState/reviewed","serviceMethod":"PUT","checked":true,"key":"4-0-0-2-0"}],"checked":true,"key":"4-0-0-2-0","id":"P0281"},{"opId":"P0655","opName":"库房收货确认收货入库","opSort":"P0655","elementClass":"acl_inStorage_spdReceive","webApis":[{"serviceUrl":"/yard/spd/spdReceives/{receiveId}/checkState/byQuick/reviewed","serviceMethod":"PUT","checked":true,"key":"4-0-0-3-0"}],"checked":true,"key":"4-0-0-3-0","id":"P0655"}],"checked":true,"key":"4-0-0-0-0"}],"children":[],"topMenu":false,"checked":true,"key":"4-0-0-0-0"},{"systemName":"收货系统","menuId":"10005-002","menuCode":"10005-002","menuParentId":"10005","icon":null,"menuSort":2,"name":"库房收货记录","level":2,"anchor":"#spd/spdReceivesHis","functions":[{"functionId":"F0014","functionName":"库房收货记录","operations":[{"opId":"P0100","opName":"库房收货记录查看","opSort":"P0100","elementClass":"acl_view_spdReceive,acl_view_spdReceiveItem","webApis":[{"serviceUrl":"/yard/spd/spdReceives","serviceMethod":"GET","checked":true,"key":"4-1-0-0-0"},{"serviceUrl":"/yard/spd/spdSellerSends/ids,{ids}","serviceMethod":"GET","checked":true,"key":"4-1-0-0-1"},{"serviceUrl":"/yard/spd/ydsGoods/ids,{ids}","serviceMethod":"GET","checked":true,"key":"4-1-0-0-2"},{"serviceUrl":"/yard/spd/spdReceives/byHis/count","serviceMethod":"GET","checked":true,"key":"4-1-0-0-3"},{"serviceUrl":"/yard/spd/spdReceiveItems/receiveId,{receiveId}","serviceMethod":"GET","checked":true,"key":"4-1-0-0-4"},{"serviceUrl":"/yard/spd/spdReceives/byHis","serviceMethod":"GET","checked":true,"key":"4-1-0-0-5"}],"checked":true,"key":"4-1-0-0-0","id":"P0100"},{"opId":"P0237","opName":"库房收货记录同步","opSort":"P0237","elementClass":"acl_exportReceiveToHis","webApis":[],"checked":true,"key":"4-1-0-1-0","id":"P0237"},{"opId":"P0101","opName":"库房收货记录打印","opSort":"P0101","elementClass":"acl_exportReceive","webApis":[{"serviceUrl":"/yard/spd/spdReceiveItems/receiveId,{receiveId}/pdf","serviceMethod":"GET","checked":true,"key":"4-1-0-2-0"}],"checked":true,"key":"4-1-0-2-0","id":"P0101"}],"checked":true,"key":"4-1-0-0-0"}],"children":[],"topMenu":false,"checked":true,"key":"4-1-0-0-0"},{"systemName":"收货系统","menuId":"10005-003","menuCode":"10005-003","menuParentId":"10005","icon":null,"menuSort":3,"name":"库房入库调度","level":2,"anchor":"#spd/spdDispatchers","functions":[{"functionId":"F0022","functionName":"库房入库调度","operations":[{"opId":"P0231","opName":"库房入库调度查看","opSort":"P0231","elementClass":"acl_view_spdDispatcher","webApis":[{"serviceUrl":"/yard/pcs/pcsDepotAreas/ids,{ids}","serviceMethod":"GET","checked":true,"key":"4-2-0-0-0"},{"serviceUrl":"/yard/spd/spdDispatchers/byReceipt/count","serviceMethod":"GET","checked":true,"key":"4-2-0-0-1"},{"serviceUrl":"/yard/spd/spdReceives/byYetDispatchedSpdReceives,{dispatcherId}/count","serviceMethod":"GET","checked":true,"key":"4-2-0-0-2"},{"serviceUrl":"/yard/spd/spdReceives/byYetDispatchedSpdReceives,{dispatcherId}","serviceMethod":"GET","checked":true,"key":"4-2-0-0-3"},{"serviceUrl":"/yard/spd/spdReceives/byNotDispatchedSpdReceives,{dispatcherId}/count","serviceMethod":"GET","checked":true,"key":"4-2-0-0-4"},{"serviceUrl":"/yard/spd/spdReceives/byNotDispatchedSpdReceives,{dispatcherId}","serviceMethod":"GET","checked":true,"key":"4-2-0-0-5"},{"serviceUrl":"/yard/spd/spdDispatchers/byReceipt","serviceMethod":"GET","checked":true,"key":"4-2-0-0-6"},{"serviceUrl":"/yard/spd/spdReceiveItems/receiveIds,{receiveIds}","serviceMethod":"GET","checked":true,"key":"4-2-0-0-7"},{"serviceUrl":"/yard/spd/spdDispatcherRefs/dispatcherId,{dispatcherId}","serviceMethod":"GET","checked":true,"key":"4-2-0-0-8"},{"serviceUrl":"/yard/spd/spdDispatcherRefs","serviceMethod":"GET","checked":true,"key":"4-2-0-0-9"},{"serviceUrl":"/yard/spd/spdReceives/yetDispatchedSpdReceives/count","serviceMethod":"GET","checked":true,"key":"4-2-0-0-10"},{"serviceUrl":"/yard/spd/spdReceives/yetDispatchedSpdReceives","serviceMethod":"GET","checked":true,"key":"4-2-0-0-11"}],"checked":true,"key":"4-2-0-0-0","id":"P0231"},{"opId":"P0232","opName":"库房入库调度新增","opSort":"P0232","elementClass":"acl_add_spdDispatcher","webApis":[{"serviceUrl":"/yard/spd/spdDispatchers","serviceMethod":"POST","checked":true,"key":"4-2-0-1-0"},{"serviceUrl":"/yard/spd/spdDispatchers/byReceipt","serviceMethod":"GET","checked":true,"key":"4-2-0-1-1"},{"serviceUrl":"/yard/spd/spdDispatcherRefs/dispatcherId,{dispatcherId}","serviceMethod":"GET","checked":true,"key":"4-2-0-1-2"},{"serviceUrl":"/yard/spd/spdReceives/byYetDispatchedSpdReceives,{dispatcherId}","serviceMethod":"GET","checked":true,"key":"4-2-0-1-3"},{"serviceUrl":"/yard/spd/spdReceives/byYetDispatchedSpdReceives,{dispatcherId}/count","serviceMethod":"GET","checked":true,"key":"4-2-0-1-4"},{"serviceUrl":"/yard/spd/spdReceives/byNotDispatchedSpdReceives,{dispatcherId}","serviceMethod":"GET","checked":true,"key":"4-2-0-1-5"},{"serviceUrl":"/yard/spd/spdReceives/byNotDispatchedSpdReceives,{dispatcherId}/count","serviceMethod":"GET","checked":true,"key":"4-2-0-1-6"},{"serviceUrl":"/yard/spd/spdReceiveItems/receiveIds,{receiveIds}","serviceMethod":"GET","checked":true,"key":"4-2-0-1-7"},{"serviceUrl":"/yard/pcs/pcsDepots/ownerOrgId,{ownerOrgId}","serviceMethod":"GET","checked":true,"key":"4-2-0-1-8"},{"serviceUrl":"/yard/pcs/pcsDepots/ownerOrgId,{ownerOrgId}/count","serviceMethod":"GET","checked":true,"key":"4-2-0-1-9"},{"serviceUrl":"/yard/spd/spdDispatchers","serviceMethod":"POST","checked":true,"key":"4-2-0-1-10"},{"serviceUrl":"/yard/pcs/pcsDepots/byReceivePointDept/{manageOrgId}","serviceMethod":"GET","checked":true,"key":"4-2-0-1-11"},{"serviceUrl":"//yard/pcs/pcsDepots/byReceivePointDept/{manageOrgId}/count","serviceMethod":"GET","checked":true,"key":"4-2-0-1-12"}],"checked":true,"key":"4-2-0-1-0","id":"P0232"},{"opId":"P0233","opName":"库房入库调度编辑","opSort":"P0233","elementClass":"acl_edit_spdDispatcher","webApis":[{"serviceUrl":"/yard/spd/spdDispatchers/{dispatcherId}","serviceMethod":"GET","checked":true,"key":"4-2-0-2-0"},{"serviceUrl":"/yard/spd/spdDispatcherRefs/{dispatcherRefId}","serviceMethod":"PUT","checked":true,"key":"4-2-0-2-1"},{"serviceUrl":"/yard/spd/spdReceiveItems/receiveIds,{receiveIds}","serviceMethod":"GET","checked":true,"key":"4-2-0-2-2"},{"serviceUrl":"/yard/spd/spdDispatcherRefs/dispatcherId,{dispatcherId}","serviceMethod":"GET","checked":true,"key":"4-2-0-2-3"},{"serviceUrl":"/yard/spd/spdReceives/byNotDispatchedSpdReceives,{dispatcherId}","serviceMethod":"GET","checked":true,"key":"4-2-0-2-4"},{"serviceUrl":"/yard/spd/spdReceives/byNotDispatchedSpdReceives,{dispatcherId}/count","serviceMethod":"GET","checked":true,"key":"4-2-0-2-5"},{"serviceUrl":"/yard/spd/spdReceives/byYetDispatchedSpdReceives,{dispatcherId}","serviceMethod":"GET","checked":true,"key":"4-2-0-2-6"},{"serviceUrl":"/yard/spd/spdReceives/byYetDispatchedSpdReceives,{dispatcherId}/count","serviceMethod":"GET","checked":true,"key":"4-2-0-2-7"},{"serviceUrl":"/yard/spd/spdReceives/notDispatchedSpdReceives","serviceMethod":"GET","checked":true,"key":"4-2-0-2-8"},{"serviceUrl":"/yard/spd/spdReceives/notDispatchedSpdReceives/count","serviceMethod":"GET","checked":true,"key":"4-2-0-2-9"},{"serviceUrl":"/yard/spd/spdDispatcherRefs","serviceMethod":"POST","checked":true,"key":"4-2-0-2-10"},{"serviceUrl":"/yard/spd/spdReceiveItems","serviceMethod":"GET","checked":true,"key":"4-2-0-2-11"},{"serviceUrl":"/yard/spd/spdDispatcherRefs/{dispatcherRefId}","serviceMethod":"DELETE","checked":true,"key":"4-2-0-2-12"},{"serviceUrl":"/yard/spd/spdDepotRoutes/{routeId}","serviceMethod":"PUT","checked":true,"key":"4-2-0-2-13"}],"checked":true,"key":"4-2-0-2-0","id":"P0233"},{"opId":"P0234","opName":"库房入库调度删除","opSort":"P0234","elementClass":"acl_delete_spdDispatcher","webApis":[{"serviceUrl":"/yard/spd/spdDispatchers/{dispatcherId}","serviceMethod":"DELETE","checked":true,"key":"4-2-0-3-0"},{"serviceUrl":"/yard/spd/spdDispatcherRefs/dispatcherId,{dispatcherId}","serviceMethod":"GET","checked":true,"key":"4-2-0-3-1"},{"serviceUrl":"/yard/spd/spdReceives/byYetDispatchedSpdReceives,{dispatcherId}/count","serviceMethod":"GET","checked":true,"key":"4-2-0-3-2"},{"serviceUrl":"/yard/spd/spdDispatchers/byReceipt","serviceMethod":"GET","checked":true,"key":"4-2-0-3-3"},{"serviceUrl":"/yard/spd/spdReceives/byYetDispatchedSpdReceives,{dispatcherId}","serviceMethod":"GET","checked":true,"key":"4-2-0-3-4"}],"checked":true,"key":"4-2-0-3-0","id":"P0234"},{"opId":"P0287","opName":"库房入库调度调度","opSort":"P0297","elementClass":"acl_confirmSpdDispatcher","webApis":[{"serviceUrl":"/yard/spd/spdDispatchers/{routeId}/reviewed","serviceMethod":"PUT","checked":true,"key":"4-2-0-4-0"}],"checked":true,"key":"4-2-0-4-0","id":"P0287"},{"opId":"P0236","opName":"库房入库调度审核","opSort":"P0236","elementClass":"acl_reviewEntity_spdDispatcher","webApis":[{"serviceUrl":"/yard/spd/spdDispatchers/{routeId}/reviewed","serviceMethod":"PUT","checked":true,"key":"4-2-0-5-0"}],"checked":true,"key":"4-2-0-5-0","id":"P0236"}],"checked":true,"key":"4-2-0-0-0"}],"children":[],"topMenu":false,"checked":true,"key":"4-2-0-0-0"},{"systemName":"收货系统","menuId":"10005-004","menuCode":"10005-004","menuParentId":"10005","icon":null,"menuSort":4,"name":"库房出库调度","level":2,"anchor":"#spd/spdApplyDispatchers","functions":[{"functionId":"F0035","functionName":"库房出库调度","operations":[{"opId":"P0245","opName":"库房出库调度查看","opSort":"P0245","elementClass":"acl_view_spdApplyDispatcher","webApis":[{"serviceUrl":"/yard/spd/spdApplyItems/applyIds,{applyIds}","serviceMethod":"GET","checked":true,"key":"4-3-0-0-0"},{"serviceUrl":"/yard/spd/spdDispatchers/byPicking","serviceMethod":"GET","checked":true,"key":"4-3-0-0-1"},{"serviceUrl":"/yard/spd/spdApplys/byNotDispatchedSpdApply,{dispatcherId}/count","serviceMethod":"GET","checked":true,"key":"4-3-0-0-2"},{"serviceUrl":"/yard/spd/spdApplys/byNotDispatchedSpdApply,{dispatcherId}","serviceMethod":"GET","checked":true,"key":"4-3-0-0-3"},{"serviceUrl":"/yard/spd/spdApplys/byYetDisaptchedSpdApply,{dispatcherId}","serviceMethod":"GET","checked":true,"key":"4-3-0-0-4"},{"serviceUrl":"/yard/spd/spdApplys/byYetDisaptchedSpdApply,{dispatcherId}/count","serviceMethod":"GET","checked":true,"key":"4-3-0-0-5"},{"serviceUrl":"/yard/spd/spdDispatchers","serviceMethod":"GET","checked":true,"key":"4-3-0-0-6"},{"serviceUrl":"/yard/pcs/pcsDepots/ids,{ids}","serviceMethod":"GET","checked":true,"key":"4-3-0-0-7"},{"serviceUrl":"/yard/pcs/pcsUsers/ids,{ids}","serviceMethod":"GET","checked":true,"key":"4-3-0-0-8"}],"checked":true,"key":"4-3-0-0-0","id":"P0245"},{"opId":"P0246","opName":"库房出库调度新增","opSort":"P0246","elementClass":"acl_add_spdApplyDispatcher","webApis":[{"serviceUrl":"/yard/spd/spdApplyItems/applyIds,{applyIds}","serviceMethod":"GET","checked":true,"key":"4-3-0-1-0"},{"serviceUrl":"/yard/spd/spdDispatchers","serviceMethod":"POST","checked":true,"key":"4-3-0-1-1"},{"serviceUrl":"/yard/spd/spdDispatchers/byPicking","serviceMethod":"GET","checked":true,"key":"4-3-0-1-2"},{"serviceUrl":"/yard/spd/spdApplys/byYetDisaptchedSpdApply,{dispatcherId}/count","serviceMethod":"GET","checked":true,"key":"4-3-0-1-3"},{"serviceUrl":"/yard/spd/spdApplys/byYetDisaptchedSpdApply,{dispatcherId}","serviceMethod":"GET","checked":true,"key":"4-3-0-1-4"},{"serviceUrl":"/yard/spd/spdApplys/byNotDispatchedSpdApply,{dispatcherId}/count","serviceMethod":"GET","checked":true,"key":"4-3-0-1-5"},{"serviceUrl":"/yard/spd/spdApplys/byNotDispatchedSpdApply,{dispatcherId}","serviceMethod":"GET","checked":true,"key":"4-3-0-1-6"},{"serviceUrl":"/yard/pcs/pcsDepots/byReceivePointDept/{manageOrgId}","serviceMethod":"GET","checked":true,"key":"4-3-0-1-7"},{"serviceUrl":"//yard/pcs/pcsDepots/byReceivePointDept/{manageOrgId}/count","serviceMethod":"GET","checked":true,"key":"4-3-0-1-8"}],"checked":true,"key":"4-3-0-1-0","id":"P0246"},{"opId":"P0247","opName":"库房出库调度编辑","opSort":"P0247","elementClass":"acl_edit_spdApplyDispatcher","webApis":[{"serviceUrl":"/yard/spd/spdDispatchers/{dispatcherId}","serviceMethod":"PUT","checked":true,"key":"4-3-0-2-0"},{"serviceUrl":"/yard/spd/spdApplyItems/applyIds,{applyIds}","serviceMethod":"GET","checked":true,"key":"4-3-0-2-1"},{"serviceUrl":"/yard/spd/spdApplys/byYetDisaptchedSpdApply,{dispatcherId}/count","serviceMethod":"GET","checked":true,"key":"4-3-0-2-2"},{"serviceUrl":"/yard/spd/spdApplys/byYetDisaptchedSpdApply,{dispatcherId}","serviceMethod":"GET","checked":true,"key":"4-3-0-2-3"},{"serviceUrl":"/yard/spd/spdApplys/byNotDispatchedSpdApply,{dispatcherId}","serviceMethod":"GET","checked":true,"key":"4-3-0-2-4"},{"serviceUrl":"/yard/spd/spdApplys/byNotDispatchedSpdApply,{dispatcherId}/count","serviceMethod":"GET","checked":true,"key":"4-3-0-2-5"},{"serviceUrl":"/yard/spd/spdApplys/notDispatchedSpdApply","serviceMethod":"GET","checked":true,"key":"4-3-0-2-6"},{"serviceUrl":"/yard/spd/spdApplys/notDispatchedSpdApply/count","serviceMethod":"GET","checked":true,"key":"4-3-0-2-7"},{"serviceUrl":"/yard/spd/spdApplyItems","serviceMethod":"GET","checked":true,"key":"4-3-0-2-8"}],"checked":true,"key":"4-3-0-2-0","id":"P0247"},{"opId":"P0248","opName":"库房出库调度删除","opSort":"P0248","elementClass":"acl_delete_spdApplyDispatcher","webApis":[{"serviceUrl":"/yard/spd/spdDispatchers/byPicking","serviceMethod":"GET","checked":true,"key":"4-3-0-3-0"},{"serviceUrl":"/yard/spd/spdApplys/byYetDisaptchedSpdApply,{dispatcherId}/count","serviceMethod":"GET","checked":true,"key":"4-3-0-3-1"},{"serviceUrl":"/yard/spd/spdApplys/byYetDisaptchedSpdApply,{dispatcherId}","serviceMethod":"GET","checked":true,"key":"4-3-0-3-2"}],"checked":true,"key":"4-3-0-3-0","id":"P0248"},{"opId":"P0250","opName":"库房出库调度审核","opSort":"P0236","elementClass":"acl_reviewEntity_spdApplyDispatcher","webApis":[{"serviceUrl":"/yard/spd/spdDispatchers/{routeId}/reviewed","serviceMethod":"PUT","checked":true,"key":"4-3-0-4-0"}],"checked":true,"key":"4-3-0-4-0","id":"P0250"},{"opId":"P0198","opName":"库房出库调度调度","opSort":"P0198","elementClass":"acl_confirmSpdApplyDispatcher","webApis":[{"serviceUrl":"/yard/spd/spdDispatchers/{routeId}/reviewed","serviceMethod":"PUT","checked":true,"key":"4-3-0-5-0"}],"checked":true,"key":"4-3-0-5-0","id":"P0198"}],"checked":true,"key":"4-3-0-0-0"}],"children":[],"topMenu":false,"checked":true,"key":"4-3-0-0-0"},{"systemName":"收货系统","menuId":"10005-005","menuCode":"10005-005","menuParentId":"10005","icon":null,"menuSort":5,"name":"库房补货计划","level":2,"anchor":"#spd/spdApplyReqReplenishments","functions":[{"functionId":"F0058","functionName":"库房补货计划","operations":[{"opId":"P0460","opName":"库房补货计划查看","opSort":"P0460","elementClass":"acl_view_spdApplyReqReplenishment","webApis":[{"serviceUrl":"/yard/spd/SpdApplyReqReplenishments/count","serviceMethod":"GET","checked":true,"key":"4-4-0-0-0"},{"serviceUrl":"/yard/spd/SpdApplyReqReplenishments","serviceMethod":"GET","checked":true,"key":"4-4-0-0-1"},{"serviceUrl":"/yard/spd/spdApplyReqReplenishmentViews/ids,{ids}","serviceMethod":"GET","checked":true,"key":"4-4-0-0-2"}],"checked":true,"key":"4-4-0-0-0","id":"P0460"},{"opId":"P0499","opName":"库房补货计划新增","opSort":"P0499","elementClass":"acl_add_spdApplyReqReplenishment","webApis":[{"serviceUrl":"/yard/spd/spdApplyReqReplenishmentViews","serviceMethod":"GET","checked":true,"key":"4-4-0-1-0"},{"serviceUrl":"/yard/spd/spdApplyReqReplenishmentViews/count","serviceMethod":"GET","checked":true,"key":"4-4-0-1-1"},{"serviceUrl":"/yard/spd/spdApplyReqReplenishmentViews/ids,{ids}","serviceMethod":"GET","checked":true,"key":"4-4-0-1-2"},{"serviceUrl":"/yard/spd/spdApplyReqs/{applyReqId}","serviceMethod":"DELETE","checked":true,"key":"4-4-0-1-3"},{"serviceUrl":"/yard/spd/spdApplyReqs","serviceMethod":"GET","checked":true,"key":"4-4-0-1-4"},{"serviceUrl":"/yard/spd/spdApplyReqs/count","serviceMethod":"GET","checked":true,"key":"4-4-0-1-5"},{"serviceUrl":"/yard/spd/spdApplyReqs","serviceMethod":"POST","checked":true,"key":"4-4-0-1-6"}],"checked":true,"key":"4-4-0-1-0","id":"P0499"},{"opId":"P0502","opName":"库房补货计划提交","opSort":"P0502","elementClass":"acl_batchCommited_spdApplyReqReplenishment","webApis":[{"serviceUrl":"/yard/spd/spdApplyReqs/{applyReqId}/checkState/commited","serviceMethod":"PUT","checked":true,"key":"4-4-0-2-0"}],"checked":true,"key":"4-4-0-2-0","id":"P0502"},{"opId":"P0501","opName":"库房补货计划删除","opSort":"P0501","elementClass":"acl_batchDelete_spdApplyReqReplenishment","webApis":[{"serviceUrl":"/yard/spd/spdApplyReqs/{applyReqId}","serviceMethod":"DELETE","checked":true,"key":"4-4-0-3-0"}],"checked":true,"key":"4-4-0-3-0","id":"P0501"},{"opId":"P0500","opName":"库房补货计划保存","opSort":"P0500","elementClass":"acl_update_spdApplyReqReplenishment","webApis":[{"serviceUrl":"/yard/spd/spdApplyReqs/{applyReqId}","serviceMethod":"PUT","checked":true,"key":"4-4-0-4-0"}],"checked":true,"key":"4-4-0-4-0","id":"P0500"},{"opId":"P0503","opName":"库房补货计划审核","opSort":"P0503","elementClass":"acl_batchReview_spdApplyReqReplenishment","webApis":[{"serviceUrl":"/yard/spd/spdApplyReqs/{applyReqId}/checkState/reviewed","serviceMethod":"PUT","checked":true,"key":"4-4-0-5-0"}],"checked":true,"key":"4-4-0-5-0","id":"P0503"}],"checked":true,"key":"4-4-0-0-0"}],"children":[],"topMenu":false,"checked":true,"key":"4-4-0-0-0"},{"systemName":"收货系统","menuId":"10005-006","menuCode":"10005-006","menuParentId":"10005","icon":null,"menuSort":6,"name":"申领审核管理","level":2,"anchor":"#spd/spdApplys","functions":[{"functionId":"F0023","functionName":"申领审核管理","operations":[{"opId":"P0147","opName":"申领审核管理查看","opSort":"P0147","elementClass":"acl_view_spdApply,acl_view_spdApplyItem","webApis":[{"serviceUrl":"/yard/spd/spdApplys/count","serviceMethod":"GET","checked":true,"key":"4-5-0-0-0"},{"serviceUrl":"/yard/spd/spdApplys","serviceMethod":"GET","checked":true,"key":"4-5-0-0-1"},{"serviceUrl":"/yard/spd/ydsEdsGoodsLots/ids,{ids}","serviceMethod":"GET","checked":true,"key":"4-5-0-0-2"},{"serviceUrl":"/yard/spd/ydsEdsGoodsLots/{edsGoodsLotId}","serviceMethod":"GET","checked":true,"key":"4-5-0-0-3"},{"serviceUrl":"/yard/spd/ydsGoodsLots/ids,{ids}","serviceMethod":"GET","checked":true,"key":"4-5-0-0-4"},{"serviceUrl":"/yard/spd/spdDepotCards","serviceMethod":"GET","checked":true,"key":"4-5-0-0-5"},{"serviceUrl":"/yard/pcs/pcsDepots","serviceMethod":"GET","checked":true,"key":"4-5-0-0-6"},{"serviceUrl":"/yard/spd/spdDepotRoutes","serviceMethod":"GET","checked":true,"key":"4-5-0-0-7"},{"serviceUrl":"/yard/spd/spdApplyItems/applyId,{applyId}","serviceMethod":"GET","checked":true,"key":"4-5-0-0-8"},{"serviceUrl":"/yard/spd/spdApplyItems","serviceMethod":"GET","checked":true,"key":"4-5-0-0-9"},{"serviceUrl":"/yard/spd/spdDepotRoutes/{routeId}","serviceMethod":"GET","checked":true,"key":"4-5-0-0-10"}],"checked":true,"key":"4-5-0-0-0","id":"P0147"},{"opId":"P0459","opName":"申领审核管理批量审核","opSort":"P0459","elementClass":"acl_reviewEntities_spdApply","webApis":[],"checked":true,"key":"4-5-0-1-0","id":"P0459"},{"opId":"P0148","opName":"申领审核管理编辑","opSort":"P0148","elementClass":"acl_edit_spdApply,acl_edit_spdApplyItem,acl_view_spdApplyItem,acl_add_spdApplyItem,acl_delete_spdApplyItem,acl_update_spdApplyItem","webApis":[{"serviceUrl":"/yard/spd/spdApplyItems","serviceMethod":"GET","checked":true,"key":"4-5-0-2-0"},{"serviceUrl":"/yard/spd/ydsGoodsLots/ids,{ids}","serviceMethod":"GET","checked":true,"key":"4-5-0-2-1"},{"serviceUrl":"/yard/spd/ydsGoodsLots/{goodsLotId}","serviceMethod":"GET","checked":true,"key":"4-5-0-2-2"},{"serviceUrl":"/yard/spd/spdApplyItems/{applyItemId}","serviceMethod":"PUT","checked":true,"key":"4-5-0-2-3"},{"serviceUrl":"/yard/spd/spdApplys","serviceMethod":"GET","checked":true,"key":"4-5-0-2-4"},{"serviceUrl":"/yard/spd/spdApplys/count","serviceMethod":"GET","checked":true,"key":"4-5-0-2-5"},{"serviceUrl":"/yard/spd/spdApplyItems/applyId,{applyId}","serviceMethod":"GET","checked":true,"key":"4-5-0-2-6"},{"serviceUrl":"/yard/spd/spdApplys/{applyId}","serviceMethod":"PUT","checked":true,"key":"4-5-0-2-7"}],"checked":true,"key":"4-5-0-2-0","id":"P0148"},{"opId":"P0149","opName":"申领审核管理新增","opSort":"P0149","elementClass":"acl_add_spdApply,acl_add_spdApplyItem,acl_view_spdApplyItem,acl_edit_spdApplyItem,acl_delete_spdApplyItem","webApis":[{"serviceUrl":"/yard/spd/spdApplys","serviceMethod":"POST","checked":true,"key":"4-5-0-3-0"},{"serviceUrl":"/yard/spd/spdApplyItems","serviceMethod":"GET","checked":true,"key":"4-5-0-3-1"},{"serviceUrl":"/yard/spd/ydsGoodsLots/ids,{ids}","serviceMethod":"GET","checked":true,"key":"4-5-0-3-2"},{"serviceUrl":"/yard/spd/spdApplys/count","serviceMethod":"GET","checked":true,"key":"4-5-0-3-3"},{"serviceUrl":"/yard/spd/spdApplys","serviceMethod":"GET","checked":true,"key":"4-5-0-3-4"},{"serviceUrl":"/yard/spd/spdApplyItems/applyId,{applyId}","serviceMethod":"GET","checked":true,"key":"4-5-0-3-5"},{"serviceUrl":"/yard/spd/spdDepotCards/byUse","serviceMethod":"GET","checked":true,"key":"4-5-0-3-6"},{"serviceUrl":"/yard/spd/spdDepotCards/byUse/count","serviceMethod":"GET","checked":true,"key":"4-5-0-3-7"},{"serviceUrl":"/yard/spd/spdDepotCards/count","serviceMethod":"GET","checked":true,"key":"4-5-0-3-8"},{"serviceUrl":"/yard/spd/ydsGoodsLots","serviceMethod":"GET","checked":true,"key":"4-5-0-3-9"},{"serviceUrl":"/yard/spd/spdApplyItems","serviceMethod":"POST","checked":true,"key":"4-5-0-3-10"}],"checked":true,"key":"4-5-0-3-0","id":"P0149"},{"opId":"P0150","opName":"申领审核管理删除","opSort":"P0150","elementClass":"acl_delete_spdApply,acl_delete_spdApplyItem,acl_view_spdApplyItem","webApis":[{"serviceUrl":"/yard/spd/spdApplyItems/{applyItemId}","serviceMethod":"DELETE","checked":true,"key":"4-5-0-4-0"},{"serviceUrl":"/yard/spd/spdApplys/{applyId}","serviceMethod":"DELETE","checked":true,"key":"4-5-0-4-1"}],"checked":true,"key":"4-5-0-4-0","id":"P0150"},{"opId":"P0152","opName":"申领审核管理审核","opSort":"P0152","elementClass":"acl_reviewEntity_spdApply,acl_confirm_spdApply","webApis":[{"serviceUrl":"/yard/spd/spdApplys/{applyId}/checkState/reviewed","serviceMethod":"PUT","checked":true,"key":"4-5-0-5-0"}],"checked":true,"key":"4-5-0-5-0","id":"P0152"},{"opId":"P0153","opName":"申领审核管理撤回","opSort":"P0153","elementClass":"acl_cancelCommit_spdApply","webApis":[],"checked":true,"key":"4-5-0-6-0","id":"P0153"},{"opId":"P0657","opName":"申领审核管理一键完成","opSort":"P0657","elementClass":"acl_inStorage_spdApply","webApis":[{"serviceUrl":"/yard/spd/spdApplys/{applyId}/checkState/byQuick/reviewed","serviceMethod":"PUT","checked":true,"key":"4-5-0-7-0"}],"checked":true,"key":"4-5-0-7-0","id":"P0657"}],"checked":true,"key":"4-5-0-0-0"}],"children":[],"topMenu":false,"checked":true,"key":"4-5-0-0-0"},{"systemName":"收货系统","menuId":"10005-007","menuCode":"10005-007","menuParentId":"10005","icon":null,"menuSort":7,"name":"申领出库确认","level":2,"anchor":"#spd/spdApplyOutStockNotarizes","functions":[{"functionId":"F0052","functionName":"申领出库确认","operations":[{"opId":"P0417","opName":"申领出库确认查看","opSort":"P0417","elementClass":"acl_view_spdApplyOutStockNotarize","webApis":[{"serviceUrl":"/yard/spd/spdApplys/byOutStockOperation","serviceMethod":"GET","checked":true,"key":"4-6-0-0-0"},{"serviceUrl":"/yard/spd/spdApplys/byOutStockOperation/count","serviceMethod":"GET","checked":true,"key":"4-6-0-0-1"},{"serviceUrl":"/yard/spd/spdApplyItems/applyId,{applyId}","serviceMethod":"GET","checked":true,"key":"4-6-0-0-2"},{"serviceUrl":"/yard/spd/spdApplyItems/applyId,{applyId}/count","serviceMethod":"GET","checked":true,"key":"4-6-0-0-3"}],"checked":true,"key":"4-6-0-0-0","id":"P0417"},{"opId":"P0475","opName":"申领出库确认编辑","opSort":"P0475","elementClass":"acl_edit_spdApplyOutStockNotarize","webApis":[],"checked":true,"key":"4-6-0-1-0","id":"P0475"},{"opId":"P0509","opName":"申领出库确认打印","opSort":"P0509","elementClass":"acl_print_spdApplyOutStockNotarize","webApis":[{"serviceUrl":"/yard/spd/spdApplyItems/applyId,{applyId}/pdf","serviceMethod":"GET","checked":true,"key":"4-6-0-2-0"}],"checked":true,"key":"4-6-0-2-0","id":"P0509"},{"opId":"P0508","opName":"申领出库确认审核","opSort":"P0508","elementClass":"acl_confirm_spdApplyOutStock","webApis":[{"serviceUrl":"/yard/spd/spdApplys/byOutStockOperation/{applyId}","serviceMethod":"PUT","checked":true,"key":"4-6-0-3-0"}],"checked":true,"key":"4-6-0-3-0","id":"P0508"}],"checked":true,"key":"4-6-0-0-0"}],"children":[],"topMenu":false,"checked":true,"key":"4-6-0-0-0"},{"systemName":"收货系统","menuId":"10005-008","menuCode":"10005-008","menuParentId":"10005","icon":null,"menuSort":8,"name":"库房申领记录","level":2,"anchor":"#spd/spdApplyStoreroomHiss","functions":[{"functionId":"F0062","functionName":"库房申领记录","operations":[{"opId":"P0476","opName":"库房申领记录查看","opSort":"P0476","elementClass":"acl_view_spdApplyOutStockNotarize","webApis":[{"serviceUrl":"/yard/spd/spdApplys/byStoreroomHis","serviceMethod":"GET","checked":true,"key":"4-7-0-0-0"},{"serviceUrl":"/yard/spd/spdApplys/byStoreroomHis/count","serviceMethod":"GET","checked":true,"key":"4-7-0-0-1"},{"serviceUrl":"/yard/spd/spdApplyItems/applyId,{applyId}","serviceMethod":"GET","checked":true,"key":"4-7-0-0-2"},{"serviceUrl":"/yard/spd/spdApplyItems/applyId,{applyId}/count","serviceMethod":"GET","checked":true,"key":"4-7-0-0-3"}],"checked":true,"key":"4-7-0-0-0","id":"P0476"}],"checked":true,"key":"4-7-0-0-0"}],"children":[],"topMenu":false,"checked":true,"key":"4-7-0-0-0"},{"systemName":"收货系统","menuId":"10005-009","menuCode":"10005-009","menuParentId":"10005","icon":null,"menuSort":9,"name":"定数打包管理","level":2,"anchor":"#spd/spdFixedMakePackings","functions":[{"functionId":"F0021","functionName":"定数打包管理","operations":[{"opId":"P0135","opName":"定数打包管理新增","opSort":"P0135","elementClass":"acl_add_spdFixedMake,acl_add_spdFixedMakeItem","webApis":[{"serviceUrl":"/yard/spd/spdFixedMakes","serviceMethod":"POST","checked":true,"key":"4-8-0-0-0"},{"serviceUrl":"/yard/spd/spdFixedMakeItems","serviceMethod":"POST","checked":true,"key":"4-8-0-0-1"},{"serviceUrl":"/yard/spd/spdFixedMakes","serviceMethod":"GET","checked":true,"key":"4-8-0-0-2"},{"serviceUrl":"/yard/spd/spdFixedMakes/count","serviceMethod":"GET","checked":true,"key":"4-8-0-0-3"},{"serviceUrl":"/yard/pcs/pcsDepots/byUMdepot/count","serviceMethod":"GET","checked":true,"key":"4-8-0-0-4"},{"serviceUrl":"/yard/pcs/pcsDepots/byUMdepot","serviceMethod":"GET","checked":true,"key":"4-8-0-0-5"},{"serviceUrl":"/yard/spd/spdGoodsMakeFixedSelViews/byStockQty/{depotId}","serviceMethod":"GET","checked":true,"key":"4-8-0-0-6"},{"serviceUrl":"/yard/spd/spdGoodsMakeFixedSelViews/byStockQty/{depotId}/count","serviceMethod":"GET","checked":true,"key":"4-8-0-0-7"}],"checked":true,"key":"4-8-0-0-0","id":"P0135"},{"opId":"P0137","opName":"定数打包管理提交","opSort":"P0137","elementClass":"acl_commitEntity_spdFixedMake","webApis":[{"serviceUrl":"/yard/spd/spdFixedMakes/{makeId}/checkState/commited","serviceMethod":"PUT","checked":true,"key":"4-8-0-1-0"},{"serviceUrl":"/yard/spd/spdFixedMakes/{makeId}","serviceMethod":"GET","checked":true,"key":"4-8-0-1-1"}],"checked":true,"key":"4-8-0-1-0","id":"P0137"},{"opId":"P0133","opName":"定数打包管理查看","opSort":"P0133","elementClass":"acl_view_spdFixedMake,acl_view_spdFixedMakeItem","webApis":[{"serviceUrl":"/yard/spd/spdFixedMakeItems/makeId,{makeId}/count","serviceMethod":"GET","checked":true,"key":"4-8-0-2-0"},{"serviceUrl":"/yard/spd/spdFixedMakeItems/makeId,{makeId}","serviceMethod":"GET","checked":true,"key":"4-8-0-2-1"},{"serviceUrl":"/yard/pcs/depotShelfs/ids,{ids}","serviceMethod":"GET","checked":true,"key":"4-8-0-2-2"},{"serviceUrl":"/yard/spd/ydsGoodsLots/ids,{ids}","serviceMethod":"GET","checked":true,"key":"4-8-0-2-3"},{"serviceUrl":"/yard/spd/spdFixeds/ids,{ids}","serviceMethod":"GET","checked":true,"key":"4-8-0-2-4"},{"serviceUrl":"/yard/spd/ydsGoods/ids,{ids}","serviceMethod":"GET","checked":true,"key":"4-8-0-2-5"},{"serviceUrl":"/yard/pcs/pcsDepots/{depotId}","serviceMethod":"GET","checked":true,"key":"4-8-0-2-6"},{"serviceUrl":"/yard/spd/spdFixedMakes","serviceMethod":"GET","checked":true,"key":"4-8-0-2-7"}],"checked":true,"key":"4-8-0-2-0","id":"P0133"},{"opId":"P0136","opName":"定数打包管理删除","opSort":"P0136","elementClass":"acl_delete_spdFixedMake,,acl_delete_spdFixedMakeItem","webApis":[{"serviceUrl":"/yard/spd/spdFixedMakes/{makeId}","serviceMethod":"DELETE","checked":true,"key":"4-8-0-3-0"},{"serviceUrl":"/yard/pcs/pcsDepots/{depotId}","serviceMethod":"GET","checked":true,"key":"4-8-0-3-1"},{"serviceUrl":"/yard/pcs/pcsDepots/{depotId}","serviceMethod":"GET","checked":true,"key":"4-8-0-3-2"},{"serviceUrl":"/yard/spd/spdFixedMakes","serviceMethod":"GET","checked":true,"key":"4-8-0-3-3"},{"serviceUrl":"/yard/spd/ydsGoods/ids,{ids}","serviceMethod":"GET","checked":true,"key":"4-8-0-3-4"},{"serviceUrl":"/yard/spd/ydsGoodsLots/ids,{ids}","serviceMethod":"GET","checked":true,"key":"4-8-0-3-5"},{"serviceUrl":"/yard/spd/spdFixedMakeItems/makeId,{makeId}/count","serviceMethod":"GET","checked":true,"key":"4-8-0-3-6"},{"serviceUrl":"/yard/spd/spdFixedMakeItems/makeId,{makeId}","serviceMethod":"GET","checked":true,"key":"4-8-0-3-7"},{"serviceUrl":"/yard/pcs/depotShelfs/ids,{ids}","serviceMethod":"GET","checked":true,"key":"4-8-0-3-8"}],"checked":true,"key":"4-8-0-3-0","id":"P0136"},{"opId":"P0138","opName":"定数打包管理审核","opSort":"P0138","elementClass":"acl_reviewEntity_spdFixedMake","webApis":[{"serviceUrl":"/yard/spd/spdFixedMakes/{makeId}/checkState/reviewed","serviceMethod":"PUT","checked":true,"key":"4-8-0-4-0"},{"serviceUrl":"/yard/spd/spdFixedMakes/{makeId}","serviceMethod":"GET","checked":true,"key":"4-8-0-4-1"}],"checked":true,"key":"4-8-0-4-0","id":"P0138"},{"opId":"P0139","opName":"定数打包管理撤回","opSort":"P0139","elementClass":"acl_cancelCommit_spdFixedMake","webApis":[],"checked":true,"key":"4-8-0-5-0","id":"P0139"},{"opId":"P0134","opName":"定数打包管理编辑","opSort":"P0134","elementClass":"acl_edit_spdFixedMake,acl_add_spdFixedMakeItem,acl_edit_spdFixedMakeItem","webApis":[{"serviceUrl":"/yard/spd/spdDepotStocks/byDepot/{depotId}","serviceMethod":"GET","checked":true,"key":"4-8-0-6-0"},{"serviceUrl":"/yard/spd/spdDepotStocks/byDepot/{depotId}/count","serviceMethod":"GET","checked":true,"key":"4-8-0-6-1"},{"serviceUrl":"/yard/spd/spdFixedMakeItems","serviceMethod":"POST","checked":true,"key":"4-8-0-6-2"},{"serviceUrl":"/yard/spd/spdFixedMakeItems/makeId,{makeId}/count","serviceMethod":"GET","checked":true,"key":"4-8-0-6-3"},{"serviceUrl":"/yard/spd/spdFixedMakeItems/makeId,{makeId}","serviceMethod":"GET","checked":true,"key":"4-8-0-6-4"},{"serviceUrl":"/yard/spd/spdFixedMakes","serviceMethod":"GET","checked":true,"key":"4-8-0-6-5"},{"serviceUrl":"/yard/spd/ydsGoods/ids,{ids}","serviceMethod":"GET","checked":true,"key":"4-8-0-6-6"},{"serviceUrl":"/yard/spd/ydsGoodsLots/ids,{ids}","serviceMethod":"GET","checked":true,"key":"4-8-0-6-7"},{"serviceUrl":"/yard/spd/spdFixeds/ids,{ids}","serviceMethod":"GET","checked":true,"key":"4-8-0-6-8"},{"serviceUrl":"/yard/spd/ydsGoods/ids,{ids}","serviceMethod":"GET","checked":true,"key":"4-8-0-6-9"},{"serviceUrl":"/yard/pcs/depotShelfs/ids,{ids}","serviceMethod":"GET","checked":true,"key":"4-8-0-6-10"},{"serviceUrl":"/yard/spd/spdFixedMakes","serviceMethod":"PUT","checked":true,"key":"4-8-0-6-11"},{"serviceUrl":"/yard/spd/spdFixedMakeItems","serviceMethod":"PUT","checked":true,"key":"4-8-0-6-12"},{"serviceUrl":"/yard/spd/spdFixedMakeItems/{makeItemId}","serviceMethod":"DELETE","checked":true,"key":"4-8-0-6-13"},{"serviceUrl":"/yard/pcs/pcsDepots/{depotId}","serviceMethod":"GET","checked":true,"key":"4-8-0-6-14"},{"serviceUrl":"/yard/spd/spdGoodsMakeFixedSelViews/byStockQty/{depotId}","serviceMethod":"GET","checked":true,"key":"4-8-0-6-15"},{"serviceUrl":"/yard/spd/spdGoodsMakeFixedSelViews/byStockQty/{depotId}/count","serviceMethod":"GET","checked":true,"key":"4-8-0-6-16"}],"checked":true,"key":"4-8-0-6-0","id":"P0134"},{"opId":"P0653","opName":"定数打包管理打印","opSort":"P0653","elementClass":"acl_export_spdFixedMakeItem","webApis":[{"serviceUrl":"/yard/spd/spd/spdFixedMakeItems/makeId,{makeId}/pdf","serviceMethod":"GET","checked":true,"key":"4-8-0-7-0"}],"checked":true,"key":"4-8-0-7-0","id":"P0653"}],"checked":true,"key":"4-8-0-0-0"}],"children":[],"topMenu":false,"checked":true,"key":"4-8-0-0-0"}],"topMenu":true,"open":false,"checked":true,"key":"4-0-0-0-0"},{"systemName":"收货系统","menuId":"10006","menuCode":"10006","menuParentId":"-1","icon":"fa fa-bed","menuSort":6,"name":"科室库存管理","level":1,"anchor":null,"functions":null,"children":[{"systemName":"收货系统","menuId":"10006-001","menuCode":"10006-001","menuParentId":"10006","icon":null,"menuSort":1,"name":"科室收货确认","level":2,"anchor":"#spd/spdReceiveAbteilungs","functions":[{"functionId":"F0020","functionName":"科室收货确认","operations":[{"opId":"P0116","opName":"科室收货确认查看","opSort":"P0116","elementClass":"acl_view_spdReceiveAbteilung","webApis":[{"serviceUrl":"/yard/spd/spdTasks/{taskId}/checkState/reviewed","serviceMethod":"PUT","checked":true,"key":"5-0-0-0-0"},{"serviceUrl":"/yard/spd/spdSellerSends/ids,{ids}","serviceMethod":"GET","checked":true,"key":"5-0-0-0-1"},{"serviceUrl":"/yard/spd/spdReceiveItems/receiveCode,{receiveCode}","serviceMethod":"GET","checked":true,"key":"5-0-0-0-2"},{"serviceUrl":"/yard/spd/spdReceives/byAbteilungCode/code,{code}","serviceMethod":"GET","checked":true,"key":"5-0-0-0-3"},{"serviceUrl":"/yard/spd/ydsGoods/ids,{ids}","serviceMethod":"GET","checked":true,"key":"5-0-0-0-4"},{"serviceUrl":"/yard/spd/spdReceives/byAbteilungChecked","serviceMethod":"GET","checked":true,"key":"5-0-0-0-5"},{"serviceUrl":"/yard/spd/spdReceives/byAbteilungChecked/count","serviceMethod":"GET","checked":true,"key":"5-0-0-0-6"}],"checked":true,"key":"5-0-0-0-0","id":"P0116"},{"opId":"P0117","opName":"科室收货确认保存","opSort":"P0117","elementClass":"acl_update_spdReceiveAbteilung","webApis":[{"serviceUrl":"/yard/spd/spdReceives/{receiveId}","serviceMethod":"GET","checked":true,"key":"5-0-0-1-0"},{"serviceUrl":"/yard/spd/spdReceiveItems/{receiveItemId}","serviceMethod":"PUT","checked":true,"key":"5-0-0-1-1"},{"serviceUrl":"/yard/spd/spdSellerSends/ids,{ids}","serviceMethod":"GET","checked":true,"key":"5-0-0-1-2"},{"serviceUrl":"/yard/spd/spdReceiveItems/receiveCode,{receiveCode}","serviceMethod":"GET","checked":true,"key":"5-0-0-1-3"},{"serviceUrl":"/yard/spd/ydsGoods/ids,{ids}","serviceMethod":"GET","checked":true,"key":"5-0-0-1-4"},{"serviceUrl":"/yard/spd/spdReceives/byAbteilungChecked","serviceMethod":"GET","checked":true,"key":"5-0-0-1-5"},{"serviceUrl":"/yard/spd/spdReceives/byAbteilungChecked/count","serviceMethod":"GET","checked":true,"key":"5-0-0-1-6"},{"serviceUrl":"/yard/spd/spdReceiveItems/{receiveItemId}","serviceMethod":"GET","checked":true,"key":"5-0-0-1-7"}],"checked":true,"key":"5-0-0-1-0","id":"P0117"},{"opId":"P0114","opName":"科室收货确认确认收货","opSort":"P0114","elementClass":"acl_confirm_spdReceiveAbteilung","webApis":[{"serviceUrl":"/yard/spd/spdSellerSends/ids,{ids}","serviceMethod":"GET","checked":true,"key":"5-0-0-2-0"},{"serviceUrl":"/yard/spd/spdReceives/{receiveId}/checkState/reviewed","serviceMethod":"PUT","checked":true,"key":"5-0-0-2-1"},{"serviceUrl":"/yard/spd/spdReceiveItems/receiveCode,{receiveCode}","serviceMethod":"GET","checked":true,"key":"5-0-0-2-2"},{"serviceUrl":"/yard/spd/ydsGoods/ids,{ids}","serviceMethod":"GET","checked":true,"key":"5-0-0-2-3"},{"serviceUrl":"/yard/spd/spdReceives/{receiveId}/checkState/reviewed","serviceMethod":"PUT","checked":true,"key":"5-0-0-2-4"},{"serviceUrl":"/yard/spd/spdReceives/byAbteilungChecked/count","serviceMethod":"GET","checked":true,"key":"5-0-0-2-5"},{"serviceUrl":"/yard/spd/spdReceives/byAbteilungChecked","serviceMethod":"GET","checked":true,"key":"5-0-0-2-6"}],"checked":true,"key":"5-0-0-2-0","id":"P0114"},{"opId":"P0656","opName":"科室收货确认收货入库","opSort":"P0656","elementClass":"acl_inStorage_spdReceiveAbteilung","webApis":[{"serviceUrl":"/yard/spd/spdReceives/{receiveId}/checkState/byQuick/reviewed","serviceMethod":"PUT","checked":true,"key":"5-0-0-3-0"}],"checked":true,"key":"5-0-0-3-0","id":"P0656"}],"checked":true,"key":"5-0-0-0-0"}],"children":[],"topMenu":false,"checked":true,"key":"5-0-0-0-0"},{"systemName":"收货系统","menuId":"10006-002","menuCode":"10006-002","menuParentId":"10006","icon":null,"menuSort":2,"name":"科室收货记录","level":2,"anchor":"#spd/spdReceiveAbteilungHiss","functions":[{"functionId":"F0043","functionName":"科室收货记录","operations":[{"opId":"P0315","opName":"科室收货确认打印","opSort":"P0315","elementClass":"acl_export_Receive","webApis":[],"checked":true,"key":"5-1-0-0-0","id":"P0315"},{"opId":"P0316","opName":"科室收货记录同步","opSort":"P0316","elementClass":"acl_syn_ReceiveToHis","webApis":[],"checked":true,"key":"5-1-0-1-0","id":"P0316"},{"opId":"P0115","opName":"科室收货记录查看","opSort":"P0115","elementClass":"acl_view_spdReceiveAbteilungs,acl_view_spdReceiveItemAbteilung","webApis":[{"serviceUrl":"/yard/spd/spdReceiveItems/receiveId,{receiveId}","serviceMethod":"GET","checked":true,"key":"5-1-0-2-0"},{"serviceUrl":"/yard/spd/spdReceiveItems/receiveId,{receiveId}","serviceMethod":"GET","checked":true,"key":"5-1-0-2-1"},{"serviceUrl":"/yard/spd/spdReceives/byAbteilungHis/count","serviceMethod":"GET","checked":true,"key":"5-1-0-2-2"},{"serviceUrl":"/yard/spd/spdReceives/byAbteilungHis","serviceMethod":"GET","checked":true,"key":"5-1-0-2-3"},{"serviceUrl":"/yard/spd/spdSellerSends/ids,{ids}","serviceMethod":"GET","checked":true,"key":"5-1-0-2-4"},{"serviceUrl":"/yard/spd/ydsGoods/ids,{ids}","serviceMethod":"GET","checked":true,"key":"5-1-0-2-5"}],"checked":true,"key":"5-1-0-2-0","id":"P0115"}],"checked":true,"key":"5-1-0-0-0"}],"children":[],"topMenu":false,"checked":true,"key":"5-1-0-0-0"},{"systemName":"收货系统","menuId":"10006-003","menuCode":"10006-003","menuParentId":"10006","icon":null,"menuSort":3,"name":"科室请领计划","level":2,"anchor":"#spd/spdApplyReqs","functions":[{"functionId":"F0057","functionName":"科室请领计划","operations":[{"opId":"P0458","opName":"科室请领计划查看","opSort":"P0458","elementClass":"acl_view_spdApplyReq","webApis":[{"serviceUrl":"/yard/spd/spdApplyReqs/count","serviceMethod":"GET","checked":true,"key":"5-2-0-0-0"},{"serviceUrl":"/yard/spd/spdApplyReqs","serviceMethod":"GET","checked":true,"key":"5-2-0-0-1"},{"serviceUrl":"/yard/spd/spdDepotCards/ids,{ids}","serviceMethod":"GET","checked":true,"key":"5-2-0-0-2"},{"serviceUrl":"/yard/spd/ydsGoodsByStockSelectViews/count","serviceMethod":"GET","checked":true,"key":"5-2-0-0-3"},{"serviceUrl":"/yard/spd/ydsGoodsByStockSelectViews","serviceMethod":"GET","checked":true,"key":"5-2-0-0-4"},{"serviceUrl":"/yard/spd/spdApplyReqs/byManual/count","serviceMethod":"GET","checked":true,"key":"5-2-0-0-5"},{"serviceUrl":"/yard/spd/spdApplyReqs/byManual","serviceMethod":"GET","checked":true,"key":"5-2-0-0-6"}],"checked":true,"key":"5-2-0-0-0","id":"P0458"},{"opId":"P0506","opName":"科室请领计划删除","opSort":"P0506","elementClass":"acl_batchDelete_spdApplyReqRep","webApis":[{"serviceUrl":"/yard/spd/spdApplyReqs/{applyReqId}","serviceMethod":"DELETE","checked":true,"key":"5-2-0-1-0"}],"checked":true,"key":"5-2-0-1-0","id":"P0506"},{"opId":"P0505","opName":"科室请领计划保存","opSort":"P0505","elementClass":"acl_update_spdApplyReq","webApis":[{"serviceUrl":"/yard/spd/spdApplyReqs/{applyReqId}","serviceMethod":"PUT","checked":true,"key":"5-2-0-2-0"}],"checked":true,"key":"5-2-0-2-0","id":"P0505"},{"opId":"P0504","opName":"科室请领计划增加","opSort":"P0504","elementClass":"acl_add_spdApplyReq","webApis":[{"serviceUrl":"/yard/spd/spdApplyReqAbteilungViews","serviceMethod":"GET","checked":true,"key":"5-2-0-3-0"},{"serviceUrl":"/yard/spd/spdApplyReqAbteilungViews/count","serviceMethod":"GET","checked":true,"key":"5-2-0-3-1"},{"serviceUrl":"/yard/spd/spdApplyReqAbteilungViews/ids,{ids}","serviceMethod":"GET","checked":true,"key":"5-2-0-3-2"},{"serviceUrl":"/yard/spd/spdApplyReqs","serviceMethod":"POST","checked":true,"key":"5-2-0-3-3"},{"serviceUrl":"/yard/spd/spdApplyReqs/{applyReqId}","serviceMethod":"DELETE","checked":true,"key":"5-2-0-3-4"}],"checked":true,"key":"5-2-0-3-0","id":"P0504"},{"opId":"P0507","opName":"科室请领计划提交","opSort":"P0507","elementClass":"acl_batchCommited_spdApplyReq","webApis":[{"serviceUrl":"/yard/spd/spdApplyReqs/{applyReqId}/checkState/commited","serviceMethod":"PUT","checked":true,"key":"5-2-0-4-0"}],"checked":true,"key":"5-2-0-4-0","id":"P0507"}],"checked":true,"key":"5-2-0-0-0"}],"children":[],"topMenu":false,"checked":true,"key":"5-2-0-0-0"},{"systemName":"收货系统","menuId":"10006-004","menuCode":"10006-004","menuParentId":"10006","icon":null,"menuSort":4,"name":"申领入库确认","level":2,"anchor":"#spd/spdApplyChecks","functions":[{"functionId":"F0024","functionName":"申领入库确认","operations":[{"opId":"P0154","opName":"申领入库确认查看","opSort":"P0154","elementClass":"acl_view_spdApplyCheck","webApis":[{"serviceUrl":"/yard/spd/spdApplyItems/applyId,{applyId}","serviceMethod":"GET","checked":true,"key":"5-3-0-0-0"},{"serviceUrl":"/yard/pcs/pcsDepots","serviceMethod":"GET","checked":true,"key":"5-3-0-0-1"},{"serviceUrl":"/yard/spd/spdApplyChecks/byCommited/count","serviceMethod":"GET","checked":true,"key":"5-3-0-0-2"},{"serviceUrl":"/yard/spd/spdApplyChecks/byCommited","serviceMethod":"GET","checked":true,"key":"5-3-0-0-3"},{"serviceUrl":"/yard/spd/spdApplyChecks/count","serviceMethod":"GET","checked":true,"key":"5-3-0-0-4"},{"serviceUrl":"/yard/spd/spdApplyChecks","serviceMethod":"GET","checked":true,"key":"5-3-0-0-5"}],"checked":true,"key":"5-3-0-0-0","id":"P0154"},{"opId":"P0155","opName":"申领入库确认编辑","opSort":"P0155","elementClass":null,"webApis":[{"serviceUrl":"/yard/spd/spdApplyChecks/byCommited/count","serviceMethod":"GET","checked":true,"key":"5-3-0-1-0"},{"serviceUrl":"/yard/spd/spdApplyChecks/byCommited","serviceMethod":"GET","checked":true,"key":"5-3-0-1-1"}],"checked":true,"key":"5-3-0-1-0","id":"P0155"},{"opId":"P0159","opName":"申领入库确认审核","opSort":"P0159","elementClass":"acl_confirm_spdApplyCheck","webApis":[{"serviceUrl":"/yard/spd/spdApplyChecks/{applyId}/checkState/reviewed","serviceMethod":"PUT","checked":true,"key":"5-3-0-2-0"}],"checked":true,"key":"5-3-0-2-0","id":"P0159"},{"opId":"P0510","opName":"申领入库确认打印","opSort":"P0510","elementClass":"acl_print_spdApplyCheck","webApis":[{"serviceUrl":"/yard/spd/spdApplyItems/applyId,{applyId}/pdf","serviceMethod":"GET","checked":true,"key":"5-3-0-3-0"}],"checked":true,"key":"5-3-0-3-0","id":"P0510"}],"checked":true,"key":"5-3-0-0-0"}],"children":[],"topMenu":false,"checked":true,"key":"5-3-0-0-0"},{"systemName":"收货系统","menuId":"10006-005","menuCode":"10006-005","menuParentId":"10006","icon":null,"menuSort":5,"name":"科室申领记录","level":2,"anchor":"#spd/spdApplyAbteilungHiss","functions":[{"functionId":"F0062","functionName":"科室申领记录","operations":[{"opId":"P0477","opName":"科室申领记录查看","opSort":"P0477","elementClass":null,"webApis":[{"serviceUrl":"/yard/spd/spdApplyItems/applyId,{applyId}","serviceMethod":"GET","checked":true,"key":"5-4-0-0-0"},{"serviceUrl":"/yard/pcs/pcsDepots","serviceMethod":"GET","checked":true,"key":"5-4-0-0-1"},{"serviceUrl":"/yard/spd/spdApplyChecks/byAbteilungHis","serviceMethod":"GET","checked":true,"key":"5-4-0-0-2"},{"serviceUrl":"/yard/spd/spdApplyChecks/byAbteilungHis/count","serviceMethod":"GET","checked":true,"key":"5-4-0-0-3"}],"checked":true,"key":"5-4-0-0-0","id":"P0477"},{"opId":"P0512","opName":"科室申领记录打印","opSort":"P0512","elementClass":"acl_export_spdApplyItem","webApis":[{"serviceUrl":"/yard/spd/spdApplyItems/applyId,{applyId}/pdf","serviceMethod":"GET","checked":true,"key":"5-4-0-1-0"}],"checked":true,"key":"5-4-0-1-0","id":"P0512"}],"checked":true,"key":"5-4-0-0-0"}],"children":[],"topMenu":false,"checked":true,"key":"5-4-0-0-0"}],"topMenu":true,"open":false,"checked":true,"key":"5-0-0-0-0"},{"systemName":"收货系统","menuId":"10007","menuCode":"10007","menuParentId":"-1","icon":"fa-cube","menuSort":7,"name":"仓库业务管理","level":1,"anchor":null,"functions":null,"children":[{"systemName":"收货系统","menuId":"10007-001","menuCode":"10007-001","menuParentId":"10007","icon":null,"menuSort":1,"name":"仓库帐页查询","level":2,"anchor":"#spd/spdDepotCardAbteilungs","functions":[{"functionId":"F0051","functionName":"仓库帐页查询","operations":[{"opId":"P0408","opName":"仓库帐页查询查看","opSort":"P0408","elementClass":"acl_view_spdDepotCardAbteilung","webApis":[{"serviceUrl":"/yard/spd/SpdDepotCardByStockTotalViews/ids,{ids}","serviceMethod":"GET","checked":true,"key":"6-0-0-0-0"},{"serviceUrl":"/yard/spd/spdDepotCards/byAbteilung/count","serviceMethod":"GET","checked":true,"key":"6-0-0-0-1"},{"serviceUrl":"/yard/spd/spdDepotCards/byAbteilung","serviceMethod":"GET","checked":true,"key":"6-0-0-0-2"}],"checked":true,"key":"6-0-0-0-0","id":"P0408"}],"checked":true,"key":"6-0-0-0-0"}],"children":[],"topMenu":false,"checked":true,"key":"6-0-0-0-0"},{"systemName":"收货系统","menuId":"10007-002","menuCode":"10007-002","menuParentId":"10007","icon":null,"menuSort":2,"name":"仓库库存查询","level":2,"anchor":"#spd/spdMyDepotStocks","functions":[{"functionId":"F0030","functionName":"仓库库存查询","operations":[{"opId":"P0196","opName":"仓库库存查询查看","opSort":"P0196","elementClass":"acl_view_spdMyDepotStocks","webApis":[{"serviceUrl":"/yard/spd/spdDepotStocks/byMyStock/count","serviceMethod":"GEt","checked":true,"key":"6-1-0-0-0"},{"serviceUrl":"/yard/spd/spdDepotStocks/byMyStock","serviceMethod":"GET","checked":true,"key":"6-1-0-0-1"},{"serviceUrl":"/yard/pcs/depotShelfs/ids,{ids}","serviceMethod":"GET","checked":true,"key":"6-1-0-0-2"}],"checked":true,"key":"6-1-0-0-0","id":"P0196"}],"checked":true,"key":"6-1-0-0-0"}],"children":[],"topMenu":false,"checked":true,"key":"6-1-0-0-0"},{"systemName":"收货系统","menuId":"10007-003","menuCode":"10007-003","menuParentId":"10007","icon":null,"menuSort":3,"name":"仓库退货管理","level":2,"anchor":"#spd/spdApplyRefunds","functions":[{"functionId":"F0071","functionName":"仓库退货管理","operations":[{"opId":"P0632","opName":"仓库退货管理查看","opSort":"P0632","elementClass":"acl_view_spdApplyRefund,acl_view_spdApplyRefundItem","webApis":[{"serviceUrl":"/yard/spd/spdApplys/byRefund/count","serviceMethod":"GET","checked":true,"key":"6-2-0-0-0"},{"serviceUrl":"/yard/spd/spdApplys/byRefund","serviceMethod":"GET","checked":true,"key":"6-2-0-0-1"},{"serviceUrl":"/yard/spd/spdApplyItems/applyId,{applyId}/count","serviceMethod":"GET","checked":true,"key":"6-2-0-0-2"},{"serviceUrl":"/yard/spd/spdApplyItems/applyId,{applyId}","serviceMethod":"GET","checked":true,"key":"6-2-0-0-3"},{"serviceUrl":"/yard/spd/spdApplyItems/{applyItemId}","serviceMethod":"GET","checked":true,"key":"6-2-0-0-4"},{"serviceUrl":"/yard/spd/spdApplys/{applyId}","serviceMethod":"GET","checked":true,"key":"6-2-0-0-5"}],"checked":true,"key":"6-2-0-0-0","id":"P0632"},{"opId":"P0633","opName":"仓库退货管理编辑","opSort":"P0633","elementClass":"acl_edit_spdApplyRefund,acl_edit_spdApplyRefundItem,acl_view_spdApplyRefundItem","webApis":[{"serviceUrl":"/yard/spd/spdApplys/byRefund/count","serviceMethod":"GET","checked":true,"key":"6-2-0-1-0"},{"serviceUrl":"/yard/spd/spdApplys/byRefund","serviceMethod":"GET","checked":true,"key":"6-2-0-1-1"},{"serviceUrl":"/yard/spd/spdApplyItems/applyId,{applyId}/count","serviceMethod":"GET","checked":true,"key":"6-2-0-1-2"},{"serviceUrl":"/yard/spd/spdApplyItems/applyId,{applyId}","serviceMethod":"GET","checked":true,"key":"6-2-0-1-3"},{"serviceUrl":"/yard/spd/spdApplyItems/{applyItemId}","serviceMethod":"GET","checked":true,"key":"6-2-0-1-4"},{"serviceUrl":"/yard/spd/spdApplyItems/{applyItemId}","serviceMethod":"PUT","checked":true,"key":"6-2-0-1-5"},{"serviceUrl":"/yard/spd/spdApplys/{applyId}","serviceMethod":"PUT","checked":true,"key":"6-2-0-1-6"},{"serviceUrl":"/yard/spd/spdApplyItems","serviceMethod":"POST","checked":true,"key":"6-2-0-1-7"},{"serviceUrl":"/yard/spd/spdApplyItems/{applyItemId}","serviceMethod":"DELETE","checked":true,"key":"6-2-0-1-8"}],"checked":true,"key":"6-2-0-1-0","id":"P0633"},{"opId":"P0634","opName":"仓库退货管理审核","opSort":"P0634","elementClass":"acl_reviewEntity_spdApplyRefund,acl_view_spdApplyRefund,acl_view_spdApplyRefundItem","webApis":[{"serviceUrl":"/yard/spd/spdApplys/byRefund/count","serviceMethod":"GET","checked":true,"key":"6-2-0-2-0"},{"serviceUrl":"/yard/spd/spdApplys/byRefund","serviceMethod":"GET","checked":true,"key":"6-2-0-2-1"},{"serviceUrl":"/yard/spd/spdApplys/{applyId}/checkState/reviewed","serviceMethod":"PUT","checked":true,"key":"6-2-0-2-2"}],"checked":true,"key":"6-2-0-2-0","id":"P0634"},{"opId":"P0635","opName":"仓库退货管理增加","opSort":"P0635","elementClass":"acl_add_spdApplyRefund,acl_add_spdApplyRefundItem,acl_view_spdApplyRefundItem,acl_edit_spdApplyRefundItem","webApis":[{"serviceUrl":"/yard/spd/spdApplys","serviceMethod":"POST","checked":true,"key":"6-2-0-3-0"},{"serviceUrl":"/yard/spd/spdApplyItems","serviceMethod":"POST","checked":true,"key":"6-2-0-3-1"},{"serviceUrl":"/yard/spd/spdApplyItems/{applyItemId}","serviceMethod":"DELETE","checked":true,"key":"6-2-0-3-2"},{"serviceUrl":"/yard/spd/spdApplyItems/{applyItemId}","serviceMethod":"PUT","checked":true,"key":"6-2-0-3-3"},{"serviceUrl":"/yard/spd/spdGoodsLotStockViews/byAllot/{applyId}","serviceMethod":"GET","checked":true,"key":"6-2-0-3-4"},{"serviceUrl":"/yard/spd/spdGoodsLotStockViews/byAllot/{applyId}/count","serviceMethod":"GET","checked":true,"key":"6-2-0-3-5"},{"serviceUrl":"/yard/pcs/pcsDepots/byUse","serviceMethod":"GET","checked":true,"key":"6-2-0-3-6"},{"serviceUrl":"/yard/spd/spdDepotRoutes/byUse","serviceMethod":"GET","checked":true,"key":"6-2-0-3-7"},{"serviceUrl":"/yard/spd/spdApplyItems/applyId,{applyId}","serviceMethod":"GET","checked":true,"key":"6-2-0-3-8"},{"serviceUrl":"/yard/spd/spdApplyItems/applyId,{applyId}/count","serviceMethod":"GET","checked":true,"key":"6-2-0-3-9"},{"serviceUrl":"/yard/spd/ydsGoodsLots/ids,{ids}","serviceMethod":"GET","checked":true,"key":"6-2-0-3-10"},{"serviceUrl":"/yard/spd/ydsGoods/ids,{ids}","serviceMethod":"GET","checked":true,"key":"6-2-0-3-11"},{"serviceUrl":" /yard/spd/spdGoodsLotStockViews/{id}","serviceMethod":"GET","checked":true,"key":"6-2-0-3-12"}],"checked":true,"key":"6-2-0-3-0","id":"P0635"},{"opId":"P0636","opName":"仓库退货管理删除","opSort":"P0636","elementClass":"acl_delete_spdApplyRefund","webApis":[{"serviceUrl":"/yard/spd/spdApplys/{applyId}","serviceMethod":"DELETE","checked":true,"key":"6-2-0-4-0"},{"serviceUrl":"/yard/spd/spdApplyItems/{applyItemId}","serviceMethod":"DELETE","checked":true,"key":"6-2-0-4-1"}],"checked":true,"key":"6-2-0-4-0","id":"P0636"},{"opId":"P0637","opName":"仓库退货管理批量审核","opSort":"P0637","elementClass":"acl_reviewEntities_spdApplyRefund","webApis":[{"serviceUrl":"/yard/spd/spdApplys/{applyId}/checkState/reviewed","serviceMethod":"PUT","checked":true,"key":"6-2-0-5-0"}],"checked":true,"key":"6-2-0-5-0","id":"P0637"}],"checked":true,"key":"6-2-0-0-0"}],"children":[],"topMenu":false,"checked":true,"key":"6-2-0-0-0"},{"systemName":"收货系统","menuId":"10007-004","menuCode":"10007-004","menuParentId":"10007","icon":null,"menuSort":4,"name":"退货入库确认","level":2,"anchor":"#spd/spdApplyRefundInStockNotarizes","functions":[{"functionId":"F0072","functionName":"退货入库确认","operations":[{"opId":"P0638","opName":"退货入库确认确认","opSort":"P0638","elementClass":"acl_confirm_spdApplyRefundInStock","webApis":[{"serviceUrl":"/yard/spd/spdApplyChecks/{applyId}/checkState/reviewed","serviceMethod":"PUT","checked":true,"key":"6-3-0-0-0"}],"checked":true,"key":"6-3-0-0-0","id":"P0638"},{"opId":"P0639","opName":"退货入库确认查看","opSort":"P0639","elementClass":"acl_view_spdApplyRefundInStock","webApis":[{"serviceUrl":"/yard/spd/spdApplyChecks/byRefund","serviceMethod":"GET","checked":true,"key":"6-3-0-1-0"},{"serviceUrl":"/yard/spd/spdApplyChecks/byRefund/count","serviceMethod":"GET","checked":true,"key":"6-3-0-1-1"}],"checked":true,"key":"6-3-0-1-0","id":"P0639"}],"checked":true,"key":"6-3-0-0-0"}],"children":[],"topMenu":false,"checked":true,"key":"6-3-0-0-0"},{"systemName":"收货系统","menuId":"10007-005","menuCode":"10007-005","menuParentId":"10007","icon":null,"menuSort":5,"name":"仓库退货记录","level":2,"anchor":"#spd/spdApplyRefundHiss","functions":[{"functionId":"F0073","functionName":"仓库退货记录","operations":[{"opId":"P0640","opName":"仓库退货记录查看","opSort":"P0640","elementClass":"acl_view_spdApplyRefundInStockNotarize","webApis":[{"serviceUrl":"/yard/spd/spdApplyChecks/byRefundHis","serviceMethod":"GET","checked":true,"key":"6-4-0-0-0"},{"serviceUrl":"/yard/spd/spdApplyChecks/byRefundHis/count","serviceMethod":"GET","checked":true,"key":"6-4-0-0-1"},{"serviceUrl":"/yard/spd/spdApplyItems/applyId,{applyId}","serviceMethod":"GET","checked":true,"key":"6-4-0-0-2"},{"serviceUrl":"/yard/spd/spdApplyItems/applyId,{applyId}/count","serviceMethod":"GET","checked":true,"key":"6-4-0-0-3"},{"serviceUrl":"/yard/spd/spdGoodsLotStockViews/{id}","serviceMethod":"GET","checked":true,"key":"6-4-0-0-4"}],"checked":true,"key":"6-4-0-0-0","id":"P0640"}],"checked":true,"key":"6-4-0-0-0"}],"children":[],"topMenu":false,"checked":true,"key":"6-4-0-0-0"},{"systemName":"收货系统","menuId":"10007-006","menuCode":"10007-006","menuParentId":"10007","icon":null,"menuSort":6,"name":"仓库调拨管理","level":2,"anchor":"#spd/spdApplyAllots","functions":[{"functionId":"F0037","functionName":"仓库调拨管理","operations":[{"opId":"P0096","opName":"仓库调拨管理查看","opSort":"P0096","elementClass":"acl_view_spdApplyAllot,acl_view_spdApplyAllotItem","webApis":[{"serviceUrl":"/yard/spd/spdApplys/byAllot","serviceMethod":"GET","checked":true,"key":"6-5-0-0-0"},{"serviceUrl":"/yard/spd/spdApplys/byAllot/count","serviceMethod":"GET","checked":true,"key":"6-5-0-0-1"},{"serviceUrl":"/yard/pcs/pcsDepots/byUse","serviceMethod":"GET","checked":true,"key":"6-5-0-0-2"},{"serviceUrl":"/yard/spd/spdDepotRoutes/byUse","serviceMethod":"GET","checked":true,"key":"6-5-0-0-3"},{"serviceUrl":"/yard/spd/spdApplyItems/applyId,{applyId}","serviceMethod":"GET","checked":true,"key":"6-5-0-0-4"},{"serviceUrl":"/yard/spd/spdApplyItems/applyId,{applyId}/count","serviceMethod":"GET","checked":true,"key":"6-5-0-0-5"},{"serviceUrl":"/yard/spd/ydsGoodsLots/ids,{ids}","serviceMethod":"GET","checked":true,"key":"6-5-0-0-6"},{"serviceUrl":"/yard/spd/ydsGoods/ids,{ids}","serviceMethod":"GET","checked":true,"key":"6-5-0-0-7"},{"serviceUrl":" /yard/spd/spdGoodsLotStockViews/{id}","serviceMethod":"GET","checked":true,"key":"6-5-0-0-8"}],"checked":true,"key":"6-5-0-0-0","id":"P0096"},{"opId":"P0484","opName":"仓库调拨管理审核","opSort":"P0484","elementClass":"acl_reviewEntity_spdApplyAllot","webApis":[{"serviceUrl":" /yard/spd/spdApplys/{applyId}/checkState/reviewed","serviceMethod":"PUT","checked":true,"key":"6-5-0-1-0"},{"serviceUrl":"/yard/spd/spdApplys/{applyId}","serviceMethod":"GET","checked":true,"key":"6-5-0-1-1"}],"checked":true,"key":"6-5-0-1-0","id":"P0484"},{"opId":"P0483","opName":"仓库调拨管理增加","opSort":"P0483","elementClass":"acl_add_spdApplyAllot,acl_add_spdApplyAllotItem,acl_view_spdApplyAllotItem","webApis":[{"serviceUrl":"/yard/spd/spdApplys","serviceMethod":"POST","checked":true,"key":"6-5-0-2-0"},{"serviceUrl":"/yard/spd/spdApplyItems","serviceMethod":"POST","checked":true,"key":"6-5-0-2-1"},{"serviceUrl":"/yard/spd/spdApplys/byAllot/count","serviceMethod":"GET","checked":true,"key":"6-5-0-2-2"},{"serviceUrl":"/yard/spd/spdApplyItems/{applyItemId}","serviceMethod":"DELETE","checked":true,"key":"6-5-0-2-3"},{"serviceUrl":"/yard/spd/spdApplyItems/{applyItemId}","serviceMethod":"PUT","checked":true,"key":"6-5-0-2-4"},{"serviceUrl":"/yard/spd/spdGoodsLotStockViews/byAllot/{applyId}","serviceMethod":"GET","checked":true,"key":"6-5-0-2-5"},{"serviceUrl":"/yard/spd/spdGoodsLotStockViews/byAllot/{applyId}/count","serviceMethod":"GET","checked":true,"key":"6-5-0-2-6"},{"serviceUrl":"/yard/pcs/pcsDepots/byUse","serviceMethod":"GET","checked":true,"key":"6-5-0-2-7"},{"serviceUrl":"/yard/spd/spdDepotRoutes/byUse","serviceMethod":"GET","checked":true,"key":"6-5-0-2-8"},{"serviceUrl":"/yard/spd/spdApplyItems/applyId,{applyId}","serviceMethod":"GET","checked":true,"key":"6-5-0-2-9"},{"serviceUrl":"/yard/spd/spdApplyItems/applyId,{applyId}/count","serviceMethod":"GET","checked":true,"key":"6-5-0-2-10"},{"serviceUrl":"/yard/spd/ydsGoodsLots/ids,{ids}","serviceMethod":"GET","checked":true,"key":"6-5-0-2-11"},{"serviceUrl":"/yard/spd/ydsGoods/ids,{ids}","serviceMethod":"GET","checked":true,"key":"6-5-0-2-12"},{"serviceUrl":" /yard/spd/spdGoodsLotStockViews/{id}","serviceMethod":"GET","checked":true,"key":"6-5-0-2-13"}],"checked":true,"key":"6-5-0-2-0","id":"P0483"},{"opId":"P0485","opName":"仓库调拨管理批量审核","opSort":"P0485","elementClass":"acl_reviewEntities_spdApplyAllot","webApis":[{"serviceUrl":" /yard/spd/spdApplys/{applyId}/checkState/reviewed","serviceMethod":"PUT","checked":true,"key":"6-5-0-3-0"},{"serviceUrl":"/yard/spd/spdApplys/{applyId}","serviceMethod":"GET","checked":true,"key":"6-5-0-3-1"}],"checked":true,"key":"6-5-0-3-0","id":"P0485"},{"opId":"P0486","opName":"仓库调拨管理删除","opSort":"P0486","elementClass":"acl_delete_spdApplyAllot,acl_delete_spdApplyAllotItem","webApis":[{"serviceUrl":"/yard/spd/spdApplys/{applyId}","serviceMethod":"DELETE","checked":true,"key":"6-5-0-4-0"},{"serviceUrl":"/yard/spd/spdApplyItems/{applyItemId}","serviceMethod":"DELETE","checked":true,"key":"6-5-0-4-1"}],"checked":true,"key":"6-5-0-4-0","id":"P0486"},{"opId":"P0487","opName":"仓库调拨管理批量提交","opSort":"P0487","elementClass":"acl_commitEntities_spdApplyAllot,acl_view_spdApplyAllot,acl_view_spdApplyAllotItem","webApis":[],"checked":true,"key":"6-5-0-5-0","id":"P0487"},{"opId":"P0488","opName":"仓库调拨管理编辑","opSort":"P0488","elementClass":"acl_edit_spdApplyAllot,acl_add_spdApplyAllotItem,acl_edit_spdApplyAllotItem,acl_view_spdApplyAllotItem,,acl_delete_spdApplyAllotItem","webApis":[{"serviceUrl":"/yard/spd/spdApplys/{applyId}","serviceMethod":"PUT","checked":true,"key":"6-5-0-6-0"},{"serviceUrl":"/yard/spd/spdApplyItems","serviceMethod":"POST","checked":true,"key":"6-5-0-6-1"},{"serviceUrl":"/yard/spd/spdApplys/byAllot/count","serviceMethod":"GET","checked":true,"key":"6-5-0-6-2"},{"serviceUrl":"/yard/spd/spdApplyItems/{applyItemId}","serviceMethod":"DELETE","checked":true,"key":"6-5-0-6-3"},{"serviceUrl":"/yard/spd/spdApplyItems/{applyItemId}","serviceMethod":"PUT","checked":true,"key":"6-5-0-6-4"},{"serviceUrl":"/yard/spd/spdGoodsLotStockViews/byAllot/{applyId}","serviceMethod":"GET","checked":true,"key":"6-5-0-6-5"},{"serviceUrl":"/yard/spd/spdGoodsLotStockViews/byAllot/{applyId}/count","serviceMethod":"GET","checked":true,"key":"6-5-0-6-6"},{"serviceUrl":"/yard/pcs/pcsDepots/byUse","serviceMethod":"GET","checked":true,"key":"6-5-0-6-7"},{"serviceUrl":"/yard/spd/spdDepotRoutes/byUse","serviceMethod":"GET","checked":true,"key":"6-5-0-6-8"},{"serviceUrl":"/yard/spd/spdApplyItems/applyId,{applyId}","serviceMethod":"GET","checked":true,"key":"6-5-0-6-9"},{"serviceUrl":"/yard/spd/spdApplyItems/applyId,{applyId}/count","serviceMethod":"GET","checked":true,"key":"6-5-0-6-10"},{"serviceUrl":"/yard/spd/ydsGoodsLots/ids,{ids}","serviceMethod":"GET","checked":true,"key":"6-5-0-6-11"},{"serviceUrl":"/yard/spd/ydsGoods/ids,{ids}","serviceMethod":"GET","checked":true,"key":"6-5-0-6-12"},{"serviceUrl":" /yard/spd/spdGoodsLotStockViews/{id}","serviceMethod":"GET","checked":true,"key":"6-5-0-6-13"}],"checked":true,"key":"6-5-0-6-0","id":"P0488"},{"opId":"P0015","opName":"His仓库调拨导入","opSort":"P0489","elementClass":"acl_import_ifHisAllot","webApis":[{"serviceUrl":"/yard/spd/ifHisAllot/import","serviceMethod":"GET","checked":true,"key":"6-5-0-7-0"}],"checked":true,"key":"6-5-0-7-0","id":"P0015"}],"checked":true,"key":"6-5-0-0-0"}],"children":[],"topMenu":false,"checked":true,"key":"6-5-0-0-0"},{"systemName":"收货系统","menuId":"10007-007","menuCode":"10007-007","menuParentId":"10007","icon":null,"menuSort":7,"name":"调拨入库确认","level":2,"anchor":"#spd/spdApplyAllotInStockNotarizes","functions":[{"functionId":"F0046","functionName":"调拨入库确认","operations":[{"opId":"P0112","opName":"调拨入库确认查看","opSort":"P0112","elementClass":"acl_view_spdApplyAllotInStock","webApis":[{"serviceUrl":"/yard/spd/spdTasks","serviceMethod":"GET","checked":true,"key":"6-6-0-0-0"},{"serviceUrl":"/yard/spd/spdTaskItems","serviceMethod":"GET","checked":true,"key":"6-6-0-0-1"},{"serviceUrl":"/yard/spd/ydsEdsGoodsLots/ids,{ids}","serviceMethod":"GET","checked":true,"key":"6-6-0-0-2"},{"serviceUrl":"/yard/spd/spdApplyChecks/byAllot","serviceMethod":"GET","checked":true,"key":"6-6-0-0-3"},{"serviceUrl":"/yard/spd/spdApplyChecks/byAllot/count","serviceMethod":"GET","checked":true,"key":"6-6-0-0-4"}],"checked":true,"key":"6-6-0-0-0","id":"P0112"},{"opId":"P0113","opName":"调拨入库确认确认","opSort":"P0113","elementClass":"acl_confirm_spdApplyAllotInStock","webApis":[{"serviceUrl":"/yard/spd/spdApplyChecks/{applyId}/checkState/reviewed","serviceMethod":"PUT","checked":true,"key":"6-6-0-1-0"}],"checked":true,"key":"6-6-0-1-0","id":"P0113"}],"checked":true,"key":"6-6-0-0-0"}],"children":[],"topMenu":false,"checked":true,"key":"6-6-0-0-0"},{"systemName":"收货系统","menuId":"10007-008","menuCode":"10007-008","menuParentId":"10007","icon":null,"menuSort":8,"name":"仓库调拨记录","level":2,"anchor":"#spd/spdApplyAllotHiss","functions":[{"functionId":"F0064","functionName":"仓库调拨记录","operations":[{"opId":"P0511","opName":"仓库调拨记录查看","opSort":"P0511","elementClass":"acl_view_spdApplyAllotHis","webApis":[{"serviceUrl":"/yard/spd/spdApplyChecks/byApplyAllotHis","serviceMethod":"GET","checked":true,"key":"6-7-0-0-0"},{"serviceUrl":"/yard/spd/spdApplyChecks/byApplyAllotHis/count","serviceMethod":"GET","checked":true,"key":"6-7-0-0-1"},{"serviceUrl":"/yard/spd/spdApplyItems/applyId,{applyId}","serviceMethod":"GET","checked":true,"key":"6-7-0-0-2"},{"serviceUrl":"/yard/spd/spdApplyItems/applyId,{applyId}/count","serviceMethod":"GET","checked":true,"key":"6-7-0-0-3"},{"serviceUrl":"/yard/spd/spdGoodsLotStockViews/{id}","serviceMethod":"GET","checked":true,"key":"6-7-0-0-4"}],"checked":true,"key":"6-7-0-0-0","id":"P0511"}],"checked":true,"key":"6-7-0-0-0"}],"children":[],"topMenu":false,"checked":true,"key":"6-7-0-0-0"},{"systemName":"收货系统","menuId":"10007-009","menuCode":"10007-009","menuParentId":"10007","icon":null,"menuSort":9,"name":"使用消耗管理","level":2,"anchor":"#spd/spdUseds","functions":[{"functionId":"F0025","functionName":"使用消耗管理","operations":[{"opId":"P0161","opName":"使用消耗管理查看","opSort":"P0161","elementClass":"acl_view_spdUsed,acl_view_spdUsedItem","webApis":[{"serviceUrl":"/yard/spd/spdUseds","serviceMethod":"GET","checked":true,"key":"6-8-0-0-0"},{"serviceUrl":"/yard/spd/spdUseds/count","serviceMethod":"GET","checked":true,"key":"6-8-0-0-1"},{"serviceUrl":"/yard/spd/spdUsedItems/usedId,{usedId}/count","serviceMethod":"GET","checked":true,"key":"6-8-0-0-2"},{"serviceUrl":"/yard/spd/spdUsedItems/usedId,{usedId}","serviceMethod":"GET","checked":true,"key":"6-8-0-0-3"},{"serviceUrl":"/yard/spd/spdUsedTypes/{usedType}","serviceMethod":"GET","checked":true,"key":"6-8-0-0-4"},{"serviceUrl":"/yard/spd/spdGoodsLotStockViews/byDepot/{depotId}","serviceMethod":"GET","checked":true,"key":"6-8-0-0-5"},{"serviceUrl":"/yard/spd/spdGoodsLotStockViews/byDepot/{depotId}/count","serviceMethod":"GET","checked":true,"key":"6-8-0-0-6"}],"checked":true,"key":"6-8-0-0-0","id":"P0161"},{"opId":"P0162","opName":"使用消耗管理编辑","opSort":"P0162","elementClass":"acl_edit_spdUsed,acl_delete_spdUsedItem,acl_edit_spdUsedItem,acl_view_spdUsedItem,acl_add_spdUsedItem","webApis":[{"serviceUrl":"/yard/spd/spdUsedItems/usedId,{usedId}/count","serviceMethod":"GET","checked":true,"key":"6-8-0-1-0"},{"serviceUrl":"/yard/spd/spdUsedItems/usedId,{usedId}","serviceMethod":"GET","checked":true,"key":"6-8-0-1-1"},{"serviceUrl":"/yard/spd/spdUseds/count","serviceMethod":"GET","checked":true,"key":"6-8-0-1-2"},{"serviceUrl":"/yard/spd/spdUseds","serviceMethod":"GET","checked":true,"key":"6-8-0-1-3"},{"serviceUrl":"/yard/pcs/pcsDepots/{depotId}","serviceMethod":"GET","checked":true,"key":"6-8-0-1-4"},{"serviceUrl":"/yard/spd/spdUseds/{usedId}","serviceMethod":"PUT","checked":true,"key":"6-8-0-1-5"},{"serviceUrl":"/yard/spd/spdUsedItems/{usedItemId}","serviceMethod":"PUT","checked":true,"key":"6-8-0-1-6"},{"serviceUrl":"/yard/spd/spdUsedItems/{usedItemId}","serviceMethod":"DELETE","checked":true,"key":"6-8-0-1-7"},{"serviceUrl":"/yard/spd/spdUsedItems","serviceMethod":"POST","checked":true,"key":"6-8-0-1-8"},{"serviceUrl":"/yard/spd/{usedId}/ifHisUseds","serviceMethod":"GET","checked":true,"key":"6-8-0-1-9"},{"serviceUrl":"/yard/spd/{usedId}/ifHisUseds/count","serviceMethod":"GET","checked":true,"key":"6-8-0-1-10"},{"serviceUrl":"/yard/spd/spdUsedTypes/{usedType}","serviceMethod":"GET","checked":true,"key":"6-8-0-1-11"},{"serviceUrl":"/yard/spd/spdGoodsLotStockViews/byDepot/{depotId}","serviceMethod":"GET","checked":true,"key":"6-8-0-1-12"},{"serviceUrl":"/yard/spd/spdGoodsLotStockViews/byDepot/{depotId}/count","serviceMethod":"GET","checked":true,"key":"6-8-0-1-13"},{"serviceUrl":"/yard/spd/spdGoodsLotStockViews/{id}","serviceMethod":"GET","checked":true,"key":"6-8-0-1-14"}],"checked":true,"key":"6-8-0-1-0","id":"P0162"},{"opId":"P0163","opName":"使用消耗管理增加","opSort":"P0163","elementClass":"acl_add_spdUsed,acl_add_spdUsedItem,acl_view_spdUsedItem,acl_edit_spdUsedItem,acl_delete_spdUsedItem","webApis":[{"serviceUrl":"/yard/pcs/PcsDepts/byUse","serviceMethod":"GET","checked":true,"key":"6-8-0-2-0"},{"serviceUrl":"/yard/pcs/pcsDepots/byUse/count","serviceMethod":"GET","checked":true,"key":"6-8-0-2-1"},{"serviceUrl":"/yard/pcs/pcsDepots/byUse","serviceMethod":"GET","checked":true,"key":"6-8-0-2-2"},{"serviceUrl":"/yard/spd/spdUseds","serviceMethod":"POST","checked":true,"key":"6-8-0-2-3"},{"serviceUrl":"/yard/spd/spdUsedItems","serviceMethod":"POST","checked":true,"key":"6-8-0-2-4"},{"serviceUrl":"/yard/spd/spdUsedItems/{usedItemId}","serviceMethod":"PUT","checked":true,"key":"6-8-0-2-5"},{"serviceUrl":"/yard/spd/spdUsedItems/{usedItemId}","serviceMethod":"DELETE","checked":true,"key":"6-8-0-2-6"},{"serviceUrl":"/yard/pcs/pcsDepots/{depotId}","serviceMethod":"GET","checked":true,"key":"6-8-0-2-7"},{"serviceUrl":"/yard/spd/spdUseds","serviceMethod":"GET","checked":true,"key":"6-8-0-2-8"},{"serviceUrl":"/yard/spd/spdUseds/count","serviceMethod":"GET","checked":true,"key":"6-8-0-2-9"},{"serviceUrl":"/yard/spd/spdUsedItems/usedId,{usedId}/count","serviceMethod":"GET","checked":true,"key":"6-8-0-2-10"},{"serviceUrl":"/yard/spd/spdUsedItems/usedId,{usedId}","serviceMethod":"GET","checked":true,"key":"6-8-0-2-11"},{"serviceUrl":"/yard/spd/spdDepotCards/byUse/count","serviceMethod":"GET","checked":true,"key":"6-8-0-2-12"},{"serviceUrl":"/yard/spd/spdDepotCards/byUse","serviceMethod":"GET","checked":true,"key":"6-8-0-2-13"},{"serviceUrl":"/yard/pcs/depotShelfs/ids,{ids}","serviceMethod":"GET","checked":true,"key":"6-8-0-2-14"},{"serviceUrl":"/yard/spd/ydsGoods/ids,{ids}","serviceMethod":"GET","checked":true,"key":"6-8-0-2-15"},{"serviceUrl":"/yard/spd/ydsGoodsLots/byUse","serviceMethod":"GET","checked":true,"key":"6-8-0-2-16"},{"serviceUrl":"/yard/spd/ydsGoodsLots/byUse","serviceMethod":"GET","checked":true,"key":"6-8-0-2-17"},{"serviceUrl":"/yard/spd/ydsGoodsLots/byUse/count","serviceMethod":"GET","checked":true,"key":"6-8-0-2-18"},{"serviceUrl":"/yard/spd/spdGoodsLotStockViews/byDepot/{depotId}","serviceMethod":"GET","checked":true,"key":"6-8-0-2-19"},{"serviceUrl":"/yard/spd/spdGoodsLotStockViews/byDepot/{depotId}/count","serviceMethod":"GET","checked":true,"key":"6-8-0-2-20"},{"serviceUrl":"/yard/spd/spdGoodsLotStockViews/{id}","serviceMethod":"GET","checked":true,"key":"6-8-0-2-21"}],"checked":true,"key":"6-8-0-2-0","id":"P0163"},{"opId":"P0164","opName":"使用消耗管理删除","opSort":"P0164","elementClass":"acl_delete_spdUsed,acl_delete_spdUsedItem,acl_view_spdUsedItem","webApis":[{"serviceUrl":"/yard/spd/spdUseds/{usedId}","serviceMethod":"DELETE","checked":true,"key":"6-8-0-3-0"},{"serviceUrl":"/yard/spd/spdUsedItems/{usedItemId}","serviceMethod":"DELETE","checked":true,"key":"6-8-0-3-1"}],"checked":true,"key":"6-8-0-3-0","id":"P0164"},{"opId":"P0165","opName":"使用消耗管理提交","opSort":"P0165","elementClass":"acl_commitEntity_spdUsed","webApis":[],"checked":true,"key":"6-8-0-4-0","id":"P0165"}],"checked":true,"key":"6-8-0-0-0"}],"children":[],"topMenu":false,"checked":true,"key":"6-8-0-0-0"},{"systemName":"收货系统","menuId":"10007-010","menuCode":"10007-010","menuParentId":"10007","icon":null,"menuSort":10,"name":"使用消耗确认","level":2,"anchor":"#spd/spdUsedChecks","functions":[{"functionId":"F0027","functionName":"使用消耗确认","operations":[{"opId":"P0175","opName":"使用消耗确认查看","opSort":"P0175","elementClass":"acl_view_spdUsed","webApis":[{"serviceUrl":"/yard/spd/spdUseds/byCheck","serviceMethod":"GET","checked":true,"key":"6-9-0-0-0"},{"serviceUrl":"/yard/spd/spdUseds/byCheck/count","serviceMethod":"GET","checked":true,"key":"6-9-0-0-1"},{"serviceUrl":"/yard/spd/spdUsedItems/usedId,{usedId}/count","serviceMethod":"GET","checked":true,"key":"6-9-0-0-2"},{"serviceUrl":"/yard/spd/spdUsedItems/usedId,{usedId}","serviceMethod":"GET","checked":true,"key":"6-9-0-0-3"},{"serviceUrl":"/yard/spd/spdUsedTypes/{usedType}","serviceMethod":"GET","checked":true,"key":"6-9-0-0-4"},{"serviceUrl":"/yard/spd/spdGoodsLotStockViews/byDepot/{depotId}","serviceMethod":"GET","checked":true,"key":"6-9-0-0-5"},{"serviceUrl":"/yard/spd/spdGoodsLotStockViews/byDepot/{depotId}/count","serviceMethod":"GET","checked":true,"key":"6-9-0-0-6"}],"checked":true,"key":"6-9-0-0-0","id":"P0175"},{"opId":"P0176","opName":"使用消耗确认编辑","opSort":"P0176","elementClass":"acl_edit_spdUsed","webApis":[],"checked":true,"key":"6-9-0-1-0","id":"P0176"},{"opId":"P0180","opName":"使用消耗确认审核","opSort":"P0180","elementClass":"acl_reviewEntity_spdUsedCheck","webApis":[{"serviceUrl":" /yard/spd/spdUseds/{usedId}/checkState/reviewed","serviceMethod":"PUT","checked":true,"key":"6-9-0-2-0"},{"serviceUrl":"/yard/spd/spdUseds/{usedId}","serviceMethod":"GET","checked":true,"key":"6-9-0-2-1"}],"checked":true,"key":"6-9-0-2-0","id":"P0180"}],"checked":true,"key":"6-9-0-0-0"}],"children":[],"topMenu":false,"checked":true,"key":"6-9-0-0-0"},{"systemName":"收货系统","menuId":"10007-011","menuCode":"10007-011","menuParentId":"10007","icon":null,"menuSort":11,"name":"使用消耗记录","level":2,"anchor":"#spd/spdUsedHiss","functions":[{"functionId":"F0026","functionName":"使用消耗记录","operations":[{"opId":"P0168","opName":"使用消耗记录查看","opSort":"P0168","elementClass":"acl_view_spdUsedCheck,acl_view_spdUsedHisItem","webApis":[{"serviceUrl":"/yard/spd/spdUseds/byHis","serviceMethod":"GET","checked":true,"key":"6-10-0-0-0"},{"serviceUrl":"/yard/spd/spdUseds/byHis/count","serviceMethod":"GET","checked":true,"key":"6-10-0-0-1"},{"serviceUrl":"/yard/spd/spdUsedItems/usedId,{usedId}/count","serviceMethod":"GET","checked":true,"key":"6-10-0-0-2"},{"serviceUrl":"/yard/spd/spdUsedItems/usedId,{usedId}","serviceMethod":"GET","checked":true,"key":"6-10-0-0-3"},{"serviceUrl":"/yard/spd/spdUsedTypes/{usedType}","serviceMethod":"GET","checked":true,"key":"6-10-0-0-4"},{"serviceUrl":"/yard/spd/spdGoodsLotStockViews/byDepot/{depotId}","serviceMethod":"GET","checked":true,"key":"6-10-0-0-5"},{"serviceUrl":"/yard/spd/spdGoodsLotStockViews/byDepot/{depotId}/count","serviceMethod":"GET","checked":true,"key":"6-10-0-0-6"}],"checked":true,"key":"6-10-0-0-0","id":"P0168"}],"checked":true,"key":"6-10-0-0-0"}],"children":[],"topMenu":false,"checked":true,"key":"6-10-0-0-0"},{"systemName":"收货系统","menuId":"10007-012","menuCode":"10007-012","menuParentId":"10007","icon":null,"menuSort":12,"name":"收货信息录入","level":2,"anchor":"#spd/spdReceiveEnterIngs","functions":[{"functionId":"F0026","functionName":"收货信息录入","operations":[{"opId":"P0665","opName":"收货信息录入查看","opSort":"P0665","elementClass":"acl_view_spdReceiveEnterIng,acl_view_spdReceiveEnterIngItem","webApis":[],"checked":true,"key":"6-11-0-0-0","id":"P0665"},{"opId":"P0665","opName":"收货信息录入新增","opSort":"P0665","elementClass":"acl_add_spdReceiveEnterIng,acl_add_spdReceiveEnterIngItem,acl_view_spdReceiveEnterIngItem","webApis":[{"serviceUrl":"/yard/spd/spdReceives","serviceMethod":"POST","checked":true,"key":"6-11-0-1-0"}],"checked":true,"key":"6-11-0-1-0","id":"P0665"},{"opId":"P0665","opName":"收货信息录入编辑","opSort":"P0665","elementClass":"acl_edit_spdReceiveEnterIng,acl_view_spdReceiveEnterIngItem,acl_add_spdReceiveEnterIngItem,acl_delete_spdReceiveEnterIngItem","webApis":[{"serviceUrl":"/yard/spd/spdReceives/{receiveId}","serviceMethod":"PUT","checked":true,"key":"6-11-0-2-0"},{"serviceUrl":"/yard/spd/spdReceiveItems","serviceMethod":"POST","checked":true,"key":"6-11-0-2-1"},{"serviceUrl":"/yard/spd/spdReceiveItems/{receiveItemId}","serviceMethod":"PUT","checked":true,"key":"6-11-0-2-2"},{"serviceUrl":"/yard/spd/spdReceiveItems/{receiveItemId}","serviceMethod":"DELETE","checked":true,"key":"6-11-0-2-3"}],"checked":true,"key":"6-11-0-2-0","id":"P0665"},{"opId":"P0665","opName":"收货信息录入删除","opSort":"P0665","elementClass":"acl_delete_spdReceiveEnterIng","webApis":[{"serviceUrl":"/yard/spd/spdReceives/{receiveId}","serviceMethod":"DELETE","checked":true,"key":"6-11-0-3-0"}],"checked":true,"key":"6-11-0-3-0","id":"P0665"},{"opId":"P0665","opName":"收货信息录入提交","opSort":"P0665","elementClass":"acl_commitEntity_spdReceiveEnterIng","webApis":[],"checked":true,"key":"6-11-0-4-0","id":"P0665"},{"opId":"P0665","opName":"收货信息录入撤回","opSort":"P0665","elementClass":"acl_cancelCommit_spdReceiveEnterIng","webApis":[],"checked":true,"key":"6-11-0-5-0","id":"P0665"},{"opId":"P0665","opName":"收货信息录入审核","opSort":"P0665","elementClass":"acl_reviewEntity_spdReceiveEnterIng","webApis":[{"serviceUrl":"/yard/spd/spdReceives/{receiveId}/checkState/byQuick/reviewed","serviceMethod":"PUT","checked":true,"key":"6-11-0-6-0"}],"checked":true,"key":"6-11-0-6-0","id":"P0665"}],"checked":true,"key":"6-11-0-0-0"}],"children":[],"topMenu":false,"checked":true,"key":"6-11-0-0-0"}],"topMenu":true,"open":false,"checked":true,"key":"6-0-0-0-0"}]};}
 
 /***/ },
 /* 205 */
@@ -22961,15 +22837,73 @@
 	Object.defineProperty(exports, '__esModule', {
 	  value: true
 	});
+	exports.setTopEdit = setTopEdit;
+	exports.setTopAdd = setTopAdd;
+	exports.setTopClose = setTopClose;
+	var SET_TOP_EDIT = 'SET_TOP_EDIT';
+	exports.SET_TOP_EDIT = SET_TOP_EDIT;
+	var SET_TOP_ADD = 'SET_TOP_ADD';
+	exports.SET_TOP_ADD = SET_TOP_ADD;
+	var SET_TOP_CLOSE = 'SET_TOP_CLOSE';
+
+	exports.SET_TOP_CLOSE = SET_TOP_CLOSE;
+
+	function setTopEdit(dataType, content) {
+	  return {
+	    type: SET_TOP_EDIT,
+	    dataType: dataType,
+	    content: content
+	  };
+	}
+
+	function setTopAdd(content) {
+	  return {
+	    type: SET_TOP_ADD,
+	    content: content
+	  };
+	}
+
+	function setTopClose() {
+	  return {
+	    type: SET_TOP_CLOSE
+	  };
+	}
+
+/***/ },
+/* 206 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
 	exports.handleSelected = handleSelected;
 	exports.operationsSelected = operationsSelected;
 	exports.webApisSelected = webApisSelected;
+	exports.dispatchHandleSubmit = dispatchHandleSubmit;
+	exports.dispatchOperationsSubmit = dispatchOperationsSubmit;
+	exports.dispatchWebApisSubmit = dispatchWebApisSubmit;
 	exports.handleSubmit = handleSubmit;
 	exports.operationsSubmit = operationsSubmit;
 	exports.webApisSubmit = webApisSubmit;
+	exports.dispatchAddActions = dispatchAddActions;
+	exports.dispatchAddOperActions = dispatchAddOperActions;
+	exports.dispatchAddApiActions = dispatchAddApiActions;
 	exports.addFunctionsSubmit = addFunctionsSubmit;
 	exports.addOperationsSubmit = addOperationsSubmit;
 	exports.addWebApisSubmit = addWebApisSubmit;
+	exports.handleDelete = handleDelete;
+
+	var _oper = __webpack_require__(207);
+
+	var _keys = __webpack_require__(208);
+
+	var _api = __webpack_require__(209);
+
+	/**
+	 * 勾选action
+	 */
 	var HANDLE_SELECTED = 'HANDLE_SELECTED';
 	exports.HANDLE_SELECTED = HANDLE_SELECTED;
 	var OPERATIONS_SELECTED = 'OPERATIONS_SELECTED';
@@ -22987,11 +22921,9 @@
 	var ADD_OPERATIONS_SUBMIT = 'ADD_OPERATIONS_SUBMIT';
 	exports.ADD_OPERATIONS_SUBMIT = ADD_OPERATIONS_SUBMIT;
 	var ADD_WEBAPIS_SUBMIT = 'ADD_WEBAPIS_SUBMIT';
-
 	exports.ADD_WEBAPIS_SUBMIT = ADD_WEBAPIS_SUBMIT;
-	/**
-	 * 勾选action
-	 */
+	var HANDLE_DELETE = 'HANDLE_DELETE';
+	exports.HANDLE_DELETE = HANDLE_DELETE;
 
 	function handleSelected(key) {
 	  return {
@@ -23015,12 +22947,46 @@
 	}
 
 	/**
+	 * 派发修改functions action
+	 */
+
+	function dispatchHandleSubmit(idArray, nextKey, key, functionId, functionName) {
+	  return function (dispatch) {
+	    dispatch(handleSubmit(idArray, nextKey, key, functionId, functionName));
+	    dispatch((0, _keys.setClose)());
+	  };
+	}
+
+	/**
+	 * 派发修改operations action
+	 */
+
+	function dispatchOperationsSubmit(idArray, nextKey, key, opId, opSort, opName, elementClass) {
+	  return function (dispatch) {
+	    dispatch(operationsSubmit(idArray, nextKey, key, opId, opSort, opName, elementClass));
+	    dispatch((0, _oper.setOperClose)());
+	  };
+	}
+
+	/**
+	 * 派发修改webApis action
+	 */
+
+	function dispatchWebApisSubmit(nextKey, key, serviceMethod, serviceUrl) {
+	  return function (dispatch) {
+	    dispatch(webApisSubmit(nextKey, key, serviceMethod, serviceUrl));
+	    dispatch((0, _api.setApiClose)());
+	  };
+	}
+
+	/**
 	 * 提交修改action
 	 */
 
-	function handleSubmit(nextKey, key, functionId, functionName) {
+	function handleSubmit(idArray, nextKey, key, functionId, functionName) {
 	  return {
 	    type: HANDLE_SUBMIT,
+	    idArray: idArray,
 	    nextKey: nextKey,
 	    key: key,
 	    functionId: functionId,
@@ -23028,9 +22994,10 @@
 	  };
 	}
 
-	function operationsSubmit(nextKey, key, opId, opSort, opName, elementClass) {
+	function operationsSubmit(idArray, nextKey, key, opId, opSort, opName, elementClass) {
 	  return {
 	    type: OPERATIONS_SUBMIT,
+	    idArray: idArray,
 	    nextKey: nextKey,
 	    key: key,
 	    opId: opId,
@@ -23047,6 +23014,37 @@
 	    key: key,
 	    serviceMethod: serviceMethod,
 	    serviceUrl: serviceUrl
+	  };
+	}
+
+	/**
+	 * 派发新增functions action
+	 */
+
+	function dispatchAddActions(idArray, nextKey, key, functionId, functionName) {
+	  return function (dispatch) {
+	    idArray.includes(functionId) ? alert('该functionId已存在！') : (dispatch(addFunctionsSubmit(nextKey, key, functionId, functionName)), dispatch((0, _keys.setClose)()));
+	  };
+	}
+
+	/**
+	 * 派发新增operations action
+	 */
+
+	function dispatchAddOperActions(idArray, nextKey, key, opId, opSort, opName, elementClass) {
+	  return function (dispatch) {
+	    idArray.includes(opId) ? alert('该opId已存在！') : (dispatch(addOperationsSubmit(nextKey, key, opId, opSort, opName, elementClass)), dispatch((0, _oper.setOperClose)()));
+	  };
+	}
+
+	/**
+	 * 派发新增webApis action
+	 */
+
+	function dispatchAddApiActions(nextKey, key, serviceMethod, serviceUrl) {
+	  return function (dispatch) {
+	    dispatch(addWebApisSubmit(nextKey, key, serviceMethod, serviceUrl));
+	    dispatch((0, _api.setApiClose)());
 	  };
 	}
 
@@ -23086,8 +23084,168 @@
 	  };
 	}
 
+	function handleDelete(dataType, key) {
+	  return {
+	    type: HANDLE_DELETE,
+	    dataType: dataType,
+	    key: key
+	  };
+	}
+
 /***/ },
-/* 206 */
+/* 207 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	exports.setOperOpen = setOperOpen;
+	exports.setOperEdit = setOperEdit;
+	exports.setOperAdd = setOperAdd;
+	exports.setOperClose = setOperClose;
+	var SET_OPER_OPEN = 'SET_OPER_OPEN';
+	exports.SET_OPER_OPEN = SET_OPER_OPEN;
+	var SET_OPER_EDIT = 'SET_OPER_EDIT';
+	exports.SET_OPER_EDIT = SET_OPER_EDIT;
+	var SET_OPER_ADD = 'SET_OPER_ADD';
+	exports.SET_OPER_ADD = SET_OPER_ADD;
+	var SET_OPER_CLOSE = 'SET_OPER_CLOSE';
+
+	exports.SET_OPER_CLOSE = SET_OPER_CLOSE;
+
+	function setOperOpen(content) {
+	  return {
+	    type: SET_OPER_OPEN,
+	    content: content
+	  };
+	}
+
+	function setOperEdit(content) {
+	  return {
+	    type: SET_OPER_EDIT,
+	    content: content
+	  };
+	}
+
+	function setOperAdd(key, array) {
+	  return {
+	    type: SET_OPER_ADD,
+	    key: key,
+	    array: array
+	  };
+	}
+
+	function setOperClose() {
+	  return {
+	    type: SET_OPER_CLOSE
+	  };
+	}
+
+/***/ },
+/* 208 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	exports.setOpen = setOpen;
+	exports.setEdit = setEdit;
+	exports.setAdd = setAdd;
+	exports.setClose = setClose;
+	var SET_OPEN = 'SET_OPEN';
+	exports.SET_OPEN = SET_OPEN;
+	var SET_EDIT = 'SET_EDIT';
+	exports.SET_EDIT = SET_EDIT;
+	var SET_ADD = 'SET_ADD';
+	exports.SET_ADD = SET_ADD;
+	var SET_CLOSE = 'SET_CLOSE';
+
+	exports.SET_CLOSE = SET_CLOSE;
+
+	function setOpen(content) {
+	  return {
+	    type: SET_OPEN,
+	    content: content
+	  };
+	}
+
+	function setEdit(content) {
+	  return {
+	    type: SET_EDIT,
+	    content: content
+	  };
+	}
+
+	function setAdd(key, array) {
+	  return {
+	    type: SET_ADD,
+	    key: key,
+	    array: array
+	  };
+	}
+
+	function setClose() {
+	  return {
+	    type: SET_CLOSE
+	  };
+	}
+
+/***/ },
+/* 209 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	exports.setApiOpen = setApiOpen;
+	exports.setApiEdit = setApiEdit;
+	exports.setApiAdd = setApiAdd;
+	exports.setApiClose = setApiClose;
+	var SET_API_OPEN = 'SET_API_OPEN';
+	exports.SET_API_OPEN = SET_API_OPEN;
+	var SET_API_EDIT = 'SET_API_EDIT';
+	exports.SET_API_EDIT = SET_API_EDIT;
+	var SET_API_ADD = 'SET_API_ADD';
+	exports.SET_API_ADD = SET_API_ADD;
+	var SET_API_CLOSE = 'SET_API_CLOSE';
+
+	exports.SET_API_CLOSE = SET_API_CLOSE;
+
+	function setApiOpen(content) {
+	  return {
+	    type: SET_API_OPEN,
+	    content: content
+	  };
+	}
+
+	function setApiEdit(content) {
+	  return {
+	    type: SET_API_EDIT,
+	    content: content
+	  };
+	}
+
+	function setApiAdd(key) {
+	  return {
+	    type: SET_API_ADD,
+	    key: key
+	  };
+	}
+
+	function setApiClose() {
+	  return {
+	    type: SET_API_CLOSE
+	  };
+	}
+
+/***/ },
+/* 210 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -23108,28 +23266,33 @@
 
 	  switch (action.type) {
 	    case _actionsMenus.RECEIVE_MENUS:
-	      return action.menus.map(function (menu, i) {
-	        menu.open = false;
-	        menu.checked = false;
-	        menu.key = i + '-' + 0 + '-' + 0 + '-' + 0 + '-' + 0;
-	        menu.children.map(function (child, j) {
-	          child.checked = false;
-	          child.key = i + '-' + j + '-' + 0 + '-' + 0 + '-' + 0;
-	          child.functions.map(function (fun, k) {
-	            fun.checked = false;
-	            fun.key = i + '-' + j + '-' + k + '-' + 0 + '-' + 0;
-	            fun.operations.map(function (operation, x) {
-	              operation.checked = false, operation.key = i + '-' + j + '-' + k + '-' + x + '-' + 0;
-	              operation.id = operation.opId;
-	              operation.webApis.map(function (api, y) {
-	                api.checked = false;
-	                api.key = i + '-' + j + '-' + k + '-' + x + '-' + y;
+	      if (action.menus[0].checked === undefined) {
+	        //判断是否为操作过的文件
+	        return action.menus.map(function (menu, i) {
+	          menu.open = false;
+	          menu.checked = false;
+	          menu.key = i + '-' + 0 + '-' + 0 + '-' + 0 + '-' + 0;
+	          menu.children.map(function (child, j) {
+	            child.checked = false;
+	            child.key = i + '-' + j + '-' + 0 + '-' + 0 + '-' + 0;
+	            child.functions.map(function (fun, k) {
+	              fun.checked = false;
+	              fun.key = i + '-' + j + '-' + k + '-' + 0 + '-' + 0;
+	              fun.operations.map(function (operation, x) {
+	                operation.checked = false, operation.key = i + '-' + j + '-' + k + '-' + x + '-' + 0;
+	                operation.id = operation.opId;
+	                operation.webApis.map(function (api, y) {
+	                  api.checked = false;
+	                  api.key = i + '-' + j + '-' + k + '-' + x + '-' + y;
+	                });
 	              });
 	            });
 	          });
+	          return menu;
 	        });
-	        return menu;
-	      });
+	      } else {
+	        return action.menus;
+	      }
 	    /**
 	     * 选中该一级菜单
 	     */
@@ -23205,6 +23368,7 @@
 	     * 合并items修改后的数据
 	     */
 	    case _actionsMenus.COMBINE_ITEMS:
+	      console.log(action.items);
 	      var funId = state.map(function (menu) {
 	        return menu.children.map(function (child) {
 	          return child.key;
@@ -23235,7 +23399,6 @@
 	     * 提交修改二级菜单数据
 	     */
 	    case _actionsMenus.SECOND_MENUS_SUBMIT:
-	      console.log(action.key);
 	      return state.map(function (menu) {
 	        return menu.menuId === action.menuParentId ? Object.assign({}, menu, {
 	          children: menu.children.map(function (child) {
@@ -23250,6 +23413,51 @@
 	          })
 	        }) : menu;
 	      });
+	    /**
+	     * 删除菜单数据
+	     */
+	    case _actionsMenus.MENU_DELETE:
+	      if (action.dataType === 'First') {
+	        var dialogMenu = confirm('确定删除一级菜单?');
+	        if (dialogMenu) {
+	          return state.filter(function (item) {
+	            return action.key !== item.key;
+	          });
+	        }
+	        return state; //有if (dialogMenu)判断的这里记得return state,不然会新增一个空的一级菜单
+	      } else if (action.dataType === 'Second') {
+	          var dialogMenu = confirm('确定删除二级菜单?');
+	          if (dialogMenu) {
+	            state = state.map(function (item) {
+	              return Object.assign({}, item, {
+	                children: item.children.filter(function (child) {
+	                  return action.key !== child.key;
+	                })
+	              });
+	            });
+	            alert('删除成功！');
+	            return state;
+	          }
+	          return state;
+	        } else {
+	          var dialogMenu = confirm('确定删除functions?');
+	          if (dialogMenu) {
+	            state = state.map(function (item) {
+	              return Object.assign({}, item, {
+	                children: item.children.map(function (child) {
+	                  return Object.assign({}, child, {
+	                    functions: child.functions.filter(function (func) {
+	                      return action.key !== func.key;
+	                    })
+	                  });
+	                })
+	              });
+	            });
+	            alert('删除成功！');
+	            return state;
+	          }
+	          return state;
+	        }
 	    /**
 	     * 提交新增一级菜单数据
 	     */
@@ -23274,27 +23482,34 @@
 	     * 提交新增二级菜单数据
 	     */
 	    case _actionsMenus.ADD_SECOND_MENUS:
-	      var b = parseInt(action.nextKey.split('-')[0]);
-	      var c = state[b].children.length;
-	      state.map(function (menu) {
-	        return menu.menuId === action.menuParentId ? Object.assign({}, menu, {
-	          children: menu.children.push({
-	            menuId: action.menuId,
-	            menuCode: action.menuCode,
-	            menuSort: action.menuSort,
-	            name: action.name,
-	            menuParentId: action.menuParentId,
-	            anchor: action.anchor,
-	            key: b + '-' + c + '-' + 0 + '-' + 0 + '-' + 0,
-	            systemName: "收货系统",
-	            "icon": null,
-	            level: 2,
-	            functions: [],
-	            children: [],
-	            topMenu: false
-	          })
-	        }) : menu;
-	      });
+	      if (action.menuId === undefined && action.menuCode === undefined && action.menuParentId === undefined) {
+	        return state;
+	      } else {
+	        (function () {
+	          console.log(action.nextKey);
+	          var b = parseInt(action.nextKey.split('-')[0]);
+	          var c = state[b].children.length;
+	          state.map(function (menu) {
+	            return menu.menuId === action.menuParentId ? Object.assign({}, menu, {
+	              children: menu.children.push({
+	                menuId: action.menuId,
+	                menuCode: action.menuCode,
+	                menuSort: action.menuSort,
+	                name: action.name,
+	                menuParentId: action.menuParentId,
+	                anchor: action.anchor,
+	                key: b + '-' + c + '-' + 0 + '-' + 0 + '-' + 0,
+	                systemName: "收货系统",
+	                "icon": null,
+	                level: 2,
+	                functions: [],
+	                children: [],
+	                topMenu: false
+	              })
+	            }) : menu;
+	          });
+	        })();
+	      }
 
 	    default:
 	      return state;
@@ -23302,7 +23517,7 @@
 	}
 
 /***/ },
-/* 207 */
+/* 211 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -23310,23 +23525,45 @@
 	Object.defineProperty(exports, '__esModule', {
 	  value: true
 	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 	exports.keys = keys;
 
 	var _actionsMenus = __webpack_require__(204);
 
 	var _actionsKeys = __webpack_require__(208);
 
-	var initial = { open: false, edit: false, addItems: false, keys: '' };
+	var initialState = { open: false, edit: false, addItems: false, nextKey: '0-0-0-0-0', nextContent: '', key: '', functionId: '' };
 
 	function keys(state, action) {
-	  if (state === undefined) state = initial;
+	  if (state === undefined) state = initialState;
 
 	  switch (action.type) {
 	    case _actionsMenus.GET_KEY:
-	      state = action.key;
-	      return state;
+	      return _extends({}, state, { key: action.key });
 
 	    case _actionsKeys.SET_OPEN:
+	      return _extends({}, state, { open: true, nextContent: action.content });
+
+	    case _actionsKeys.SET_EDIT:
+	      return _extends({}, state, { open: true, edit: true, nextContent: action.content });
+
+	    case _actionsKeys.SET_ADD:
+	      var funcId = action.array[action.array.length - 1];
+	      var newOne = parseInt(funcId.slice(1)) + 1;
+	      var newId = undefined;
+	      if (newOne > 999) {
+	        newId = 'F' + newOne;
+	      } else if (newOne > 99) {
+	        newId = 'F' + '0' + newOne;
+	      } else {
+	        newId = 'F' + '0' + '0' + newOne;
+	      }
+	      return _extends({}, state, { open: true, addItems: true, functionId: newId, nextKey: action.key });
+
+	    case _actionsKeys.SET_CLOSE:
+	      return _extends({}, state, { open: false, addItems: false, edit: false });
 
 	    default:
 	      return state;
@@ -23334,45 +23571,167 @@
 	}
 
 /***/ },
-/* 208 */
-/***/ function(module, exports) {
+/* 212 */
+/***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	Object.defineProperty(exports, '__esModule', {
 	  value: true
 	});
-	exports.setOpen = setOpen;
-	exports.setEdit = setEdit;
-	exports.setAddItems = setAddItems;
-	var SET_OPEN = 'SET_OPEN';
-	exports.SET_OPEN = SET_OPEN;
-	var SET_EDIT = 'SET_EDIT';
-	exports.SET_EDIT = SET_EDIT;
-	var SET_ADDITEMS = 'SET_ADDITEMS';
 
-	exports.SET_ADDITEMS = SET_ADDITEMS;
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-	function setOpen() {
-	  return {
-	    type: SET_OPEN
-	  };
-	}
+	exports.oper = oper;
 
-	function setEdit() {
-	  return {
-	    type: SET_EDIT
-	  };
-	}
+	var _actionsOper = __webpack_require__(207);
 
-	function setAddItems() {
-	  return {
-	    type: SET_ADDITEMS
-	  };
+	var initialState = { open: false, edit: false, addItems: false, nextKey: '0-0-0-0-0', nextContent: '', opId: '', opSort: '' };
+
+	function oper(state, action) {
+	  if (state === undefined) state = initialState;
+
+	  switch (action.type) {
+
+	    case _actionsOper.SET_OPER_OPEN:
+	      return _extends({}, state, { open: true, nextContent: action.content });
+
+	    case _actionsOper.SET_OPER_EDIT:
+	      return _extends({}, state, { open: true, edit: true, nextContent: action.content });
+
+	    case _actionsOper.SET_OPER_ADD:
+	      var opId = action.array[action.array.length - 1]; //todo 新增functionId后这个opId为undefined,所以下面也执行不了 2016.12.30
+	      var newOne = parseInt(opId.slice(1)) + 1;
+	      var newId = undefined;
+	      if (newOne > 999) {
+	        newId = 'P' + newOne;
+	      } else if (newOne > 99) {
+	        newId = 'P' + '0' + newOne;
+	      } else {
+	        newId = 'P' + '0' + '0' + newOne;
+	      }
+	      return _extends({}, state, { open: true, addItems: true, opId: newId, opSort: newId, nextKey: action.key });
+
+	    case _actionsOper.SET_OPER_CLOSE:
+	      return _extends({}, state, { open: false, addItems: false, edit: false });
+
+	    default:
+	      return state;
+	  }
 	}
 
 /***/ },
-/* 209 */
+/* 213 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	    value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	exports.api = api;
+
+	var _actionsApi = __webpack_require__(209);
+
+	var initialState = { open: false, addItems: false, nextKey: '0-0-0-0-0', nextContent: '' };
+
+	function api(state, action) {
+	    if (state === undefined) state = initialState;
+
+	    switch (action.type) {
+
+	        case _actionsApi.SET_API_OPEN:
+	            return _extends({}, state, { open: true, nextContent: action.content });
+
+	        case _actionsApi.SET_API_EDIT:
+	            return _extends({}, state, { open: true, nextContent: action.content });
+
+	        case _actionsApi.SET_API_ADD:
+	            return _extends({}, state, { open: true, addItems: true, nextKey: action.key });
+
+	        case _actionsApi.SET_API_CLOSE:
+	            return _extends({}, state, { open: false, addItems: false });
+
+	        default:
+	            return state;
+	    }
+	}
+
+/***/ },
+/* 214 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	exports.top = top;
+
+	var _actionsTop = __webpack_require__(205);
+
+	var initialState = { open: false, first: false, addMenu: true, nextKey: '0-0-0-0-0', idArray: [], nextContent: '', menuId: '', menuCode: '', menuParentId: '' };
+
+	function top(state, action) {
+	  if (state === undefined) state = initialState;
+
+	  switch (action.type) {
+
+	    case _actionsTop.SET_TOP_EDIT:
+	      return action.dataType === 'First' ? _extends({}, state, { open: true, first: true, addMenus: false, nextContent: action.content }) : _extends({}, state, { open: true, first: false, addMenus: false, nextContent: action.content });
+
+	    case _actionsTop.SET_TOP_ADD:
+	      var menus = action.content.filter(function (menu) {
+	        return menu.checked;
+	      });
+	      var arrayFirst = action.content.map(function (item) {
+	        return item.menuId;
+	      }); //一级菜单下的menuId数组
+	      var arraySecond = action.content.map(function (item) {
+	        return item.children.map(function (child) {
+	          return child.menuId;
+	        });
+	      }); //二级菜单下的menuId数组
+
+	      var Id = function Id(obj) {
+	        //定义一个将多层嵌套数组合并成一层数组的函数
+	        return obj.reduce(function (x, y) {
+	          return x.concat(y).reduce(function (x, y) {
+	            return x.concat(y);
+	          }, []);
+	        }, []).sort();
+	      };
+
+	      if (menus.length === 0) {
+	        var FirstId = Id(arrayFirst);
+	        var newOne = parseInt(FirstId[FirstId.length - 1]) + 1;
+	        return _extends({}, state, { open: true, first: true, addMenus: true, menuId: newOne, menuCode: newOne, idArray: FirstId });
+	      } else {
+	        var FirstId = Id(arraySecond);
+	        var SecondId = menus[0].menuId;
+	        var IdLength = menus[0].children.length + 1;
+	        var num = undefined; //这里不能用const，下面有两次赋值
+	        IdLength > 9 ? num = '0' + IdLength : num = '00' + IdLength; //避免有 如10001-1格式出现
+	        var newId = SecondId + '-' + num;
+	        return _extends({}, state, { open: true, first: false, addMenus: true, nextKey: menus[0].key, menuId: newId, menuCode: newId, menuParentId: SecondId, idArray: FirstId });
+	      }
+
+	    case _actionsTop.SET_TOP_CLOSE:
+	      return _extends({}, state, { open: false });
+
+	    default:
+	      return state;
+	  }
+	}
+
+/***/ },
+/* 215 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -23391,7 +23750,7 @@
 	module.exports = thunkMiddleware;
 
 /***/ },
-/* 210 */
+/* 216 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -23402,11 +23761,11 @@
 	  value: true
 	});
 
-	var _core = __webpack_require__(211);
+	var _core = __webpack_require__(217);
 
-	var _helpers = __webpack_require__(212);
+	var _helpers = __webpack_require__(218);
 
-	var _defaults = __webpack_require__(215);
+	var _defaults = __webpack_require__(221);
 
 	var _defaults2 = _interopRequireDefault(_defaults);
 
@@ -23509,7 +23868,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 211 */
+/* 217 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -23519,9 +23878,9 @@
 	});
 	exports.printBuffer = printBuffer;
 
-	var _helpers = __webpack_require__(212);
+	var _helpers = __webpack_require__(218);
 
-	var _diff = __webpack_require__(213);
+	var _diff = __webpack_require__(219);
 
 	var _diff2 = _interopRequireDefault(_diff);
 
@@ -23650,7 +24009,7 @@
 	}
 
 /***/ },
-/* 212 */
+/* 218 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -23674,7 +24033,7 @@
 	var timer = exports.timer = typeof performance !== "undefined" && performance !== null && typeof performance.now === "function" ? performance : Date;
 
 /***/ },
-/* 213 */
+/* 219 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -23684,7 +24043,7 @@
 	});
 	exports.default = diffLogger;
 
-	var _deepDiff = __webpack_require__(214);
+	var _deepDiff = __webpack_require__(220);
 
 	var _deepDiff2 = _interopRequireDefault(_deepDiff);
 
@@ -23770,7 +24129,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 214 */
+/* 220 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global) {/*!
@@ -24199,7 +24558,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 215 */
+/* 221 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -24250,7 +24609,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 216 */
+/* 222 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24259,16 +24618,16 @@
 
 	function _interopRequire(obj) { return obj && obj.__esModule ? obj['default'] : obj; }
 
-	var _devTools = __webpack_require__(217);
+	var _devTools = __webpack_require__(223);
 
 	exports.devTools = _interopRequire(_devTools);
 
-	var _persistState = __webpack_require__(218);
+	var _persistState = __webpack_require__(224);
 
 	exports.persistState = _interopRequire(_persistState);
 
 /***/ },
-/* 217 */
+/* 223 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -24569,7 +24928,7 @@
 	}
 
 /***/ },
-/* 218 */
+/* 224 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -24664,23 +25023,23 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 219 */
+/* 225 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var defaultClickRejectionStrategy = __webpack_require__(220);
+	var defaultClickRejectionStrategy = __webpack_require__(226);
 
 	module.exports = function injectTapEventPlugin (strategyOverrides) {
 	  strategyOverrides = strategyOverrides || {}
 	  var shouldRejectClick = strategyOverrides.shouldRejectClick || defaultClickRejectionStrategy;
 
 	  __webpack_require__(20).injection.injectEventPluginsByName({
-	    "TapEventPlugin":       __webpack_require__(221)(shouldRejectClick)
+	    "TapEventPlugin":       __webpack_require__(227)(shouldRejectClick)
 	  });
 	};
 
 
 /***/ },
-/* 220 */
+/* 226 */
 /***/ function(module, exports) {
 
 	module.exports = function(lastTouchEvent, clickTimestamp) {
@@ -24691,7 +25050,7 @@
 
 
 /***/ },
-/* 221 */
+/* 227 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -24719,10 +25078,10 @@
 	var EventPluginUtils = __webpack_require__(22);
 	var EventPropagators = __webpack_require__(85);
 	var SyntheticUIEvent = __webpack_require__(99);
-	var TouchEventUtils = __webpack_require__(222);
+	var TouchEventUtils = __webpack_require__(228);
 	var ViewportMetrics = __webpack_require__(30);
 
-	var keyOf = __webpack_require__(223);
+	var keyOf = __webpack_require__(229);
 	var topLevelTypes = EventConstants.topLevelTypes;
 
 	var isStartish = EventPluginUtils.isStartish;
@@ -24868,7 +25227,7 @@
 
 
 /***/ },
-/* 222 */
+/* 228 */
 /***/ function(module, exports) {
 
 	/**
@@ -24916,7 +25275,7 @@
 
 
 /***/ },
-/* 223 */
+/* 229 */
 /***/ function(module, exports) {
 
 	/**
@@ -24956,7 +25315,7 @@
 	module.exports = keyOf;
 
 /***/ },
-/* 224 */
+/* 230 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24985,41 +25344,39 @@
 
 	var _reactRedux = __webpack_require__(171);
 
-	var _materialUiLibAppBar = __webpack_require__(225);
+	var _materialUiLibAppBar = __webpack_require__(231);
 
 	var _materialUiLibAppBar2 = _interopRequireDefault(_materialUiLibAppBar);
 
-	var _materialUiLibIconButton = __webpack_require__(253);
+	var _materialUiLibIconButton = __webpack_require__(259);
 
 	var _materialUiLibIconButton2 = _interopRequireDefault(_materialUiLibIconButton);
 
-	var _materialUiLibSvgIconsActionHome = __webpack_require__(308);
+	var _materialUiLibSvgIconsActionHome = __webpack_require__(314);
 
 	var _materialUiLibSvgIconsActionHome2 = _interopRequireDefault(_materialUiLibSvgIconsActionHome);
 
-	var _materialUiLibStylesColors = __webpack_require__(252);
+	var _materialUiLibSvgIconsActionDelete = __webpack_require__(315);
 
-	var _materialUiLibCheckbox = __webpack_require__(309);
-
-	var _materialUiLibCheckbox2 = _interopRequireDefault(_materialUiLibCheckbox);
+	var _materialUiLibSvgIconsActionDelete2 = _interopRequireDefault(_materialUiLibSvgIconsActionDelete);
 
 	var _actionsMenus = __webpack_require__(204);
 
 	var MenusActions = _interopRequireWildcard(_actionsMenus);
 
-	var _actionsItems = __webpack_require__(205);
+	var _actionsItems = __webpack_require__(206);
 
 	var ItemsActions = _interopRequireWildcard(_actionsItems);
 
-	var _componentsItemsItems = __webpack_require__(317);
+	var _componentsItemsItems = __webpack_require__(316);
 
 	var _componentsItemsItems2 = _interopRequireDefault(_componentsItemsItems);
 
-	var _componentsMenusMenus = __webpack_require__(341);
+	var _componentsMenusMenus = __webpack_require__(348);
 
 	var _componentsMenusMenus2 = _interopRequireDefault(_componentsMenusMenus);
 
-	__webpack_require__(343);
+	__webpack_require__(350);
 
 	var App = (function (_Component) {
 	  _inherits(App, _Component);
@@ -25033,7 +25390,8 @@
 	  _createClass(App, [{
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
-	      this.props.menusActions.readItemsFile(); //electron下，用fs读取文件
+	      // this.props.menusActions.readItemsFile()  //electron下，用fs读取文件
+	      this.props.menusActions.receiveMenus(); //web下
 	    }
 	  }, {
 	    key: 'componentWillReceiveProps',
@@ -25042,17 +25400,13 @@
 
 	      nextState.items.map(function (item, i) {
 	        return nextState.items !== _this.props.items ? _this.props.menusActions.combineItems(item.key, nextState.items) : item;
-	      } //不加这个判断很容易进行死循环，一直更新
-	      );
+	      });
 	    }
-	    //item.key不能combine的原因是key不一样，如一个为0-0，另一个为0-0-0，所以不相等 2016.12.15
-
 	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var _props = this.props;
 	      var items = _props.items;
-	      var keys = _props.keys;
 	      var menusActions = _props.menusActions;
 	      var itemsActions = _props.itemsActions;
 	      var menus = _props.menus;
@@ -25061,11 +25415,11 @@
 	        'div',
 	        null,
 	        _react2['default'].createElement(_materialUiLibAppBar2['default'], {
-	          title: 'Coooooool',
+	          title: 'MCT',
 	          iconElementLeft: _react2['default'].createElement(
 	            _materialUiLibIconButton2['default'],
 	            null,
-	            _react2['default'].createElement(_materialUiLibSvgIconsActionHome2['default'], { color: _materialUiLibStylesColors.fullWhite })
+	            _react2['default'].createElement(_materialUiLibSvgIconsActionHome2['default'], null)
 	          )
 	        }),
 	        _react2['default'].createElement(
@@ -25084,9 +25438,9 @@
 	            _react2['default'].createElement(_componentsItemsItems2['default'], {
 	              itemsActions: itemsActions,
 	              menusActions: menusActions,
-	              keys: keys,
 	              menus: menus,
-	              items: items })
+	              items: items
+	            })
 	          )
 	        )
 	      );
@@ -25100,8 +25454,7 @@
 	  // menu = Object.assign({}, menu, {functions: item}) //想把items上改变合并到menus上用这个方法行不通,因为item和menu是平级
 	  return {
 	    items: state.items,
-	    menus: state.menus,
-	    keys: state.keys //todo 新增menus下的key，用来创建新增菜单下functions,感觉就用在这个地方有点浪费性能，待优化  2016.12.20
+	    menus: state.menus
 	  };
 	}
 
@@ -25116,7 +25469,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 225 */
+/* 231 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -25131,35 +25484,35 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _stylePropable = __webpack_require__(226);
+	var _stylePropable = __webpack_require__(232);
 
 	var _stylePropable2 = _interopRequireDefault(_stylePropable);
 
-	var _typography = __webpack_require__(251);
+	var _typography = __webpack_require__(257);
 
 	var _typography2 = _interopRequireDefault(_typography);
 
-	var _iconButton = __webpack_require__(253);
+	var _iconButton = __webpack_require__(259);
 
 	var _iconButton2 = _interopRequireDefault(_iconButton);
 
-	var _menu = __webpack_require__(305);
+	var _menu = __webpack_require__(311);
 
 	var _menu2 = _interopRequireDefault(_menu);
 
-	var _getMuiTheme = __webpack_require__(273);
+	var _getMuiTheme = __webpack_require__(279);
 
 	var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
 
-	var _paper = __webpack_require__(307);
+	var _paper = __webpack_require__(313);
 
 	var _paper2 = _interopRequireDefault(_paper);
 
-	var _propTypes = __webpack_require__(257);
+	var _propTypes = __webpack_require__(263);
 
 	var _propTypes2 = _interopRequireDefault(_propTypes);
 
-	var _warning = __webpack_require__(248);
+	var _warning = __webpack_require__(254);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
@@ -25488,7 +25841,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14)))
 
 /***/ },
-/* 226 */
+/* 232 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -25501,7 +25854,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _styles = __webpack_require__(227);
+	var _styles = __webpack_require__(233);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -25543,7 +25896,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 227 */
+/* 233 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -25555,15 +25908,15 @@
 	exports.mergeAndPrefix = mergeAndPrefix;
 	exports.prepareStyles = prepareStyles;
 
-	var _autoPrefix = __webpack_require__(228);
+	var _autoPrefix = __webpack_require__(234);
 
 	var _autoPrefix2 = _interopRequireDefault(_autoPrefix);
 
-	var _reactAddonsUpdate = __webpack_require__(249);
+	var _reactAddonsUpdate = __webpack_require__(255);
 
 	var _reactAddonsUpdate2 = _interopRequireDefault(_reactAddonsUpdate);
 
-	var _warning = __webpack_require__(248);
+	var _warning = __webpack_require__(254);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
@@ -25718,7 +26071,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14)))
 
 /***/ },
-/* 228 */
+/* 234 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -25729,11 +26082,11 @@
 	  value: true
 	});
 
-	var _inlineStylePrefixer = __webpack_require__(229);
+	var _inlineStylePrefixer = __webpack_require__(235);
 
 	var _inlineStylePrefixer2 = _interopRequireDefault(_inlineStylePrefixer);
 
-	var _warning = __webpack_require__(248);
+	var _warning = __webpack_require__(254);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
@@ -25854,7 +26207,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14)))
 
 /***/ },
-/* 229 */
+/* 235 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -25873,31 +26226,31 @@
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	var _utilsGetBrowserInformation = __webpack_require__(230);
+	var _utilsGetBrowserInformation = __webpack_require__(236);
 
 	var _utilsGetBrowserInformation2 = _interopRequireDefault(_utilsGetBrowserInformation);
 
-	var _utilsGetPrefixedKeyframes = __webpack_require__(233);
+	var _utilsGetPrefixedKeyframes = __webpack_require__(239);
 
 	var _utilsGetPrefixedKeyframes2 = _interopRequireDefault(_utilsGetPrefixedKeyframes);
 
-	var _utilsCapitalizeString = __webpack_require__(234);
+	var _utilsCapitalizeString = __webpack_require__(240);
 
 	var _utilsCapitalizeString2 = _interopRequireDefault(_utilsCapitalizeString);
 
-	var _utilsAssign = __webpack_require__(235);
+	var _utilsAssign = __webpack_require__(241);
 
 	var _utilsAssign2 = _interopRequireDefault(_utilsAssign);
 
-	var _utilsWarn = __webpack_require__(236);
+	var _utilsWarn = __webpack_require__(242);
 
 	var _utilsWarn2 = _interopRequireDefault(_utilsWarn);
 
-	var _caniuseData = __webpack_require__(237);
+	var _caniuseData = __webpack_require__(243);
 
 	var _caniuseData2 = _interopRequireDefault(_caniuseData);
 
-	var _Plugins = __webpack_require__(238);
+	var _Plugins = __webpack_require__(244);
 
 	var _Plugins2 = _interopRequireDefault(_Plugins);
 
@@ -26091,7 +26444,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 230 */
+/* 236 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -26102,7 +26455,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _bowser = __webpack_require__(231);
+	var _bowser = __webpack_require__(237);
 
 	var _bowser2 = _interopRequireDefault(_bowser);
 
@@ -26251,7 +26604,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 231 */
+/* 237 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -26262,7 +26615,7 @@
 
 	!function (root, name, definition) {
 	  if (typeof module != 'undefined' && module.exports) module.exports = definition()
-	  else if (true) __webpack_require__(232)(name, definition)
+	  else if (true) __webpack_require__(238)(name, definition)
 	  else root[name] = definition()
 	}(this, 'bowser', function () {
 	  /**
@@ -26837,14 +27190,14 @@
 
 
 /***/ },
-/* 232 */
+/* 238 */
 /***/ function(module, exports) {
 
 	module.exports = function() { throw new Error("define cannot be used indirect"); };
 
 
 /***/ },
-/* 233 */
+/* 239 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -26869,7 +27222,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 234 */
+/* 240 */
 /***/ function(module, exports) {
 
 	// helper to capitalize strings
@@ -26886,7 +27239,7 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 235 */
+/* 241 */
 /***/ function(module, exports) {
 
 	// leight polyfill for Object.assign
@@ -26908,7 +27261,7 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 236 */
+/* 242 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {// only throw warnings if devmode is enabled
@@ -26928,13 +27281,13 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14)))
 
 /***/ },
-/* 237 */
+/* 243 */
 /***/ function(module, exports) {
 
 	var caniuseData = {"chrome":{"transform":35,"transformOrigin":35,"transformOriginX":35,"transformOriginY":35,"backfaceVisibility":35,"perspective":35,"perspectiveOrigin":35,"transformStyle":35,"transformOriginZ":35,"animation":42,"animationDelay":42,"animationDirection":42,"animationFillMode":42,"animationDuration":42,"animationIterationCount":42,"animationName":42,"animationPlayState":42,"animationTimingFunction":42,"appearance":50,"userSelect":50,"fontKerning":32,"textEmphasisPosition":50,"textEmphasis":50,"textEmphasisStyle":50,"textEmphasisColor":50,"boxDecorationBreak":50,"clipPath":50,"maskImage":50,"maskMode":50,"maskRepeat":50,"maskPosition":50,"maskClip":50,"maskOrigin":50,"maskSize":50,"maskComposite":50,"mask":50,"maskBorderSource":50,"maskBorderMode":50,"maskBorderSlice":50,"maskBorderWidth":50,"maskBorderOutset":50,"maskBorderRepeat":50,"maskBorder":50,"maskType":50,"textDecorationStyle":50,"textDecorationSkip":50,"textDecorationLine":50,"textDecorationColor":50,"filter":50,"fontFeatureSettings":47,"breakAfter":50,"breakBefore":50,"breakInside":50,"columnCount":50,"columnFill":50,"columnGap":50,"columnRule":50,"columnRuleColor":50,"columnRuleStyle":50,"columnRuleWidth":50,"columns":50,"columnSpan":50,"columnWidth":50},"safari":{"flex":8,"flexBasis":8,"flexDirection":8,"flexGrow":8,"flexFlow":8,"flexShrink":8,"flexWrap":8,"alignContent":8,"alignItems":8,"alignSelf":8,"justifyContent":8,"order":8,"transition":6,"transitionDelay":6,"transitionDuration":6,"transitionProperty":6,"transitionTimingFunction":6,"transform":8,"transformOrigin":8,"transformOriginX":8,"transformOriginY":8,"backfaceVisibility":8,"perspective":8,"perspectiveOrigin":8,"transformStyle":8,"transformOriginZ":8,"animation":8,"animationDelay":8,"animationDirection":8,"animationFillMode":8,"animationDuration":8,"animationIterationCount":8,"animationName":8,"animationPlayState":8,"animationTimingFunction":8,"appearance":9.1,"userSelect":9.1,"backdropFilter":9.1,"fontKerning":9.1,"scrollSnapType":9.1,"scrollSnapPointsX":9.1,"scrollSnapPointsY":9.1,"scrollSnapDestination":9.1,"scrollSnapCoordinate":9.1,"textEmphasisPosition":7,"textEmphasis":7,"textEmphasisStyle":7,"textEmphasisColor":7,"boxDecorationBreak":9.1,"clipPath":9.1,"maskImage":9.1,"maskMode":9.1,"maskRepeat":9.1,"maskPosition":9.1,"maskClip":9.1,"maskOrigin":9.1,"maskSize":9.1,"maskComposite":9.1,"mask":9.1,"maskBorderSource":9.1,"maskBorderMode":9.1,"maskBorderSlice":9.1,"maskBorderWidth":9.1,"maskBorderOutset":9.1,"maskBorderRepeat":9.1,"maskBorder":9.1,"maskType":9.1,"textDecorationStyle":9.1,"textDecorationSkip":9.1,"textDecorationLine":9.1,"textDecorationColor":9.1,"shapeImageThreshold":9.1,"shapeImageMargin":9.1,"shapeImageOutside":9.1,"filter":9,"hyphens":9.1,"flowInto":9.1,"flowFrom":9.1,"breakBefore":8,"breakAfter":8,"breakInside":8,"regionFragment":9.1,"columnCount":8,"columnFill":8,"columnGap":8,"columnRule":8,"columnRuleColor":8,"columnRuleStyle":8,"columnRuleWidth":8,"columns":8,"columnSpan":8,"columnWidth":8},"firefox":{"appearance":46,"userSelect":46,"boxSizing":28,"textAlignLast":46,"textDecorationStyle":35,"textDecorationSkip":35,"textDecorationLine":35,"textDecorationColor":35,"tabSize":46,"hyphens":42,"fontFeatureSettings":33,"breakAfter":46,"breakBefore":46,"breakInside":46,"columnCount":46,"columnFill":46,"columnGap":46,"columnRule":46,"columnRuleColor":46,"columnRuleStyle":46,"columnRuleWidth":46,"columns":46,"columnSpan":46,"columnWidth":46},"opera":{"flex":16,"flexBasis":16,"flexDirection":16,"flexGrow":16,"flexFlow":16,"flexShrink":16,"flexWrap":16,"alignContent":16,"alignItems":16,"alignSelf":16,"justifyContent":16,"order":16,"transform":22,"transformOrigin":22,"transformOriginX":22,"transformOriginY":22,"backfaceVisibility":22,"perspective":22,"perspectiveOrigin":22,"transformStyle":22,"transformOriginZ":22,"animation":29,"animationDelay":29,"animationDirection":29,"animationFillMode":29,"animationDuration":29,"animationIterationCount":29,"animationName":29,"animationPlayState":29,"animationTimingFunction":29,"appearance":36,"userSelect":36,"fontKerning":19,"textEmphasisPosition":36,"textEmphasis":36,"textEmphasisStyle":36,"textEmphasisColor":36,"boxDecorationBreak":36,"clipPath":36,"maskImage":36,"maskMode":36,"maskRepeat":36,"maskPosition":36,"maskClip":36,"maskOrigin":36,"maskSize":36,"maskComposite":36,"mask":36,"maskBorderSource":36,"maskBorderMode":36,"maskBorderSlice":36,"maskBorderWidth":36,"maskBorderOutset":36,"maskBorderRepeat":36,"maskBorder":36,"maskType":36,"filter":36,"fontFeatureSettings":36,"breakAfter":36,"breakBefore":36,"breakInside":36,"columnCount":36,"columnFill":36,"columnGap":36,"columnRule":36,"columnRuleColor":36,"columnRuleStyle":36,"columnRuleWidth":36,"columns":36,"columnSpan":36,"columnWidth":36},"ie":{"gridArea":11,"gridGap":11,"gridColumnStart":11,"userSelect":11,"grid":11,"breakInside":11,"hyphens":11,"gridTemplateAreas":11,"breakAfter":11,"scrollSnapCoordinate":11,"gridRowStart":11,"gridAutoFlow":11,"scrollSnapDestination":11,"gridTemplate":11,"gridTemplateColumns":11,"transformOrigin":9,"gridAutoRows":11,"gridColumnEnd":11,"transformOriginY":9,"scrollSnapPointsY":11,"breakBefore":11,"gridRowGap":11,"scrollSnapPointsX":11,"regionFragment":11,"flexWrap":10,"wrapFlow":11,"gridRowEnd":11,"flex":10,"flexDirection":10,"flowInto":11,"touchAction":10,"gridColumn":11,"transform":9,"gridTemplateRows":11,"flexFlow":10,"transformOriginX":9,"flowFrom":11,"scrollSnapType":11,"wrapMargin":11,"gridColumnGap":11,"gridRow":11,"wrapThrough":11,"gridAutoColumns":11,"textSizeAdjust":11},"edge":{"userSelect":14,"wrapFlow":14,"wrapThrough":14,"wrapMargin":14,"scrollSnapType":14,"scrollSnapPointsX":14,"scrollSnapPointsY":14,"scrollSnapDestination":14,"scrollSnapCoordinate":14,"hyphens":14,"flowInto":14,"flowFrom":14,"breakBefore":14,"breakAfter":14,"breakInside":14,"regionFragment":14,"gridTemplateColumns":14,"gridTemplateRows":14,"gridTemplateAreas":14,"gridTemplate":14,"gridAutoColumns":14,"gridAutoRows":14,"gridAutoFlow":14,"grid":14,"gridRowStart":14,"gridColumnStart":14,"gridRowEnd":14,"gridRow":14,"gridColumn":14,"gridColumnEnd":14,"gridColumnGap":14,"gridRowGap":14,"gridArea":14,"gridGap":14},"ios_saf":{"flex":8.1,"flexBasis":8.1,"flexDirection":8.1,"flexGrow":8.1,"flexFlow":8.1,"flexShrink":8.1,"flexWrap":8.1,"alignContent":8.1,"alignItems":8.1,"alignSelf":8.1,"justifyContent":8.1,"order":8.1,"transition":6,"transitionDelay":6,"transitionDuration":6,"transitionProperty":6,"transitionTimingFunction":6,"transform":8.1,"transformOrigin":8.1,"transformOriginX":8.1,"transformOriginY":8.1,"backfaceVisibility":8.1,"perspective":8.1,"perspectiveOrigin":8.1,"transformStyle":8.1,"transformOriginZ":8.1,"animation":8.1,"animationDelay":8.1,"animationDirection":8.1,"animationFillMode":8.1,"animationDuration":8.1,"animationIterationCount":8.1,"animationName":8.1,"animationPlayState":8.1,"animationTimingFunction":8.1,"appearance":9.3,"userSelect":9.3,"backdropFilter":9.3,"fontKerning":9.3,"scrollSnapType":9.3,"scrollSnapPointsX":9.3,"scrollSnapPointsY":9.3,"scrollSnapDestination":9.3,"scrollSnapCoordinate":9.3,"boxDecorationBreak":9.3,"clipPath":9.3,"maskImage":9.3,"maskMode":9.3,"maskRepeat":9.3,"maskPosition":9.3,"maskClip":9.3,"maskOrigin":9.3,"maskSize":9.3,"maskComposite":9.3,"mask":9.3,"maskBorderSource":9.3,"maskBorderMode":9.3,"maskBorderSlice":9.3,"maskBorderWidth":9.3,"maskBorderOutset":9.3,"maskBorderRepeat":9.3,"maskBorder":9.3,"maskType":9.3,"textSizeAdjust":9.3,"textDecorationStyle":9.3,"textDecorationSkip":9.3,"textDecorationLine":9.3,"textDecorationColor":9.3,"shapeImageThreshold":9.3,"shapeImageMargin":9.3,"shapeImageOutside":9.3,"filter":9,"hyphens":9.3,"flowInto":9.3,"flowFrom":9.3,"breakBefore":8.1,"breakAfter":8.1,"breakInside":8.1,"regionFragment":9.3,"columnCount":8.1,"columnFill":8.1,"columnGap":8.1,"columnRule":8.1,"columnRuleColor":8.1,"columnRuleStyle":8.1,"columnRuleWidth":8.1,"columns":8.1,"columnSpan":8.1,"columnWidth":8.1},"android":{"borderImage":4.2,"borderImageOutset":4.2,"borderImageRepeat":4.2,"borderImageSlice":4.2,"borderImageSource":4.2,"borderImageWidth":4.2,"flex":4.2,"flexBasis":4.2,"flexDirection":4.2,"flexGrow":4.2,"flexFlow":4.2,"flexShrink":4.2,"flexWrap":4.2,"alignContent":4.2,"alignItems":4.2,"alignSelf":4.2,"justifyContent":4.2,"order":4.2,"transition":4.2,"transitionDelay":4.2,"transitionDuration":4.2,"transitionProperty":4.2,"transitionTimingFunction":4.2,"transform":4.4,"transformOrigin":4.4,"transformOriginX":4.4,"transformOriginY":4.4,"backfaceVisibility":4.4,"perspective":4.4,"perspectiveOrigin":4.4,"transformStyle":4.4,"transformOriginZ":4.4,"animation":4.4,"animationDelay":4.4,"animationDirection":4.4,"animationFillMode":4.4,"animationDuration":4.4,"animationIterationCount":4.4,"animationName":4.4,"animationPlayState":4.4,"animationTimingFunction":4.4,"appearance":46,"userSelect":46,"fontKerning":4.4,"textEmphasisPosition":46,"textEmphasis":46,"textEmphasisStyle":46,"textEmphasisColor":46,"boxDecorationBreak":46,"clipPath":46,"maskImage":46,"maskMode":46,"maskRepeat":46,"maskPosition":46,"maskClip":46,"maskOrigin":46,"maskSize":46,"maskComposite":46,"mask":46,"maskBorderSource":46,"maskBorderMode":46,"maskBorderSlice":46,"maskBorderWidth":46,"maskBorderOutset":46,"maskBorderRepeat":46,"maskBorder":46,"maskType":46,"filter":46,"fontFeatureSettings":46,"breakAfter":46,"breakBefore":46,"breakInside":46,"columnCount":46,"columnFill":46,"columnGap":46,"columnRule":46,"columnRuleColor":46,"columnRuleStyle":46,"columnRuleWidth":46,"columns":46,"columnSpan":46,"columnWidth":46},"and_chr":{"appearance":47,"userSelect":47,"textEmphasisPosition":47,"textEmphasis":47,"textEmphasisStyle":47,"textEmphasisColor":47,"boxDecorationBreak":47,"clipPath":47,"maskImage":47,"maskMode":47,"maskRepeat":47,"maskPosition":47,"maskClip":47,"maskOrigin":47,"maskSize":47,"maskComposite":47,"mask":47,"maskBorderSource":47,"maskBorderMode":47,"maskBorderSlice":47,"maskBorderWidth":47,"maskBorderOutset":47,"maskBorderRepeat":47,"maskBorder":47,"maskType":47,"textDecorationStyle":47,"textDecorationSkip":47,"textDecorationLine":47,"textDecorationColor":47,"filter":47,"fontFeatureSettings":47,"breakAfter":47,"breakBefore":47,"breakInside":47,"columnCount":47,"columnFill":47,"columnGap":47,"columnRule":47,"columnRuleColor":47,"columnRuleStyle":47,"columnRuleWidth":47,"columns":47,"columnSpan":47,"columnWidth":47},"and_uc":{"flex":9.9,"flexBasis":9.9,"flexDirection":9.9,"flexGrow":9.9,"flexFlow":9.9,"flexShrink":9.9,"flexWrap":9.9,"alignContent":9.9,"alignItems":9.9,"alignSelf":9.9,"justifyContent":9.9,"order":9.9,"transition":9.9,"transitionDelay":9.9,"transitionDuration":9.9,"transitionProperty":9.9,"transitionTimingFunction":9.9,"transform":9.9,"transformOrigin":9.9,"transformOriginX":9.9,"transformOriginY":9.9,"backfaceVisibility":9.9,"perspective":9.9,"perspectiveOrigin":9.9,"transformStyle":9.9,"transformOriginZ":9.9,"animation":9.9,"animationDelay":9.9,"animationDirection":9.9,"animationFillMode":9.9,"animationDuration":9.9,"animationIterationCount":9.9,"animationName":9.9,"animationPlayState":9.9,"animationTimingFunction":9.9,"appearance":9.9,"userSelect":9.9,"fontKerning":9.9,"textEmphasisPosition":9.9,"textEmphasis":9.9,"textEmphasisStyle":9.9,"textEmphasisColor":9.9,"maskImage":9.9,"maskMode":9.9,"maskRepeat":9.9,"maskPosition":9.9,"maskClip":9.9,"maskOrigin":9.9,"maskSize":9.9,"maskComposite":9.9,"mask":9.9,"maskBorderSource":9.9,"maskBorderMode":9.9,"maskBorderSlice":9.9,"maskBorderWidth":9.9,"maskBorderOutset":9.9,"maskBorderRepeat":9.9,"maskBorder":9.9,"maskType":9.9,"textSizeAdjust":9.9,"filter":9.9,"hyphens":9.9,"flowInto":9.9,"flowFrom":9.9,"breakBefore":9.9,"breakAfter":9.9,"breakInside":9.9,"regionFragment":9.9,"fontFeatureSettings":9.9,"columnCount":9.9,"columnFill":9.9,"columnGap":9.9,"columnRule":9.9,"columnRuleColor":9.9,"columnRuleStyle":9.9,"columnRuleWidth":9.9,"columns":9.9,"columnSpan":9.9,"columnWidth":9.9},"op_mini":{"borderImage":5,"borderImageOutset":5,"borderImageRepeat":5,"borderImageSlice":5,"borderImageSource":5,"borderImageWidth":5,"tabSize":5,"objectFit":5,"objectPosition":5}}; module.exports = caniuseData
 
 /***/ },
-/* 238 */
+/* 244 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -26945,37 +27298,37 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _pluginsCalc = __webpack_require__(239);
+	var _pluginsCalc = __webpack_require__(245);
 
 	var _pluginsCalc2 = _interopRequireDefault(_pluginsCalc);
 
-	var _pluginsCursor = __webpack_require__(240);
+	var _pluginsCursor = __webpack_require__(246);
 
 	var _pluginsCursor2 = _interopRequireDefault(_pluginsCursor);
 
-	var _pluginsFlex = __webpack_require__(241);
+	var _pluginsFlex = __webpack_require__(247);
 
 	var _pluginsFlex2 = _interopRequireDefault(_pluginsFlex);
 
-	var _pluginsSizing = __webpack_require__(242);
+	var _pluginsSizing = __webpack_require__(248);
 
 	var _pluginsSizing2 = _interopRequireDefault(_pluginsSizing);
 
-	var _pluginsGradient = __webpack_require__(243);
+	var _pluginsGradient = __webpack_require__(249);
 
 	var _pluginsGradient2 = _interopRequireDefault(_pluginsGradient);
 
-	var _pluginsTransition = __webpack_require__(244);
+	var _pluginsTransition = __webpack_require__(250);
 
 	var _pluginsTransition2 = _interopRequireDefault(_pluginsTransition);
 
 	// special flexbox specifications
 
-	var _pluginsFlexboxIE = __webpack_require__(246);
+	var _pluginsFlexboxIE = __webpack_require__(252);
 
 	var _pluginsFlexboxIE2 = _interopRequireDefault(_pluginsFlexboxIE);
 
-	var _pluginsFlexboxOld = __webpack_require__(247);
+	var _pluginsFlexboxOld = __webpack_require__(253);
 
 	var _pluginsFlexboxOld2 = _interopRequireDefault(_pluginsFlexboxOld);
 
@@ -26985,7 +27338,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 239 */
+/* 245 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -27022,7 +27375,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 240 */
+/* 246 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -27065,7 +27418,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 241 */
+/* 247 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -27101,7 +27454,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 242 */
+/* 248 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -27157,7 +27510,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 243 */
+/* 249 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -27196,7 +27549,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 244 */
+/* 250 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -27210,11 +27563,11 @@
 
 	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-	var _utilsCamelToDashCase = __webpack_require__(245);
+	var _utilsCamelToDashCase = __webpack_require__(251);
 
 	var _utilsCamelToDashCase2 = _interopRequireDefault(_utilsCamelToDashCase);
 
-	var _utilsCapitalizeString = __webpack_require__(234);
+	var _utilsCapitalizeString = __webpack_require__(240);
 
 	var _utilsCapitalizeString2 = _interopRequireDefault(_utilsCapitalizeString);
 
@@ -27275,7 +27628,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 245 */
+/* 251 */
 /***/ function(module, exports) {
 
 	/**
@@ -27297,7 +27650,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 246 */
+/* 252 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -27363,7 +27716,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 247 */
+/* 253 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -27437,7 +27790,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 248 */
+/* 254 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -27504,13 +27857,13 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14)))
 
 /***/ },
-/* 249 */
+/* 255 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(250);
+	module.exports = __webpack_require__(256);
 
 /***/ },
-/* 250 */
+/* 256 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -27623,7 +27976,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14)))
 
 /***/ },
-/* 251 */
+/* 257 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -27632,7 +27985,7 @@
 	  value: true
 	});
 
-	var _colors = __webpack_require__(252);
+	var _colors = __webpack_require__(258);
 
 	var _colors2 = _interopRequireDefault(_colors);
 
@@ -27664,7 +28017,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 252 */
+/* 258 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -27962,7 +28315,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 253 */
+/* 259 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -27977,39 +28330,39 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _stylePropable = __webpack_require__(226);
+	var _stylePropable = __webpack_require__(232);
 
 	var _stylePropable2 = _interopRequireDefault(_stylePropable);
 
-	var _contextPure = __webpack_require__(254);
+	var _contextPure = __webpack_require__(260);
 
 	var _contextPure2 = _interopRequireDefault(_contextPure);
 
-	var _transitions = __webpack_require__(256);
+	var _transitions = __webpack_require__(262);
 
 	var _transitions2 = _interopRequireDefault(_transitions);
 
-	var _propTypes = __webpack_require__(257);
+	var _propTypes = __webpack_require__(263);
 
 	var _propTypes2 = _interopRequireDefault(_propTypes);
 
-	var _enhancedButton = __webpack_require__(258);
+	var _enhancedButton = __webpack_require__(264);
 
 	var _enhancedButton2 = _interopRequireDefault(_enhancedButton);
 
-	var _fontIcon = __webpack_require__(303);
+	var _fontIcon = __webpack_require__(309);
 
 	var _fontIcon2 = _interopRequireDefault(_fontIcon);
 
-	var _tooltip = __webpack_require__(304);
+	var _tooltip = __webpack_require__(310);
 
 	var _tooltip2 = _interopRequireDefault(_tooltip);
 
-	var _children = __webpack_require__(262);
+	var _children = __webpack_require__(268);
 
 	var _children2 = _interopRequireDefault(_children);
 
-	var _getMuiTheme = __webpack_require__(273);
+	var _getMuiTheme = __webpack_require__(279);
 
 	var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
 
@@ -28300,7 +28653,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 254 */
+/* 260 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -28309,7 +28662,7 @@
 	  value: true
 	});
 
-	var _shallowEqual = __webpack_require__(255);
+	var _shallowEqual = __webpack_require__(261);
 
 	var _shallowEqual2 = _interopRequireDefault(_shallowEqual);
 
@@ -28370,7 +28723,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 255 */
+/* 261 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -28410,7 +28763,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 256 */
+/* 262 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -28451,7 +28804,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 257 */
+/* 263 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -28492,7 +28845,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 258 */
+/* 264 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -28507,39 +28860,39 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactAddonsPureRenderMixin = __webpack_require__(259);
+	var _reactAddonsPureRenderMixin = __webpack_require__(265);
 
 	var _reactAddonsPureRenderMixin2 = _interopRequireDefault(_reactAddonsPureRenderMixin);
 
-	var _stylePropable = __webpack_require__(226);
+	var _stylePropable = __webpack_require__(232);
 
 	var _stylePropable2 = _interopRequireDefault(_stylePropable);
 
-	var _colors = __webpack_require__(252);
+	var _colors = __webpack_require__(258);
 
 	var _colors2 = _interopRequireDefault(_colors);
 
-	var _children = __webpack_require__(262);
+	var _children = __webpack_require__(268);
 
 	var _children2 = _interopRequireDefault(_children);
 
-	var _events = __webpack_require__(265);
+	var _events = __webpack_require__(271);
 
 	var _events2 = _interopRequireDefault(_events);
 
-	var _keyCode = __webpack_require__(266);
+	var _keyCode = __webpack_require__(272);
 
 	var _keyCode2 = _interopRequireDefault(_keyCode);
 
-	var _focusRipple = __webpack_require__(267);
+	var _focusRipple = __webpack_require__(273);
 
 	var _focusRipple2 = _interopRequireDefault(_focusRipple);
 
-	var _touchRipple = __webpack_require__(300);
+	var _touchRipple = __webpack_require__(306);
 
 	var _touchRipple2 = _interopRequireDefault(_touchRipple);
 
-	var _getMuiTheme = __webpack_require__(273);
+	var _getMuiTheme = __webpack_require__(279);
 
 	var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
 
@@ -28841,13 +29194,13 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 259 */
+/* 265 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(260);
+	module.exports = __webpack_require__(266);
 
 /***/ },
-/* 260 */
+/* 266 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -28863,7 +29216,7 @@
 
 	'use strict';
 
-	var shallowCompare = __webpack_require__(261);
+	var shallowCompare = __webpack_require__(267);
 
 	/**
 	 * If your React component's render function is "pure", e.g. it will render the
@@ -28898,7 +29251,7 @@
 	module.exports = ReactComponentWithPureRenderMixin;
 
 /***/ },
-/* 261 */
+/* 267 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -28927,7 +29280,7 @@
 	module.exports = shallowCompare;
 
 /***/ },
-/* 262 */
+/* 268 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -28940,7 +29293,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactAddonsCreateFragment = __webpack_require__(263);
+	var _reactAddonsCreateFragment = __webpack_require__(269);
 
 	var _reactAddonsCreateFragment2 = _interopRequireDefault(_reactAddonsCreateFragment);
 
@@ -28982,13 +29335,13 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 263 */
+/* 269 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(264).create;
+	module.exports = __webpack_require__(270).create;
 
 /***/ },
-/* 264 */
+/* 270 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -29058,7 +29411,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14)))
 
 /***/ },
-/* 265 */
+/* 271 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -29103,7 +29456,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 266 */
+/* 272 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -29124,7 +29477,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 267 */
+/* 273 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29141,27 +29494,27 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _reactAddonsPureRenderMixin = __webpack_require__(259);
+	var _reactAddonsPureRenderMixin = __webpack_require__(265);
 
 	var _reactAddonsPureRenderMixin2 = _interopRequireDefault(_reactAddonsPureRenderMixin);
 
-	var _stylePropable = __webpack_require__(226);
+	var _stylePropable = __webpack_require__(232);
 
 	var _stylePropable2 = _interopRequireDefault(_stylePropable);
 
-	var _autoPrefix = __webpack_require__(228);
+	var _autoPrefix = __webpack_require__(234);
 
 	var _autoPrefix2 = _interopRequireDefault(_autoPrefix);
 
-	var _colors = __webpack_require__(252);
+	var _colors = __webpack_require__(258);
 
 	var _colors2 = _interopRequireDefault(_colors);
 
-	var _transitions = __webpack_require__(256);
+	var _transitions = __webpack_require__(262);
 
 	var _transitions2 = _interopRequireDefault(_transitions);
 
-	var _scaleIn = __webpack_require__(268);
+	var _scaleIn = __webpack_require__(274);
 
 	var _scaleIn2 = _interopRequireDefault(_scaleIn);
 
@@ -29289,7 +29642,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 268 */
+/* 274 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29304,23 +29657,23 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactAddonsPureRenderMixin = __webpack_require__(259);
+	var _reactAddonsPureRenderMixin = __webpack_require__(265);
 
 	var _reactAddonsPureRenderMixin2 = _interopRequireDefault(_reactAddonsPureRenderMixin);
 
-	var _reactAddonsTransitionGroup = __webpack_require__(269);
+	var _reactAddonsTransitionGroup = __webpack_require__(275);
 
 	var _reactAddonsTransitionGroup2 = _interopRequireDefault(_reactAddonsTransitionGroup);
 
-	var _stylePropable = __webpack_require__(226);
+	var _stylePropable = __webpack_require__(232);
 
 	var _stylePropable2 = _interopRequireDefault(_stylePropable);
 
-	var _scaleInChild = __webpack_require__(272);
+	var _scaleInChild = __webpack_require__(278);
 
 	var _scaleInChild2 = _interopRequireDefault(_scaleInChild);
 
-	var _getMuiTheme = __webpack_require__(273);
+	var _getMuiTheme = __webpack_require__(279);
 
 	var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
 
@@ -29423,13 +29776,13 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 269 */
+/* 275 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(270);
+	module.exports = __webpack_require__(276);
 
 /***/ },
-/* 270 */
+/* 276 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -29446,7 +29799,7 @@
 	'use strict';
 
 	var React = __webpack_require__(67);
-	var ReactTransitionChildMapping = __webpack_require__(271);
+	var ReactTransitionChildMapping = __webpack_require__(277);
 
 	var assign = __webpack_require__(31);
 	var emptyFunction = __webpack_require__(25);
@@ -29639,7 +29992,7 @@
 	module.exports = ReactTransitionGroup;
 
 /***/ },
-/* 271 */
+/* 277 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -29742,7 +30095,7 @@
 	module.exports = ReactTransitionChildMapping;
 
 /***/ },
-/* 272 */
+/* 278 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29761,23 +30114,23 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _reactAddonsPureRenderMixin = __webpack_require__(259);
+	var _reactAddonsPureRenderMixin = __webpack_require__(265);
 
 	var _reactAddonsPureRenderMixin2 = _interopRequireDefault(_reactAddonsPureRenderMixin);
 
-	var _stylePropable = __webpack_require__(226);
+	var _stylePropable = __webpack_require__(232);
 
 	var _stylePropable2 = _interopRequireDefault(_stylePropable);
 
-	var _autoPrefix = __webpack_require__(228);
+	var _autoPrefix = __webpack_require__(234);
 
 	var _autoPrefix2 = _interopRequireDefault(_autoPrefix);
 
-	var _transitions = __webpack_require__(256);
+	var _transitions = __webpack_require__(262);
 
 	var _transitions2 = _interopRequireDefault(_transitions);
 
-	var _getMuiTheme = __webpack_require__(273);
+	var _getMuiTheme = __webpack_require__(279);
 
 	var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
 
@@ -29907,7 +30260,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 273 */
+/* 279 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29917,33 +30270,33 @@
 	});
 	exports.default = getMuiTheme;
 
-	var _lodash = __webpack_require__(274);
+	var _lodash = __webpack_require__(280);
 
 	var _lodash2 = _interopRequireDefault(_lodash);
 
-	var _colors = __webpack_require__(252);
+	var _colors = __webpack_require__(258);
 
 	var _colors2 = _interopRequireDefault(_colors);
 
-	var _colorManipulator = __webpack_require__(291);
+	var _colorManipulator = __webpack_require__(297);
 
 	var _colorManipulator2 = _interopRequireDefault(_colorManipulator);
 
-	var _autoPrefix = __webpack_require__(228);
+	var _autoPrefix = __webpack_require__(234);
 
 	var _autoPrefix2 = _interopRequireDefault(_autoPrefix);
 
-	var _lightBaseTheme = __webpack_require__(292);
+	var _lightBaseTheme = __webpack_require__(298);
 
 	var _lightBaseTheme2 = _interopRequireDefault(_lightBaseTheme);
 
-	var _zIndex = __webpack_require__(294);
+	var _zIndex = __webpack_require__(300);
 
 	var _zIndex2 = _interopRequireDefault(_zIndex);
 
-	var _transformers = __webpack_require__(295);
+	var _transformers = __webpack_require__(301);
 
-	var _lodash3 = __webpack_require__(299);
+	var _lodash3 = __webpack_require__(305);
 
 	var _lodash4 = _interopRequireDefault(_lodash3);
 
@@ -30191,7 +30544,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 274 */
+/* 280 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -30202,15 +30555,15 @@
 	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
-	var arrayCopy = __webpack_require__(275),
-	    arrayEach = __webpack_require__(276),
-	    createAssigner = __webpack_require__(277),
-	    isArguments = __webpack_require__(281),
-	    isArray = __webpack_require__(282),
-	    isPlainObject = __webpack_require__(283),
-	    isTypedArray = __webpack_require__(286),
-	    keys = __webpack_require__(287),
-	    toPlainObject = __webpack_require__(289);
+	var arrayCopy = __webpack_require__(281),
+	    arrayEach = __webpack_require__(282),
+	    createAssigner = __webpack_require__(283),
+	    isArguments = __webpack_require__(287),
+	    isArray = __webpack_require__(288),
+	    isPlainObject = __webpack_require__(289),
+	    isTypedArray = __webpack_require__(292),
+	    keys = __webpack_require__(293),
+	    toPlainObject = __webpack_require__(295);
 
 	/**
 	 * Checks if `value` is object-like.
@@ -30463,7 +30816,7 @@
 
 
 /***/ },
-/* 275 */
+/* 281 */
 /***/ function(module, exports) {
 
 	/**
@@ -30498,7 +30851,7 @@
 
 
 /***/ },
-/* 276 */
+/* 282 */
 /***/ function(module, exports) {
 
 	/**
@@ -30535,7 +30888,7 @@
 
 
 /***/ },
-/* 277 */
+/* 283 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -30546,9 +30899,9 @@
 	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
-	var bindCallback = __webpack_require__(278),
-	    isIterateeCall = __webpack_require__(279),
-	    restParam = __webpack_require__(280);
+	var bindCallback = __webpack_require__(284),
+	    isIterateeCall = __webpack_require__(285),
+	    restParam = __webpack_require__(286);
 
 	/**
 	 * Creates a function that assigns properties of source object(s) to a given
@@ -30593,7 +30946,7 @@
 
 
 /***/ },
-/* 278 */
+/* 284 */
 /***/ function(module, exports) {
 
 	/**
@@ -30664,7 +31017,7 @@
 
 
 /***/ },
-/* 279 */
+/* 285 */
 /***/ function(module, exports) {
 
 	/**
@@ -30802,7 +31155,7 @@
 
 
 /***/ },
-/* 280 */
+/* 286 */
 /***/ function(module, exports) {
 
 	/**
@@ -30875,7 +31228,7 @@
 
 
 /***/ },
-/* 281 */
+/* 287 */
 /***/ function(module, exports) {
 
 	/**
@@ -31110,7 +31463,7 @@
 
 
 /***/ },
-/* 282 */
+/* 288 */
 /***/ function(module, exports) {
 
 	/**
@@ -31296,7 +31649,7 @@
 
 
 /***/ },
-/* 283 */
+/* 289 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -31307,9 +31660,9 @@
 	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
-	var baseFor = __webpack_require__(284),
-	    isArguments = __webpack_require__(281),
-	    keysIn = __webpack_require__(285);
+	var baseFor = __webpack_require__(290),
+	    isArguments = __webpack_require__(287),
+	    keysIn = __webpack_require__(291);
 
 	/** `Object#toString` result references. */
 	var objectTag = '[object Object]';
@@ -31405,7 +31758,7 @@
 
 
 /***/ },
-/* 284 */
+/* 290 */
 /***/ function(module, exports) {
 
 	/**
@@ -31459,7 +31812,7 @@
 
 
 /***/ },
-/* 285 */
+/* 291 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -31470,8 +31823,8 @@
 	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
-	var isArguments = __webpack_require__(281),
-	    isArray = __webpack_require__(282);
+	var isArguments = __webpack_require__(287),
+	    isArray = __webpack_require__(288);
 
 	/** Used to detect unsigned integer values. */
 	var reIsUint = /^\d+$/;
@@ -31597,7 +31950,7 @@
 
 
 /***/ },
-/* 286 */
+/* 292 */
 /***/ function(module, exports) {
 
 	/**
@@ -31751,7 +32104,7 @@
 
 
 /***/ },
-/* 287 */
+/* 293 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -31762,9 +32115,9 @@
 	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
-	var getNative = __webpack_require__(288),
-	    isArguments = __webpack_require__(281),
-	    isArray = __webpack_require__(282);
+	var getNative = __webpack_require__(294),
+	    isArguments = __webpack_require__(287),
+	    isArray = __webpack_require__(288);
 
 	/** Used to detect unsigned integer values. */
 	var reIsUint = /^\d+$/;
@@ -31993,7 +32346,7 @@
 
 
 /***/ },
-/* 288 */
+/* 294 */
 /***/ function(module, exports) {
 
 	/**
@@ -32136,7 +32489,7 @@
 
 
 /***/ },
-/* 289 */
+/* 295 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -32147,8 +32500,8 @@
 	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
-	var baseCopy = __webpack_require__(290),
-	    keysIn = __webpack_require__(285);
+	var baseCopy = __webpack_require__(296),
+	    keysIn = __webpack_require__(291);
 
 	/**
 	 * Converts `value` to a plain object flattening inherited enumerable
@@ -32181,7 +32534,7 @@
 
 
 /***/ },
-/* 290 */
+/* 296 */
 /***/ function(module, exports) {
 
 	/**
@@ -32219,7 +32572,7 @@
 
 
 /***/ },
-/* 291 */
+/* 297 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -32228,7 +32581,7 @@
 	  value: true
 	});
 
-	var _warning = __webpack_require__(248);
+	var _warning = __webpack_require__(254);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
@@ -32410,7 +32763,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14)))
 
 /***/ },
-/* 292 */
+/* 298 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -32419,15 +32772,15 @@
 	  value: true
 	});
 
-	var _colors = __webpack_require__(252);
+	var _colors = __webpack_require__(258);
 
 	var _colors2 = _interopRequireDefault(_colors);
 
-	var _colorManipulator = __webpack_require__(291);
+	var _colorManipulator = __webpack_require__(297);
 
 	var _colorManipulator2 = _interopRequireDefault(_colorManipulator);
 
-	var _spacing = __webpack_require__(293);
+	var _spacing = __webpack_require__(299);
 
 	var _spacing2 = _interopRequireDefault(_spacing);
 
@@ -32462,7 +32815,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 293 */
+/* 299 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -32487,7 +32840,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 294 */
+/* 300 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -32510,7 +32863,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 295 */
+/* 301 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -32520,15 +32873,15 @@
 	});
 	exports.rtl = exports.callOnce = exports.autoprefixer = undefined;
 
-	var _autoprefixer = __webpack_require__(296);
+	var _autoprefixer = __webpack_require__(302);
 
 	var _autoprefixer2 = _interopRequireDefault(_autoprefixer);
 
-	var _callOnce = __webpack_require__(297);
+	var _callOnce = __webpack_require__(303);
 
 	var _callOnce2 = _interopRequireDefault(_callOnce);
 
-	var _rtl = __webpack_require__(298);
+	var _rtl = __webpack_require__(304);
 
 	var _rtl2 = _interopRequireDefault(_rtl);
 
@@ -32539,7 +32892,7 @@
 	exports.rtl = _rtl2.default;
 
 /***/ },
-/* 296 */
+/* 302 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -32559,7 +32912,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 297 */
+/* 303 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -32569,7 +32922,7 @@
 	});
 	exports.default = callOnce;
 
-	var _warning = __webpack_require__(248);
+	var _warning = __webpack_require__(254);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
@@ -32592,7 +32945,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14)))
 
 /***/ },
-/* 298 */
+/* 304 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -32681,7 +33034,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 299 */
+/* 305 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
@@ -33130,7 +33483,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 300 */
+/* 306 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33147,27 +33500,27 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _reactAddonsPureRenderMixin = __webpack_require__(259);
+	var _reactAddonsPureRenderMixin = __webpack_require__(265);
 
 	var _reactAddonsPureRenderMixin2 = _interopRequireDefault(_reactAddonsPureRenderMixin);
 
-	var _reactAddonsTransitionGroup = __webpack_require__(269);
+	var _reactAddonsTransitionGroup = __webpack_require__(275);
 
 	var _reactAddonsTransitionGroup2 = _interopRequireDefault(_reactAddonsTransitionGroup);
 
-	var _stylePropable = __webpack_require__(226);
+	var _stylePropable = __webpack_require__(232);
 
 	var _stylePropable2 = _interopRequireDefault(_stylePropable);
 
-	var _dom = __webpack_require__(301);
+	var _dom = __webpack_require__(307);
 
 	var _dom2 = _interopRequireDefault(_dom);
 
-	var _circleRipple = __webpack_require__(302);
+	var _circleRipple = __webpack_require__(308);
 
 	var _circleRipple2 = _interopRequireDefault(_circleRipple);
 
-	var _reactAddonsUpdate = __webpack_require__(249);
+	var _reactAddonsUpdate = __webpack_require__(255);
 
 	var _reactAddonsUpdate2 = _interopRequireDefault(_reactAddonsUpdate);
 
@@ -33343,7 +33696,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 301 */
+/* 307 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -33420,7 +33773,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 302 */
+/* 308 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33439,23 +33792,23 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _reactAddonsPureRenderMixin = __webpack_require__(259);
+	var _reactAddonsPureRenderMixin = __webpack_require__(265);
 
 	var _reactAddonsPureRenderMixin2 = _interopRequireDefault(_reactAddonsPureRenderMixin);
 
-	var _stylePropable = __webpack_require__(226);
+	var _stylePropable = __webpack_require__(232);
 
 	var _stylePropable2 = _interopRequireDefault(_stylePropable);
 
-	var _autoPrefix = __webpack_require__(228);
+	var _autoPrefix = __webpack_require__(234);
 
 	var _autoPrefix2 = _interopRequireDefault(_autoPrefix);
 
-	var _transitions = __webpack_require__(256);
+	var _transitions = __webpack_require__(262);
 
 	var _transitions2 = _interopRequireDefault(_transitions);
 
-	var _colors = __webpack_require__(252);
+	var _colors = __webpack_require__(258);
 
 	var _colors2 = _interopRequireDefault(_colors);
 
@@ -33553,7 +33906,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 303 */
+/* 309 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33568,15 +33921,15 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _stylePropable = __webpack_require__(226);
+	var _stylePropable = __webpack_require__(232);
 
 	var _stylePropable2 = _interopRequireDefault(_stylePropable);
 
-	var _transitions = __webpack_require__(256);
+	var _transitions = __webpack_require__(262);
 
 	var _transitions2 = _interopRequireDefault(_transitions);
 
-	var _getMuiTheme = __webpack_require__(273);
+	var _getMuiTheme = __webpack_require__(279);
 
 	var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
 
@@ -33700,7 +34053,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 304 */
+/* 310 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33719,19 +34072,19 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _stylePropable = __webpack_require__(226);
+	var _stylePropable = __webpack_require__(232);
 
 	var _stylePropable2 = _interopRequireDefault(_stylePropable);
 
-	var _transitions = __webpack_require__(256);
+	var _transitions = __webpack_require__(262);
 
 	var _transitions2 = _interopRequireDefault(_transitions);
 
-	var _colors = __webpack_require__(252);
+	var _colors = __webpack_require__(258);
 
 	var _colors2 = _interopRequireDefault(_colors);
 
-	var _getMuiTheme = __webpack_require__(273);
+	var _getMuiTheme = __webpack_require__(279);
 
 	var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
 
@@ -33906,7 +34259,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 305 */
+/* 311 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33919,11 +34272,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactAddonsPureRenderMixin = __webpack_require__(259);
+	var _reactAddonsPureRenderMixin = __webpack_require__(265);
 
 	var _reactAddonsPureRenderMixin2 = _interopRequireDefault(_reactAddonsPureRenderMixin);
 
-	var _svgIcon = __webpack_require__(306);
+	var _svgIcon = __webpack_require__(312);
 
 	var _svgIcon2 = _interopRequireDefault(_svgIcon);
 
@@ -33947,7 +34300,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 306 */
+/* 312 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33962,15 +34315,15 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _stylePropable = __webpack_require__(226);
+	var _stylePropable = __webpack_require__(232);
 
 	var _stylePropable2 = _interopRequireDefault(_stylePropable);
 
-	var _transitions = __webpack_require__(256);
+	var _transitions = __webpack_require__(262);
 
 	var _transitions2 = _interopRequireDefault(_transitions);
 
-	var _getMuiTheme = __webpack_require__(273);
+	var _getMuiTheme = __webpack_require__(279);
 
 	var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
 
@@ -34115,7 +34468,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 307 */
+/* 313 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34130,23 +34483,23 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactAddonsPureRenderMixin = __webpack_require__(259);
+	var _reactAddonsPureRenderMixin = __webpack_require__(265);
 
 	var _reactAddonsPureRenderMixin2 = _interopRequireDefault(_reactAddonsPureRenderMixin);
 
-	var _stylePropable = __webpack_require__(226);
+	var _stylePropable = __webpack_require__(232);
 
 	var _stylePropable2 = _interopRequireDefault(_stylePropable);
 
-	var _propTypes = __webpack_require__(257);
+	var _propTypes = __webpack_require__(263);
 
 	var _propTypes2 = _interopRequireDefault(_propTypes);
 
-	var _transitions = __webpack_require__(256);
+	var _transitions = __webpack_require__(262);
 
 	var _transitions2 = _interopRequireDefault(_transitions);
 
-	var _getMuiTheme = __webpack_require__(273);
+	var _getMuiTheme = __webpack_require__(279);
 
 	var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
 
@@ -34259,7 +34612,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 308 */
+/* 314 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34272,11 +34625,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactAddonsPureRenderMixin = __webpack_require__(259);
+	var _reactAddonsPureRenderMixin = __webpack_require__(265);
 
 	var _reactAddonsPureRenderMixin2 = _interopRequireDefault(_reactAddonsPureRenderMixin);
 
-	var _svgIcon = __webpack_require__(306);
+	var _svgIcon = __webpack_require__(312);
 
 	var _svgIcon2 = _interopRequireDefault(_svgIcon);
 
@@ -34300,1022 +34653,6 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 309 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _react = __webpack_require__(66);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _enhancedSwitch = __webpack_require__(310);
-
-	var _enhancedSwitch2 = _interopRequireDefault(_enhancedSwitch);
-
-	var _stylePropable = __webpack_require__(226);
-
-	var _stylePropable2 = _interopRequireDefault(_stylePropable);
-
-	var _transitions = __webpack_require__(256);
-
-	var _transitions2 = _interopRequireDefault(_transitions);
-
-	var _checkBoxOutlineBlank = __webpack_require__(315);
-
-	var _checkBoxOutlineBlank2 = _interopRequireDefault(_checkBoxOutlineBlank);
-
-	var _checkBox = __webpack_require__(316);
-
-	var _checkBox2 = _interopRequireDefault(_checkBox);
-
-	var _getMuiTheme = __webpack_require__(273);
-
-	var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
-
-	var Checkbox = _react2.default.createClass({
-	  displayName: 'Checkbox',
-
-	  propTypes: {
-	    /**
-	     * Checkbox is checked if true.
-	     */
-	    checked: _react2.default.PropTypes.bool,
-
-	    /**
-	     * The SvgIcon to use for the checked state.
-	     * This is useful to create icon toggles.
-	     */
-	    checkedIcon: _react2.default.PropTypes.element,
-
-	    /**
-	     * The default state of our checkbox component.
-	     */
-	    defaultChecked: _react2.default.PropTypes.bool,
-
-	    /**
-	     * Disabled if true.
-	     */
-	    disabled: _react2.default.PropTypes.bool,
-
-	    /**
-	     * Overrides the inline-styles of the icon element.
-	     */
-	    iconStyle: _react2.default.PropTypes.object,
-
-	    /**
-	     * Where the label will be placed next to the checkbox.
-	     */
-	    labelPosition: _react2.default.PropTypes.oneOf(['left', 'right']),
-
-	    /**
-	     * Overrides the inline-styles of the Checkbox element label.
-	     */
-	    labelStyle: _react2.default.PropTypes.object,
-
-	    /**
-	     * Callback function that is fired when the checkbox is checked.
-	     */
-	    onCheck: _react2.default.PropTypes.func,
-
-	    /**
-	     * Override the inline-styles of the root element.
-	     */
-	    style: _react2.default.PropTypes.object,
-
-	    /**
-	     * The SvgIcon to use for the unchecked state.
-	     * This is useful to create icon toggles.
-	     */
-	    unCheckedIcon: _react2.default.PropTypes.element,
-
-	    /**
-	     * ValueLink for when using controlled checkbox.
-	     */
-	    valueLink: _react2.default.PropTypes.object
-	  },
-
-	  contextTypes: {
-	    muiTheme: _react2.default.PropTypes.object
-	  },
-
-	  //for passing default theme context to children
-	  childContextTypes: {
-	    muiTheme: _react2.default.PropTypes.object
-	  },
-
-	  mixins: [_stylePropable2.default],
-
-	  getDefaultProps: function getDefaultProps() {
-	    return {
-	      defaultChecked: false,
-	      labelPosition: 'right',
-	      disabled: false
-	    };
-	  },
-	  getInitialState: function getInitialState() {
-	    return {
-	      switched: this.props.checked || this.props.defaultChecked || this.props.valueLink && this.props.valueLink.value || false,
-	      muiTheme: this.context.muiTheme || (0, _getMuiTheme2.default)()
-	    };
-	  },
-	  getChildContext: function getChildContext() {
-	    return {
-	      muiTheme: this.state.muiTheme
-	    };
-	  },
-
-	  //to update theme inside state whenever a new theme is passed down
-	  //from the parent / owner using context
-	  componentWillReceiveProps: function componentWillReceiveProps(nextProps, nextContext) {
-	    var newMuiTheme = nextContext.muiTheme ? nextContext.muiTheme : this.state.muiTheme;
-	    this.setState({
-	      muiTheme: newMuiTheme,
-	      switched: this.props.checked !== nextProps.checked ? nextProps.checked : this.state.switched
-	    });
-	  },
-	  getTheme: function getTheme() {
-	    return this.state.muiTheme.checkbox;
-	  },
-	  getStyles: function getStyles() {
-	    var checkboxSize = 24;
-	    var styles = {
-	      icon: {
-	        height: checkboxSize,
-	        width: checkboxSize
-	      },
-	      check: {
-	        position: 'absolute',
-	        opacity: 0,
-	        transform: 'scale(0)',
-	        transitionOrigin: '50% 50%',
-	        transition: _transitions2.default.easeOut('450ms', 'opacity', '0ms') + ', ' + _transitions2.default.easeOut('0ms', 'transform', '450ms'),
-	        fill: this.getTheme().checkedColor
-	      },
-	      box: {
-	        position: 'absolute',
-	        opacity: 1,
-	        fill: this.getTheme().boxColor,
-	        transition: _transitions2.default.easeOut('2s', null, '200ms')
-	      },
-	      checkWhenSwitched: {
-	        opacity: 1,
-	        transform: 'scale(1)',
-	        transition: _transitions2.default.easeOut('0ms', 'opacity', '0ms') + ', ' + _transitions2.default.easeOut('800ms', 'transform', '0ms')
-	      },
-	      boxWhenSwitched: {
-	        transition: _transitions2.default.easeOut('100ms', null, '0ms'),
-	        fill: this.getTheme().checkedColor
-	      },
-	      checkWhenDisabled: {
-	        fill: this.getTheme().disabledColor
-	      },
-	      boxWhenDisabled: {
-	        fill: this.getTheme().disabledColor
-	      },
-	      label: {
-	        color: this.props.disabled ? this.getTheme().labelDisabledColor : this.getTheme().labelColor
-	      }
-	    };
-
-	    return styles;
-	  },
-	  isChecked: function isChecked() {
-	    return this.refs.enhancedSwitch.isSwitched();
-	  },
-	  setChecked: function setChecked(newCheckedValue) {
-	    this.refs.enhancedSwitch.setSwitched(newCheckedValue);
-	  },
-	  _handleCheck: function _handleCheck(e, isInputChecked) {
-	    if (this.props.onCheck) this.props.onCheck(e, isInputChecked);
-	  },
-	  _handleStateChange: function _handleStateChange(newSwitched) {
-	    this.setState({ switched: newSwitched });
-	  },
-	  render: function render() {
-	    var _props = this.props;
-	    var iconStyle = _props.iconStyle;
-	    var onCheck = _props.onCheck;
-	    var checkedIcon = _props.checkedIcon;
-	    var unCheckedIcon = _props.unCheckedIcon;
-
-	    var other = _objectWithoutProperties(_props, ['iconStyle', 'onCheck', 'checkedIcon', 'unCheckedIcon']);
-
-	    var styles = this.getStyles();
-	    var boxStyles = this.mergeStyles(styles.box, this.state.switched && styles.boxWhenSwitched, iconStyle, this.props.disabled && styles.boxWhenDisabled);
-	    var checkStyles = this.mergeStyles(styles.check, this.state.switched && styles.checkWhenSwitched, iconStyle, this.props.disabled && styles.checkWhenDisabled);
-
-	    var checkedElement = checkedIcon ? _react2.default.cloneElement(checkedIcon, {
-	      style: this.mergeStyles(checkStyles, checkedIcon.props.style)
-	    }) : _react2.default.createElement(_checkBox2.default, {
-	      style: checkStyles
-	    });
-
-	    var unCheckedElement = unCheckedIcon ? _react2.default.cloneElement(unCheckedIcon, {
-	      style: this.mergeStyles(boxStyles, unCheckedIcon.props.style)
-	    }) : _react2.default.createElement(_checkBoxOutlineBlank2.default, {
-	      style: boxStyles
-	    });
-
-	    var checkboxElement = _react2.default.createElement(
-	      'div',
-	      null,
-	      unCheckedElement,
-	      checkedElement
-	    );
-
-	    var rippleColor = this.state.switched ? checkStyles.fill : boxStyles.fill;
-	    var mergedIconStyle = this.mergeStyles(styles.icon, iconStyle);
-
-	    var labelStyle = this.mergeStyles(styles.label, this.props.labelStyle);
-
-	    var enhancedSwitchProps = {
-	      ref: 'enhancedSwitch',
-	      inputType: 'checkbox',
-	      switched: this.state.switched,
-	      switchElement: checkboxElement,
-	      rippleColor: rippleColor,
-	      iconStyle: mergedIconStyle,
-	      onSwitch: this._handleCheck,
-	      labelStyle: labelStyle,
-	      onParentShouldUpdate: this._handleStateChange,
-	      defaultSwitched: this.props.defaultChecked,
-	      labelPosition: this.props.labelPosition
-	    };
-
-	    return _react2.default.createElement(_enhancedSwitch2.default, _extends({}, other, enhancedSwitchProps));
-	  }
-	});
-
-	exports.default = Checkbox;
-	module.exports = exports['default'];
-
-/***/ },
-/* 310 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _react = __webpack_require__(66);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactDom = __webpack_require__(170);
-
-	var _reactDom2 = _interopRequireDefault(_reactDom);
-
-	var _keyCode = __webpack_require__(266);
-
-	var _keyCode2 = _interopRequireDefault(_keyCode);
-
-	var _stylePropable = __webpack_require__(226);
-
-	var _stylePropable2 = _interopRequireDefault(_stylePropable);
-
-	var _transitions = __webpack_require__(256);
-
-	var _transitions2 = _interopRequireDefault(_transitions);
-
-	var _uniqueId = __webpack_require__(311);
-
-	var _uniqueId2 = _interopRequireDefault(_uniqueId);
-
-	var _windowListenable = __webpack_require__(312);
-
-	var _windowListenable2 = _interopRequireDefault(_windowListenable);
-
-	var _clearfix = __webpack_require__(313);
-
-	var _clearfix2 = _interopRequireDefault(_clearfix);
-
-	var _focusRipple = __webpack_require__(267);
-
-	var _focusRipple2 = _interopRequireDefault(_focusRipple);
-
-	var _touchRipple = __webpack_require__(300);
-
-	var _touchRipple2 = _interopRequireDefault(_touchRipple);
-
-	var _paper = __webpack_require__(307);
-
-	var _paper2 = _interopRequireDefault(_paper);
-
-	var _getMuiTheme = __webpack_require__(273);
-
-	var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
-
-	var _warning = __webpack_require__(248);
-
-	var _warning2 = _interopRequireDefault(_warning);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
-
-	var EnhancedSwitch = _react2.default.createClass({
-	  displayName: 'EnhancedSwitch',
-
-	  propTypes: {
-	    checked: _react2.default.PropTypes.bool,
-
-	    /**
-	     * The css class name of the root element.
-	     */
-	    className: _react2.default.PropTypes.string,
-	    defaultSwitched: _react2.default.PropTypes.bool,
-	    disableFocusRipple: _react2.default.PropTypes.bool,
-	    disableTouchRipple: _react2.default.PropTypes.bool,
-	    disabled: _react2.default.PropTypes.bool,
-	    iconStyle: _react2.default.PropTypes.object,
-	    id: _react2.default.PropTypes.string,
-	    inputType: _react2.default.PropTypes.string.isRequired,
-	    label: _react2.default.PropTypes.node,
-	    labelPosition: _react2.default.PropTypes.oneOf(['left', 'right']),
-	    labelStyle: _react2.default.PropTypes.object,
-	    name: _react2.default.PropTypes.string,
-	    onBlur: _react2.default.PropTypes.func,
-	    onFocus: _react2.default.PropTypes.func,
-	    onMouseDown: _react2.default.PropTypes.func,
-	    onMouseLeave: _react2.default.PropTypes.func,
-	    onMouseUp: _react2.default.PropTypes.func,
-	    onParentShouldUpdate: _react2.default.PropTypes.func.isRequired,
-	    onSwitch: _react2.default.PropTypes.func,
-	    onTouchEnd: _react2.default.PropTypes.func,
-	    onTouchStart: _react2.default.PropTypes.func,
-	    required: _react2.default.PropTypes.bool,
-	    rippleColor: _react2.default.PropTypes.string,
-	    rippleStyle: _react2.default.PropTypes.object,
-
-	    /**
-	     * Override the inline-styles of the root element.
-	     */
-	    style: _react2.default.PropTypes.object,
-	    switchElement: _react2.default.PropTypes.element.isRequired,
-	    switched: _react2.default.PropTypes.bool.isRequired,
-	    thumbStyle: _react2.default.PropTypes.object,
-	    trackStyle: _react2.default.PropTypes.object,
-	    value: _react2.default.PropTypes.string
-	  },
-
-	  contextTypes: {
-	    muiTheme: _react2.default.PropTypes.object
-	  },
-
-	  //for passing default theme context to children
-	  childContextTypes: {
-	    muiTheme: _react2.default.PropTypes.object
-	  },
-
-	  mixins: [_windowListenable2.default, _stylePropable2.default],
-
-	  getInitialState: function getInitialState() {
-	    return {
-	      isKeyboardFocused: false,
-	      parentWidth: 100,
-	      muiTheme: this.context.muiTheme || (0, _getMuiTheme2.default)()
-	    };
-	  },
-	  getChildContext: function getChildContext() {
-	    return {
-	      muiTheme: this.state.muiTheme
-	    };
-	  },
-	  componentDidMount: function componentDidMount() {
-	    var inputNode = _reactDom2.default.findDOMNode(this.refs.checkbox);
-	    if (!this.props.switched || inputNode.checked !== this.props.switched) {
-	      this.props.onParentShouldUpdate(inputNode.checked);
-	    }
-
-	    window.addEventListener('resize', this._handleResize);
-
-	    this._handleResize();
-	  },
-	  componentWillReceiveProps: function componentWillReceiveProps(nextProps, nextContext) {
-	    var hasCheckedLinkProp = nextProps.hasOwnProperty('checkedLink');
-	    var hasCheckedProp = nextProps.hasOwnProperty('checked');
-	    var hasToggledProp = nextProps.hasOwnProperty('toggled');
-	    var hasNewDefaultProp = nextProps.hasOwnProperty('defaultSwitched') && nextProps.defaultSwitched !== this.props.defaultSwitched;
-	    var newState = {};
-	    newState.muiTheme = nextContext.muiTheme ? nextContext.muiTheme : this.state.muiTheme;
-
-	    if (hasCheckedProp) {
-	      newState.switched = nextProps.checked;
-	    } else if (hasToggledProp) {
-	      newState.switched = nextProps.toggled;
-	    } else if (hasCheckedLinkProp) {
-	      newState.switched = nextProps.checkedLink.value;
-	    } else if (hasNewDefaultProp) {
-	      newState.switched = nextProps.defaultSwitched;
-	    }
-
-	    if (newState.switched !== undefined && newState.switched !== this.props.switched) {
-	      this.props.onParentShouldUpdate(newState.switched);
-	    }
-
-	    this.setState(newState);
-	  },
-	  componentWillUnmount: function componentWillUnmount() {
-	    window.removeEventListener('resize', this._handleResize);
-	  },
-
-	  windowListeners: {
-	    keydown: '_handleWindowKeydown',
-	    keyup: '_handleWindowKeyup'
-	  },
-
-	  getEvenWidth: function getEvenWidth() {
-	    return parseInt(window.getComputedStyle(_reactDom2.default.findDOMNode(this.refs.root)).getPropertyValue('width'), 10);
-	  },
-	  getTheme: function getTheme() {
-	    return this.state.muiTheme.rawTheme.palette;
-	  },
-	  getStyles: function getStyles() {
-	    var spacing = this.state.muiTheme.rawTheme.spacing;
-	    var switchWidth = 60 - spacing.desktopGutterLess;
-	    var labelWidth = 'calc(100% - 60px)';
-	    var styles = {
-	      root: {
-	        position: 'relative',
-	        cursor: this.props.disabled ? 'default' : 'pointer',
-	        overflow: 'visible',
-	        display: 'table',
-	        height: 'auto',
-	        width: '100%'
-	      },
-	      input: {
-	        position: 'absolute',
-	        cursor: this.props.disabled ? 'default' : 'pointer',
-	        pointerEvents: 'all',
-	        opacity: 0,
-	        width: '100%',
-	        height: '100%',
-	        zIndex: 2,
-	        left: 0,
-	        boxSizing: 'border-box',
-	        padding: 0,
-	        margin: 0
-	      },
-	      controls: {
-	        width: '100%',
-	        height: '100%'
-	      },
-	      label: {
-	        float: 'left',
-	        position: 'relative',
-	        display: 'block',
-	        width: labelWidth,
-	        lineHeight: '24px',
-	        color: this.getTheme().textColor,
-	        fontFamily: this.state.muiTheme.rawTheme.fontFamily
-	      },
-	      wrap: {
-	        transition: _transitions2.default.easeOut(),
-	        float: 'left',
-	        position: 'relative',
-	        display: 'block',
-	        width: switchWidth,
-	        marginRight: this.props.labelPosition === 'right' ? spacing.desktopGutterLess : 0,
-	        marginLeft: this.props.labelPosition === 'left' ? spacing.desktopGutterLess : 0
-	      },
-	      ripple: {
-	        height: '200%',
-	        width: '200%',
-	        top: -12,
-	        left: -12
-	      }
-	    };
-
-	    return styles;
-	  },
-	  isSwitched: function isSwitched() {
-	    return _reactDom2.default.findDOMNode(this.refs.checkbox).checked;
-	  },
-
-	  // no callback here because there is no event
-	  setSwitched: function setSwitched(newSwitchedValue) {
-	    if (!this.props.hasOwnProperty('checked') || this.props.checked === false) {
-	      this.props.onParentShouldUpdate(newSwitchedValue);
-	      _reactDom2.default.findDOMNode(this.refs.checkbox).checked = newSwitchedValue;
-	    } else {
-	      process.env.NODE_ENV !== "production" ? (0, _warning2.default)(false, 'Cannot call set method while checked is defined as a property.') : undefined;
-	    }
-	  },
-	  getValue: function getValue() {
-	    return _reactDom2.default.findDOMNode(this.refs.checkbox).value;
-	  },
-	  isKeyboardFocused: function isKeyboardFocused() {
-	    return this.state.isKeyboardFocused;
-	  },
-	  _handleChange: function _handleChange(e) {
-	    this._tabPressed = false;
-	    this.setState({
-	      isKeyboardFocused: false
-	    });
-
-	    var isInputChecked = _reactDom2.default.findDOMNode(this.refs.checkbox).checked;
-
-	    if (!this.props.hasOwnProperty('checked')) {
-	      this.props.onParentShouldUpdate(isInputChecked);
-	    }
-	    if (this.props.onSwitch) {
-	      this.props.onSwitch(e, isInputChecked);
-	    }
-	  },
-
-	  // Checkbox inputs only use SPACE to change their state. Using ENTER will
-	  // update the ui but not the input.
-	  _handleWindowKeydown: function _handleWindowKeydown(e) {
-	    if (e.keyCode === _keyCode2.default.TAB) {
-	      this._tabPressed = true;
-	    }
-	    if (e.keyCode === _keyCode2.default.SPACE && this.state.isKeyboardFocused) {
-	      this._handleChange(e);
-	    }
-	  },
-	  _handleWindowKeyup: function _handleWindowKeyup(e) {
-	    if (e.keyCode === _keyCode2.default.SPACE && this.state.isKeyboardFocused) {
-	      this._handleChange(e);
-	    }
-	  },
-
-	  /**
-	   * Because both the ripples and the checkbox input cannot share pointer
-	   * events, the checkbox input takes control of pointer events and calls
-	   * ripple animations manually.
-	   */
-	  _handleMouseDown: function _handleMouseDown(e) {
-	    //only listen to left clicks
-	    if (e.button === 0) {
-	      this.refs.touchRipple.start(e);
-	    }
-	  },
-	  _handleMouseUp: function _handleMouseUp() {
-	    this.refs.touchRipple.end();
-	  },
-	  _handleMouseLeave: function _handleMouseLeave() {
-	    this.refs.touchRipple.end();
-	  },
-	  _handleTouchStart: function _handleTouchStart(e) {
-	    this.refs.touchRipple.start(e);
-	  },
-	  _handleTouchEnd: function _handleTouchEnd() {
-	    this.refs.touchRipple.end();
-	  },
-	  _handleBlur: function _handleBlur(e) {
-	    this.setState({
-	      isKeyboardFocused: false
-	    });
-
-	    if (this.props.onBlur) {
-	      this.props.onBlur(e);
-	    }
-	  },
-	  _handleFocus: function _handleFocus(e) {
-	    var _this = this;
-
-	    //setTimeout is needed becuase the focus event fires first
-	    //Wait so that we can capture if this was a keyboard focus
-	    //or touch focus
-	    setTimeout(function () {
-	      if (_this._tabPressed) {
-	        _this.setState({
-	          isKeyboardFocused: true
-	        });
-	      }
-	    }, 150);
-
-	    if (this.props.onFocus) {
-	      this.props.onFocus(e);
-	    }
-	  },
-	  _handleResize: function _handleResize() {
-	    this.setState({ parentWidth: this.getEvenWidth() });
-	  },
-	  render: function render() {
-	    var _props = this.props;
-	    var name = _props.name;
-	    var value = _props.value;
-	    var label = _props.label;
-	    var onSwitch = _props.onSwitch;
-	    var defaultSwitched = _props.defaultSwitched;
-	    var onBlur = _props.onBlur;
-	    var onFocus = _props.onFocus;
-	    var onMouseUp = _props.onMouseUp;
-	    var onMouseDown = _props.onMouseDown;
-	    var onMouseLeave = _props.onMouseLeave;
-	    var onTouchStart = _props.onTouchStart;
-	    var onTouchEnd = _props.onTouchEnd;
-	    var disableTouchRipple = _props.disableTouchRipple;
-	    var disableFocusRipple = _props.disableFocusRipple;
-	    var className = _props.className;
-
-	    var other = _objectWithoutProperties(_props, ['name', 'value', 'label', 'onSwitch', 'defaultSwitched', 'onBlur', 'onFocus', 'onMouseUp', 'onMouseDown', 'onMouseLeave', 'onTouchStart', 'onTouchEnd', 'disableTouchRipple', 'disableFocusRipple', 'className']);
-
-	    var styles = this.getStyles();
-	    var wrapStyles = this.mergeStyles(styles.wrap, this.props.iconStyle);
-	    var rippleStyle = this.mergeStyles(styles.ripple, this.props.rippleStyle);
-	    var rippleColor = this.props.hasOwnProperty('rippleColor') ? this.props.rippleColor : this.getTheme().primary1Color;
-
-	    if (this.props.thumbStyle) {
-	      wrapStyles.marginLeft /= 2;
-	      wrapStyles.marginRight /= 2;
-	    }
-
-	    var inputId = this.props.id || _uniqueId2.default.generate();
-
-	    var labelStyle = this.mergeStyles(styles.label, this.props.labelStyle);
-	    var labelElement = this.props.label ? _react2.default.createElement(
-	      'label',
-	      { style: this.prepareStyles(labelStyle), htmlFor: inputId },
-	      this.props.label
-	    ) : null;
-
-	    var inputProps = {
-	      ref: 'checkbox',
-	      type: this.props.inputType,
-	      style: this.prepareStyles(styles.input),
-	      name: this.props.name,
-	      value: this.props.value,
-	      defaultChecked: this.props.defaultSwitched,
-	      onBlur: this._handleBlur,
-	      onFocus: this._handleFocus
-	    };
-
-	    var hideTouchRipple = this.props.disabled || disableTouchRipple;
-
-	    if (!hideTouchRipple) {
-	      inputProps.onMouseUp = this._handleMouseUp;
-	      inputProps.onMouseDown = this._handleMouseDown;
-	      inputProps.onMouseLeave = this._handleMouseLeave;
-	      inputProps.onTouchStart = this._handleTouchStart;
-	      inputProps.onTouchEnd = this._handleTouchEnd;
-	    }
-
-	    if (!this.props.hasOwnProperty('checkedLink')) {
-	      inputProps.onChange = this._handleChange;
-	    }
-
-	    var inputElement = _react2.default.createElement('input', _extends({}, other, inputProps));
-
-	    var touchRipple = _react2.default.createElement(_touchRipple2.default, {
-	      ref: 'touchRipple',
-	      key: 'touchRipple',
-	      style: rippleStyle,
-	      color: rippleColor,
-	      muiTheme: this.state.muiTheme,
-	      centerRipple: true
-	    });
-
-	    var focusRipple = _react2.default.createElement(_focusRipple2.default, {
-	      key: 'focusRipple',
-	      innerStyle: rippleStyle,
-	      color: rippleColor,
-	      muiTheme: this.state.muiTheme,
-	      show: this.state.isKeyboardFocused
-	    });
-
-	    var ripples = [hideTouchRipple ? null : touchRipple, this.props.disabled || disableFocusRipple ? null : focusRipple];
-
-	    // If toggle component (indicated by whether the style includes thumb) manually lay out
-	    // elements in order to nest ripple elements
-	    var switchElement = !this.props.thumbStyle ? _react2.default.createElement(
-	      'div',
-	      { style: this.prepareStyles(wrapStyles) },
-	      this.props.switchElement,
-	      ripples
-	    ) : _react2.default.createElement(
-	      'div',
-	      { style: this.prepareStyles(wrapStyles) },
-	      _react2.default.createElement('div', { style: this.prepareStyles(this.props.trackStyle) }),
-	      _react2.default.createElement(
-	        _paper2.default,
-	        { style: this.props.thumbStyle, zDepth: 1, circle: true },
-	        ' ',
-	        ripples,
-	        ' '
-	      )
-	    );
-
-	    var labelPositionExist = this.props.labelPosition;
-
-	    // Position is left if not defined or invalid.
-	    var elementsInOrder = labelPositionExist && this.props.labelPosition.toUpperCase() === 'RIGHT' ? _react2.default.createElement(
-	      _clearfix2.default,
-	      { style: styles.controls },
-	      switchElement,
-	      labelElement
-	    ) : _react2.default.createElement(
-	      _clearfix2.default,
-	      { style: styles.controls },
-	      labelElement,
-	      switchElement
-	    );
-
-	    return _react2.default.createElement(
-	      'div',
-	      { ref: 'root', className: className, style: this.prepareStyles(styles.root, this.props.style) },
-	      inputElement,
-	      elementsInOrder
-	    );
-	  }
-	});
-
-	exports.default = EnhancedSwitch;
-	module.exports = exports['default'];
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14)))
-
-/***/ },
-/* 311 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	var index = 0;
-
-	exports.default = {
-	  generate: function generate() {
-	    return 'mui-id-' + index++;
-	  }
-	};
-	module.exports = exports['default'];
-
-/***/ },
-/* 312 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _events = __webpack_require__(265);
-
-	var _events2 = _interopRequireDefault(_events);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	exports.default = {
-	  componentDidMount: function componentDidMount() {
-	    var listeners = this.windowListeners;
-
-	    for (var eventName in listeners) {
-	      var callbackName = listeners[eventName];
-	      _events2.default.on(window, eventName, this[callbackName]);
-	    }
-	  },
-	  componentWillUnmount: function componentWillUnmount() {
-	    var listeners = this.windowListeners;
-
-	    for (var eventName in listeners) {
-	      var callbackName = listeners[eventName];
-	      _events2.default.off(window, eventName, this[callbackName]);
-	    }
-	  }
-	};
-	module.exports = exports['default'];
-
-/***/ },
-/* 313 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _react = __webpack_require__(66);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _beforeAfterWrapper = __webpack_require__(314);
-
-	var _beforeAfterWrapper2 = _interopRequireDefault(_beforeAfterWrapper);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
-
-	var styles = {
-	  before: {
-	    content: "' '",
-	    display: 'table'
-	  },
-	  after: {
-	    content: "' '",
-	    clear: 'both',
-	    display: 'table'
-	  }
-	};
-
-	var ClearFix = function ClearFix(_ref) {
-	  var style = _ref.style;
-	  var children = _ref.children;
-
-	  var other = _objectWithoutProperties(_ref, ['style', 'children']);
-
-	  return _react2.default.createElement(
-	    _beforeAfterWrapper2.default,
-	    _extends({}, other, {
-	      beforeStyle: styles.before,
-	      afterStyle: styles.after,
-	      style: style
-	    }),
-	    children
-	  );
-	};
-
-	ClearFix.displayName = 'ClearFix';
-
-	ClearFix.propTypes = {
-	  children: _react2.default.PropTypes.node,
-
-	  /**
-	   * Override the inline-styles of the root element.
-	   */
-	  style: _react2.default.PropTypes.object
-	};
-
-	exports.default = ClearFix;
-	module.exports = exports['default'];
-
-/***/ },
-/* 314 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _react = __webpack_require__(66);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _stylePropable = __webpack_require__(226);
-
-	var _stylePropable2 = _interopRequireDefault(_stylePropable);
-
-	var _getMuiTheme = __webpack_require__(273);
-
-	var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
-
-	/**
-	 *  BeforeAfterWrapper
-	 *    An alternative for the ::before and ::after css pseudo-elements for
-	 *    components whose styles are defined in javascript instead of css.
-	 *
-	 *  Usage: For the element that we want to apply before and after elements to,
-	 *    wrap its children with BeforeAfterWrapper. For example:
-	 *
-	 *                                            <Paper>
-	 *  <Paper>                                     <div> // See notice
-	 *    <BeforeAfterWrapper>        renders         <div/> // before element
-	 *      [children of paper]       ------>         [children of paper]
-	 *    </BeforeAfterWrapper>                       <div/> // after element
-	 *  </Paper>                                    </div>
-	 *                                            </Paper>
-	 *
-	 *  Notice: Notice that this div bundles together our elements. If the element
-	 *    that we want to apply before and after elements is a HTML tag (i.e. a
-	 *    div, p, or button tag), we can avoid this extra nesting by passing using
-	 *    the BeforeAfterWrapper in place of said tag like so:
-	 *
-	 *  <p>
-	 *    <BeforeAfterWrapper>   do this instead   <BeforeAfterWrapper elementType='p'>
-	 *      [children of p]          ------>         [children of p]
-	 *    </BeforeAfterWrapper>                    </BeforeAfterWrapper>
-	 *  </p>
-	 *
-	 *  BeforeAfterWrapper features spread functionality. This means that we can
-	 *  pass HTML tag properties directly into the BeforeAfterWrapper tag.
-	 *
-	 *  When using BeforeAfterWrapper, ensure that the parent of the beforeElement
-	 *  and afterElement have a defined style position.
-	 */
-
-	var BeforeAfterWrapper = _react2.default.createClass({
-	  displayName: 'BeforeAfterWrapper',
-
-	  propTypes: {
-	    afterElementType: _react2.default.PropTypes.string,
-	    afterStyle: _react2.default.PropTypes.object,
-	    beforeElementType: _react2.default.PropTypes.string,
-	    beforeStyle: _react2.default.PropTypes.object,
-	    children: _react2.default.PropTypes.node,
-	    elementType: _react2.default.PropTypes.string,
-
-	    /**
-	     * Override the inline-styles of the root element.
-	     */
-	    style: _react2.default.PropTypes.object
-	  },
-
-	  contextTypes: {
-	    muiTheme: _react2.default.PropTypes.object
-	  },
-
-	  //for passing default theme context to children
-	  childContextTypes: {
-	    muiTheme: _react2.default.PropTypes.object
-	  },
-
-	  mixins: [_stylePropable2.default],
-
-	  getDefaultProps: function getDefaultProps() {
-	    return {
-	      beforeElementType: 'div',
-	      afterElementType: 'div',
-	      elementType: 'div'
-	    };
-	  },
-	  getInitialState: function getInitialState() {
-	    return {
-	      muiTheme: this.context.muiTheme || (0, _getMuiTheme2.default)()
-	    };
-	  },
-	  getChildContext: function getChildContext() {
-	    return {
-	      muiTheme: this.state.muiTheme
-	    };
-	  },
-
-	  //to update theme inside state whenever a new theme is passed down
-	  //from the parent / owner using context
-	  componentWillReceiveProps: function componentWillReceiveProps(nextProps, nextContext) {
-	    var newMuiTheme = nextContext.muiTheme ? nextContext.muiTheme : this.state.muiTheme;
-	    this.setState({ muiTheme: newMuiTheme });
-	  },
-	  render: function render() {
-	    var _props = this.props;
-	    var beforeStyle = _props.beforeStyle;
-	    var afterStyle = _props.afterStyle;
-	    var beforeElementType = _props.beforeElementType;
-	    var afterElementType = _props.afterElementType;
-	    var elementType = _props.elementType;
-
-	    var other = _objectWithoutProperties(_props, ['beforeStyle', 'afterStyle', 'beforeElementType', 'afterElementType', 'elementType']);
-
-	    var beforeElement = undefined;
-	    var afterElement = undefined;
-
-	    beforeStyle = {
-	      boxSizing: 'border-box'
-	    };
-
-	    afterStyle = {
-	      boxSizing: 'border-box'
-	    };
-
-	    if (this.props.beforeStyle) beforeElement = _react2.default.createElement(this.props.beforeElementType, {
-	      style: this.prepareStyles(beforeStyle, this.props.beforeStyle),
-	      key: '::before'
-	    });
-	    if (this.props.afterStyle) afterElement = _react2.default.createElement(this.props.afterElementType, {
-	      style: this.prepareStyles(afterStyle, this.props.afterStyle),
-	      key: '::after'
-	    });
-
-	    var children = [beforeElement, this.props.children, afterElement];
-
-	    var props = other;
-	    props.style = this.prepareStyles(this.props.style);
-
-	    return _react2.default.createElement(this.props.elementType, props, children);
-	  }
-	});
-
-	exports.default = BeforeAfterWrapper;
-	module.exports = exports['default'];
-
-/***/ },
 /* 315 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -35329,18 +34666,18 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactAddonsPureRenderMixin = __webpack_require__(259);
+	var _reactAddonsPureRenderMixin = __webpack_require__(265);
 
 	var _reactAddonsPureRenderMixin2 = _interopRequireDefault(_reactAddonsPureRenderMixin);
 
-	var _svgIcon = __webpack_require__(306);
+	var _svgIcon = __webpack_require__(312);
 
 	var _svgIcon2 = _interopRequireDefault(_svgIcon);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var ToggleCheckBoxOutlineBlank = _react2.default.createClass({
-	  displayName: 'ToggleCheckBoxOutlineBlank',
+	var ActionDelete = _react2.default.createClass({
+	  displayName: 'ActionDelete',
 
 	  mixins: [_reactAddonsPureRenderMixin2.default],
 
@@ -35348,57 +34685,16 @@
 	    return _react2.default.createElement(
 	      _svgIcon2.default,
 	      this.props,
-	      _react2.default.createElement('path', { d: 'M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z' })
+	      _react2.default.createElement('path', { d: 'M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z' })
 	    );
 	  }
 	});
 
-	exports.default = ToggleCheckBoxOutlineBlank;
+	exports.default = ActionDelete;
 	module.exports = exports['default'];
 
 /***/ },
 /* 316 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _react = __webpack_require__(66);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactAddonsPureRenderMixin = __webpack_require__(259);
-
-	var _reactAddonsPureRenderMixin2 = _interopRequireDefault(_reactAddonsPureRenderMixin);
-
-	var _svgIcon = __webpack_require__(306);
-
-	var _svgIcon2 = _interopRequireDefault(_svgIcon);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var ToggleCheckBox = _react2.default.createClass({
-	  displayName: 'ToggleCheckBox',
-
-	  mixins: [_reactAddonsPureRenderMixin2.default],
-
-	  render: function render() {
-	    return _react2.default.createElement(
-	      _svgIcon2.default,
-	      this.props,
-	      _react2.default.createElement('path', { d: 'M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z' })
-	    );
-	  }
-	});
-
-	exports.default = ToggleCheckBox;
-	module.exports = exports['default'];
-
-/***/ },
-/* 317 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35421,18 +34717,17 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _materialUiLibRaisedButton = __webpack_require__(318);
+	var _materialUiLibRaisedButton = __webpack_require__(317);
 
 	var _materialUiLibRaisedButton2 = _interopRequireDefault(_materialUiLibRaisedButton);
 
-	var _ChildrenItems = __webpack_require__(319);
+	var _ChildrenItems = __webpack_require__(318);
 
 	var _ChildrenItems2 = _interopRequireDefault(_ChildrenItems);
 
-	var remote = window.require('electron').remote;
-	var fs = remote.require('fs');
-
-	var dialog = window.require('electron').remote.dialog;
+	// const remote = window.require('electron').remote
+	// const fs = remote.require('fs')
+	// const {dialog} = window.require('electron').remote
 
 	var style = {
 	  raisedButton: {
@@ -35450,68 +34745,83 @@
 	  }
 
 	  _createClass(Items, [{
-	    key: 'writeItemsFile',
-	    value: function writeItemsFile(data) {
-	      data = JSON.stringify(data);
-	      fs.writeFileSync('./menus.json', data, 'utf-8', function (err) {
-	        err ? err : alert('保存成功！');
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      var _this = this;
+
+	      window.addEventListener('keyup', function (e) {
+	        //监听键盘事件
+	        e.preventDefault();
+	        if (e.ctrlKey && e.which === 83) {
+	          //ctrl + s为保存
+	          _this.writeItemsFile();
+	        } else if (e.ctrlKey && e.which === 69) {
+	          //ctrl + e为导出
+	          _this.exportItemsFile();
+	        }
 	      });
 	    }
 	  }, {
+	    key: 'writeItemsFile',
+	    value: function writeItemsFile() {
+	      var data = this.props.menus;
+	      console.log(data);
+	      var dialogSave = confirm('确定覆盖menus.json?');
+	      // if (dialogSave) {
+	      //   data = JSON.stringify(data)
+	      //   fs.writeFileSync('./menus.json', data, 'utf-8', err => {
+	      //     err ? err : alert('保存成功！')
+	      //   })
+	      // }
+	    }
+	  }, {
+	    key: 'handleClick',
+	    value: function handleClick() {
+	      alert('按' + 'ctrl' + '和' + 's');
+	    }
+	  }, {
 	    key: 'exportItemsFile',
-	    value: function exportItemsFile(data) {
-	      //完成了filter筛选，逻辑欠妥，点保存的时候不应该filter，因为如果这样那么每次新增或修改时需要保存都要去勾选这样很麻烦,这个应该放在导出上 2016.12.23
-	      //这个应该放在哪里呢？？ action要保持纯净 2016.12.23
-	      data = JSON.stringify(data.filter(function (item) {
-	        return item.checked;
-	      }).map(function (item) {
-	        return Object.assign({}, item, {
-	          children: item.children.filter(function (child) {
-	            return child.checked;
-	          }).map(function (child) {
-	            return Object.assign({}, child, {
-	              functions: child.functions.filter(function (func) {
-	                return func.checked;
-	              }).map(function (func) {
-	                return Object.assign({}, func, {
-	                  operations: func.operations.filter(function (oper) {
-	                    return oper.checked;
-	                  }).map(function (oper) {
-	                    return Object.assign({}, oper, {
-	                      webApis: oper.webApis.filter(function (api) {
-	                        return api.checked;
-	                      })
-	                    });
-	                  })
-	                });
-	              })
-	            });
-	          })
-	        });
-	      }));
+	    value: function exportItemsFile() {
+	      //todo 组件和逻辑尽量分离 2016.12.26
+	      // const data = this.props.menus
+	      // data = JSON.stringify(data.filter(item => item.checked)
+	      //   .map(item => Object.assign({}, item, {
+	      //     children: item.children.filter(child => child.checked)
+	      //       .map(child => Object.assign({}, child, {
+	      //         functions: child.functions.filter(func => func.checked)
+	      //           .map(func => Object.assign({}, func, {
+	      //             operations: func.operations.filter(oper => oper.checked)
+	      //               .map(oper => Object.assign({}, oper, {
+	      //                 webApis: oper.webApis.filter(api => api.checked)
+	      //               }))
+	      //           }))
+	      //       }))
+	      //   })))
 
-	      dialog.showSaveDialog({
-	        filters: [{ name: 'Json', extensions: ['json'] }, { name: 'All Files', extensions: ['*'] }]
-	      }, function (fileName) {
-	        if (fileName === undefined) {
-	          alert("请输入文件名！");
-	          return;
-	        }
-	        fs.writeFile(fileName, data, function (err) {
-	          if (err) {
-	            alert("导出失败 " + err.message);
-	            return;
-	          }
-	          alert("导出成功！");
-	        });
-	      });
+	      // dialog.showSaveDialog({
+	      //   filters: [
+	      //     { name: 'Json', extensions: ['json'] },
+	      //     { name: 'All Files', extensions: ['*'] }
+	      //   ]
+	      // }, fileName => {
+	      //   if (fileName === undefined) {
+	      //     alert("请输入文件名！")
+	      //     return
+	      //   }
+	      //   fs.writeFile(fileName, data, err => {
+	      //     if (err) {
+	      //       alert("导出失败 " + err.message)
+	      //       return
+	      //     }
+	      //     alert("导出成功！")
+	      //   })
+	      // })
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var _props = this.props;
 	      var items = _props.items;
-	      var keys = _props.keys;
 	      var menus = _props.menus;
 	      var itemsActions = _props.itemsActions;
 	      var menusActions = _props.menusActions;
@@ -35521,9 +34831,10 @@
 	        null,
 	        _react2['default'].createElement(_ChildrenItems2['default'], {
 	          items: items,
-	          keys: keys,
+	          menus: menus,
 	          forward: false,
-	          itemsActions: itemsActions
+	          itemsActions: itemsActions,
+	          menusActions: menusActions
 	        }),
 	        _react2['default'].createElement(
 	          'div',
@@ -35531,8 +34842,8 @@
 	          _react2['default'].createElement(_materialUiLibRaisedButton2['default'], { label: '导 入', secondary: true, style: style.raisedButton, onTouchTap: function () {
 	              return menusActions.importItemsFile();
 	            } }),
-	          _react2['default'].createElement(_materialUiLibRaisedButton2['default'], { label: '导 出', secondary: true, style: style.raisedButton, onTouchTap: this.exportItemsFile.bind(this, menus) }),
-	          _react2['default'].createElement(_materialUiLibRaisedButton2['default'], { label: '保 存', primary: true, style: style.raisedButton, onTouchTap: this.writeItemsFile.bind(this, menus) })
+	          _react2['default'].createElement(_materialUiLibRaisedButton2['default'], { label: '导 出', secondary: true, style: style.raisedButton, onTouchTap: this.exportItemsFile.bind(this) }),
+	          _react2['default'].createElement(_materialUiLibRaisedButton2['default'], { label: '保 存', primary: true, style: style.raisedButton, onTouchTap: this.writeItemsFile.bind(this) })
 	        )
 	      );
 	    }
@@ -35545,7 +34856,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 318 */
+/* 317 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35564,35 +34875,35 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _stylePropable = __webpack_require__(226);
+	var _stylePropable = __webpack_require__(232);
 
 	var _stylePropable2 = _interopRequireDefault(_stylePropable);
 
-	var _transitions = __webpack_require__(256);
+	var _transitions = __webpack_require__(262);
 
 	var _transitions2 = _interopRequireDefault(_transitions);
 
-	var _colorManipulator = __webpack_require__(291);
+	var _colorManipulator = __webpack_require__(297);
 
 	var _colorManipulator2 = _interopRequireDefault(_colorManipulator);
 
-	var _children = __webpack_require__(262);
+	var _children = __webpack_require__(268);
 
 	var _children2 = _interopRequireDefault(_children);
 
-	var _typography = __webpack_require__(251);
+	var _typography = __webpack_require__(257);
 
 	var _typography2 = _interopRequireDefault(_typography);
 
-	var _enhancedButton = __webpack_require__(258);
+	var _enhancedButton = __webpack_require__(264);
 
 	var _enhancedButton2 = _interopRequireDefault(_enhancedButton);
 
-	var _paper = __webpack_require__(307);
+	var _paper = __webpack_require__(313);
 
 	var _paper2 = _interopRequireDefault(_paper);
 
-	var _getMuiTheme = __webpack_require__(273);
+	var _getMuiTheme = __webpack_require__(279);
 
 	var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
 
@@ -35993,7 +35304,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 319 */
+/* 318 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36006,6 +35317,8 @@
 
 	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
@@ -36016,21 +35329,29 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _materialUiLibDialog = __webpack_require__(320);
+	var _materialUiLibDialog = __webpack_require__(319);
 
 	var _materialUiLibDialog2 = _interopRequireDefault(_materialUiLibDialog);
+
+	var _reactRedux = __webpack_require__(171);
+
+	var _redux = __webpack_require__(179);
 
 	var _DialogEditTextField = __webpack_require__(326);
 
 	var _DialogEditTextField2 = _interopRequireDefault(_DialogEditTextField);
 
-	var _DialogFunctionsDialog = __webpack_require__(334);
+	var _DialogFunctionsDialog = __webpack_require__(335);
 
 	var _DialogFunctionsDialog2 = _interopRequireDefault(_DialogFunctionsDialog);
 
-	var _DialogForwardTable = __webpack_require__(335);
+	var _DialogForwardTable = __webpack_require__(336);
 
 	var _DialogForwardTable2 = _interopRequireDefault(_DialogForwardTable);
+
+	var _actionsKeys = __webpack_require__(208);
+
+	var KeysActions = _interopRequireWildcard(_actionsKeys);
 
 	var style = {
 	  dialog: {
@@ -36042,87 +35363,69 @@
 	var ChildrenItems = (function (_Component) {
 	  _inherits(ChildrenItems, _Component);
 
-	  function ChildrenItems(props) {
+	  function ChildrenItems() {
 	    _classCallCheck(this, ChildrenItems);
 
-	    _get(Object.getPrototypeOf(ChildrenItems.prototype), 'constructor', this).call(this, props);
-	    this.handleClose = this.handleClose.bind(this);
-	    this.handleEdit = this.handleEdit.bind(this);
-	    this.handleAdd = this.handleAdd.bind(this);
-	    this.handleOpen = this.handleOpen.bind(this);
-	    this.state = {
-	      open: false,
-	      edit: false,
-	      addItems: false,
-	      nextContent: '',
-	      nextKey: '0-0-0-0-0'
-	    };
+	    _get(Object.getPrototypeOf(ChildrenItems.prototype), 'constructor', this).apply(this, arguments);
 	  }
 
 	  _createClass(ChildrenItems, [{
-	    key: 'handleOpen',
-	    value: function handleOpen(content) {
-	      this.setState({ open: true, addItems: false, nextContent: content });
-	    }
-	  }, {
-	    key: 'handleEdit',
-	    value: function handleEdit(content) {
-	      this.setState({ open: true, addItems: false, edit: true, nextContent: content });
-	    }
-	  }, {
-	    key: 'handleAdd',
-	    value: function handleAdd(key) {
-	      this.setState({ open: true, addItems: true, nextKey: key });
-	    }
-	  }, {
-	    key: 'handleClose',
-	    value: function handleClose() {
-	      this.setState({ open: false, edit: false });
-	    }
-	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var _props = this.props;
 	      var items = _props.items;
-	      var keys = _props.keys;
+	      var menus = _props.menus;
 	      var itemsActions = _props.itemsActions;
+	      var menusActions = _props.menusActions;
+	      var keys = _props.keys;
+	      var keysActions = _props.keysActions;
 
-	      /**debug2 */ //2.key的值可以正常获取
-	      /** //todo 新增functions有点问题，就是每新增一个，第一个的functions下就会新增一个空的operations,第一个operations下会增加一个webApis，
-	      *  这个应该是新增functions时默认给的那个operations:[]这个导致的，待优化 2016.12.21
-	      */
+	      var array = menus.map(function (item) {
+	        return item.children.map(function (child) {
+	          return child.functions.map(function (func) {
+	            return func.functionId;
+	          });
+	        });
+	      });
+	      var idArray = array.reduce(function (x, y) {
+	        return x.concat(y);
+	      }, []).reduce(function (x, y) {
+	        return x.concat(y);
+	      }, []).sort();
+
 	      return _react2['default'].createElement(
 	        'div',
 	        null,
 	        _react2['default'].createElement(_DialogForwardTable2['default'], {
 	          forward: true,
 	          items: items,
-	          keys: keys, //functions的新增需要从menus传keys过来
+	          idArray: idArray,
+	          keys: keys.key, //functions的新增需要从menus传key过来
+	          _handleDelete: menusActions.menuDelete,
 	          _handleChecked: itemsActions.handleSelected,
-	          _handleEdit: this.handleEdit,
-	          _handleAdd: this.handleAdd,
-	          _handleOpen: this.handleOpen,
+	          _handleEdit: keysActions.setEdit,
+	          _handleAdd: keysActions.setAdd,
+	          _handleOpen: keysActions.setOpen,
 	          array: ['functionId', 'functionName']
 	        }),
 	        _react2['default'].createElement(
 	          _materialUiLibDialog2['default'],
 	          {
 	            modal: false,
-	            open: this.state.open,
+	            open: keys.open,
 	            contentStyle: style.dialog,
-	            onRequestClose: this.handleClose
+	            onRequestClose: keysActions.setClose
 	          },
-	          this.state.addItems ? _react2['default'].createElement(_DialogEditTextField2['default'], //有点问题，一开始点增加里面为空，因为这个this.state.operations还没有赋值进去  2016.12.14
-	          { menus: this.state.nextContent,
-	            Key: this.state.nextKey, //nextKey 的值其实就是从forwardTable通过handleAdd函数setState然后传过来的，这个值用于去生成新增的functions、operations、webApis下的key
-	            _MenusSubmit: itemsActions.addFunctionsSubmit,
+	          keys.addItems ? _react2['default'].createElement(_DialogEditTextField2['default'], {
+	            menus: keys,
+	            idArray: idArray,
+	            Key: keys.nextKey, //nextKey 的值其实就是从forwardTable通过handleAdd函数setState然后传过来的，这个值用于去生成新增的functions、operations、webApis下的key
+	            _MenusSubmit: itemsActions.dispatchAddActions,
 	            array: ['functionId', 'functionName']
 	          }) : _react2['default'].createElement(_DialogFunctionsDialog2['default'], {
-	            edit: this.state.edit,
-	            keys: this.state.nextContent.key, //operations的新增需要从functions传keys过来  //todo 这里的items为什么不用items[0],因为只有一个数组吗？可能以后这个会改动 2016.12.20
-	            itemsActions: itemsActions, //接上  keys这里报错了，因为items是array，直接用items.key报undefined，items[0].key也会报错，因为一开始items为空，也就没有key
-	            content: this.state.nextContent, //接上  所以这里的key用当前的functions的key既可以把新增的operations加到相应的functions上，又可以解决item[0]的问题 2016.12.21
-	            Key: this.state.nextKey
+	            itemsActions: itemsActions,
+	            menus: menus,
+	            func: keys
 	          })
 	        )
 	      );
@@ -36132,11 +35435,21 @@
 	  return ChildrenItems;
 	})(_react.Component);
 
-	exports['default'] = ChildrenItems;
+	function mapStateToProps(state) {
+	  return {
+	    keys: state.keys
+	  };
+	}
+	function mapDispatchToProps(dispatch) {
+	  return {
+	    keysActions: (0, _redux.bindActionCreators)(KeysActions, dispatch)
+	  };
+	}
+	exports['default'] = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(ChildrenItems);
 	module.exports = exports['default'];
 
 /***/ },
-/* 320 */
+/* 319 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -36155,19 +35468,19 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _windowListenable = __webpack_require__(312);
+	var _windowListenable = __webpack_require__(320);
 
 	var _windowListenable2 = _interopRequireDefault(_windowListenable);
 
-	var _keyCode = __webpack_require__(266);
+	var _keyCode = __webpack_require__(272);
 
 	var _keyCode2 = _interopRequireDefault(_keyCode);
 
-	var _transitions = __webpack_require__(256);
+	var _transitions = __webpack_require__(262);
 
 	var _transitions2 = _interopRequireDefault(_transitions);
 
-	var _stylePropable = __webpack_require__(226);
+	var _stylePropable = __webpack_require__(232);
 
 	var _stylePropable2 = _interopRequireDefault(_stylePropable);
 
@@ -36183,15 +35496,15 @@
 
 	var _renderToLayer2 = _interopRequireDefault(_renderToLayer);
 
-	var _paper = __webpack_require__(307);
+	var _paper = __webpack_require__(313);
 
 	var _paper2 = _interopRequireDefault(_paper);
 
-	var _getMuiTheme = __webpack_require__(273);
+	var _getMuiTheme = __webpack_require__(279);
 
 	var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
 
-	var _warning = __webpack_require__(248);
+	var _warning = __webpack_require__(254);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
@@ -36199,7 +35512,7 @@
 
 	var _deprecatedPropType2 = _interopRequireDefault(_deprecatedPropType);
 
-	var _reactAddonsTransitionGroup = __webpack_require__(269);
+	var _reactAddonsTransitionGroup = __webpack_require__(275);
 
 	var _reactAddonsTransitionGroup2 = _interopRequireDefault(_reactAddonsTransitionGroup);
 
@@ -36792,6 +36105,42 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14)))
 
 /***/ },
+/* 320 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _events = __webpack_require__(271);
+
+	var _events2 = _interopRequireDefault(_events);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = {
+	  componentDidMount: function componentDidMount() {
+	    var listeners = this.windowListeners;
+
+	    for (var eventName in listeners) {
+	      var callbackName = listeners[eventName];
+	      _events2.default.on(window, eventName, this[callbackName]);
+	    }
+	  },
+	  componentWillUnmount: function componentWillUnmount() {
+	    var listeners = this.windowListeners;
+
+	    for (var eventName in listeners) {
+	      var callbackName = listeners[eventName];
+	      _events2.default.off(window, eventName, this[callbackName]);
+	    }
+	  }
+	};
+	module.exports = exports['default'];
+
+/***/ },
 /* 321 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -36807,29 +36156,29 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _contextPure = __webpack_require__(254);
+	var _contextPure = __webpack_require__(260);
 
 	var _contextPure2 = _interopRequireDefault(_contextPure);
 
-	var _transitions = __webpack_require__(256);
+	var _transitions = __webpack_require__(262);
 
 	var _transitions2 = _interopRequireDefault(_transitions);
 
-	var _children = __webpack_require__(262);
+	var _children = __webpack_require__(268);
 
 	var _children2 = _interopRequireDefault(_children);
 
-	var _colorManipulator = __webpack_require__(291);
+	var _colorManipulator = __webpack_require__(297);
 
 	var _colorManipulator2 = _interopRequireDefault(_colorManipulator);
 
-	var _styles = __webpack_require__(227);
+	var _styles = __webpack_require__(233);
 
-	var _typography = __webpack_require__(251);
+	var _typography = __webpack_require__(257);
 
 	var _typography2 = _interopRequireDefault(_typography);
 
-	var _enhancedButton = __webpack_require__(258);
+	var _enhancedButton = __webpack_require__(264);
 
 	var _enhancedButton2 = _interopRequireDefault(_enhancedButton);
 
@@ -36837,7 +36186,7 @@
 
 	var _flatButtonLabel2 = _interopRequireDefault(_flatButtonLabel);
 
-	var _getMuiTheme = __webpack_require__(273);
+	var _getMuiTheme = __webpack_require__(279);
 
 	var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
 
@@ -37163,15 +36512,15 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _contextPure = __webpack_require__(254);
+	var _contextPure = __webpack_require__(260);
 
 	var _contextPure2 = _interopRequireDefault(_contextPure);
 
-	var _stylePropable = __webpack_require__(226);
+	var _stylePropable = __webpack_require__(232);
 
 	var _stylePropable2 = _interopRequireDefault(_stylePropable);
 
-	var _getMuiTheme = __webpack_require__(273);
+	var _getMuiTheme = __webpack_require__(279);
 
 	var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
 
@@ -37271,15 +36620,15 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _stylePropable = __webpack_require__(226);
+	var _stylePropable = __webpack_require__(232);
 
 	var _stylePropable2 = _interopRequireDefault(_stylePropable);
 
-	var _transitions = __webpack_require__(256);
+	var _transitions = __webpack_require__(262);
 
 	var _transitions2 = _interopRequireDefault(_transitions);
 
-	var _colors = __webpack_require__(252);
+	var _colors = __webpack_require__(258);
 
 	var _colors2 = _interopRequireDefault(_colors);
 
@@ -37414,11 +36763,11 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _dom = __webpack_require__(301);
+	var _dom = __webpack_require__(307);
 
 	var _dom2 = _interopRequireDefault(_dom);
 
-	var _getMuiTheme = __webpack_require__(273);
+	var _getMuiTheme = __webpack_require__(279);
 
 	var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
 
@@ -37582,7 +36931,7 @@
 	});
 	exports.default = deprecated;
 
-	var _warning = __webpack_require__(248);
+	var _warning = __webpack_require__(254);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
@@ -37652,7 +37001,6 @@
 	    _classCallCheck(this, EditTextField);
 
 	    _get(Object.getPrototypeOf(EditTextField.prototype), 'constructor', this).call(this, props);
-	    //todo  不要重复取一个对象里面的数据'
 
 	    var _ref = this.props.menus || {};
 
@@ -37680,8 +37028,8 @@
 	      menuParentId: menuParentId,
 	      menuSort: menuSort,
 	      name: name,
-	      /**functions */
 	      icon: icon,
+	      /**functions */
 	      functionId: functionId,
 	      functionName: functionName,
 	      /*operations */
@@ -37703,8 +37051,6 @@
 	      newState[name] = event.currentTarget.value;
 	      this.setState(newState);
 	    }
-
-	    /**hahahah */ //3.key在这里为undefined
 	  }, {
 	    key: 'render',
 	    value: function render() {
@@ -37715,6 +37061,8 @@
 	      var menus = _props.menus;
 	      var _MenusSubmit = _props._MenusSubmit;
 	      var array = _props.array;
+	      var _props$idArray = _props.idArray;
+	      var idArray = _props$idArray === undefined ? [] : _props$idArray;
 
 	      var submitContent = array.map(function (arr) {
 	        return _this.state[arr];
@@ -37737,8 +37085,10 @@
 	          label: 'Submit',
 	          primary: true,
 	          keyboardFocused: true,
-	          onTouchTap: function () {
+	          onTouchTap: array[0] === 'serviceMethod' ? function () {
 	            return _MenusSubmit.apply(undefined, [Key, menus.key].concat(_toConsumableArray(submitContent)));
+	          } : function () {
+	            return _MenusSubmit.apply(undefined, [idArray, Key, menus.key].concat(_toConsumableArray(submitContent)));
 	          }
 	        })
 	      );
@@ -37809,47 +37159,47 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _colorManipulator = __webpack_require__(291);
+	var _colorManipulator = __webpack_require__(297);
 
 	var _colorManipulator2 = _interopRequireDefault(_colorManipulator);
 
-	var _stylePropable = __webpack_require__(226);
+	var _stylePropable = __webpack_require__(232);
 
 	var _stylePropable2 = _interopRequireDefault(_stylePropable);
 
-	var _transitions = __webpack_require__(256);
+	var _transitions = __webpack_require__(262);
 
 	var _transitions2 = _interopRequireDefault(_transitions);
 
-	var _uniqueId = __webpack_require__(311);
+	var _uniqueId = __webpack_require__(330);
 
 	var _uniqueId2 = _interopRequireDefault(_uniqueId);
 
-	var _enhancedTextarea = __webpack_require__(330);
+	var _enhancedTextarea = __webpack_require__(331);
 
 	var _enhancedTextarea2 = _interopRequireDefault(_enhancedTextarea);
 
-	var _getMuiTheme = __webpack_require__(273);
+	var _getMuiTheme = __webpack_require__(279);
 
 	var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
 
-	var _contextPure = __webpack_require__(254);
+	var _contextPure = __webpack_require__(260);
 
 	var _contextPure2 = _interopRequireDefault(_contextPure);
 
-	var _TextFieldHint = __webpack_require__(331);
+	var _TextFieldHint = __webpack_require__(332);
 
 	var _TextFieldHint2 = _interopRequireDefault(_TextFieldHint);
 
-	var _TextFieldLabel = __webpack_require__(332);
+	var _TextFieldLabel = __webpack_require__(333);
 
 	var _TextFieldLabel2 = _interopRequireDefault(_TextFieldLabel);
 
-	var _TextFieldUnderline = __webpack_require__(333);
+	var _TextFieldUnderline = __webpack_require__(334);
 
 	var _TextFieldUnderline2 = _interopRequireDefault(_TextFieldUnderline);
 
-	var _warning = __webpack_require__(248);
+	var _warning = __webpack_require__(254);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
@@ -38357,6 +37707,24 @@
 
 /***/ },
 /* 330 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var index = 0;
+
+	exports.default = {
+	  generate: function generate() {
+	    return 'mui-id-' + index++;
+	  }
+	};
+	module.exports = exports['default'];
+
+/***/ },
+/* 331 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -38375,11 +37743,11 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _stylePropable = __webpack_require__(226);
+	var _stylePropable = __webpack_require__(232);
 
 	var _stylePropable2 = _interopRequireDefault(_stylePropable);
 
-	var _getMuiTheme = __webpack_require__(273);
+	var _getMuiTheme = __webpack_require__(279);
 
 	var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
 
@@ -38562,7 +37930,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 331 */
+/* 332 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -38575,11 +37943,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _transitions = __webpack_require__(256);
+	var _transitions = __webpack_require__(262);
 
 	var _transitions2 = _interopRequireDefault(_transitions);
 
-	var _styles = __webpack_require__(227);
+	var _styles = __webpack_require__(233);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -38640,7 +38008,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 332 */
+/* 333 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -38653,11 +38021,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _transitions = __webpack_require__(256);
+	var _transitions = __webpack_require__(262);
 
 	var _transitions2 = _interopRequireDefault(_transitions);
 
-	var _styles = __webpack_require__(227);
+	var _styles = __webpack_require__(233);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -38752,7 +38120,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 333 */
+/* 334 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -38765,11 +38133,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _transitions = __webpack_require__(256);
+	var _transitions = __webpack_require__(262);
 
 	var _transitions2 = _interopRequireDefault(_transitions);
 
-	var _styles = __webpack_require__(227);
+	var _styles = __webpack_require__(233);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -38890,154 +38258,6 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 334 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, '__esModule', {
-	  value: true
-	});
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var _react = __webpack_require__(66);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _materialUiLibDialog = __webpack_require__(320);
-
-	var _materialUiLibDialog2 = _interopRequireDefault(_materialUiLibDialog);
-
-	var _ForwardTable = __webpack_require__(335);
-
-	var _ForwardTable2 = _interopRequireDefault(_ForwardTable);
-
-	var _EditTextField = __webpack_require__(326);
-
-	var _EditTextField2 = _interopRequireDefault(_EditTextField);
-
-	var _DialogOperationsDialog = __webpack_require__(340);
-
-	var _DialogOperationsDialog2 = _interopRequireDefault(_DialogOperationsDialog);
-
-	var style = {
-	  dialog: {
-	    width: '80%',
-	    maxWidth: 'none'
-	  }
-	};
-
-	var FunctionsDialog = (function (_Component) {
-	  _inherits(FunctionsDialog, _Component);
-
-	  function FunctionsDialog(props) {
-	    _classCallCheck(this, FunctionsDialog);
-
-	    //todo 一般来说state应该放到顶级props中管理，通过发出action返回一个新的state，这个也相应的要，应该可以放到keys中一起。待优化 2016.12.20
-	    _get(Object.getPrototypeOf(FunctionsDialog.prototype), 'constructor', this).call(this, props);
-	    this.handleClose = this.handleClose.bind(this);
-	    this.handleEdit = this.handleEdit.bind(this);
-	    this.handleAdd = this.handleAdd.bind(this);
-	    this.handleOpen = this.handleOpen.bind(this);
-	    this.state = {
-	      open: false,
-	      addItems: false,
-	      edit: false,
-	      nextContent: '',
-	      nextKey: '0-0-0-0-0'
-	    };
-	  }
-
-	  _createClass(FunctionsDialog, [{
-	    key: 'handleOpen',
-	    value: function handleOpen(content) {
-	      this.setState({ open: true, addItems: false, nextContent: content });
-	    }
-	  }, {
-	    key: 'handleEdit',
-	    value: function handleEdit(content) {
-	      this.setState({ open: true, addItems: false, edit: true, nextContent: content });
-	    }
-	  }, {
-	    key: 'handleAdd',
-	    value: function handleAdd(key) {
-	      this.setState({ open: true, addItems: true, nextKey: key });
-	    }
-	  }, {
-	    key: 'handleClose',
-	    value: function handleClose() {
-	      this.setState({ edit: false, open: false });
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      var _props = this.props;
-	      var content = _props.content;
-	      var key = _props.key;
-	      var edit = _props.edit;
-	      var itemsActions = _props.itemsActions;
-	      var keys = _props.keys;
-
-	      var element = edit ? _react2['default'].createElement(_EditTextField2['default'], {
-	        menus: content,
-	        Key: key,
-	        _MenusSubmit: itemsActions.handleSubmit,
-	        array: ['functionId', 'functionName'] //不同点
-	      }) : _react2['default'].createElement(_ForwardTable2['default'], {
-	        forward: true, //不同点  控制是否有下一级，true为有，false反之
-	        items: content.operations, //不同点   下一级为operations,若webApis则为webApis
-	        keys: keys, //operations的新增需要从functions传keys过来
-	        _handleChecked: itemsActions.operationsSelected, //不同点
-	        _handleEdit: this.handleEdit,
-	        _handleAdd: this.handleAdd,
-	        _handleOpen: this.handleOpen,
-	        array: ['opId', 'opSort', 'opName', 'elementClass'] //不同点
-	      });
-
-	      return _react2['default'].createElement(
-	        'span',
-	        null,
-	        element,
-	        _react2['default'].createElement(
-	          _materialUiLibDialog2['default'],
-	          {
-	            modal: false,
-	            open: this.state.open,
-	            contentStyle: style.dialog,
-	            onRequestClose: this.handleClose
-	          },
-	          this.state.addItems ? _react2['default'].createElement(_EditTextField2['default'], {
-	            menus: this.state.nextContent,
-	            Key: this.state.nextKey, //nextKey 的值其实就是从forwardTable通过handleAdd函数setState然后传过来的，这个值用于去生成新增的functions、operations、webApis下的key
-	            _MenusSubmit: itemsActions.addOperationsSubmit,
-	            array: ['opId', 'opSort', 'opName', 'elementClass']
-	          }) : _react2['default'].createElement(_DialogOperationsDialog2['default'], {
-	            edit: this.state.edit,
-	            // keys={content.operations[0].key}      //这里content.operations[0].key会导致每次新增webApis都加在第一个的operations上, 后面已解决，不需要在这传keys了
-	            itemsActions: itemsActions,
-	            content: this.state.nextContent
-	          })
-	        )
-	      );
-	    }
-	  }]);
-
-	  return FunctionsDialog;
-	})(_react.Component);
-
-	exports['default'] = FunctionsDialog;
-	module.exports = exports['default'];
-
-/***/ },
 /* 335 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -39051,6 +38271,8 @@
 
 	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
@@ -39061,27 +38283,182 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _materialUiLibCheckbox = __webpack_require__(309);
+	var _materialUiLibDialog = __webpack_require__(319);
+
+	var _materialUiLibDialog2 = _interopRequireDefault(_materialUiLibDialog);
+
+	var _reactRedux = __webpack_require__(171);
+
+	var _redux = __webpack_require__(179);
+
+	var _ForwardTable = __webpack_require__(336);
+
+	var _ForwardTable2 = _interopRequireDefault(_ForwardTable);
+
+	var _EditTextField = __webpack_require__(326);
+
+	var _EditTextField2 = _interopRequireDefault(_EditTextField);
+
+	var _DialogOperationsDialog = __webpack_require__(347);
+
+	var _DialogOperationsDialog2 = _interopRequireDefault(_DialogOperationsDialog);
+
+	var _actionsOper = __webpack_require__(207);
+
+	var OperActions = _interopRequireWildcard(_actionsOper);
+
+	var style = {
+	  dialog: {
+	    width: '80%',
+	    maxWidth: 'none'
+	  }
+	};
+
+	var FunctionsDialog = (function (_Component) {
+	  _inherits(FunctionsDialog, _Component);
+
+	  function FunctionsDialog() {
+	    _classCallCheck(this, FunctionsDialog);
+
+	    _get(Object.getPrototypeOf(FunctionsDialog.prototype), 'constructor', this).apply(this, arguments);
+	  }
+
+	  _createClass(FunctionsDialog, [{
+	    key: 'render',
+	    value: function render() {
+	      var _props = this.props;
+	      var itemsActions = _props.itemsActions;
+	      var func = _props.func;
+	      var oper = _props.oper;
+	      var operActions = _props.operActions;
+	      var menus = _props.menus;
+
+	      var array = menus.map(function (item) {
+	        return item.children.map(function (child) {
+	          return child.functions.map(function (func) {
+	            return func.operations.map(function (oper) {
+	              return oper.opId;
+	            });
+	          });
+	        });
+	      });
+	      var idArray = array.reduce(function (x, y) {
+	        return x.concat(y);
+	      }, []).reduce(function (x, y) {
+	        return x.concat(y);
+	      }, []).reduce(function (x, y) {
+	        return x.concat(y);
+	      }, []).sort();
+
+	      return _react2['default'].createElement(
+	        'span',
+	        null,
+	        func.edit ? _react2['default'].createElement(_EditTextField2['default'], {
+	          menus: func.nextContent,
+	          Key: func.nextKey, //用于后面新增或修改进行匹配的值
+	          _MenusSubmit: itemsActions.dispatchHandleSubmit,
+	          array: ['functionId', 'functionName'] //不同点
+	        }) : _react2['default'].createElement(_ForwardTable2['default'], {
+	          forward: true, //不同点  控制是否有下一级，true为有，false反之
+	          items: func.nextContent.operations, //不同点  下一级为operations,若webApis则为webApis
+	          keys: func.nextContent.key, //operations的新增需要从functions传keys过来
+	          idArray: idArray, //opId数组
+	          _handleDelete: itemsActions.handleDelete,
+	          _handleChecked: itemsActions.operationsSelected, //不同点
+	          _handleEdit: operActions.setOperEdit,
+	          _handleAdd: operActions.setOperAdd,
+	          _handleOpen: operActions.setOperOpen,
+	          array: ['opId', 'opSort', 'opName', 'elementClass'] //不同点
+	        }),
+	        _react2['default'].createElement(
+	          _materialUiLibDialog2['default'],
+	          {
+	            modal: false,
+	            open: oper.open,
+	            contentStyle: style.dialog,
+	            onRequestClose: operActions.setOperClose
+	          },
+	          oper.addItems ? _react2['default'].createElement(_EditTextField2['default'], {
+	            menus: oper,
+	            idArray: idArray, //用于后面判断新增的opId是否为重复
+	            Key: oper.nextKey, //nextKey 从forwardTable传过来的，用于去生成新增的functions、operations、webApis下的key
+	            _MenusSubmit: itemsActions.dispatchAddOperActions,
+	            array: ['opId', 'opSort', 'opName', 'elementClass']
+	          }) : _react2['default'].createElement(_DialogOperationsDialog2['default'], {
+	            edit: oper.edit,
+	            itemsActions: itemsActions,
+	            content: oper.nextContent
+	          })
+	        )
+	      );
+	    }
+	  }]);
+
+	  return FunctionsDialog;
+	})(_react.Component);
+
+	function mapStateToProps(state) {
+	  return {
+	    oper: state.oper
+	  };
+	}
+	function mapDispatchToProps(dispatch) {
+	  return {
+	    operActions: (0, _redux.bindActionCreators)(OperActions, dispatch)
+	  };
+	}
+	exports['default'] = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(FunctionsDialog);
+	module.exports = exports['default'];
+
+/***/ },
+/* 336 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var _react = __webpack_require__(66);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _materialUiLibCheckbox = __webpack_require__(337);
 
 	var _materialUiLibCheckbox2 = _interopRequireDefault(_materialUiLibCheckbox);
 
-	var _materialUiLibFloatingActionButton = __webpack_require__(336);
+	var _materialUiLibFloatingActionButton = __webpack_require__(343);
 
 	var _materialUiLibFloatingActionButton2 = _interopRequireDefault(_materialUiLibFloatingActionButton);
 
-	var _materialUiLibSvgIconsContentCreate = __webpack_require__(337);
+	var _materialUiLibSvgIconsContentCreate = __webpack_require__(344);
 
 	var _materialUiLibSvgIconsContentCreate2 = _interopRequireDefault(_materialUiLibSvgIconsContentCreate);
 
-	var _materialUiLibSvgIconsContentForward = __webpack_require__(338);
+	var _materialUiLibSvgIconsContentForward = __webpack_require__(345);
 
 	var _materialUiLibSvgIconsContentForward2 = _interopRequireDefault(_materialUiLibSvgIconsContentForward);
 
-	var _materialUiLibSvgIconsContentAdd = __webpack_require__(339);
+	var _materialUiLibSvgIconsActionDelete = __webpack_require__(315);
+
+	var _materialUiLibSvgIconsActionDelete2 = _interopRequireDefault(_materialUiLibSvgIconsActionDelete);
+
+	var _materialUiLibSvgIconsContentAdd = __webpack_require__(346);
 
 	var _materialUiLibSvgIconsContentAdd2 = _interopRequireDefault(_materialUiLibSvgIconsContentAdd);
 
-	var _materialUiLibStylesColors = __webpack_require__(252);
+	var _materialUiLibStylesColors = __webpack_require__(258);
 
 	var _materialUiLibStylesColors2 = _interopRequireDefault(_materialUiLibStylesColors);
 
@@ -39093,16 +38470,16 @@
 	  }
 	};
 
-	var ChildrenItems = (function (_Component) {
-	  _inherits(ChildrenItems, _Component);
+	var ForwardTable = (function (_Component) {
+	  _inherits(ForwardTable, _Component);
 
-	  function ChildrenItems(props) {
-	    _classCallCheck(this, ChildrenItems);
+	  function ForwardTable() {
+	    _classCallCheck(this, ForwardTable);
 
-	    _get(Object.getPrototypeOf(ChildrenItems.prototype), 'constructor', this).call(this, props);
+	    _get(Object.getPrototypeOf(ForwardTable.prototype), 'constructor', this).apply(this, arguments);
 	  }
 
-	  _createClass(ChildrenItems, [{
+	  _createClass(ForwardTable, [{
 	    key: 'render',
 	    value: function render() {
 	      var _props = this.props;
@@ -39114,9 +38491,11 @@
 	      var _handleAdd = _props._handleAdd;
 	      var _handleEdit = _props._handleEdit;
 	      var _handleChecked = _props._handleChecked;
+	      var _handleDelete = _props._handleDelete;
 	      var keys = _props.keys;
+	      var _props$idArray = _props.idArray;
+	      var idArray = _props$idArray === undefined ? [] : _props$idArray;
 
-	      /**debug1 */ //1.key的值可以正常获取
 	      return _react2['default'].createElement(
 	        'div',
 	        { className: 'tableBox' },
@@ -39150,6 +38529,11 @@
 	                'th',
 	                { className: 'toolItems' },
 	                'edit'
+	              ),
+	              array[0] === 'functionId' ? '' : _react2['default'].createElement(
+	                'th',
+	                { className: 'toolItems' },
+	                'delete'
 	              )
 	            )
 	          ),
@@ -39187,6 +38571,13 @@
 	                  _react2['default'].createElement(_materialUiLibSvgIconsContentCreate2['default'], { color: _materialUiLibStylesColors2['default'].cyan500, onTouchTap: function () {
 	                      return _handleEdit(item);
 	                    } })
+	                ),
+	                _react2['default'].createElement(
+	                  'td',
+	                  { className: 'toolItems' },
+	                  _react2['default'].createElement(_materialUiLibSvgIconsActionDelete2['default'], { color: _materialUiLibStylesColors2['default'].cyan500, onTouchTap: function () {
+	                      return _handleDelete(array[0], item.key);
+	                    } })
 	                )
 	              );
 	            })
@@ -39194,23 +38585,291 @@
 	        ),
 	        _react2['default'].createElement(
 	          _materialUiLibFloatingActionButton2['default'],
-	          { secondary: true, mini: true, style: style.actionButton, onTouchTap: function () {
+	          {
+	            secondary: true,
+	            mini: true,
+	            style: style.actionButton,
+	            onTouchTap: array[0] === 'serviceMethod' ? function () {
 	              return _handleAdd(keys);
-	            } },
+	            } : function () {
+	              return _handleAdd(keys, idArray);
+	            }
+	          },
 	          _react2['default'].createElement(_materialUiLibSvgIconsContentAdd2['default'], null)
 	        )
 	      );
 	    }
 	  }]);
 
-	  return ChildrenItems;
+	  return ForwardTable;
 	})(_react.Component);
 
-	exports['default'] = ChildrenItems;
+	exports['default'] = ForwardTable;
 	module.exports = exports['default'];
 
 /***/ },
-/* 336 */
+/* 337 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(66);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _enhancedSwitch = __webpack_require__(338);
+
+	var _enhancedSwitch2 = _interopRequireDefault(_enhancedSwitch);
+
+	var _stylePropable = __webpack_require__(232);
+
+	var _stylePropable2 = _interopRequireDefault(_stylePropable);
+
+	var _transitions = __webpack_require__(262);
+
+	var _transitions2 = _interopRequireDefault(_transitions);
+
+	var _checkBoxOutlineBlank = __webpack_require__(341);
+
+	var _checkBoxOutlineBlank2 = _interopRequireDefault(_checkBoxOutlineBlank);
+
+	var _checkBox = __webpack_require__(342);
+
+	var _checkBox2 = _interopRequireDefault(_checkBox);
+
+	var _getMuiTheme = __webpack_require__(279);
+
+	var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+
+	var Checkbox = _react2.default.createClass({
+	  displayName: 'Checkbox',
+
+	  propTypes: {
+	    /**
+	     * Checkbox is checked if true.
+	     */
+	    checked: _react2.default.PropTypes.bool,
+
+	    /**
+	     * The SvgIcon to use for the checked state.
+	     * This is useful to create icon toggles.
+	     */
+	    checkedIcon: _react2.default.PropTypes.element,
+
+	    /**
+	     * The default state of our checkbox component.
+	     */
+	    defaultChecked: _react2.default.PropTypes.bool,
+
+	    /**
+	     * Disabled if true.
+	     */
+	    disabled: _react2.default.PropTypes.bool,
+
+	    /**
+	     * Overrides the inline-styles of the icon element.
+	     */
+	    iconStyle: _react2.default.PropTypes.object,
+
+	    /**
+	     * Where the label will be placed next to the checkbox.
+	     */
+	    labelPosition: _react2.default.PropTypes.oneOf(['left', 'right']),
+
+	    /**
+	     * Overrides the inline-styles of the Checkbox element label.
+	     */
+	    labelStyle: _react2.default.PropTypes.object,
+
+	    /**
+	     * Callback function that is fired when the checkbox is checked.
+	     */
+	    onCheck: _react2.default.PropTypes.func,
+
+	    /**
+	     * Override the inline-styles of the root element.
+	     */
+	    style: _react2.default.PropTypes.object,
+
+	    /**
+	     * The SvgIcon to use for the unchecked state.
+	     * This is useful to create icon toggles.
+	     */
+	    unCheckedIcon: _react2.default.PropTypes.element,
+
+	    /**
+	     * ValueLink for when using controlled checkbox.
+	     */
+	    valueLink: _react2.default.PropTypes.object
+	  },
+
+	  contextTypes: {
+	    muiTheme: _react2.default.PropTypes.object
+	  },
+
+	  //for passing default theme context to children
+	  childContextTypes: {
+	    muiTheme: _react2.default.PropTypes.object
+	  },
+
+	  mixins: [_stylePropable2.default],
+
+	  getDefaultProps: function getDefaultProps() {
+	    return {
+	      defaultChecked: false,
+	      labelPosition: 'right',
+	      disabled: false
+	    };
+	  },
+	  getInitialState: function getInitialState() {
+	    return {
+	      switched: this.props.checked || this.props.defaultChecked || this.props.valueLink && this.props.valueLink.value || false,
+	      muiTheme: this.context.muiTheme || (0, _getMuiTheme2.default)()
+	    };
+	  },
+	  getChildContext: function getChildContext() {
+	    return {
+	      muiTheme: this.state.muiTheme
+	    };
+	  },
+
+	  //to update theme inside state whenever a new theme is passed down
+	  //from the parent / owner using context
+	  componentWillReceiveProps: function componentWillReceiveProps(nextProps, nextContext) {
+	    var newMuiTheme = nextContext.muiTheme ? nextContext.muiTheme : this.state.muiTheme;
+	    this.setState({
+	      muiTheme: newMuiTheme,
+	      switched: this.props.checked !== nextProps.checked ? nextProps.checked : this.state.switched
+	    });
+	  },
+	  getTheme: function getTheme() {
+	    return this.state.muiTheme.checkbox;
+	  },
+	  getStyles: function getStyles() {
+	    var checkboxSize = 24;
+	    var styles = {
+	      icon: {
+	        height: checkboxSize,
+	        width: checkboxSize
+	      },
+	      check: {
+	        position: 'absolute',
+	        opacity: 0,
+	        transform: 'scale(0)',
+	        transitionOrigin: '50% 50%',
+	        transition: _transitions2.default.easeOut('450ms', 'opacity', '0ms') + ', ' + _transitions2.default.easeOut('0ms', 'transform', '450ms'),
+	        fill: this.getTheme().checkedColor
+	      },
+	      box: {
+	        position: 'absolute',
+	        opacity: 1,
+	        fill: this.getTheme().boxColor,
+	        transition: _transitions2.default.easeOut('2s', null, '200ms')
+	      },
+	      checkWhenSwitched: {
+	        opacity: 1,
+	        transform: 'scale(1)',
+	        transition: _transitions2.default.easeOut('0ms', 'opacity', '0ms') + ', ' + _transitions2.default.easeOut('800ms', 'transform', '0ms')
+	      },
+	      boxWhenSwitched: {
+	        transition: _transitions2.default.easeOut('100ms', null, '0ms'),
+	        fill: this.getTheme().checkedColor
+	      },
+	      checkWhenDisabled: {
+	        fill: this.getTheme().disabledColor
+	      },
+	      boxWhenDisabled: {
+	        fill: this.getTheme().disabledColor
+	      },
+	      label: {
+	        color: this.props.disabled ? this.getTheme().labelDisabledColor : this.getTheme().labelColor
+	      }
+	    };
+
+	    return styles;
+	  },
+	  isChecked: function isChecked() {
+	    return this.refs.enhancedSwitch.isSwitched();
+	  },
+	  setChecked: function setChecked(newCheckedValue) {
+	    this.refs.enhancedSwitch.setSwitched(newCheckedValue);
+	  },
+	  _handleCheck: function _handleCheck(e, isInputChecked) {
+	    if (this.props.onCheck) this.props.onCheck(e, isInputChecked);
+	  },
+	  _handleStateChange: function _handleStateChange(newSwitched) {
+	    this.setState({ switched: newSwitched });
+	  },
+	  render: function render() {
+	    var _props = this.props;
+	    var iconStyle = _props.iconStyle;
+	    var onCheck = _props.onCheck;
+	    var checkedIcon = _props.checkedIcon;
+	    var unCheckedIcon = _props.unCheckedIcon;
+
+	    var other = _objectWithoutProperties(_props, ['iconStyle', 'onCheck', 'checkedIcon', 'unCheckedIcon']);
+
+	    var styles = this.getStyles();
+	    var boxStyles = this.mergeStyles(styles.box, this.state.switched && styles.boxWhenSwitched, iconStyle, this.props.disabled && styles.boxWhenDisabled);
+	    var checkStyles = this.mergeStyles(styles.check, this.state.switched && styles.checkWhenSwitched, iconStyle, this.props.disabled && styles.checkWhenDisabled);
+
+	    var checkedElement = checkedIcon ? _react2.default.cloneElement(checkedIcon, {
+	      style: this.mergeStyles(checkStyles, checkedIcon.props.style)
+	    }) : _react2.default.createElement(_checkBox2.default, {
+	      style: checkStyles
+	    });
+
+	    var unCheckedElement = unCheckedIcon ? _react2.default.cloneElement(unCheckedIcon, {
+	      style: this.mergeStyles(boxStyles, unCheckedIcon.props.style)
+	    }) : _react2.default.createElement(_checkBoxOutlineBlank2.default, {
+	      style: boxStyles
+	    });
+
+	    var checkboxElement = _react2.default.createElement(
+	      'div',
+	      null,
+	      unCheckedElement,
+	      checkedElement
+	    );
+
+	    var rippleColor = this.state.switched ? checkStyles.fill : boxStyles.fill;
+	    var mergedIconStyle = this.mergeStyles(styles.icon, iconStyle);
+
+	    var labelStyle = this.mergeStyles(styles.label, this.props.labelStyle);
+
+	    var enhancedSwitchProps = {
+	      ref: 'enhancedSwitch',
+	      inputType: 'checkbox',
+	      switched: this.state.switched,
+	      switchElement: checkboxElement,
+	      rippleColor: rippleColor,
+	      iconStyle: mergedIconStyle,
+	      onSwitch: this._handleCheck,
+	      labelStyle: labelStyle,
+	      onParentShouldUpdate: this._handleStateChange,
+	      defaultSwitched: this.props.defaultChecked,
+	      labelPosition: this.props.labelPosition
+	    };
+
+	    return _react2.default.createElement(_enhancedSwitch2.default, _extends({}, other, enhancedSwitchProps));
+	  }
+	});
+
+	exports.default = Checkbox;
+	module.exports = exports['default'];
+
+/***/ },
+/* 338 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -39229,43 +38888,826 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _stylePropable = __webpack_require__(226);
+	var _keyCode = __webpack_require__(272);
+
+	var _keyCode2 = _interopRequireDefault(_keyCode);
+
+	var _stylePropable = __webpack_require__(232);
 
 	var _stylePropable2 = _interopRequireDefault(_stylePropable);
 
-	var _transitions = __webpack_require__(256);
+	var _transitions = __webpack_require__(262);
 
 	var _transitions2 = _interopRequireDefault(_transitions);
 
-	var _colors = __webpack_require__(252);
+	var _uniqueId = __webpack_require__(330);
 
-	var _colors2 = _interopRequireDefault(_colors);
+	var _uniqueId2 = _interopRequireDefault(_uniqueId);
 
-	var _colorManipulator = __webpack_require__(291);
+	var _windowListenable = __webpack_require__(320);
 
-	var _colorManipulator2 = _interopRequireDefault(_colorManipulator);
+	var _windowListenable2 = _interopRequireDefault(_windowListenable);
 
-	var _enhancedButton = __webpack_require__(258);
+	var _clearfix = __webpack_require__(339);
 
-	var _enhancedButton2 = _interopRequireDefault(_enhancedButton);
+	var _clearfix2 = _interopRequireDefault(_clearfix);
 
-	var _fontIcon = __webpack_require__(303);
+	var _focusRipple = __webpack_require__(273);
 
-	var _fontIcon2 = _interopRequireDefault(_fontIcon);
+	var _focusRipple2 = _interopRequireDefault(_focusRipple);
 
-	var _paper = __webpack_require__(307);
+	var _touchRipple = __webpack_require__(306);
+
+	var _touchRipple2 = _interopRequireDefault(_touchRipple);
+
+	var _paper = __webpack_require__(313);
 
 	var _paper2 = _interopRequireDefault(_paper);
 
-	var _children = __webpack_require__(262);
-
-	var _children2 = _interopRequireDefault(_children);
-
-	var _getMuiTheme = __webpack_require__(273);
+	var _getMuiTheme = __webpack_require__(279);
 
 	var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
 
-	var _warning = __webpack_require__(248);
+	var _warning = __webpack_require__(254);
+
+	var _warning2 = _interopRequireDefault(_warning);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+
+	var EnhancedSwitch = _react2.default.createClass({
+	  displayName: 'EnhancedSwitch',
+
+	  propTypes: {
+	    checked: _react2.default.PropTypes.bool,
+
+	    /**
+	     * The css class name of the root element.
+	     */
+	    className: _react2.default.PropTypes.string,
+	    defaultSwitched: _react2.default.PropTypes.bool,
+	    disableFocusRipple: _react2.default.PropTypes.bool,
+	    disableTouchRipple: _react2.default.PropTypes.bool,
+	    disabled: _react2.default.PropTypes.bool,
+	    iconStyle: _react2.default.PropTypes.object,
+	    id: _react2.default.PropTypes.string,
+	    inputType: _react2.default.PropTypes.string.isRequired,
+	    label: _react2.default.PropTypes.node,
+	    labelPosition: _react2.default.PropTypes.oneOf(['left', 'right']),
+	    labelStyle: _react2.default.PropTypes.object,
+	    name: _react2.default.PropTypes.string,
+	    onBlur: _react2.default.PropTypes.func,
+	    onFocus: _react2.default.PropTypes.func,
+	    onMouseDown: _react2.default.PropTypes.func,
+	    onMouseLeave: _react2.default.PropTypes.func,
+	    onMouseUp: _react2.default.PropTypes.func,
+	    onParentShouldUpdate: _react2.default.PropTypes.func.isRequired,
+	    onSwitch: _react2.default.PropTypes.func,
+	    onTouchEnd: _react2.default.PropTypes.func,
+	    onTouchStart: _react2.default.PropTypes.func,
+	    required: _react2.default.PropTypes.bool,
+	    rippleColor: _react2.default.PropTypes.string,
+	    rippleStyle: _react2.default.PropTypes.object,
+
+	    /**
+	     * Override the inline-styles of the root element.
+	     */
+	    style: _react2.default.PropTypes.object,
+	    switchElement: _react2.default.PropTypes.element.isRequired,
+	    switched: _react2.default.PropTypes.bool.isRequired,
+	    thumbStyle: _react2.default.PropTypes.object,
+	    trackStyle: _react2.default.PropTypes.object,
+	    value: _react2.default.PropTypes.string
+	  },
+
+	  contextTypes: {
+	    muiTheme: _react2.default.PropTypes.object
+	  },
+
+	  //for passing default theme context to children
+	  childContextTypes: {
+	    muiTheme: _react2.default.PropTypes.object
+	  },
+
+	  mixins: [_windowListenable2.default, _stylePropable2.default],
+
+	  getInitialState: function getInitialState() {
+	    return {
+	      isKeyboardFocused: false,
+	      parentWidth: 100,
+	      muiTheme: this.context.muiTheme || (0, _getMuiTheme2.default)()
+	    };
+	  },
+	  getChildContext: function getChildContext() {
+	    return {
+	      muiTheme: this.state.muiTheme
+	    };
+	  },
+	  componentDidMount: function componentDidMount() {
+	    var inputNode = _reactDom2.default.findDOMNode(this.refs.checkbox);
+	    if (!this.props.switched || inputNode.checked !== this.props.switched) {
+	      this.props.onParentShouldUpdate(inputNode.checked);
+	    }
+
+	    window.addEventListener('resize', this._handleResize);
+
+	    this._handleResize();
+	  },
+	  componentWillReceiveProps: function componentWillReceiveProps(nextProps, nextContext) {
+	    var hasCheckedLinkProp = nextProps.hasOwnProperty('checkedLink');
+	    var hasCheckedProp = nextProps.hasOwnProperty('checked');
+	    var hasToggledProp = nextProps.hasOwnProperty('toggled');
+	    var hasNewDefaultProp = nextProps.hasOwnProperty('defaultSwitched') && nextProps.defaultSwitched !== this.props.defaultSwitched;
+	    var newState = {};
+	    newState.muiTheme = nextContext.muiTheme ? nextContext.muiTheme : this.state.muiTheme;
+
+	    if (hasCheckedProp) {
+	      newState.switched = nextProps.checked;
+	    } else if (hasToggledProp) {
+	      newState.switched = nextProps.toggled;
+	    } else if (hasCheckedLinkProp) {
+	      newState.switched = nextProps.checkedLink.value;
+	    } else if (hasNewDefaultProp) {
+	      newState.switched = nextProps.defaultSwitched;
+	    }
+
+	    if (newState.switched !== undefined && newState.switched !== this.props.switched) {
+	      this.props.onParentShouldUpdate(newState.switched);
+	    }
+
+	    this.setState(newState);
+	  },
+	  componentWillUnmount: function componentWillUnmount() {
+	    window.removeEventListener('resize', this._handleResize);
+	  },
+
+	  windowListeners: {
+	    keydown: '_handleWindowKeydown',
+	    keyup: '_handleWindowKeyup'
+	  },
+
+	  getEvenWidth: function getEvenWidth() {
+	    return parseInt(window.getComputedStyle(_reactDom2.default.findDOMNode(this.refs.root)).getPropertyValue('width'), 10);
+	  },
+	  getTheme: function getTheme() {
+	    return this.state.muiTheme.rawTheme.palette;
+	  },
+	  getStyles: function getStyles() {
+	    var spacing = this.state.muiTheme.rawTheme.spacing;
+	    var switchWidth = 60 - spacing.desktopGutterLess;
+	    var labelWidth = 'calc(100% - 60px)';
+	    var styles = {
+	      root: {
+	        position: 'relative',
+	        cursor: this.props.disabled ? 'default' : 'pointer',
+	        overflow: 'visible',
+	        display: 'table',
+	        height: 'auto',
+	        width: '100%'
+	      },
+	      input: {
+	        position: 'absolute',
+	        cursor: this.props.disabled ? 'default' : 'pointer',
+	        pointerEvents: 'all',
+	        opacity: 0,
+	        width: '100%',
+	        height: '100%',
+	        zIndex: 2,
+	        left: 0,
+	        boxSizing: 'border-box',
+	        padding: 0,
+	        margin: 0
+	      },
+	      controls: {
+	        width: '100%',
+	        height: '100%'
+	      },
+	      label: {
+	        float: 'left',
+	        position: 'relative',
+	        display: 'block',
+	        width: labelWidth,
+	        lineHeight: '24px',
+	        color: this.getTheme().textColor,
+	        fontFamily: this.state.muiTheme.rawTheme.fontFamily
+	      },
+	      wrap: {
+	        transition: _transitions2.default.easeOut(),
+	        float: 'left',
+	        position: 'relative',
+	        display: 'block',
+	        width: switchWidth,
+	        marginRight: this.props.labelPosition === 'right' ? spacing.desktopGutterLess : 0,
+	        marginLeft: this.props.labelPosition === 'left' ? spacing.desktopGutterLess : 0
+	      },
+	      ripple: {
+	        height: '200%',
+	        width: '200%',
+	        top: -12,
+	        left: -12
+	      }
+	    };
+
+	    return styles;
+	  },
+	  isSwitched: function isSwitched() {
+	    return _reactDom2.default.findDOMNode(this.refs.checkbox).checked;
+	  },
+
+	  // no callback here because there is no event
+	  setSwitched: function setSwitched(newSwitchedValue) {
+	    if (!this.props.hasOwnProperty('checked') || this.props.checked === false) {
+	      this.props.onParentShouldUpdate(newSwitchedValue);
+	      _reactDom2.default.findDOMNode(this.refs.checkbox).checked = newSwitchedValue;
+	    } else {
+	      process.env.NODE_ENV !== "production" ? (0, _warning2.default)(false, 'Cannot call set method while checked is defined as a property.') : undefined;
+	    }
+	  },
+	  getValue: function getValue() {
+	    return _reactDom2.default.findDOMNode(this.refs.checkbox).value;
+	  },
+	  isKeyboardFocused: function isKeyboardFocused() {
+	    return this.state.isKeyboardFocused;
+	  },
+	  _handleChange: function _handleChange(e) {
+	    this._tabPressed = false;
+	    this.setState({
+	      isKeyboardFocused: false
+	    });
+
+	    var isInputChecked = _reactDom2.default.findDOMNode(this.refs.checkbox).checked;
+
+	    if (!this.props.hasOwnProperty('checked')) {
+	      this.props.onParentShouldUpdate(isInputChecked);
+	    }
+	    if (this.props.onSwitch) {
+	      this.props.onSwitch(e, isInputChecked);
+	    }
+	  },
+
+	  // Checkbox inputs only use SPACE to change their state. Using ENTER will
+	  // update the ui but not the input.
+	  _handleWindowKeydown: function _handleWindowKeydown(e) {
+	    if (e.keyCode === _keyCode2.default.TAB) {
+	      this._tabPressed = true;
+	    }
+	    if (e.keyCode === _keyCode2.default.SPACE && this.state.isKeyboardFocused) {
+	      this._handleChange(e);
+	    }
+	  },
+	  _handleWindowKeyup: function _handleWindowKeyup(e) {
+	    if (e.keyCode === _keyCode2.default.SPACE && this.state.isKeyboardFocused) {
+	      this._handleChange(e);
+	    }
+	  },
+
+	  /**
+	   * Because both the ripples and the checkbox input cannot share pointer
+	   * events, the checkbox input takes control of pointer events and calls
+	   * ripple animations manually.
+	   */
+	  _handleMouseDown: function _handleMouseDown(e) {
+	    //only listen to left clicks
+	    if (e.button === 0) {
+	      this.refs.touchRipple.start(e);
+	    }
+	  },
+	  _handleMouseUp: function _handleMouseUp() {
+	    this.refs.touchRipple.end();
+	  },
+	  _handleMouseLeave: function _handleMouseLeave() {
+	    this.refs.touchRipple.end();
+	  },
+	  _handleTouchStart: function _handleTouchStart(e) {
+	    this.refs.touchRipple.start(e);
+	  },
+	  _handleTouchEnd: function _handleTouchEnd() {
+	    this.refs.touchRipple.end();
+	  },
+	  _handleBlur: function _handleBlur(e) {
+	    this.setState({
+	      isKeyboardFocused: false
+	    });
+
+	    if (this.props.onBlur) {
+	      this.props.onBlur(e);
+	    }
+	  },
+	  _handleFocus: function _handleFocus(e) {
+	    var _this = this;
+
+	    //setTimeout is needed becuase the focus event fires first
+	    //Wait so that we can capture if this was a keyboard focus
+	    //or touch focus
+	    setTimeout(function () {
+	      if (_this._tabPressed) {
+	        _this.setState({
+	          isKeyboardFocused: true
+	        });
+	      }
+	    }, 150);
+
+	    if (this.props.onFocus) {
+	      this.props.onFocus(e);
+	    }
+	  },
+	  _handleResize: function _handleResize() {
+	    this.setState({ parentWidth: this.getEvenWidth() });
+	  },
+	  render: function render() {
+	    var _props = this.props;
+	    var name = _props.name;
+	    var value = _props.value;
+	    var label = _props.label;
+	    var onSwitch = _props.onSwitch;
+	    var defaultSwitched = _props.defaultSwitched;
+	    var onBlur = _props.onBlur;
+	    var onFocus = _props.onFocus;
+	    var onMouseUp = _props.onMouseUp;
+	    var onMouseDown = _props.onMouseDown;
+	    var onMouseLeave = _props.onMouseLeave;
+	    var onTouchStart = _props.onTouchStart;
+	    var onTouchEnd = _props.onTouchEnd;
+	    var disableTouchRipple = _props.disableTouchRipple;
+	    var disableFocusRipple = _props.disableFocusRipple;
+	    var className = _props.className;
+
+	    var other = _objectWithoutProperties(_props, ['name', 'value', 'label', 'onSwitch', 'defaultSwitched', 'onBlur', 'onFocus', 'onMouseUp', 'onMouseDown', 'onMouseLeave', 'onTouchStart', 'onTouchEnd', 'disableTouchRipple', 'disableFocusRipple', 'className']);
+
+	    var styles = this.getStyles();
+	    var wrapStyles = this.mergeStyles(styles.wrap, this.props.iconStyle);
+	    var rippleStyle = this.mergeStyles(styles.ripple, this.props.rippleStyle);
+	    var rippleColor = this.props.hasOwnProperty('rippleColor') ? this.props.rippleColor : this.getTheme().primary1Color;
+
+	    if (this.props.thumbStyle) {
+	      wrapStyles.marginLeft /= 2;
+	      wrapStyles.marginRight /= 2;
+	    }
+
+	    var inputId = this.props.id || _uniqueId2.default.generate();
+
+	    var labelStyle = this.mergeStyles(styles.label, this.props.labelStyle);
+	    var labelElement = this.props.label ? _react2.default.createElement(
+	      'label',
+	      { style: this.prepareStyles(labelStyle), htmlFor: inputId },
+	      this.props.label
+	    ) : null;
+
+	    var inputProps = {
+	      ref: 'checkbox',
+	      type: this.props.inputType,
+	      style: this.prepareStyles(styles.input),
+	      name: this.props.name,
+	      value: this.props.value,
+	      defaultChecked: this.props.defaultSwitched,
+	      onBlur: this._handleBlur,
+	      onFocus: this._handleFocus
+	    };
+
+	    var hideTouchRipple = this.props.disabled || disableTouchRipple;
+
+	    if (!hideTouchRipple) {
+	      inputProps.onMouseUp = this._handleMouseUp;
+	      inputProps.onMouseDown = this._handleMouseDown;
+	      inputProps.onMouseLeave = this._handleMouseLeave;
+	      inputProps.onTouchStart = this._handleTouchStart;
+	      inputProps.onTouchEnd = this._handleTouchEnd;
+	    }
+
+	    if (!this.props.hasOwnProperty('checkedLink')) {
+	      inputProps.onChange = this._handleChange;
+	    }
+
+	    var inputElement = _react2.default.createElement('input', _extends({}, other, inputProps));
+
+	    var touchRipple = _react2.default.createElement(_touchRipple2.default, {
+	      ref: 'touchRipple',
+	      key: 'touchRipple',
+	      style: rippleStyle,
+	      color: rippleColor,
+	      muiTheme: this.state.muiTheme,
+	      centerRipple: true
+	    });
+
+	    var focusRipple = _react2.default.createElement(_focusRipple2.default, {
+	      key: 'focusRipple',
+	      innerStyle: rippleStyle,
+	      color: rippleColor,
+	      muiTheme: this.state.muiTheme,
+	      show: this.state.isKeyboardFocused
+	    });
+
+	    var ripples = [hideTouchRipple ? null : touchRipple, this.props.disabled || disableFocusRipple ? null : focusRipple];
+
+	    // If toggle component (indicated by whether the style includes thumb) manually lay out
+	    // elements in order to nest ripple elements
+	    var switchElement = !this.props.thumbStyle ? _react2.default.createElement(
+	      'div',
+	      { style: this.prepareStyles(wrapStyles) },
+	      this.props.switchElement,
+	      ripples
+	    ) : _react2.default.createElement(
+	      'div',
+	      { style: this.prepareStyles(wrapStyles) },
+	      _react2.default.createElement('div', { style: this.prepareStyles(this.props.trackStyle) }),
+	      _react2.default.createElement(
+	        _paper2.default,
+	        { style: this.props.thumbStyle, zDepth: 1, circle: true },
+	        ' ',
+	        ripples,
+	        ' '
+	      )
+	    );
+
+	    var labelPositionExist = this.props.labelPosition;
+
+	    // Position is left if not defined or invalid.
+	    var elementsInOrder = labelPositionExist && this.props.labelPosition.toUpperCase() === 'RIGHT' ? _react2.default.createElement(
+	      _clearfix2.default,
+	      { style: styles.controls },
+	      switchElement,
+	      labelElement
+	    ) : _react2.default.createElement(
+	      _clearfix2.default,
+	      { style: styles.controls },
+	      labelElement,
+	      switchElement
+	    );
+
+	    return _react2.default.createElement(
+	      'div',
+	      { ref: 'root', className: className, style: this.prepareStyles(styles.root, this.props.style) },
+	      inputElement,
+	      elementsInOrder
+	    );
+	  }
+	});
+
+	exports.default = EnhancedSwitch;
+	module.exports = exports['default'];
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14)))
+
+/***/ },
+/* 339 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(66);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _beforeAfterWrapper = __webpack_require__(340);
+
+	var _beforeAfterWrapper2 = _interopRequireDefault(_beforeAfterWrapper);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+
+	var styles = {
+	  before: {
+	    content: "' '",
+	    display: 'table'
+	  },
+	  after: {
+	    content: "' '",
+	    clear: 'both',
+	    display: 'table'
+	  }
+	};
+
+	var ClearFix = function ClearFix(_ref) {
+	  var style = _ref.style;
+	  var children = _ref.children;
+
+	  var other = _objectWithoutProperties(_ref, ['style', 'children']);
+
+	  return _react2.default.createElement(
+	    _beforeAfterWrapper2.default,
+	    _extends({}, other, {
+	      beforeStyle: styles.before,
+	      afterStyle: styles.after,
+	      style: style
+	    }),
+	    children
+	  );
+	};
+
+	ClearFix.displayName = 'ClearFix';
+
+	ClearFix.propTypes = {
+	  children: _react2.default.PropTypes.node,
+
+	  /**
+	   * Override the inline-styles of the root element.
+	   */
+	  style: _react2.default.PropTypes.object
+	};
+
+	exports.default = ClearFix;
+	module.exports = exports['default'];
+
+/***/ },
+/* 340 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(66);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _stylePropable = __webpack_require__(232);
+
+	var _stylePropable2 = _interopRequireDefault(_stylePropable);
+
+	var _getMuiTheme = __webpack_require__(279);
+
+	var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+
+	/**
+	 *  BeforeAfterWrapper
+	 *    An alternative for the ::before and ::after css pseudo-elements for
+	 *    components whose styles are defined in javascript instead of css.
+	 *
+	 *  Usage: For the element that we want to apply before and after elements to,
+	 *    wrap its children with BeforeAfterWrapper. For example:
+	 *
+	 *                                            <Paper>
+	 *  <Paper>                                     <div> // See notice
+	 *    <BeforeAfterWrapper>        renders         <div/> // before element
+	 *      [children of paper]       ------>         [children of paper]
+	 *    </BeforeAfterWrapper>                       <div/> // after element
+	 *  </Paper>                                    </div>
+	 *                                            </Paper>
+	 *
+	 *  Notice: Notice that this div bundles together our elements. If the element
+	 *    that we want to apply before and after elements is a HTML tag (i.e. a
+	 *    div, p, or button tag), we can avoid this extra nesting by passing using
+	 *    the BeforeAfterWrapper in place of said tag like so:
+	 *
+	 *  <p>
+	 *    <BeforeAfterWrapper>   do this instead   <BeforeAfterWrapper elementType='p'>
+	 *      [children of p]          ------>         [children of p]
+	 *    </BeforeAfterWrapper>                    </BeforeAfterWrapper>
+	 *  </p>
+	 *
+	 *  BeforeAfterWrapper features spread functionality. This means that we can
+	 *  pass HTML tag properties directly into the BeforeAfterWrapper tag.
+	 *
+	 *  When using BeforeAfterWrapper, ensure that the parent of the beforeElement
+	 *  and afterElement have a defined style position.
+	 */
+
+	var BeforeAfterWrapper = _react2.default.createClass({
+	  displayName: 'BeforeAfterWrapper',
+
+	  propTypes: {
+	    afterElementType: _react2.default.PropTypes.string,
+	    afterStyle: _react2.default.PropTypes.object,
+	    beforeElementType: _react2.default.PropTypes.string,
+	    beforeStyle: _react2.default.PropTypes.object,
+	    children: _react2.default.PropTypes.node,
+	    elementType: _react2.default.PropTypes.string,
+
+	    /**
+	     * Override the inline-styles of the root element.
+	     */
+	    style: _react2.default.PropTypes.object
+	  },
+
+	  contextTypes: {
+	    muiTheme: _react2.default.PropTypes.object
+	  },
+
+	  //for passing default theme context to children
+	  childContextTypes: {
+	    muiTheme: _react2.default.PropTypes.object
+	  },
+
+	  mixins: [_stylePropable2.default],
+
+	  getDefaultProps: function getDefaultProps() {
+	    return {
+	      beforeElementType: 'div',
+	      afterElementType: 'div',
+	      elementType: 'div'
+	    };
+	  },
+	  getInitialState: function getInitialState() {
+	    return {
+	      muiTheme: this.context.muiTheme || (0, _getMuiTheme2.default)()
+	    };
+	  },
+	  getChildContext: function getChildContext() {
+	    return {
+	      muiTheme: this.state.muiTheme
+	    };
+	  },
+
+	  //to update theme inside state whenever a new theme is passed down
+	  //from the parent / owner using context
+	  componentWillReceiveProps: function componentWillReceiveProps(nextProps, nextContext) {
+	    var newMuiTheme = nextContext.muiTheme ? nextContext.muiTheme : this.state.muiTheme;
+	    this.setState({ muiTheme: newMuiTheme });
+	  },
+	  render: function render() {
+	    var _props = this.props;
+	    var beforeStyle = _props.beforeStyle;
+	    var afterStyle = _props.afterStyle;
+	    var beforeElementType = _props.beforeElementType;
+	    var afterElementType = _props.afterElementType;
+	    var elementType = _props.elementType;
+
+	    var other = _objectWithoutProperties(_props, ['beforeStyle', 'afterStyle', 'beforeElementType', 'afterElementType', 'elementType']);
+
+	    var beforeElement = undefined;
+	    var afterElement = undefined;
+
+	    beforeStyle = {
+	      boxSizing: 'border-box'
+	    };
+
+	    afterStyle = {
+	      boxSizing: 'border-box'
+	    };
+
+	    if (this.props.beforeStyle) beforeElement = _react2.default.createElement(this.props.beforeElementType, {
+	      style: this.prepareStyles(beforeStyle, this.props.beforeStyle),
+	      key: '::before'
+	    });
+	    if (this.props.afterStyle) afterElement = _react2.default.createElement(this.props.afterElementType, {
+	      style: this.prepareStyles(afterStyle, this.props.afterStyle),
+	      key: '::after'
+	    });
+
+	    var children = [beforeElement, this.props.children, afterElement];
+
+	    var props = other;
+	    props.style = this.prepareStyles(this.props.style);
+
+	    return _react2.default.createElement(this.props.elementType, props, children);
+	  }
+	});
+
+	exports.default = BeforeAfterWrapper;
+	module.exports = exports['default'];
+
+/***/ },
+/* 341 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(66);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactAddonsPureRenderMixin = __webpack_require__(265);
+
+	var _reactAddonsPureRenderMixin2 = _interopRequireDefault(_reactAddonsPureRenderMixin);
+
+	var _svgIcon = __webpack_require__(312);
+
+	var _svgIcon2 = _interopRequireDefault(_svgIcon);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var ToggleCheckBoxOutlineBlank = _react2.default.createClass({
+	  displayName: 'ToggleCheckBoxOutlineBlank',
+
+	  mixins: [_reactAddonsPureRenderMixin2.default],
+
+	  render: function render() {
+	    return _react2.default.createElement(
+	      _svgIcon2.default,
+	      this.props,
+	      _react2.default.createElement('path', { d: 'M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z' })
+	    );
+	  }
+	});
+
+	exports.default = ToggleCheckBoxOutlineBlank;
+	module.exports = exports['default'];
+
+/***/ },
+/* 342 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(66);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactAddonsPureRenderMixin = __webpack_require__(265);
+
+	var _reactAddonsPureRenderMixin2 = _interopRequireDefault(_reactAddonsPureRenderMixin);
+
+	var _svgIcon = __webpack_require__(312);
+
+	var _svgIcon2 = _interopRequireDefault(_svgIcon);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var ToggleCheckBox = _react2.default.createClass({
+	  displayName: 'ToggleCheckBox',
+
+	  mixins: [_reactAddonsPureRenderMixin2.default],
+
+	  render: function render() {
+	    return _react2.default.createElement(
+	      _svgIcon2.default,
+	      this.props,
+	      _react2.default.createElement('path', { d: 'M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z' })
+	    );
+	  }
+	});
+
+	exports.default = ToggleCheckBox;
+	module.exports = exports['default'];
+
+/***/ },
+/* 343 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(66);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactDom = __webpack_require__(170);
+
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+
+	var _stylePropable = __webpack_require__(232);
+
+	var _stylePropable2 = _interopRequireDefault(_stylePropable);
+
+	var _transitions = __webpack_require__(262);
+
+	var _transitions2 = _interopRequireDefault(_transitions);
+
+	var _colors = __webpack_require__(258);
+
+	var _colors2 = _interopRequireDefault(_colors);
+
+	var _colorManipulator = __webpack_require__(297);
+
+	var _colorManipulator2 = _interopRequireDefault(_colorManipulator);
+
+	var _enhancedButton = __webpack_require__(264);
+
+	var _enhancedButton2 = _interopRequireDefault(_enhancedButton);
+
+	var _fontIcon = __webpack_require__(309);
+
+	var _fontIcon2 = _interopRequireDefault(_fontIcon);
+
+	var _paper = __webpack_require__(313);
+
+	var _paper2 = _interopRequireDefault(_paper);
+
+	var _children = __webpack_require__(268);
+
+	var _children2 = _interopRequireDefault(_children);
+
+	var _getMuiTheme = __webpack_require__(279);
+
+	var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
+
+	var _warning = __webpack_require__(254);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
@@ -39583,7 +40025,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14)))
 
 /***/ },
-/* 337 */
+/* 344 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -39596,11 +40038,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactAddonsPureRenderMixin = __webpack_require__(259);
+	var _reactAddonsPureRenderMixin = __webpack_require__(265);
 
 	var _reactAddonsPureRenderMixin2 = _interopRequireDefault(_reactAddonsPureRenderMixin);
 
-	var _svgIcon = __webpack_require__(306);
+	var _svgIcon = __webpack_require__(312);
 
 	var _svgIcon2 = _interopRequireDefault(_svgIcon);
 
@@ -39624,7 +40066,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 338 */
+/* 345 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -39637,11 +40079,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactAddonsPureRenderMixin = __webpack_require__(259);
+	var _reactAddonsPureRenderMixin = __webpack_require__(265);
 
 	var _reactAddonsPureRenderMixin2 = _interopRequireDefault(_reactAddonsPureRenderMixin);
 
-	var _svgIcon = __webpack_require__(306);
+	var _svgIcon = __webpack_require__(312);
 
 	var _svgIcon2 = _interopRequireDefault(_svgIcon);
 
@@ -39665,7 +40107,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 339 */
+/* 346 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -39678,11 +40120,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactAddonsPureRenderMixin = __webpack_require__(259);
+	var _reactAddonsPureRenderMixin = __webpack_require__(265);
 
 	var _reactAddonsPureRenderMixin2 = _interopRequireDefault(_reactAddonsPureRenderMixin);
 
-	var _svgIcon = __webpack_require__(306);
+	var _svgIcon = __webpack_require__(312);
 
 	var _svgIcon2 = _interopRequireDefault(_svgIcon);
 
@@ -39706,7 +40148,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 340 */
+/* 347 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -39719,6 +40161,8 @@
 
 	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
@@ -39729,17 +40173,25 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _materialUiLibDialog = __webpack_require__(320);
+	var _materialUiLibDialog = __webpack_require__(319);
 
 	var _materialUiLibDialog2 = _interopRequireDefault(_materialUiLibDialog);
 
-	var _ForwardTable = __webpack_require__(335);
+	var _reactRedux = __webpack_require__(171);
+
+	var _redux = __webpack_require__(179);
+
+	var _ForwardTable = __webpack_require__(336);
 
 	var _ForwardTable2 = _interopRequireDefault(_ForwardTable);
 
 	var _EditTextField = __webpack_require__(326);
 
 	var _EditTextField2 = _interopRequireDefault(_EditTextField);
+
+	var _actionsApi = __webpack_require__(209);
+
+	var ApiActions = _interopRequireWildcard(_actionsApi);
 
 	var style = {
 	  dialog: {
@@ -39751,43 +40203,13 @@
 	var OperationsDialog = (function (_Component) {
 	  _inherits(OperationsDialog, _Component);
 
-	  function OperationsDialog(props) {
+	  function OperationsDialog() {
 	    _classCallCheck(this, OperationsDialog);
 
-	    _get(Object.getPrototypeOf(OperationsDialog.prototype), 'constructor', this).call(this, props);
-	    this.handleClose = this.handleClose.bind(this);
-	    this.handleEdit = this.handleEdit.bind(this);
-	    this.handleAdd = this.handleAdd.bind(this);
-	    this.handleOpen = this.handleOpen.bind(this);
-	    this.state = {
-	      open: false,
-	      addItems: false,
-	      nextContent: '',
-	      nextKey: '0-0-0-0-0'
-	    };
+	    _get(Object.getPrototypeOf(OperationsDialog.prototype), 'constructor', this).apply(this, arguments);
 	  }
 
 	  _createClass(OperationsDialog, [{
-	    key: 'handleOpen',
-	    value: function handleOpen(content) {
-	      this.setState({ open: true, addItems: false, nextContent: content });
-	    }
-	  }, {
-	    key: 'handleEdit',
-	    value: function handleEdit(content) {
-	      this.setState({ open: true, addItems: false, nextContent: content });
-	    }
-	  }, {
-	    key: 'handleAdd',
-	    value: function handleAdd(key) {
-	      this.setState({ open: true, addItems: true, nextKey: key });
-	    }
-	  }, {
-	    key: 'handleClose',
-	    value: function handleClose() {
-	      this.setState({ open: false, addItems: true });
-	    }
-	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var _props = this.props;
@@ -39795,6 +40217,8 @@
 	      var key = _props.key;
 	      var edit = _props.edit;
 	      var itemsActions = _props.itemsActions;
+	      var apiActions = _props.apiActions;
+	      var api = _props.api;
 
 	      return _react2['default'].createElement(
 	        'span',
@@ -39802,30 +40226,32 @@
 	        edit ? _react2['default'].createElement(_EditTextField2['default'], {
 	          menus: content,
 	          Key: key,
-	          _MenusSubmit: itemsActions.operationsSubmit,
+	          _MenusSubmit: itemsActions.dispatchOperationsSubmit,
 	          array: ['opId', 'opSort', 'opName', 'elementClass']
 	        }) : _react2['default'].createElement(_ForwardTable2['default'], {
 	          forward: false,
 	          items: content.webApis,
 	          keys: content.key, //用content.key解决那个webApis下新增每次都在第一个的operations中的webApis的问题 2016.12.21
 	          _handleChecked: itemsActions.webApisSelected,
-	          _handleEdit: this.handleEdit,
-	          _handleAdd: this.handleAdd,
-	          _handleOpen: this.handleOpen,
+	          _handleDelete: itemsActions.handleDelete,
+	          _handleEdit: apiActions.setApiEdit,
+	          _handleAdd: apiActions.setApiAdd,
+	          _handleOpen: apiActions.setApiOpen,
 	          array: ['serviceMethod', 'serviceUrl']
 	        }),
 	        _react2['default'].createElement(
 	          _materialUiLibDialog2['default'],
 	          {
 	            modal: false,
-	            open: this.state.open,
+	            open: api.open,
 	            contentStyle: style.dialog,
-	            onRequestClose: this.handleClose
+	            onRequestClose: apiActions.setApiClose
 	          },
 	          _react2['default'].createElement(_EditTextField2['default'], {
-	            menus: this.state.nextContent,
-	            Key: this.state.nextKey, //nextKey 的值其实就是从forwardTable通过handleAdd函数setState然后传过来的，这个值用于去生成新增的functions、operations、webApis下的key
-	            _MenusSubmit: this.state.addItems ? itemsActions.addWebApisSubmit : itemsActions.webApisSubmit,
+	            menus: api.nextContent,
+	            idArray: [],
+	            Key: api.nextKey, //nextKey 的值其实就是从forwardTable通过handleAdd函数setState然后传过来的，这个值用于去生成新增的functions、operations、webApis下的key
+	            _MenusSubmit: api.addItems ? itemsActions.dispatchAddApiActions : itemsActions.dispatchWebApisSubmit,
 	            array: ['serviceMethod', 'serviceUrl']
 	          })
 	        )
@@ -39836,11 +40262,21 @@
 	  return OperationsDialog;
 	})(_react.Component);
 
-	exports['default'] = OperationsDialog;
+	function mapStateToProps(state) {
+	  return {
+	    api: state.api
+	  };
+	}
+	function mapDispatchToProps(dispatch) {
+	  return {
+	    apiActions: (0, _redux.bindActionCreators)(ApiActions, dispatch)
+	  };
+	}
+	exports['default'] = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(OperationsDialog);
 	module.exports = exports['default'];
 
 /***/ },
-/* 341 */
+/* 348 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -39853,6 +40289,8 @@
 
 	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
@@ -39863,27 +40301,31 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _materialUiLibPaper = __webpack_require__(307);
+	var _materialUiLibPaper = __webpack_require__(313);
 
 	var _materialUiLibPaper2 = _interopRequireDefault(_materialUiLibPaper);
 
-	var _materialUiLibFloatingActionButton = __webpack_require__(336);
+	var _materialUiLibFloatingActionButton = __webpack_require__(343);
 
 	var _materialUiLibFloatingActionButton2 = _interopRequireDefault(_materialUiLibFloatingActionButton);
 
-	var _materialUiLibSvgIconsContentAdd = __webpack_require__(339);
+	var _materialUiLibSvgIconsContentAdd = __webpack_require__(346);
 
 	var _materialUiLibSvgIconsContentAdd2 = _interopRequireDefault(_materialUiLibSvgIconsContentAdd);
 
-	var _materialUiLibSvgIconsContentCreate = __webpack_require__(337);
+	var _materialUiLibSvgIconsContentCreate = __webpack_require__(344);
 
 	var _materialUiLibSvgIconsContentCreate2 = _interopRequireDefault(_materialUiLibSvgIconsContentCreate);
 
-	var _materialUiLibDialog = __webpack_require__(320);
+	var _materialUiLibDialog = __webpack_require__(319);
 
 	var _materialUiLibDialog2 = _interopRequireDefault(_materialUiLibDialog);
 
-	var _MenusItems = __webpack_require__(342);
+	var _reactRedux = __webpack_require__(171);
+
+	var _redux = __webpack_require__(179);
+
+	var _MenusItems = __webpack_require__(349);
 
 	var _MenusItems2 = _interopRequireDefault(_MenusItems);
 
@@ -39891,13 +40333,14 @@
 
 	var _DialogEditTextField2 = _interopRequireDefault(_DialogEditTextField);
 
+	var _actionsTop = __webpack_require__(205);
+
+	var TopActions = _interopRequireWildcard(_actionsTop);
+
 	var style = {
 	  dialog: {
 	    width: '80%',
 	    maxWidth: 'none'
-	  },
-	  actionButton: {
-	    marginLeft: 20
 	  }
 	};
 
@@ -39906,63 +40349,20 @@
 	var Menus = (function (_Component) {
 	  _inherits(Menus, _Component);
 
-	  function Menus(props) {
+	  function Menus() {
 	    _classCallCheck(this, Menus);
 
-	    _get(Object.getPrototypeOf(Menus.prototype), 'constructor', this).call(this, props);
-	    this.handleClose = this.handleClose.bind(this);
-	    this.handleAdd = this.handleAdd.bind(this);
-	    this.handleEdit = this.handleEdit.bind(this);
-	    this.state = {
-	      open: false,
-	      first: false,
-	      addFirst: false,
-	      addMenus: true,
-	      content: '',
-	      nextKey: '0-0-0-0-0' //todo 给个初始化的值，在点击增加一级菜单时会触发二级菜单的function，若传过去的key为空，则会导致后面的split这个方法报错  逻辑欠妥待优化 2016.12.19
-	    };
+	    _get(Object.getPrototypeOf(Menus.prototype), 'constructor', this).apply(this, arguments);
 	  }
 
-	  // Menus.propTypes = {
-	  //   menus: PropTypes.array.isRequired,
-	  //   actions: PropTypes.func.isRequired
-	  // }
-
 	  _createClass(Menus, [{
-	    key: 'handleEdit',
-	    value: function handleEdit() {
-	      //todo 这个要修改二级菜单必须要有勾选一级菜单才行，要修改一级菜单就要全部取消勾选一级菜单下的所有二级菜单，逻辑欠妥 2016.12.12
-	      var menus = this.props.menus.filter(function (menu) {
-	        return menu.checked === true;
-	      });
-	      if (menus.length === 0) {
-	        alert('勾选');
-	        return;
-	      }
-	      var functions = menus[0].children.filter(function (child) {
-	        return child.checked === true;
-	      });
-	      functions.length !== 0 ? this.setState({ addMenus: false, open: true, first: false, content: functions[0] }) : menus.length !== 0 ? this.setState({ addMenus: false, open: true, first: true, content: menus[0] }) : this.state;
-	    }
-	  }, {
-	    key: 'handleAdd',
-	    value: function handleAdd() {
-	      var menus = this.props.menus.filter(function (menu) {
-	        return menu.checked === true;
-	      });
-	      menus.length === 0 ? this.setState({ open: true, first: true, addMenus: true }) : this.setState({ open: true, first: false, addMenus: true, nextKey: menus[0].key });
-	    }
-	  }, {
-	    key: 'handleClose',
-	    value: function handleClose() {
-	      this.setState({ open: false });
-	    }
-	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var _props = this.props;
 	      var menus = _props.menus;
 	      var actions = _props.actions;
+	      var topActions = _props.topActions;
+	      var top = _props.top;
 
 	      return _react2['default'].createElement(
 	        'span',
@@ -39977,6 +40377,8 @@
 	              _dispatchActions: actions.dispatchActions,
 	              _checkedAll: actions.checkedAll,
 	              _checkedMenus: actions.checkedMenus,
+	              _menuDelete: actions.menuDelete,
+	              _menuSubmit: topActions.setTopEdit,
 	              menuItems: menu
 	            });
 	          })
@@ -39986,29 +40388,26 @@
 	          { className: 'buttonBox' },
 	          _react2['default'].createElement(
 	            _materialUiLibFloatingActionButton2['default'],
-	            { secondary: true, mini: true, style: style.actionButton, onTouchTap: this.handleAdd },
+	            { secondary: true, mini: true, onTouchTap: function () {
+	                return topActions.setTopAdd(menus);
+	              } },
 	            _react2['default'].createElement(_materialUiLibSvgIconsContentAdd2['default'], null)
-	          ),
-	          _react2['default'].createElement(
-	            _materialUiLibFloatingActionButton2['default'],
-	            { secondary: true, mini: true, style: style.actionButton, onTouchTap: this.handleEdit },
-	            _react2['default'].createElement(_materialUiLibSvgIconsContentCreate2['default'], null)
 	          )
 	        ),
 	        _react2['default'].createElement(
 	          _materialUiLibDialog2['default'],
 	          {
 	            modal: false,
-	            open: this.state.open,
+	            open: top.open,
 	            contentStyle: style.dialog,
-	            onRequestClose: this.handleClose
+	            onRequestClose: topActions.setTopClose
 	          },
-	          //todo 新增的content获取的是根据上次点击set的state，欠妥 2016.12.16
 	          _react2['default'].createElement(_DialogEditTextField2['default'], {
-	            menus: this.state.content,
-	            Key: this.state.nextKey,
-	            _MenusSubmit: this.state.addMenus ? this.state.first ? actions.addFirstMenus : actions.addSecondMenus : this.state.first ? actions.firstMenusSubmit : actions.secondMenusSubmit,
-	            array: this.state.addMenus ? this.state.first ? [].concat(nameBox, ['icon']) : [].concat(nameBox, ['menuParentId', 'anchor']) : this.state.first ? [].concat(nameBox) : [].concat(nameBox, ['menuParentId', 'anchor'])
+	            menus: top.addMenus ? top : top.nextContent,
+	            Key: top.nextKey,
+	            idArray: top.idArray,
+	            _MenusSubmit: top.addMenus ? top.first ? actions.dispatchAddFirst : actions.dispatchAddSecond : top.first ? actions.dispatchSubmitFirst : actions.dispatchSubmitSecond,
+	            array: top.addMenus ? top.first ? [].concat(nameBox, ['icon']) : [].concat(nameBox, ['menuParentId', 'anchor']) : top.first ? [].concat(nameBox) : [].concat(nameBox, ['menuParentId', 'anchor'])
 	          })
 	        )
 	      );
@@ -40018,11 +40417,21 @@
 	  return Menus;
 	})(_react.Component);
 
-	exports['default'] = Menus;
+	function mapStateToProps(state) {
+	  return {
+	    top: state.top
+	  };
+	}
+	function mapDispatchToProps(dispatch) {
+	  return {
+	    topActions: (0, _redux.bindActionCreators)(TopActions, dispatch)
+	  };
+	}
+	exports['default'] = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Menus);
 	module.exports = exports['default'];
 
 /***/ },
-/* 342 */
+/* 349 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -40045,7 +40454,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _materialUiLibCheckbox = __webpack_require__(309);
+	var _materialUiLibCheckbox = __webpack_require__(337);
 
 	var _materialUiLibCheckbox2 = _interopRequireDefault(_materialUiLibCheckbox);
 
@@ -40075,29 +40484,45 @@
 	      var _checkedAll = _props._checkedAll;
 	      var _checkedMenus = _props._checkedMenus;
 	      var _dispatchActions = _props._dispatchActions;
+	      var _menuDelete = _props._menuDelete;
+	      var _menuSubmit = _props._menuSubmit;
 
 	      var element = _react2['default'].createElement(
 	        'span',
 	        { open: menuItems.open },
-	        _react2['default'].createElement(_materialUiLibCheckbox2['default'], {
-	          checked: menuItems.checked,
-	          onClick: function () {
-	            return _checkedAll(menuItems.menuId, menuItems.key);
-	          },
-	          style: style.checkbox }),
 	        _react2['default'].createElement(
-	          'span',
-	          {
-	            className: 'itemsSpan',
+	          'div',
+	          { className: menuItems.open ? 'addBackground' : 'reduceBackground' },
+	          _react2['default'].createElement(_materialUiLibCheckbox2['default'], {
+	            checked: menuItems.checked,
 	            onClick: function () {
-	              return open(menuItems.key);
-	            } },
-	          menuItems.name
-	        ),
-	        _react2['default'].createElement(
-	          'span',
-	          { className: 'arrow' },
-	          menuItems.open ? '▲' : '▼'
+	              return _checkedAll(menuItems.menuId, menuItems.key);
+	            },
+	            style: style.checkbox }),
+	          _react2['default'].createElement(
+	            'span',
+	            {
+	              className: 'itemsSpan',
+	              onClick: function () {
+	                return open(menuItems.key);
+	              },
+	              id: menuItems.key },
+	            menuItems.name
+	          ),
+	          _react2['default'].createElement(
+	            'span',
+	            { className: 'arrow', title: '删除', onClick: function () {
+	                return _menuDelete('First', menuItems.key);
+	              } },
+	            '✘'
+	          ),
+	          _react2['default'].createElement(
+	            'span',
+	            { className: 'arrow', title: '修改', onClick: function () {
+	                return _menuSubmit('First', menuItems);
+	              } },
+	            '✎'
+	          )
 	        ),
 	        _react2['default'].createElement(
 	          'ul',
@@ -40120,10 +40545,25 @@
 	                {
 	                  child: child,
 	                  className: 'itemsSpan',
+	                  id: menuItems.key,
 	                  onClick: function () {
 	                    return _dispatchActions(child.key, child.functions);
 	                  } },
 	                child.name
+	              ),
+	              _react2['default'].createElement(
+	                'span',
+	                { className: 'arrow', title: '删除', onClick: function () {
+	                    return _menuDelete('Second', child.key);
+	                  } },
+	                '✘'
+	              ),
+	              _react2['default'].createElement(
+	                'span',
+	                { className: 'arrow', title: '修改', onClick: function () {
+	                    return _menuSubmit('Second', child);
+	                  } },
+	                '✎'
 	              )
 	            );
 	          })
@@ -40144,23 +40584,23 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 343 */
+/* 350 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(344);
+	var content = __webpack_require__(351);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(346)(content, {});
+	var update = __webpack_require__(353)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(true) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept(344, function() {
-				var newContent = __webpack_require__(344);
+			module.hot.accept(351, function() {
+				var newContent = __webpack_require__(351);
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -40170,21 +40610,21 @@
 	}
 
 /***/ },
-/* 344 */
+/* 351 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(345)();
+	exports = module.exports = __webpack_require__(352)();
 	// imports
 
 
 	// module
-	exports.push([module.id, "*{\r\n    font-family: Microsoft YaHei;\r\n}\r\nli{\r\n    list-style: none;\r\n}\r\n.MainBody{\r\n    display: flex;\r\n    align-items: stretch;\r\n    position: fixed;\r\n    height: 100%;\r\n    width: calc(100% + 6px);\r\n}\r\n.MainLeft{\r\n    display: flex;\r\n}\r\n.MainRight{\r\n    display: inline-flex;\r\n    width:100%;\r\n    overflow-y: auto;\r\n    margin-bottom:60px;\r\n    background: white;\r\n    z-index: 9;\r\n    margin-left: -12px;\r\n}\r\n.MainRight>div{\r\n    width:100%;\r\n    min-height: 160px;\r\n}\r\n.text{\r\n    text-decoration: none;\r\n}\r\n.exp-imp{\r\n    position: fixed;\r\n    bottom: 20px;\r\n    right: 20px;\r\n    z-index: 19;\r\n}\r\n/*menus样式*/\r\n.mainLeftMenus {\r\n    width: 240px;\r\n    margin-left: -30px;\r\n    overflow-y:scroll;\r\n    margin-bottom: 130px;  \r\n}\r\n.menusBox>li{\r\n    margin:8px 0;\r\n    cursor: pointer;\r\n}\r\n.block{\r\n    display: block;\r\n    margin-left: -40px;\r\n}\r\n.none{\r\n    display: none;\r\n}\r\n.bgColor{\r\n    background: none rgba(0, 0, 0, 0.2);\r\n}\r\n.menus{\r\n    margin-left: -40px;\r\n    display: block;\r\n}\r\n.block>li{\r\n    padding: 8px 0 8px 20px;\r\n}\r\n.itemsSpan {\r\n    padding: 8px 4px;\r\n}\r\n.arrow{\r\n    float: right;\r\n    margin-right: 10px;\r\n    color: #00bcd4;\r\n}\r\n.dialogButton{\r\n    float: right;\r\n    margin:20px 20px 0 0;\r\n}\r\n.buttonBox{\r\n    position: fixed;\r\n    bottom: 32px;\r\n    margin-left: 60px;\r\n}\r\n/*items样式*/\r\n.tableBox {\r\n    max-height: 600px;\r\n    overflow-y: auto;\r\n}\r\n.tableItems{\r\n    width: 100%;\r\n    text-align: left;\r\n    margin-bottom: 10px;\r\n}\r\n.theadItems{\r\n    opacity: 0.3;\r\n}\r\n.toolItems{\r\n    width: 40px;\r\n    padding:4px;\r\n    border-bottom: 1px solid #e0e0e0;\r\n    text-align: center;\r\n    cursor: pointer;\r\n}\r\n.tdItems, .thItems {\r\n    max-width: 10em;\r\n    overflow: hidden;\r\n    text-overflow: ellipsis;\r\n    padding:4px;\r\n    border-bottom: 1px solid #e0e0e0;\r\n}", ""]);
+	exports.push([module.id, "*{\r\n    font-family: Microsoft YaHei;\r\n}\r\nli{\r\n    list-style: none;\r\n}\r\n.MainBody{\r\n    display: flex;\r\n    align-items: stretch;\r\n    position: fixed;\r\n    height: 100%;\r\n    width: calc(100% + 6px);\r\n}\r\n.MainLeft{\r\n    display: flex;\r\n}\r\n.MainRight{\r\n    display: inline-flex;\r\n    width:100%;\r\n    overflow-y: auto;\r\n    margin-bottom:60px;\r\n    background: white;\r\n    z-index: 9;\r\n    margin-left: -12px;\r\n}\r\n.MainRight>div{\r\n    width:100%;\r\n    min-height: 160px;\r\n}\r\n.text{\r\n    text-decoration: none;\r\n}\r\n.exp-imp{\r\n    position: fixed;\r\n    bottom: 20px;\r\n    right: 20px;\r\n    z-index: 19;\r\n}\r\n/*menus样式*/\r\n.mainLeftMenus {\r\n    width: 270px;\r\n    margin-left: -30px;\r\n    overflow-y:scroll;\r\n    margin-bottom: 130px;  \r\n}\r\n.menusBox>li{\r\n    margin:8px 0;\r\n    cursor: pointer;\r\n}\r\n.block{\r\n    display: block;\r\n    margin-left: -40px;\r\n}\r\n.none{\r\n    display: none;\r\n}\r\n.bgColor{\r\n    background: none rgba(0, 0, 0, 0.2);\r\n}\r\n.menus{\r\n    margin-left: -40px;\r\n    display: block;\r\n}\r\n.block>li{\r\n    padding: 8px 0 8px 20px;\r\n}\r\n.itemsSpan {\r\n    padding: 8px 4px;\r\n}\r\n.downArrow{\r\n    color:#6b6666;\r\n}\r\n.arrow{\r\n    float: right;\r\n    margin-right: 6px;\r\n    color: #00bcd4;\r\n}\r\n.dialogButton{\r\n    float: right;\r\n    margin:20px 20px 0 0;\r\n}\r\n.buttonBox{\r\n    position: fixed;\r\n    bottom: 32px;\r\n    margin-left: 120px;\r\n}\r\n/*items样式*/\r\n.tableBox {\r\n    max-height: 600px;\r\n    overflow-y: auto;\r\n}\r\n.tableItems{\r\n    width: 100%;\r\n    text-align: left;\r\n    margin-bottom: 10px;\r\n}\r\n.theadItems{\r\n    opacity: 0.3;\r\n}\r\n.toolItems{\r\n    width: 40px;\r\n    padding:4px;\r\n    border-bottom: 1px solid #e0e0e0;\r\n    text-align: center;\r\n    cursor: pointer;\r\n}\r\n.tdItems, .thItems {\r\n    max-width: 10em;\r\n    overflow: hidden;\r\n    text-overflow: ellipsis;\r\n    padding:4px;\r\n    border-bottom: 1px solid #e0e0e0;\r\n}\r\n.addBackground {\r\n    background: rgba(0, 0, 0, 0.2);\r\n    padding: 4px 0;\r\n}\r\n.reduceBackground {\r\n    padding: 4px 0;\r\n}", ""]);
 
 	// exports
 
 
 /***/ },
-/* 345 */
+/* 352 */
 /***/ function(module, exports) {
 
 	/*
@@ -40240,7 +40680,7 @@
 
 
 /***/ },
-/* 346 */
+/* 353 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -40465,13 +40905,13 @@
 
 
 /***/ },
-/* 347 */
+/* 354 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var isReactClassish = __webpack_require__(348),
-	    isReactElementish = __webpack_require__(349);
+	var isReactClassish = __webpack_require__(355),
+	    isReactElementish = __webpack_require__(356);
 
 	function makeExportsHot(m, React) {
 	  if (isReactElementish(m.exports, React)) {
@@ -40525,7 +40965,7 @@
 
 
 /***/ },
-/* 348 */
+/* 355 */
 /***/ function(module, exports) {
 
 	function hasRender(Class) {
@@ -40575,10 +41015,10 @@
 	module.exports = isReactClassish;
 
 /***/ },
-/* 349 */
+/* 356 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var isReactClassish = __webpack_require__(348);
+	var isReactClassish = __webpack_require__(355);
 
 	function isReactElementish(obj, React) {
 	  if (!obj) {

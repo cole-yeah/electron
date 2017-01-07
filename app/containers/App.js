@@ -5,8 +5,6 @@ import AppBar from 'material-ui/lib/app-bar'
 import IconButton from 'material-ui/lib/icon-button'
 import ActionHome from 'material-ui/lib/svg-icons/action/home'
 import ActionDelete from 'material-ui/lib/svg-icons/action/delete'
-import { fullWhite } from 'material-ui/lib/styles/colors'
-import Checkbox from 'material-ui/lib/checkbox'
 
 import * as MenusActions from '../actions/menus'
 import * as ItemsActions from '../actions/items'
@@ -20,30 +18,27 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.props.menusActions.readItemsFile()  //electron下，用fs读取文件
+    // this.props.menusActions.readItemsFile()  //electron下，用fs读取文件
+    this.props.menusActions.receiveMenus()    //web下
   }
 
   componentWillReceiveProps(nextState) {
     nextState.items.map((item, i) =>
-      nextState.items !== this.props.items ? this.props.menusActions.combineItems(item.key, nextState.items) : item//不加这个判断很容易进行死循环，一直更新
+      nextState.items !== this.props.items ? this.props.menusActions.combineItems(item.key, nextState.items) : item
     )
   }
 
   render() {
-    const {items, keys, menusActions, itemsActions, menus} = this.props
+    const {items, menusActions, itemsActions, menus} = this.props
     return (
       <div>
         <AppBar
-          title="Coooooool"
+          title="MCT"
           iconElementLeft={
             <IconButton>
-              <ActionHome color={fullWhite} />
+              <ActionHome />
             </IconButton>
           }
-          iconElementRight={            
-            <IconButton onClick={() => menusActions.deleteMenus()}>
-              <ActionDelete/>
-            </IconButton>}
           />
 
         <div className="MainBody">
@@ -58,9 +53,9 @@ class App extends Component {
             <Items
               itemsActions={itemsActions}
               menusActions={menusActions}
-              keys={keys}
               menus={menus}
-              items={items} />
+              items={items}
+              />
           </div>
 
         </div>
@@ -73,8 +68,7 @@ function mapStateToProps(state) {
   // menu = Object.assign({}, menu, {functions: item}) //想把items上改变合并到menus上用这个方法行不通,因为item和menu是平级
   return {
     items: state.items,
-    menus: state.menus,
-    keys: state.keys  //todo 新增menus下的key，用来创建新增菜单下functions,感觉就用在这个地方有点浪费性能，待优化  2016.12.20
+    menus: state.menus
   }
 }
 

@@ -20,7 +20,7 @@ if (canUseDOM) {
   createStoreWithMiddleware = compose(
     applyMiddleware(thunk),
     applyMiddleware(createLogger()),
-    devTools()
+    devTools()     //开发模式下
   )(createStore);
 }
 

@@ -1,8 +1,11 @@
 import React, { Component, PropTypes } from 'react'
 import Dialog from 'material-ui/lib/dialog'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 
 import ForwardTable from './ForwardTable'
 import EditTextField from './EditTextField'
+import * as ApiActions from '../../actions/api'
 
 const style = {
   dialog: {
@@ -11,38 +14,10 @@ const style = {
   }
 }
 
-export default class OperationsDialog extends Component {
-  constructor(props) {
-    super(props)
-    this.handleClose = this.handleClose.bind(this)
-    this.handleEdit = this.handleEdit.bind(this)
-    this.handleAdd = this.handleAdd.bind(this)
-    this.handleOpen = this.handleOpen.bind(this)
-    this.state = {
-      open: false,
-      addItems: false,
-      nextContent: '',
-      nextKey: '0-0-0-0-0'
-    }
-  }
-  handleOpen(content) {
-    this.setState({ open: true, addItems: false, nextContent: content })
-  }
-
-  handleEdit(content) {
-    this.setState({ open: true, addItems: false, nextContent: content })
-  }
-
-  handleAdd(key) {
-    this.setState({ open: true, addItems: true, nextKey: key })
-  }
-
-  handleClose() {
-    this.setState({ open: false, addItems: true })
-  }
+class OperationsDialog extends Component {
 
   render() {
-    const { content, key, edit, itemsActions } = this.props
+    const { content, key, edit, itemsActions, apiActions, api } = this.props
     return (
       <span>
         {
@@ -50,7 +25,7 @@ export default class OperationsDialog extends Component {
             <EditTextField
               menus={content}
               Key={key}
-              _MenusSubmit={itemsActions.operationsSubmit}
+              _MenusSubmit={itemsActions.dispatchOperationsSubmit}
               array={['opId', 'opSort', 'opName', 'elementClass']}
               /> :
             <ForwardTable
@@ -58,23 +33,25 @@ export default class OperationsDialog extends Component {
               items={content.webApis}
               keys={content.key}  //用content.key解决那个webApis下新增每次都在第一个的operations中的webApis的问题 2016.12.21
               _handleChecked={itemsActions.webApisSelected}
-              _handleEdit={this.handleEdit}
-              _handleAdd={this.handleAdd}
-              _handleOpen={this.handleOpen}
+              _handleDelete={itemsActions.handleDelete}
+              _handleEdit={apiActions.setApiEdit}
+              _handleAdd={apiActions.setApiAdd}
+              _handleOpen={apiActions.setApiOpen}
               array={['serviceMethod', 'serviceUrl']}
               />
         }
 
         <Dialog
           modal={false}
-          open={this.state.open}
+          open={api.open}
           contentStyle={style.dialog}
-          onRequestClose={this.handleClose}
+          onRequestClose={apiActions.setApiClose}
           >
           <EditTextField
-            menus={this.state.nextContent}
-            Key={this.state.nextKey} //nextKey 的值其实就是从forwardTable通过handleAdd函数setState然后传过来的，这个值用于去生成新增的functions、operations、webApis下的key
-            _MenusSubmit={this.state.addItems ? itemsActions.addWebApisSubmit : itemsActions.webApisSubmit}
+            menus={api.nextContent}
+            idArray={[]}
+            Key={api.nextKey} //nextKey 的值其实就是从forwardTable通过handleAdd函数setState然后传过来的，这个值用于去生成新增的functions、operations、webApis下的key
+            _MenusSubmit={api.addItems ? itemsActions.dispatchAddApiActions : itemsActions.dispatchWebApisSubmit}
             array={['serviceMethod', 'serviceUrl']}
             />
         </Dialog>
@@ -82,3 +59,15 @@ export default class OperationsDialog extends Component {
     )
   }
 }
+
+function mapStateToProps(state) {
+  return {
+    api: state.api
+  }
+}
+function mapDispatchToProps(dispatch) {
+  return {
+    apiActions: bindActionCreators(ApiActions, dispatch)
+  }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(OperationsDialog)

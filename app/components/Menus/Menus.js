@@ -4,63 +4,26 @@ import FloatingActionButton from 'material-ui/lib/floating-action-button'
 import ContentAdd from 'material-ui/lib/svg-icons/content/add'
 import ContentCreate from 'material-ui/lib/svg-icons/content/create'
 import Dialog from 'material-ui/lib/dialog'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 
 import MenusItems from './MenusItems'
 import EditTextField from '../Dialog/EditTextField'
+import * as TopActions from '../../actions/top'
 
 const style = {
   dialog: {
     width: '80%',
     maxWidth: 'none',
-  },
-  actionButton: {
-    marginLeft: 20
   }
 }
 
 const nameBox = ['menuId', 'menuCode', 'menuSort', 'name']
 
-export default class Menus extends Component {
-  constructor(props) {
-    super(props)
-    this.handleClose = this.handleClose.bind(this)
-    this.handleAdd = this.handleAdd.bind(this)
-    this.handleEdit = this.handleEdit.bind(this)
-    this.state = {
-      open: false,
-      first: false,
-      addFirst: false,
-      addMenus: true,
-      content: '',
-      nextKey: '0-0-0-0-0'//todo 给个初始化的值，在点击增加一级菜单时会触发二级菜单的function，若传过去的key为空，则会导致后面的split这个方法报错  逻辑欠妥待优化 2016.12.19
-    }
-  }
-
-  handleEdit() {
-    //todo 这个要修改二级菜单必须要有勾选一级菜单才行，要修改一级菜单就要全部取消勾选一级菜单下的所有二级菜单，逻辑欠妥 2016.12.12
-    const menus = this.props.menus.filter(menu => menu.checked === true)
-    if (menus.length === 0) {
-      alert('勾选')
-      return
-    }
-    const functions = menus[0].children.filter(child => child.checked === true)
-    functions.length !== 0 ?
-      (this.setState({ addMenus: false, open: true, first: false, content: functions[0] }))
-      : (menus.length !== 0 ? (this.setState({ addMenus: false, open: true, first: true, content: menus[0] })) : this.state)
-  }
-
-  handleAdd() {
-    const menus = this.props.menus.filter(menu => menu.checked === true)
-    menus.length === 0 ? this.setState({ open: true, first: true, addMenus: true })
-      : this.setState({ open: true, first: false, addMenus: true, nextKey: menus[0].key })
-  }
-
-  handleClose() {
-    this.setState({ open: false })
-  }
+class Menus extends Component {
 
   render() {
-    const {menus, actions} = this.props
+    const {menus, actions, topActions, top} = this.props
     return (
       <span className="mainLeftMenus">
         <ul className="menusBox">
@@ -72,48 +35,51 @@ export default class Menus extends Component {
                 _dispatchActions={actions.dispatchActions}
                 _checkedAll={actions.checkedAll}
                 _checkedMenus={actions.checkedMenus}
+                _menuDelete={actions.menuDelete}
+                _menuSubmit={topActions.setTopEdit}
                 menuItems={menu}
                 />)
           }
         </ul>
 
         <span className="buttonBox">
-          <FloatingActionButton secondary={true} mini={true} style={style.actionButton} onTouchTap={this.handleAdd}>
+          <FloatingActionButton secondary={true} mini={true} onTouchTap={() => topActions.setTopAdd(menus)}>
             <ContentAdd />
           </FloatingActionButton>
-          <FloatingActionButton secondary={true} mini={true} style={style.actionButton} onTouchTap={this.handleEdit}>
-            <ContentCreate />
-          </FloatingActionButton>
         </span>
-
         <Dialog
           modal={false}
-          open={this.state.open}
+          open={top.open}
           contentStyle={style.dialog}
-          onRequestClose={this.handleClose}
+          onRequestClose={topActions.setTopClose}
           >
-          {//todo 新增的content获取的是根据上次点击set的state，欠妥 2016.12.16
-            <EditTextField
-              menus={this.state.content}
-              Key={this.state.nextKey}
-              _MenusSubmit={
-                this.state.addMenus ?
-                  (this.state.first ? actions.addFirstMenus : actions.addSecondMenus) :
-                  (this.state.first ? actions.firstMenusSubmit : actions.secondMenusSubmit)}
-              array={
-                this.state.addMenus ?
-                  (this.state.first ? [...nameBox, 'icon'] : [...nameBox, 'menuParentId', 'anchor']) :
-                  (this.state.first ? [...nameBox] : [...nameBox, 'menuParentId', 'anchor'])}
-              />
-          }
+          <EditTextField
+            menus={top.addMenus ? top : top.nextContent}
+            Key={top.nextKey}
+            idArray={top.idArray}
+            _MenusSubmit={
+              top.addMenus ?
+                (top.first ? actions.dispatchAddFirst : actions.dispatchAddSecond) :
+                (top.first ? actions.dispatchSubmitFirst : actions.dispatchSubmitSecond)}
+            array={
+              top.addMenus ?
+                (top.first ? [...nameBox, 'icon'] : [...nameBox, 'menuParentId', 'anchor']) :
+                (top.first ? [...nameBox] : [...nameBox, 'menuParentId', 'anchor'])}
+            />
         </Dialog>
-
       </span>
     )
   }
 }
 
-// Menus.propTypes = {
-//   menus: PropTypes.array.isRequired,
-//   actions: PropTypes.func.isRequired
-// }
+function mapStateToProps(state) {
+  return {
+    top: state.top
+  }
+}
+function mapDispatchToProps(dispatch) {
+  return {
+    topActions: bindActionCreators(TopActions, dispatch)
+  }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Menus)

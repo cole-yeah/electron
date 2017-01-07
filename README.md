@@ -1,18 +1,20 @@
-# 基于electron + react + redux + webpack修改json文件的桌面应用
+### 基于electron + react + redux + webpack修改json文件的桌面应用
 **浏览器查看**：
 1. App.js文件下注释相应引用：</br>    
     this.props.menusActions.readItemsFile()  //electron下，用fs读取文件<br/> 
     this.props.menusActions.receiveMenus()  //web下，假数据<br/> 
 2. items.js和actions文件下menus.js注释相应的fs引用</br>
     读取本地json文件获取列表,根据参数first,second 索引出点击菜单下的数组</br>
-     `export function readItemsFile() {`</br>
-       `return dispatch => {`</br>
-         `return (fs.readFile('./menus.json', 'utf-8', (err, data) => {`</br>
-           `data = JSON.parse(data)`</br>
-           `dispatch(receiveMenus(data))`</br>
-         `}))`</br>
-       `}`</br>
-     `}`</br>
+     ```javascript
+     export function readItemsFile() {
+       return dispatch => {
+         return (fs.readFile('./menus.json', 'utf-8', (err, data) => {
+           data = JSON.parse(data)
+           dispatch(receiveMenus(data))
+         }))
+       }
+     }
+     ```
 3. npm run dev -- browser open localhost:3000</br>
 **打开应用查看**：
 1. 操作和浏览器相反的操作</br>

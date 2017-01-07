@@ -12,17 +12,23 @@ const style = {
 export default class MenusItems extends Component {
 
   render() {
-    const { menuItems, open, _checkedAll, _checkedMenus, _dispatchActions } = this.props
+    const { menuItems, open, _checkedAll, _checkedMenus, _dispatchActions, _menuDelete, _menuSubmit } = this.props
     let element = (
       <span open={menuItems.open}>
+      <div className={menuItems.open ?'addBackground':'reduceBackground'}>
         <Checkbox
           checked={menuItems.checked}
           onClick={() => _checkedAll(menuItems.menuId, menuItems.key)}
           style={style.checkbox} />
         <span
           className="itemsSpan"
-          onClick={() => open(menuItems.key)}>{menuItems.name}</span>
-        <span className="arrow">{menuItems.open ? '▲' : '▼'}</span>
+          onClick={() => open(menuItems.key)}
+          id={menuItems.key}>
+          {menuItems.name}
+        </span>
+        <span className="arrow" title="删除" onClick={() => _menuDelete('First', menuItems.key)}>✘</span>
+        <span className="arrow" title="修改" onClick={() => _menuSubmit('First', menuItems)}>✎</span>
+        </div>
         <ul className={menuItems.open ? 'block' : 'none'}>
           {
             menuItems.children.map((child, j) =>
@@ -37,7 +43,12 @@ export default class MenusItems extends Component {
                 <span
                   child={child}
                   className="itemsSpan"
-                  onClick={() => _dispatchActions(child.key, child.functions)}>{child.name}</span>
+                  id={menuItems.key}
+                  onClick={() => _dispatchActions(child.key, child.functions)}>
+                  {child.name}
+                </span>
+                <span className="arrow" title="删除" onClick={() => _menuDelete('Second', child.key)}>✘</span>
+                <span className="arrow" title="修改" onClick={() => _menuSubmit('Second', child)}>✎</span>
               </li>)
           }
         </ul>

@@ -1,21 +1,32 @@
 export const SET_OPEN = 'SET_OPEN'
 export const SET_EDIT = 'SET_EDIT'
-export const SET_ADDITEMS = 'SET_ADDITEMS'
+export const SET_ADD = 'SET_ADD'
+export const SET_CLOSE = 'SET_CLOSE'
 
-export function setOpen() {
+export function setOpen(content) {
   return {
-    type: SET_OPEN
+    type: SET_OPEN,
+    content
   }
 }
 
-export function setEdit() {
+export function setEdit(content) {
   return {
-    type: SET_EDIT
+    type: SET_EDIT,
+    content
   }
 }
 
-export function setAddItems() {
+export function setAdd(key, array) {
   return {
-    type: SET_ADDITEMS
+    type: SET_ADD,
+    key,
+    array
+  }
+}
+
+export function setClose() {
+  return {
+    type: SET_CLOSE
   }
 }

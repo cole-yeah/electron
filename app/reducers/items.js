@@ -8,7 +8,8 @@ import {
   WEBAPIS_SUBMIT,
   ADD_OPERATIONS_SUBMIT,
   ADD_WEBAPIS_SUBMIT,
-  ADD_FUNCTIONS_SUBMIT
+  ADD_FUNCTIONS_SUBMIT,
+  HANDLE_DELETE
 } from '../actions/items'
 /**
  * 获取items  
@@ -27,6 +28,7 @@ export function items(state = [], action) {
      * 点击勾选与否operations  
      */
     case OPERATIONS_SELECTED:
+      // const webApiChecked = state.map(item => )
       return state.map(item => Object.assign({}, item, {
         operations: item.operations.map(operation => operation.key === action.key ?
           Object.assign({}, operation, { checked: !operation.checked }) : operation)
@@ -66,6 +68,34 @@ export function items(state = [], action) {
         }))
       }))
     /**
+    * 删除functions、operations、webApis  
+    */
+    case HANDLE_DELETE:
+      if (action.dataType === 'opId') {
+        const dialogOper = confirm('确定删除operations?')
+        if (dialogOper) {
+          state = state.map(item => Object.assign({}, item, {
+            operations: item.operations.filter(oper => oper.key !== action.key)
+          }))
+          alert('删除成功！')
+          return state
+        }
+        return state
+      } else {
+        const dialogApi = confirm('确定删除webApis?')
+        if (dialogApi) {
+          state = state.map(item => Object.assign({}, item, {
+            operations: item.operations.map(oper => Object.assign({}, oper, {
+              webApis: oper.webApis.filter(api => api.key !== action.key)
+            }))
+          }))
+          alert('删除成功！')
+          return state
+        }
+        return state
+      }
+
+    /**
      * 提交新增functions的值，并合并到menus中  
      */
     case ADD_FUNCTIONS_SUBMIT:
@@ -80,53 +110,64 @@ export function items(state = [], action) {
         checked: false,
         operations: []
       })
-    // return //这里加return或break会报错，明天debug调试一下 2016.12.26
+    // return state
     /**
      * 提交新增operations的值，并合并到menus中  
      */
-    case ADD_OPERATIONS_SUBMIT:  //有两个问题，1.新增同个children下会同时新增，2.action为undefined  2016.12.16
-      const arrayOper = action.nextKey.split('-')
-      const d = parseInt(arrayOper[0])  //在新增的functions下再新增operations会报item[0].key undefined
-      const e = parseInt(arrayOper[1])  //因为这个item是取functions下的数组的第一个的key，所以若一开始没有数组即会报错
-      const f = parseInt(arrayOper[2])
-      const g = state[f].operations.length
+    case ADD_OPERATIONS_SUBMIT:
+      if (opId === undefined && opSort === undefined) {
+        return state
+      } else {
+        const arrayOper = action.nextKey.split('-')
+        const d = parseInt(arrayOper[0])
+        const e = parseInt(arrayOper[1])
+        const f = parseInt(arrayOper[2])
+        const g = state[f].operations.length
 
-      state.map(item => item.key === action.nextKey ? Object.assign({}, item, {
-        operations: item.operations.push({
-          checked: false,
-          opId,
-          opSort,
-          opName,
-          elementClass,
-          key: d + '-' + e + '-' + f + '-' + g + '-' + 0,
-          webApis: []
-        })  //todo 这里有点不明白，一return的话就会报childrenItems下的items.map is not a function错误. debug之后发现items变成了长度，不再是数组..
-      }) : item)  // 是push的原因, array.push('xx')为数组，var other = array.push('xx')为长度
-    // return 
+        state.map(item => item.key === action.nextKey ? Object.assign({}, item, {
+          operations: item.operations.push({
+            checked: false,
+            opId,
+            opSort,
+            opName,
+            elementClass,
+            key: d + '-' + e + '-' + f + '-' + g + '-' + 0,
+            webApis: []
+          })
+        }) : item)
+      }
+    //这里加return的时候报错，因为这里return的时候的nextState的operations变成了它的长度，如operations:4，而不是对象；但是不return的时候函数会一直执行下去，造成的就是会多出一些空的数组，
+    //如新增operations之后会在继续执行ADD_WEBAPIS_SUBMIT，但是 serviceMethod和serviceUrl为undefined，所以数组为空的，这样导出时容易造成错误，暂时不知道return为什么会造成数组对象
+    //变成长度，所以先在这里做个判断，待优化   2017.01.05
     /**
      * 提交新增webApis的值，并合并到menus中  
      */
     case ADD_WEBAPIS_SUBMIT:
       console.log(action.nextKey)
-      const arrayApis = action.nextKey.split('-')
-      const h = parseInt(arrayApis[0])
-      const i = parseInt(arrayApis[1])
-      const j = parseInt(arrayApis[2])
-      const k = parseInt(arrayApis[3])
-      const l = state[j].operations[k].webApis.length
-      console.log(h, i, j, k, l)
-      state.map(item => Object.assign({}, item, {
-        operations: item.operations.map(operation => operation.key === action.nextKey ?  //新增的webApis都会加到第一个operations下的webApis中，因为nextKey为点击菜单传过来的值
-          Object.assign({}, operation, {
-            webApis: operation.webApis.push({
-              checked: false,
-              serviceUrl,
-              serviceMethod,
-              key: h + '-' + i + '-' + j + '-' + k + '-' + l,
-            })
-          }) : operation)
-      }))
-    // return 
+      if (serviceUrl === undefined && serviceUrl === undefined) {
+        return state
+      } else {
+        const arrayApis = action.nextKey.split('-')
+        const h = parseInt(arrayApis[0])
+        const i = parseInt(arrayApis[1])
+        const j = parseInt(arrayApis[2])
+        const k = parseInt(arrayApis[3])
+        const l = state[j].operations[k].webApis.length
+        console.log(h, i, j, k, l)
+        state.map(item => Object.assign({}, item, {
+          operations: item.operations.map(operation => operation.key === action.nextKey ?  //新增的webApis都会加到第一个operations下的webApis中，因为nextKey为点击菜单传过来的值
+            Object.assign({}, operation, {
+              webApis: operation.webApis.push({
+                checked: false,
+                serviceUrl,
+                serviceMethod,
+                key: h + '-' + i + '-' + j + '-' + k + '-' + l,
+              })
+            }) : operation)
+        }))
+      }
+    // return state
+
     default:
       return state
   }

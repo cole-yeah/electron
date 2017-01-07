@@ -8,7 +8,8 @@ import {
   FIRST_MENUS_SUBMIT,
   SECOND_MENUS_SUBMIT,
   ADD_FIRST_MENUS,
-  ADD_SECOND_MENUS
+  ADD_SECOND_MENUS,
+  MENU_DELETE
 } from '../actions/menus'
 
 /**
@@ -17,29 +18,33 @@ import {
 export function menus(state = [], action) {
   switch (action.type) {
     case RECEIVE_MENUS:
-      return action.menus.map((menu, i) => {
-        menu.open = false
-        menu.checked = false
-        menu.key = i + '-' + 0 + '-' + 0 + '-' + 0 + '-' + 0
-        menu.children.map((child, j) => {
-          child.checked = false
-          child.key = i + '-' + j + '-' + 0 + '-' + 0 + '-' + 0
-          child.functions.map((fun, k) => {
-            fun.checked = false
-            fun.key = i + '-' + j + '-' + k + '-' + 0 + '-' + 0
-            fun.operations.map((operation, x) => {
-              operation.checked = false,
-                operation.key = i + '-' + j + '-' + k + '-' + x + '-' + 0
-              operation.id = operation.opId
-              operation.webApis.map((api, y) => {
-                api.checked = false
-                api.key = i + '-' + j + '-' + k + '-' + x + '-' + y
+      if (action.menus[0].checked === undefined) { //判断是否为操作过的文件
+        return action.menus.map((menu, i) => {
+          menu.open = false
+          menu.checked = false
+          menu.key = i + '-' + 0 + '-' + 0 + '-' + 0 + '-' + 0
+          menu.children.map((child, j) => {
+            child.checked = false
+            child.key = i + '-' + j + '-' + 0 + '-' + 0 + '-' + 0
+            child.functions.map((fun, k) => {
+              fun.checked = false
+              fun.key = i + '-' + j + '-' + k + '-' + 0 + '-' + 0
+              fun.operations.map((operation, x) => {
+                operation.checked = false,
+                  operation.key = i + '-' + j + '-' + k + '-' + x + '-' + 0
+                operation.id = operation.opId
+                operation.webApis.map((api, y) => {
+                  api.checked = false
+                  api.key = i + '-' + j + '-' + k + '-' + x + '-' + y
+                })
               })
             })
           })
+          return menu
         })
-        return menu
-      })
+      } else {
+        return action.menus
+      }
     /**
      * 选中该一级菜单
      */
@@ -100,6 +105,7 @@ export function menus(state = [], action) {
      * 合并items修改后的数据
      */
     case COMBINE_ITEMS:
+      console.log(action.items)
       const funId = state.map(menu => menu.children.map(child => child.key))
       return state.map(menu => Object.assign({}, menu, {
         children: menu.children.map(child => action.key === child.key ?
@@ -122,7 +128,6 @@ export function menus(state = [], action) {
      * 提交修改二级菜单数据
      */
     case SECOND_MENUS_SUBMIT:
-      console.log(action.key)
       return state.map(menu => menu.menuId === action.menuParentId ? (Object.assign({}, menu, {
         children: menu.children.map(child => child.key === action.key ?
           Object.assign({}, child, {
@@ -134,6 +139,39 @@ export function menus(state = [], action) {
             anchor: action.anchor
           }) : child)
       })) : menu)
+    /**
+     * 删除菜单数据
+     */
+    case MENU_DELETE:
+      if (action.dataType === 'First') {
+        const dialogMenu = confirm('确定删除一级菜单?')
+        if (dialogMenu) {
+          return state.filter(item => action.key !== item.key)
+        }
+        return state //有if (dialogMenu)判断的这里记得return state,不然会新增一个空的一级菜单
+      } else if (action.dataType === 'Second') {
+        const dialogMenu = confirm('确定删除二级菜单?')
+        if (dialogMenu) {
+          state = state.map(item => Object.assign({}, item, {
+            children: item.children.filter(child => action.key !== child.key)
+          }))
+          alert('删除成功！')
+          return state
+        }
+        return state
+      } else {
+        const dialogMenu = confirm('确定删除functions?')
+        if (dialogMenu) {
+          state = state.map(item => Object.assign({}, item, {
+            children: item.children.map(child => Object.assign({}, child, {
+              functions: child.functions.filter(func => action.key !== func.key)
+            }))
+          }))
+          alert('删除成功！')
+          return state
+        }
+        return state
+      }
     /**
      * 提交新增一级菜单数据
      */
@@ -158,63 +196,30 @@ export function menus(state = [], action) {
      * 提交新增二级菜单数据
      */
     case ADD_SECOND_MENUS:
-      const b = parseInt((action.nextKey).split('-')[0])
-      const c = state[b].children.length
-      state.map(menu => menu.menuId === action.menuParentId ? Object.assign({}, menu, {
-        children: menu.children.push({
-          menuId: action.menuId,
-          menuCode: action.menuCode,
-          menuSort: action.menuSort,
-          name: action.name,
-          menuParentId: action.menuParentId,
-          anchor: action.anchor,
-          key: b + '-' + c + '-' + 0 + '-' + 0 + '-' + 0,
-          systemName: "收货系统",
-          "icon": null,
-          level: 2,
-          functions: [],
-          children: [],
-          topMenu: false
-        })
-      }) : menu)
-
-          /**
-     * 删除菜单数据
-     */
-      case DELETE_MENUS:
-        // console.log(state.length)
-        // const i = state.length
-        // // const d = parseInt((action.id).split('-')[0])
-
-        // return state.filter(menu => menu.name !== action.name)
-        // if(state[d].name === action.name){
-        //   state.splice(d, 1)
-        // }else{
-        //   state[d].children.map(child => {
-        //     if(child.name === action.name){
-        //       const e = parseInt((child.key).split('-')[1])
-        //       state[d].children.splice(e, 1)
-        //       alert('删除成功')}
-        //   })
-        // }
-        // console.log(state)
-
-        // return 
-        // console.log(state.filter(item => !item.checked))
-
-        return state.filter(item => !item.checked)         
-        .map(item => Object.assign({}, item, {                 
-        children: item.children.filter(child => !child.checked)
-        .map(child => Object.assign({}, child, {
-          functions: child.functions.filter(func => !func.checked)
-          .map(func => Object.assign({}, func, {
-            operations: func.operations.filter(oper => !oper.checked)
-            .map(oper => Object.assign({}, oper, {
-              webApis: oper.webApis.filter(api => !api.checked)
-            }))
-          }))
-        }))
-      }))
+      if (action.menuId === undefined && action.menuCode === undefined && action.menuParentId === undefined) {
+        return state
+      } else {
+        console.log(action.nextKey)
+        const b = parseInt((action.nextKey).split('-')[0])
+        const c = state[b].children.length
+        state.map(menu => menu.menuId === action.menuParentId ? Object.assign({}, menu, {
+          children: menu.children.push({
+            menuId: action.menuId,
+            menuCode: action.menuCode,
+            menuSort: action.menuSort,
+            name: action.name,
+            menuParentId: action.menuParentId,
+            anchor: action.anchor,
+            key: b + '-' + c + '-' + 0 + '-' + 0 + '-' + 0,
+            systemName: "收货系统",
+            "icon": null,
+            level: 2,
+            functions: [],
+            children: [],
+            topMenu: false
+          })
+        }) : menu)
+      }
 
     default:
       return state

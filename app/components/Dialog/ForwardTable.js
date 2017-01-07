@@ -3,6 +3,7 @@ import Checkbox from 'material-ui/lib/checkbox'
 import FloatingActionButton from 'material-ui/lib/floating-action-button'
 import ContentCreate from 'material-ui/lib/svg-icons/content/create'
 import ContentForward from 'material-ui/lib/svg-icons/content/forward'
+import ContentRemove from 'material-ui/lib/svg-icons/action/delete'
 import ContentAdd from 'material-ui/lib/svg-icons/content/add'
 import Colors from 'material-ui/lib/styles/colors'
 
@@ -14,14 +15,10 @@ const style = {
   }
 }
 
-export default class ChildrenItems extends Component {
-  constructor(props) {
-    super(props)
-  }
-
+export default class ForwardTable extends Component {
+  
   render() {
-    const { items = [], array, forward, _handleOpen, _handleAdd, _handleEdit, _handleChecked, keys } = this.props
-    /**debug1 */ //1.key的值可以正常获取
+    const { items = [], array, forward, _handleOpen, _handleAdd, _handleEdit, _handleChecked, _handleDelete, keys, idArray = []} = this.props
     return (
       <div className="tableBox">
         <table className="tableItems" hahah={items}>
@@ -34,6 +31,7 @@ export default class ChildrenItems extends Component {
               }
               {forward ? <th className="toolItems">forward</th> : ''}
               <th className="toolItems">edit</th>
+              {array[0] === 'functionId' ? '' : <th className="toolItems">delete</th>}
             </tr>
           </thead>
           <tbody>
@@ -53,6 +51,9 @@ export default class ChildrenItems extends Component {
                   <td className="toolItems">
                     <ContentCreate color={Colors.cyan500} onTouchTap={() => _handleEdit(item)} />
                   </td>
+                  <td className="toolItems">
+                    <ContentRemove color={Colors.cyan500} onTouchTap={() => _handleDelete(array[0], item.key)} />
+                  </td>
                 </tr>
               )
             }
@@ -61,7 +62,12 @@ export default class ChildrenItems extends Component {
 
         </table>
 
-        <FloatingActionButton secondary={true} mini={true} style={style.actionButton} onTouchTap={() => _handleAdd(keys)}>
+        <FloatingActionButton
+          secondary={true}
+          mini={true}
+          style={style.actionButton}
+          onTouchTap={array[0] === 'serviceMethod' ? () => _handleAdd(keys) : () => _handleAdd(keys, idArray)}
+          >
           <ContentAdd />
         </FloatingActionButton>
 

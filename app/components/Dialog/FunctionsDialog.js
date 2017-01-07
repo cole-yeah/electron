@@ -1,9 +1,12 @@
 import React, { Component, PropTypes } from 'react'
 import Dialog from 'material-ui/lib/dialog'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 
 import ForwardTable from './ForwardTable'
 import EditTextField from './EditTextField'
 import OperationsDialog from '../Dialog/OperationsDialog'
+import * as OperActions from '../../actions/oper'
 
 const style = {
   dialog: {
@@ -12,85 +15,73 @@ const style = {
   }
 }
 
-export default class FunctionsDialog extends Component {
-  constructor(props) {
-    //todo 一般来说state应该放到顶级props中管理，通过发出action返回一个新的state，这个也相应的要，应该可以放到keys中一起。待优化 2016.12.20
-    super(props)
-    this.handleClose = this.handleClose.bind(this)
-    this.handleEdit = this.handleEdit.bind(this)
-    this.handleAdd = this.handleAdd.bind(this)
-    this.handleOpen = this.handleOpen.bind(this)
-    this.state = {
-      open: false,
-      addItems: false,
-      edit: false,
-      nextContent: '',
-      nextKey: '0-0-0-0-0',
-    }
-  }
-  handleOpen(content) {
-    this.setState({ open: true, addItems: false, nextContent: content })
-  }
-
-  handleEdit(content) {
-    this.setState({ open: true, addItems: false, edit: true, nextContent: content })
-  }
-
-  handleAdd(key) {
-    this.setState({ open: true, addItems: true, nextKey: key })
-  }
-
-  handleClose() {
-    this.setState({ edit: false, open: false })
-  }
+class FunctionsDialog extends Component {
 
   render() {
-    const { content, key, edit, itemsActions, keys } = this.props
-
-    let element = (
-      edit ?
-        <EditTextField
-          menus={content}
-          Key={key}
-          _MenusSubmit={itemsActions.handleSubmit}
-          array={['functionId', 'functionName']}//不同点
-          /> :
-        <ForwardTable
-          forward={true}                        //不同点  控制是否有下一级，true为有，false反之
-          items={content.operations}            //不同点   下一级为operations,若webApis则为webApis
-          keys={keys}                           //operations的新增需要从functions传keys过来
-          _handleChecked={itemsActions.operationsSelected}        //不同点
-          _handleEdit={this.handleEdit}
-          _handleAdd={this.handleAdd}
-          _handleOpen={this.handleOpen}
-          array={['opId', 'opSort', 'opName', 'elementClass']}    //不同点
-          />
-    )
+    const { itemsActions, func, oper, operActions, menus } = this.props
+    const array = menus.map(item => item.children.map(child => child.functions.map(func => func.operations.map(oper => oper.opId))))
+    const idArray = array.reduce((x, y) => {
+      return x.concat(y)
+    }, []).reduce((x, y) => {
+      return x.concat(y)
+    }, []).reduce((x, y) => {
+      return x.concat(y)
+    }, []).sort()
 
     return (
       <span>
-        {element}
+        {func.edit ?
+          <EditTextField
+            menus={func.nextContent}
+            Key={func.nextKey}                      //用于后面新增或修改进行匹配的值
+            _MenusSubmit={itemsActions.dispatchHandleSubmit}
+            array={['functionId', 'functionName']}//不同点
+            /> :
+          <ForwardTable
+            forward={true}                        //不同点  控制是否有下一级，true为有，false反之
+            items={func.nextContent.operations}   //不同点  下一级为operations,若webApis则为webApis
+            keys={func.nextContent.key}           //operations的新增需要从functions传keys过来
+            idArray={idArray}                     //opId数组
+            _handleDelete={itemsActions.handleDelete}
+            _handleChecked={itemsActions.operationsSelected}        //不同点
+            _handleEdit={operActions.setOperEdit}
+            _handleAdd={operActions.setOperAdd}
+            _handleOpen={operActions.setOperOpen}
+            array={['opId', 'opSort', 'opName', 'elementClass']}    //不同点
+            />}
         <Dialog
           modal={false}
-          open={this.state.open}
+          open={oper.open}
           contentStyle={style.dialog}
-          onRequestClose={this.handleClose}
+          onRequestClose={operActions.setOperClose}
           >
-          {this.state.addItems ?
+          {oper.addItems ?
             <EditTextField
-              menus={this.state.nextContent}
-              Key={this.state.nextKey} //nextKey 的值其实就是从forwardTable通过handleAdd函数setState然后传过来的，这个值用于去生成新增的functions、operations、webApis下的key
-              _MenusSubmit={itemsActions.addOperationsSubmit}
+              menus={oper}
+              idArray={idArray}  //用于后面判断新增的opId是否为重复
+              Key={oper.nextKey} //nextKey 从forwardTable传过来的，用于去生成新增的functions、operations、webApis下的key
+              _MenusSubmit={itemsActions.dispatchAddOperActions}
               array={['opId', 'opSort', 'opName', 'elementClass']}
               /> :
             <OperationsDialog
-              edit={this.state.edit}
-              // keys={content.operations[0].key}      //这里content.operations[0].key会导致每次新增webApis都加在第一个的operations上, 后面已解决，不需要在这传keys了
+              edit={oper.edit}
               itemsActions={itemsActions}
-              content={this.state.nextContent}
+              content={oper.nextContent}
               />}
         </Dialog>
       </span>
     )
   }
 }
+
+function mapStateToProps(state) {
+  return {
+    oper: state.oper
+  }
+}
+function mapDispatchToProps(dispatch) {
+  return {
+    operActions: bindActionCreators(OperActions, dispatch)
+  }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(FunctionsDialog)
